@@ -1,21 +1,35 @@
-import { MemoryRouter as Router, Switch, Route } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import {
+  MemoryRouter as Router,
+  Switch,
+  Route,
+  // useLocation,
+} from 'react-router-dom';
 // import icon from '../../assets/icon.svg';
-import './App.css';
+// import './App.css';
 
-const Hello = () => {
-  return (
-    <div>
-      <p>Teste</p>
-    </div>
-  );
-};
+// import { AnimatePresence } from 'framer-motion';
+
+import Home from './components/Home';
+import Sidebar from './components/Sidebar';
+
+import './styles/global.scss';
 
 export default function App() {
+  // const location = useLocation();
+
   return (
     <Router>
-      <Switch>
-        <Route path="/" component={Hello} />
-      </Switch>
+      <div id="appWrapper">
+        <Sidebar />
+        <main>
+          <AnimatePresence exitBeforeEnter>
+            <Switch /* location={location} key={location.key} */>
+              <Route exact path="/" component={Home} />
+            </Switch>
+          </AnimatePresence>
+        </main>
+      </div>
     </Router>
   );
 }
