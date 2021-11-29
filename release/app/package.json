@@ -1,12 +1,12 @@
 {
-  "name": "electron-react-boilerplate",
-  "version": "4.4.0",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "name": "fluig-monitor",
+  "version": "1.0.0",
+  "description": "Aplicação para monitoramento de ambiente Fluig com métricas disponibilizadas via API",
   "main": "./dist/main/main.js",
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://github.com/electron-react-boilerplate"
+    "name": "Luiz Ferreira",
+    "email": "luizfernando_lf@hotmail.com.br",
+    "url": "https://github.com/luizf-lf"
   },
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",

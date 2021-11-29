@@ -10,7 +10,7 @@ import {
 
 // import { AnimatePresence } from 'framer-motion';
 
-import Home from './components/Home';
+import CenterView from './components/CenterView';
 import Sidebar from './components/Sidebar';
 
 import './styles/global.scss';
@@ -25,7 +25,7 @@ export default function App() {
         <main>
           <AnimatePresence exitBeforeEnter>
             <Switch /* location={location} key={location.key} */>
-              <Route exact path="/" component={Home} />
+              <Route exact path="/" component={CenterView} />
             </Switch>
           </AnimatePresence>
         </main>
