@@ -1,6 +1,6 @@
 {
   "name": "fluig-monitor",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Aplicação para monitoramento de ambiente Fluig com métricas disponibilizadas via API",
   "main": "./dist/main/main.js",
   "author": {

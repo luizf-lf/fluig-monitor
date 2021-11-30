@@ -5,15 +5,13 @@ import {
   Route,
   // useLocation,
 } from 'react-router-dom';
-// import icon from '../../assets/icon.svg';
-// import './App.css';
 
 // import { AnimatePresence } from 'framer-motion';
 
 import CenterView from './components/CenterView';
 import Sidebar from './components/Sidebar';
 
-import './styles/global.scss';
+import './assets/styles/global.scss';
 
 export default function App() {
   // const location = useLocation();
