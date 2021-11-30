@@ -22,6 +22,15 @@ button {
   cursor: pointer;
 }
 
+#mainWindow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  padding: 1rem;
+}
+
 #appWrapper {
   display: flex;
   flex-direction: row;

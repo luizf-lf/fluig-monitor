@@ -1,33 +1,38 @@
+import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import {
   MemoryRouter as Router,
   Switch,
   Route,
-  // useLocation,
+  useLocation,
+  BrowserRouter,
 } from 'react-router-dom';
 
 // import { AnimatePresence } from 'framer-motion';
 
-import CenterView from './components/CenterView';
+import AmbientView from './views/AmbientView';
+import CreateAmbientView from './views/CreateAmbientView';
 import Sidebar from './components/Sidebar';
 
 import './assets/styles/global.scss';
 
 export default function App() {
-  // const location = useLocation();
+  const location = useLocation();
 
   return (
-    <Router>
+    <AnimatePresence exitBeforeEnter>
       <div id="appWrapper">
         <Sidebar />
-        <main>
-          <AnimatePresence exitBeforeEnter>
-            <Switch /* location={location} key={location.key} */>
-              <Route exact path="/" component={CenterView} />
-            </Switch>
-          </AnimatePresence>
+        <main id="mainWindow">
+          <Switch location={location} key={location.key}>
+            <Route exact path="/" component={AmbientView} />
+            <Route
+              path="/settings/ambients/new"
+              component={CreateAmbientView}
+            />
+          </Switch>
         </main>
       </div>
-    </Router>
+    </AnimatePresence>
   );
 }
