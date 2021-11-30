@@ -8,9 +8,14 @@
 
   border-top: 2px solid #ececec;
 
+  a,
   button {
     width: 4rem;
     transition: background-color 300ms;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     svg {
       font-size: 1.5rem;

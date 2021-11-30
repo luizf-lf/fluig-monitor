@@ -1,18 +1,19 @@
-import { FiHelpCircle, FiInfo, FiSliders } from 'react-icons/fi';
+import { FiInfo, FiMoon, FiSliders } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import '../assets/styles/components/SidebarFooter.scss';
 
 export default function SidebarFooter(): JSX.Element {
   return (
     <footer id="sidebarFooter">
-      <button type="button">
+      <Link to="/about">
         <FiInfo />
-      </button>
+      </Link>
       <button type="button">
-        <FiHelpCircle />
+        <FiMoon />
       </button>
-      <button type="button">
+      <Link to="/settings">
         <FiSliders />
-      </button>
+      </Link>
     </footer>
   );
 }
