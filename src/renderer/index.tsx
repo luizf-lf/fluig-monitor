@@ -1,11 +1,11 @@
 import { render } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import App from './App';
 
 render(
-  /* O componente BrowserRouter deve ser colocado neste arquivo para funcionamento do hook useLocation */
-  <BrowserRouter>
+  /* O componente HashRouter deve ser colocado neste arquivo para funcionamento do hook useLocation */
+  <HashRouter>
     <App />
-  </BrowserRouter>,
+  </HashRouter>,
   document.getElementById('root')
 );

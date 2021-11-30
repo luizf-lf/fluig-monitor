@@ -1,12 +1,15 @@
 import { motion } from 'framer-motion';
+import globalContainerVariants from '../utils/globalContainerVariants';
 
 export default function CreateAmbientView() {
   return (
     <motion.div
-      animate={{ opacity: 1 }}
-      transition={{ from: 0, ease: 'easeInOut', duration: 0.3 }}
+      variants={globalContainerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
     >
-      aaa
+      CreateAmbientView.tsx
     </motion.div>
   );
 }

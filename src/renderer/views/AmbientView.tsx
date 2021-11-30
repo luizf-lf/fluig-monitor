@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+import globalContainerVariants from '../utils/globalContainerVariants';
 import '../assets/styles/components/CenterView.scss';
 
 export default function Home(): JSX.Element {
@@ -13,8 +15,14 @@ export default function Home(): JSX.Element {
   );
 
   return (
-    <div id="centerViewContainer">
+    <motion.div
+      variants={globalContainerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+      id="centerViewContainer"
+    >
       {ambientData === null ? defaultMsg : ambientData}
-    </div>
+    </motion.div>
   );
 }

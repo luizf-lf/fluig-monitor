@@ -1,14 +1,6 @@
-import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import {
-  MemoryRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-  BrowserRouter,
-} from 'react-router-dom';
+import { Switch, Route, useLocation } from 'react-router-dom';
 
-// import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 
 import AmbientView from './views/AmbientView';
 import CreateAmbientView from './views/CreateAmbientView';
