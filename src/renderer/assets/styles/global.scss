@@ -31,13 +31,12 @@ body {
 
 button {
   background-color: transparent;
-
   cursor: pointer;
 }
 
 #mainWindow {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   width: 100%;
 

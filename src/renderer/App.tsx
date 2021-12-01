@@ -7,6 +7,7 @@ import CreateAmbientView from './views/CreateAmbientView';
 import Sidebar from './components/Sidebar';
 
 import './assets/styles/global.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function App() {
   const location = useLocation();
