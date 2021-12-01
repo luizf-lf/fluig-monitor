@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import globalContainerVariants from '../utils/globalContainerVariants';
+import globalContainerVariants from '../../utils/globalContainerVariants';
 import '../assets/styles/components/CenterView.scss';
 
 export default function Home(): JSX.Element {

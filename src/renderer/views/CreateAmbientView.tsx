@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import globalContainerVariants from '../utils/globalContainerVariants';
+import globalContainerVariants from '../../utils/globalContainerVariants';
 
 export default function CreateAmbientView() {
   return (
