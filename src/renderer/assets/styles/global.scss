@@ -1,19 +1,32 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
 
 :root {
-  font-family: 'Inter';
-  color: #152b45;
-  font-size: 16px;
+  --title: #1e293b;
+  --title-secondary: #334155;
+  --title-info: #9ca3af;
+  --background: #f1f5f9;
+  --card-bg: #ffffff;
+  --card-shadow: #f1f5f9;
+  --fade: #d1d5db;
+  --soft-border: #e5e7eb;
+
+  --green: #10b981;
+  --yellow: #fbbf24;
+  --red: #ef4444;
+  --blue: #6366f1;
 }
 
 * {
+  font-family: 'Inter';
+  font-size: 16px;
+
   margin: 0;
   border: 0;
   box-sizing: border-box;
 }
 
 body {
-  background-color: #f3f4f6;
+  background-color: var(--background);
 }
 
 button {

@@ -1,9 +1,8 @@
 #sidebarContainer {
-  background-color: #fff;
+  background-color: var(--card-bg);
   height: 100vh;
   width: 20rem;
   box-shadow: 4px 0px 40px rgba(0, 0, 0, 0.03);
-  left: -400px;
 
   display: flex;
   flex-direction: column;

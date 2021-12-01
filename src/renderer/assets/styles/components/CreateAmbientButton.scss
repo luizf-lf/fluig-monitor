@@ -1,6 +1,6 @@
 #createAmbientButton {
-  border: 2px dashed #d1d5db;
-  color: #d1d5db;
+  border: 2px dashed var(--fade);
+  color: var(--fade);
   width: 100%;
   display: flex;
   text-decoration: none;
