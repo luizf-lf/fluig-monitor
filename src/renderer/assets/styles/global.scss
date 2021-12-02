@@ -14,6 +14,8 @@
   --yellow: #fbbf24;
   --red: #ef4444;
   --blue: #6366f1;
+  --blue-outline: #7dd3fc;
+  --blue-medium: #60a5fa;
 }
 
 * {
@@ -32,6 +34,28 @@ body {
 button {
   background-color: transparent;
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid var(--blue-outline);
+  }
+}
+
+h1,
+h2,
+h3 {
+  margin-bottom: 1.25rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+}
+
+h3 {
+  font-size: 1.2rem;
 }
 
 #mainWindow {
@@ -39,11 +63,31 @@ button {
   align-items: flex-start;
   justify-content: center;
   width: 100%;
+  height: 100vh;
 
   padding: 2rem;
+
+  overflow-x: auto;
 }
 
 #appWrapper {
   display: flex;
   flex-direction: row;
+}
+
+/*/ Scroll Bar  /*/
+::-webkit-scrollbar {
+  width: 0.7rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--card-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+
+  &:hover {
+    background: #52525b;
+  }
 }

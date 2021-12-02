@@ -1,0 +1,81 @@
+/*
+  Buttons
+*/
+
+.button {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.35rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-right: 0.5rem;
+  }
+
+  &.is-default {
+    background-color: var(--blue);
+    color: var(--background);
+
+    &:hover {
+      outline: 3px solid var(--blue-outline);
+    }
+  }
+
+  &.is-secondary {
+    background-color: var(--card-bg);
+    color: var(--title-secondary);
+
+    &:hover {
+      outline: 3px solid var(--fade);
+    }
+  }
+}
+
+/*
+  Forms group
+*/
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0;
+  width: 100%;
+
+  label {
+    margin-bottom: 0.25rem;
+  }
+
+  input,
+  select {
+    padding: 0.5rem;
+    border-radius: 0.35rem;
+
+    &:focus-visible {
+      outline: 3px solid var(--blue-outline);
+    }
+  }
+
+  small {
+    font-size: 0.85rem;
+    margin-top: 0.3rem;
+    color: var(--title-info);
+  }
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+.mb-2 {
+  margin-bottom: 2rem;
+}
