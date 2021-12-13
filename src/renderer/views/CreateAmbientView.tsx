@@ -1,7 +1,14 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { motion } from 'framer-motion';
 import { FormEvent, useState } from 'react';
-import { FiCheck, FiWifi } from 'react-icons/fi';
+import {
+  FiAlertCircle,
+  FiAlertTriangle,
+  FiCheck,
+  FiRefreshCcw,
+  FiRefreshCw,
+  FiWifi,
+} from 'react-icons/fi';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
 import globalContainerVariants from '../../utils/globalContainerVariants';
@@ -40,6 +47,8 @@ export default function CreateAmbientView() {
   const [updateFrequencyTo, setUpdateFrequencyTo] = useState('');
   const [updateOnWorkDays, setUpdateOnWorkDays] = useState(false);
 
+  const [testMessage, setTestMessage] = useState(<></>);
+
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
@@ -61,7 +70,7 @@ export default function CreateAmbientView() {
       },
     };
 
-    console.log(formData);
+    // console.log(formData);
   }
 
   function sendTestConnection() {
@@ -71,7 +80,56 @@ export default function CreateAmbientView() {
       accessToken,
       tokenSecret,
     };
-    testConnection(domainUrl, auth);
+
+    if (
+      domainUrl !== '' &&
+      (consumerKey !== '' ||
+        consumerSecret !== '' ||
+        accessToken !== '' ||
+        tokenSecret !== '')
+    ) {
+      setTestMessage(
+        <span className="info-blip">
+          <FiRefreshCw className="rotating" /> Conectando...
+        </span>
+      );
+
+      setTimeout(async () => {
+        const result = await testConnection(domainUrl, auth);
+
+        console.log(result);
+        if (typeof result !== 'undefined') {
+          if (result.status !== 200) {
+            setTestMessage(
+              <span className="info-blip has-warning">
+                <FiAlertCircle /> Erro na conexão: {result.status}:{' '}
+                {result.statusText}
+              </span>
+            );
+          } else {
+            setTestMessage(
+              <span className="info-blip has-success">
+                <FiCheck /> Conexão Ok
+              </span>
+            );
+          }
+        } else {
+          setTestMessage(
+            <span className="info-blip has-error">
+              <FiAlertTriangle /> Erro de rede. Verifique a URL e a
+              disponibilidade do servidor.
+            </span>
+          );
+        }
+      }, 1000);
+    } else {
+      setTestMessage(
+        <span className="info-blip has-warning">
+          <FiAlertCircle />
+          Preencha os campos de URL e autenticação para continuar.
+        </span>
+      );
+    }
   }
 
   return (
@@ -93,7 +151,7 @@ export default function CreateAmbientView() {
             type="text"
             name="ambientName"
             id="ambientName"
-            placeholder="Informe um nome para identificação do ambiente"
+            placeholder="Ex.: Ambiente Exemplo 01"
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -108,7 +166,7 @@ export default function CreateAmbientView() {
               type="text"
               name="domainUrl"
               id="domainUrl"
-              placeholder="Informe a url do ambiente."
+              placeholder="Ex.: https://teste.fluig.com/"
               value={domainUrl}
               onChange={(event) => {
                 setDomainUrl(event.target.value);
@@ -196,13 +254,17 @@ export default function CreateAmbientView() {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="button is-secondary mt-1 mb-2"
-          onClick={sendTestConnection}
-        >
-          <FiWifi /> Testar Conexão
-        </button>
+        <div className="test-connection-row mt-1 mb-2">
+          <button
+            type="button"
+            className="button is-secondary"
+            onClick={sendTestConnection}
+          >
+            <FiWifi /> Testar Conexão
+          </button>
+
+          <span>{testMessage}</span>
+        </div>
 
         <h3>Configurações</h3>
 
