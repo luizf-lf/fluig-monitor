@@ -20,5 +20,8 @@
     "package-lock.json": true,
     "*.{css,sass,scss}.d.ts": true
   },
-  "totvsLanguageServer.welcomePage": false
+  "totvsLanguageServer.welcomePage": false,
+  "cSpell.words": [
+    "Wifi"
+  ]
 }

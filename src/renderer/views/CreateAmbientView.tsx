@@ -5,10 +5,10 @@ import {
   FiAlertCircle,
   FiAlertTriangle,
   FiCheck,
-  FiRefreshCcw,
   FiRefreshCw,
   FiWifi,
 } from 'react-icons/fi';
+import localStorageHandler from '../../utils/dbHandler';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
 import globalContainerVariants from '../../utils/globalContainerVariants';
@@ -48,13 +48,40 @@ export default function CreateAmbientView() {
   const [updateOnWorkDays, setUpdateOnWorkDays] = useState(false);
 
   const [testMessage, setTestMessage] = useState(<></>);
+  const [validationMessage, setValidationMessage] = useState(<></>);
+
+  function validateCustomData(formData: AmbientDataInterface) {
+    let isValid = false;
+    let message = '';
+    if (formData) {
+      if (formData.name === '') {
+        message = 'Nome do ambiente é obrigatório.';
+      } else if (formData.baseUrl === '') {
+        message = 'Endereço do ambiente é obrigatório.';
+      } else if (formData.auth.consumerKey === '') {
+        message = 'Consumer Key é obrigatório.';
+      } else if (formData.auth.consumerSecret === '') {
+        message = 'Consumer Secret ambiente é obrigatório.';
+      } else if (formData.auth.accessToken === '') {
+        message = 'Access Token é obrigatório.';
+      } else if (formData.auth.tokenSecret === '') {
+        message = 'Token Secret é obrigatório.';
+      } else if (formData.update.from === '' || formData.update.to === '') {
+        message = 'Horário de atualização é obrigatório.';
+      } else {
+        isValid = true;
+      }
+    }
+
+    return { isValid, message };
+  }
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
     const formData: AmbientDataInterface = {
       name,
-      url: domainUrl,
+      baseUrl: domainUrl,
       kind,
       auth: {
         consumerKey,
@@ -66,11 +93,29 @@ export default function CreateAmbientView() {
         frequency: updateFrequency,
         from: updateFrequencyFrom,
         to: updateFrequencyTo,
-        updateOnWorkDays,
+        onlyOnWorkDays: updateOnWorkDays,
       },
     };
 
-    // console.log(formData);
+    const { isValid, message } = validateCustomData(formData);
+
+    if (isValid) {
+      localStorageHandler.ambients.saveNew(formData);
+      // console.log(formData);
+      setValidationMessage(
+        <span className="info-blip has-success">
+          <FiCheck />
+          Ambiente cadastrado com sucesso
+        </span>
+      );
+    } else {
+      setValidationMessage(
+        <span className="info-blip has-error">
+          <FiAlertCircle />
+          {message}
+        </span>
+      );
+    }
   }
 
   function sendTestConnection() {
@@ -97,7 +142,6 @@ export default function CreateAmbientView() {
       setTimeout(async () => {
         const result = await testConnection(domainUrl, auth);
 
-        console.log(result);
         if (typeof result !== 'undefined') {
           if (result.status !== 200) {
             setTestMessage(
@@ -121,7 +165,7 @@ export default function CreateAmbientView() {
             </span>
           );
         }
-      }, 1000);
+      }, 100);
     } else {
       setTestMessage(
         <span className="info-blip has-warning">
@@ -254,7 +298,7 @@ export default function CreateAmbientView() {
           </div>
         </div>
 
-        <div className="test-connection-row mt-1 mb-2">
+        <div className="button-action-row mt-1 mb-2">
           <button
             type="button"
             className="button is-secondary"
@@ -335,9 +379,13 @@ export default function CreateAmbientView() {
           </span>
         </div>
 
-        <button className="button is-default mt-1" type="submit">
-          <FiCheck /> Confirmar
-        </button>
+        <div className="button-action-row mt-1 mb-2">
+          <button className="button is-default" type="submit">
+            <FiCheck /> Confirmar
+          </button>
+
+          {validationMessage}
+        </div>
       </form>
     </motion.div>
   );

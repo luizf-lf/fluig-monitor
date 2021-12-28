@@ -1,6 +1,6 @@
 export default interface AmbientDataInterface {
   name: string;
-  url: string;
+  baseUrl: string;
   kind: string;
   auth: {
     consumerKey: string;
@@ -12,6 +12,6 @@ export default interface AmbientDataInterface {
     frequency: string;
     from: string;
     to: string;
-    updateOnWorkDays: boolean;
+    onlyOnWorkDays: boolean;
   };
 }
