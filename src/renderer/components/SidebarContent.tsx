@@ -3,6 +3,7 @@ import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import dbHandler from '../../utils/dbHandler';
 import '../assets/styles/components/SidebarContent.scss';
 import CreateAmbientButton from './CreateAmbientButton';
+import AmbientListItem from './AmbientListItem';
 
 function getAmbientList() {
   const ambients = dbHandler.ambients.getAll();
@@ -12,7 +13,7 @@ function getAmbientList() {
     );
   }
   return ambients.map((ambient: AmbientDataInterface) => {
-    return <div key={ambient.baseUrl}>{ambient.name}</div>;
+    return <AmbientListItem data={ambient} />;
   });
 }
 

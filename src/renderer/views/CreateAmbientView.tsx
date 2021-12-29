@@ -101,7 +101,6 @@ export default function CreateAmbientView() {
 
     if (isValid) {
       localStorageHandler.ambients.saveNew(formData);
-      // console.log(formData);
       setValidationMessage(
         <span className="info-blip has-success">
           <FiCheck />
