@@ -1,0 +1,11 @@
+.empty-server-view {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  img.icon {
+    height: 5rem;
+    margin: 2rem;
+  }
+}
