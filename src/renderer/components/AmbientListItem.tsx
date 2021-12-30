@@ -1,6 +1,7 @@
 import { FiSettings } from 'react-icons/fi';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import SmallTag from './SmallTag';
+import '../assets/styles/components/AmbientListItem.scss';
 
 interface AmbientListItemInterface {
   data: AmbientDataInterface;
@@ -9,14 +10,20 @@ interface AmbientListItemInterface {
 export default function AmbientListItem({ data }: AmbientListItemInterface) {
   return (
     <div className="ambient-item-container">
-      <div>
-        <button type="button">{data.name}</button>
+      <div className="ambient-item-row">
+        <button type="button" id="ambientName">
+          {data.name}
+        </button>
         <button type="button">
           <FiSettings />
         </button>
       </div>
-      <div>
-        <span>status</span>
+      <div className="ambient-item-row">
+        {/* <span className="ambientStatusIndicator is-offline"> */}
+        <span className="ambientStatusIndicator">
+          <div id="indicatorDot" />
+          <span id="indicatorText">online</span>
+        </span>
         <span>
           <SmallTag kind={data.kind} />
         </span>

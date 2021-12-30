@@ -1,0 +1,56 @@
+.ambient-item-container {
+  background-color: var(--background);
+
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+
+  border-radius: 1rem;
+
+  .ambient-item-row {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    #ambientName {
+      font-weight: 600;
+    }
+
+    &:nth-child(1) {
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      padding: 0;
+    }
+
+    .ambientStatusIndicator {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      color: var(--green);
+
+      #indicatorDot {
+        height: 0.35rem;
+        width: 0.35rem;
+        border-radius: 100%;
+        background-color: var(--green);
+
+        margin-right: 0.4rem;
+      }
+      #indicatorText {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+      }
+
+      &.is-offline {
+        color: var(--red);
+
+        #indicatorDot {
+          background-color: var(--red);
+        }
+      }
+    }
+  }
+}
