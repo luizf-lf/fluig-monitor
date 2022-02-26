@@ -104,9 +104,13 @@ export default function CreateAmbientView() {
       setValidationMessage(
         <span className="info-blip has-success">
           <FiCheck />
-          Ambiente cadastrado com sucesso
+          Ambiente cadastrado com sucesso. Redirecionando para a tela inicial...
         </span>
       );
+
+      setTimeout(() => {
+        window.location.replace('/');
+      }, 3000);
     } else {
       setValidationMessage(
         <span className="info-blip has-error">
@@ -159,8 +163,8 @@ export default function CreateAmbientView() {
         } else {
           setTestMessage(
             <span className="info-blip has-error">
-              <FiAlertTriangle /> Erro de rede. Verifique a URL e a
-              disponibilidade do servidor.
+              <FiAlertTriangle /> Erro de conexão. Verifique a URL de domínio e
+              a disponibilidade do servidor.
             </span>
           );
         }
