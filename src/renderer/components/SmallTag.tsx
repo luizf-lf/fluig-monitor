@@ -5,5 +5,21 @@ interface SmallTagInterface {
 }
 
 export default function SmallTag({ kind }: SmallTagInterface) {
-  return <div className="small-tag">{kind}</div>;
+  let className = 'small-tag';
+
+  switch (kind) {
+    case 'PROD':
+      className += ' is-production';
+      break;
+    case 'HOMOLOG':
+      className += ' is-homolog';
+      break;
+    case 'DEV':
+      className += ' is-dev';
+      break;
+    default:
+      break;
+  }
+
+  return <div className={className}>{kind}</div>;
 }

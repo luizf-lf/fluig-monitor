@@ -1,9 +1,24 @@
 .small-tag {
   padding: 0.1rem 0.4rem;
   font-size: 0.75rem;
-  background-color: var(--light-green);
-  border: 1px solid var(--green);
-  color: var(--green);
   border-radius: 0.25rem;
   width: fit-content;
+
+  &.is-production {
+    background-color: var(--light-green);
+    border: 1px solid var(--green);
+    color: var(--green);
+  }
+
+  &.is-homolog {
+    background-color: var(--light-yellow);
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+  }
+
+  &.is-dev {
+    background-color: var(--light-blue);
+    border: 1px solid var(--blue);
+    color: var(--blue);
+  }
 }
