@@ -14,4 +14,5 @@ export default interface AmbientDataInterface {
     to: string;
     onlyOnWorkDays: boolean;
   };
+  uuid: string;
 }

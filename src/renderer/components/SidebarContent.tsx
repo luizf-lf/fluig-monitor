@@ -13,7 +13,7 @@ function getAmbientList() {
     );
   }
   return ambients.map((ambient: AmbientDataInterface) => {
-    return <AmbientListItem data={ambient} key={ambient.baseUrl} />;
+    return <AmbientListItem data={ambient} key={ambient.uuid} />;
   });
 }
 

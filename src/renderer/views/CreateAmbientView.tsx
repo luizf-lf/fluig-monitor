@@ -8,6 +8,7 @@ import {
   FiRefreshCw,
   FiWifi,
 } from 'react-icons/fi';
+import { v4 as uuidv4 } from 'uuid';
 import localStorageHandler from '../../utils/dbHandler';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
@@ -95,6 +96,7 @@ export default function CreateAmbientView() {
         to: updateFrequencyTo,
         onlyOnWorkDays: updateOnWorkDays,
       },
+      uuid: uuidv4(),
     };
 
     const { isValid, message } = validateCustomData(formData);
