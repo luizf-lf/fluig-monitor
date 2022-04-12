@@ -1,111 +1,58 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { motion } from 'framer-motion';
 import { FormEvent, useState } from 'react';
+import { motion } from 'framer-motion';
+import { useParams } from 'react-router';
 import {
   FiAlertCircle,
   FiAlertTriangle,
   FiCheck,
   FiRefreshCw,
   FiWifi,
+  FiX,
 } from 'react-icons/fi';
-import { v4 as uuidv4 } from 'uuid';
-import localStorageHandler from '../../utils/dbHandler';
-import AmbientDataInterface from '../interfaces/AmbientDataInterface';
-import testConnection from '../../services/testConnection';
+import AmbientViewParams from '../interfaces/AmbientViewParams';
 import globalContainerVariants from '../../utils/globalContainerVariants';
-
+import dbHandler from '../../utils/dbHandler';
 import ambientKinds from '../../utils/defaultAmbientKinds';
 import updateFrequencies from '../../utils/defaultUpdateFrequencies';
+import AmbientDataInterface from '../interfaces/AmbientDataInterface';
+import testConnection from '../../services/testConnection';
 
-export default function CreateAmbientView() {
-  const [name, setName] = useState('');
-  const [domainUrl, setDomainUrl] = useState('');
-  const [kind, setKind] = useState(ambientKinds[0].value);
-  const [consumerKey, setConsumerKey] = useState('');
-  const [consumerSecret, setConsumerSecret] = useState('');
-  const [accessToken, setAccessToken] = useState('');
-  const [tokenSecret, setTokenSecret] = useState('');
-  const [updateFrequency, setUpdateFrequency] = useState(
-    updateFrequencies[2].value
+function EditAmbientSettingsView(): JSX.Element {
+  console.log('-- EditAmbientSettingsView --');
+  const { ambientUUID }: AmbientViewParams = useParams();
+  console.log({ ambientUUID });
+  const ambientData: AmbientDataInterface =
+    dbHandler.ambients.getByUUID(ambientUUID);
+  console.log({ ambientData });
+
+  const [name, setName] = useState(ambientData.name);
+  const [domainUrl, setDomainUrl] = useState(ambientData.baseUrl);
+  const [kind, setKind] = useState(
+    ambientKinds.find((i) => i.value === ambientData.kind)?.value
   );
-  const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState('');
-  const [updateFrequencyTo, setUpdateFrequencyTo] = useState('');
-  const [updateOnWorkDays, setUpdateOnWorkDays] = useState(false);
+  const [consumerKey, setConsumerKey] = useState(ambientData.auth.consumerKey);
+  const [consumerSecret, setConsumerSecret] = useState(
+    ambientData.auth.consumerSecret
+  );
+  const [accessToken, setAccessToken] = useState(ambientData.auth.accessToken);
+  const [tokenSecret, setTokenSecret] = useState(ambientData.auth.tokenSecret);
+  const [updateFrequency, setUpdateFrequency] = useState(
+    updateFrequencies.find((i) => i.value === ambientData.update.frequency)
+      ?.value
+  );
+  const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState(
+    ambientData.update.from
+  );
+  const [updateFrequencyTo, setUpdateFrequencyTo] = useState(
+    ambientData.update.to
+  );
+  const [updateOnWorkDays, setUpdateOnWorkDays] = useState(
+    ambientData.update.onlyOnWorkDays
+  );
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
-
-  function validateCustomData(formData: AmbientDataInterface) {
-    let isValid = false;
-    let message = '';
-    if (formData) {
-      if (formData.name === '') {
-        message = 'Nome do ambiente é obrigatório.';
-      } else if (formData.baseUrl === '') {
-        message = 'Endereço do ambiente é obrigatório.';
-      } else if (formData.auth.consumerKey === '') {
-        message = 'Consumer Key é obrigatório.';
-      } else if (formData.auth.consumerSecret === '') {
-        message = 'Consumer Secret ambiente é obrigatório.';
-      } else if (formData.auth.accessToken === '') {
-        message = 'Access Token é obrigatório.';
-      } else if (formData.auth.tokenSecret === '') {
-        message = 'Token Secret é obrigatório.';
-      } else if (formData.update.from === '' || formData.update.to === '') {
-        message = 'Horário de atualização é obrigatório.';
-      } else {
-        isValid = true;
-      }
-    }
-
-    return { isValid, message };
-  }
-
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    const formData: AmbientDataInterface = {
-      name,
-      baseUrl: domainUrl,
-      kind,
-      auth: {
-        consumerKey,
-        consumerSecret,
-        accessToken,
-        tokenSecret,
-      },
-      update: {
-        frequency: updateFrequency,
-        from: updateFrequencyFrom,
-        to: updateFrequencyTo,
-        onlyOnWorkDays: updateOnWorkDays,
-      },
-      uuid: uuidv4(),
-    };
-
-    const { isValid, message } = validateCustomData(formData);
-
-    if (isValid) {
-      localStorageHandler.ambients.saveNew(formData);
-      setValidationMessage(
-        <span className="info-blip has-success">
-          <FiCheck />
-          Ambiente cadastrado com sucesso. Redirecionando para a tela inicial...
-        </span>
-      );
-
-      setTimeout(() => {
-        window.location.replace('/');
-      }, 3000);
-    } else {
-      setValidationMessage(
-        <span className="info-blip has-error">
-          <FiAlertCircle />
-          {message}
-        </span>
-      );
-    }
-  }
 
   function sendTestConnection() {
     const auth = {
@@ -165,18 +112,27 @@ export default function CreateAmbientView() {
     }
   }
 
+  function handleSave(event: FormEvent) {
+    event.preventDefault();
+    // TODO: Implement
+  }
+
+  function confirmDelete() {
+    // TODO: Implement
+  }
+
   return (
     <motion.div
       variants={globalContainerVariants}
       initial="hidden"
       animate="visible"
       exit="exit"
-      id="createAmbientContainer"
+      id="centerViewContainer"
       className="ambientFormContainer"
     >
-      <h1>Cadastrar novo ambiente</h1>
+      <h1>Editar ambiente</h1>
 
-      <form action="#" onSubmit={handleSubmit}>
+      <form action="#" onSubmit={handleSave}>
         <h3>Dados do ambiente</h3>
 
         <div className="form-group">
@@ -301,7 +257,6 @@ export default function CreateAmbientView() {
         </div>
 
         <h3>Configurações</h3>
-
         <div className="form-group">
           <label htmlFor="updateFrequency">Frequência de atualização:</label>
           <select
@@ -358,6 +313,7 @@ export default function CreateAmbientView() {
               name="updateInWorkDays"
               id="updateInWorkDays"
               value={updateOnWorkDays === true ? 'on' : ''}
+              checked={updateOnWorkDays === true}
               onChange={(event) => {
                 setUpdateOnWorkDays(event.target.checked);
               }}
@@ -371,12 +327,19 @@ export default function CreateAmbientView() {
 
         <div className="button-action-row mt-1 mb-2">
           <button className="button is-default" type="submit">
-            <FiCheck /> Confirmar
+            <FiCheck /> Salvar
           </button>
-
-          {validationMessage}
+          <button
+            className="button is-danger"
+            type="button"
+            onClick={confirmDelete}
+          >
+            <FiX /> Excluir Ambiente
+          </button>
         </div>
       </form>
     </motion.div>
   );
 }
+
+export default EditAmbientSettingsView;

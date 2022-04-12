@@ -9,15 +9,32 @@ interface AmbientListItemInterface {
 }
 
 export default function AmbientListItem({ data }: AmbientListItemInterface) {
+  let ambientKindTitle = '';
+
+  switch (data.kind) {
+    case 'PROD':
+      ambientKindTitle = 'Produção';
+      break;
+    case 'HML':
+      ambientKindTitle = 'Homologação';
+      break;
+    case 'DEV':
+      ambientKindTitle = 'Desenvolvimento';
+      break;
+
+    default:
+      ambientKindTitle = 'Desconhecido';
+      break;
+  }
   return (
     <div className="ambient-item-container">
       <div className="ambient-item-row">
         <Link to={`/ambient/${data.uuid}`} id="ambientName">
           {data.name}
         </Link>
-        <button type="button">
+        <Link to={`/ambient/${data.uuid}/edit`}>
           <FiSettings />
-        </button>
+        </Link>
       </div>
       <div className="ambient-item-row">
         {/* <span className="ambientStatusIndicator is-offline"> */}
@@ -25,7 +42,7 @@ export default function AmbientListItem({ data }: AmbientListItemInterface) {
           <div id="indicatorDot" />
           <span id="indicatorText">online</span>
         </span>
-        <span>
+        <span title={ambientKindTitle}>
           <SmallTag kind={data.kind} />
         </span>
       </div>

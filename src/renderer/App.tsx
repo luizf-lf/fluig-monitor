@@ -4,6 +4,7 @@ import { AnimatePresence } from 'framer-motion';
 
 import AmbientView from './views/AmbientView';
 import CreateAmbientView from './views/CreateAmbientView';
+import EditAmbientSettingsView from './views/EditAmbientSettingsView';
 import Sidebar from './components/Sidebar';
 
 import './assets/styles/global.scss';
@@ -23,7 +24,11 @@ export default function App() {
               path="/settings/ambients/new"
               component={CreateAmbientView}
             />
-            <Route path="/ambient/:ambientUUID" component={AmbientView} />
+            <Route exact path="/ambient/:ambientUUID" component={AmbientView} />
+            <Route
+              path="/ambient/:ambientUUID/edit"
+              component={EditAmbientSettingsView}
+            />
           </Switch>
         </main>
       </div>

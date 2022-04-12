@@ -6,15 +6,18 @@ import AmbientViewParams from '../interfaces/AmbientViewParams';
 import serverImg from '../assets/img/server.png';
 import '../assets/styles/components/CenterView.scss';
 
-export default function Home(): JSX.Element {
+export default function AmbientView(): JSX.Element {
+  console.log('-- AmbientView --');
   let ambientView = null;
   const { ambientUUID }: AmbientViewParams = useParams();
   console.log({ ambientUUID });
 
-  const ambientData = dbHandler.ambients.getByUUID(ambientUUID);
-  console.log({ ambientData });
+  if (typeof ambientUUID !== 'undefined') {
+    const ambientData = dbHandler.ambients.getByUUID(ambientUUID);
+    console.log({ ambientData });
 
-  ambientView = <></>;
+    ambientView = <div>{ambientData.name}</div>;
+  }
 
   const defaultMsg = (
     <div className="empty-server-view">
