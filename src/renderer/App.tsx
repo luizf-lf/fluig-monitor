@@ -23,6 +23,7 @@ export default function App() {
               path="/settings/ambients/new"
               component={CreateAmbientView}
             />
+            <Route path="/ambient/:ambientUUID" component={AmbientView} />
           </Switch>
         </main>
       </div>

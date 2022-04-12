@@ -1,12 +1,20 @@
 import { motion } from 'framer-motion';
+import { useParams } from 'react-router';
 import globalContainerVariants from '../../utils/globalContainerVariants';
-import '../assets/styles/components/CenterView.scss';
+import dbHandler from '../../utils/dbHandler';
+import AmbientViewParams from '../interfaces/AmbientViewParams';
 import serverImg from '../assets/img/server.png';
+import '../assets/styles/components/CenterView.scss';
 
 export default function Home(): JSX.Element {
-  let ambientData = null;
+  let ambientView = null;
+  const { ambientUUID }: AmbientViewParams = useParams();
+  console.log({ ambientUUID });
 
-  ambientData = null;
+  const ambientData = dbHandler.ambients.getByUUID(ambientUUID);
+  console.log({ ambientData });
+
+  ambientView = <></>;
 
   const defaultMsg = (
     <div className="empty-server-view">
@@ -26,7 +34,7 @@ export default function Home(): JSX.Element {
       exit="exit"
       id="centerViewContainer"
     >
-      {ambientData === null ? defaultMsg : ambientData}
+      {ambientView === null ? defaultMsg : ambientView}
     </motion.div>
   );
 }
