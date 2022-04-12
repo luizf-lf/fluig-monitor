@@ -19,7 +19,7 @@ import '../assets/styles/views/CreateAmbientView.scss';
 export default function CreateAmbientView() {
   const ambientKinds = [
     { value: 'PROD', description: 'Produção' },
-    { value: 'HOMOLOG', description: 'Homologação' },
+    { value: 'HML', description: 'Homologação' },
     { value: 'DEV', description: 'Desenvolvimento' },
   ];
   const updateFrequencies = [

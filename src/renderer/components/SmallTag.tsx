@@ -11,7 +11,7 @@ export default function SmallTag({ kind }: SmallTagInterface) {
     case 'PROD':
       className += ' is-production';
       break;
-    case 'HOMOLOG':
+    case 'HML':
       className += ' is-homolog';
       break;
     case 'DEV':
