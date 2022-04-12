@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import AmbientDataInterface from '../renderer/interfaces/AmbientDataInterface';
 
 const dbHandler = {
@@ -9,6 +10,11 @@ const dbHandler = {
       if (storage !== null) {
         ambients = JSON.parse(storage);
       }
+
+      // sends a synchronous IPC message to the IPC listener on the 'main' process
+      //  requesting the data provided by the 'getPath' method, which itself is
+      //  a custom method implemented to return the user path from the 'main' process.
+      console.log(ipcRenderer.sendSync('get-user-data-folder', 'getPath'));
 
       return ambients;
     },

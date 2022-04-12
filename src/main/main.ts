@@ -69,7 +69,8 @@ const createWindow = async () => {
     minHeight: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      nodeIntegration: true,
+      contextIsolation: false,
       devTools: isDevelopment,
     },
   });
@@ -104,6 +105,20 @@ const createWindow = async () => {
 /**
  * Add event listeners...
  */
+
+// creates a custom IPC listener
+//  the 'get-user-data-folder' is the custom channel name.
+//  A channel can have multiple methods verified by the 'arg' variable,
+//  which can return different values according to your logic.
+ipcMain.on('get-user-data-folder', (event, arg) => {
+  // in this case, the required method is 'getPath'
+  if (arg === 'getPath') {
+    // so the return value of the event is the getPath() method of
+    //  the electron 'app' process.
+    // it should return something like C:\Users\<user>\AppData\Roaming on Windows
+    event.returnValue = app.getPath('appData');
+  }
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even
