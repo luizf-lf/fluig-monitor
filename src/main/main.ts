@@ -107,50 +107,59 @@ const createWindow = async () => {
  * Add event listeners...
  */
 
-// creates a custom IPC listener
+// Example: creates a custom IPC listener
 //  the 'get-user-data-folder' is the custom channel name.
-//  A channel can have multiple methods verified by the 'arg' variable,
+//  A channel can have multiple methods described by the 'arg' variable,
 //  which can return different values according to your logic.
 ipcMain.on('get-user-data-folder', (event, arg) => {
   // in this case, the required method is 'getPath'
   if (arg === 'getPath') {
     // so the return value of the event is the getPath() method of
     //  the electron 'app' process.
-    // it should return something like C:\Users\<user>\AppData\Roaming on Windows
+    // it should return something like 'C:\Users\<user>\AppData\Roaming' on Windows
     event.returnValue = path.resolve(app.getPath('appData'), 'fluig-monitor');
   }
 });
 
-// TODO: Evaluate method
-// IPC listener - save local settings file
+// IPC listener to save local settings file
 ipcMain.on('update-db-file', (event, arg) => {
-  const pathName = path.resolve(app.getPath('appData'), 'fluig-monitor');
-
-  fs.writeFile(
-    `${pathName}/user-settings.json`,
-    JSON.stringify(arg),
-    (result) => {
-      console.log(result);
-    }
+  const filePath = path.resolve(
+    app.getPath('appData'),
+    'fluig-monitor',
+    'user-settings.json'
   );
 
-  event.returnValue = true;
+  console.log(
+    `[${new Date().toLocaleString()}] IPC: Writing database file to ${filePath}`
+  );
+
+  try {
+    fs.writeFileSync(filePath, arg);
+    event.returnValue = true;
+  } catch (err) {
+    console.log(err);
+    event.returnValue = false;
+  }
 });
 
-// TODO: Evaluate method
 // IPC listener to get settings file
-ipcMain.on('update-db-file', (event, arg) => {
-  const pathName = path.resolve(app.getPath('appData'), 'fluig-monitor');
-
-  fs.writeFile(
-    `${pathName}/user-settings.json`,
-    JSON.stringify(arg),
-    (result) => {
-      console.log(result);
-    }
+ipcMain.on('get-db-file', (event) => {
+  const filePath = path.resolve(
+    app.getPath('appData'),
+    'fluig-monitor',
+    'user-settings.json'
   );
 
-  event.returnValue = true;
+  console.log(
+    `[${new Date().toLocaleString()}] IPC: Reading database file from ${filePath}`
+  );
+
+  try {
+    event.returnValue = fs.readFileSync(filePath, 'utf-8');
+  } catch (err) {
+    console.log(err);
+    event.returnValue = null;
+  }
 });
 
 app.on('window-all-closed', () => {

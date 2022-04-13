@@ -1,41 +1,57 @@
 import { ipcRenderer } from 'electron';
 import AmbientDataInterface from '../renderer/interfaces/AmbientDataInterface';
 
-// TODO: use ipcRenderer to get/save data to local file
 const dbHandler = {
+  global: {
+    initData() {
+      const initData = {
+        userSettings: {},
+        ambients: [],
+        monitoringHistory: [],
+      };
+
+      const result = ipcRenderer.sendSync(
+        'update-db-file',
+        JSON.stringify(initData)
+      );
+      if (!result) {
+        throw new Error('Error initializing database file');
+      }
+
+      return initData;
+    },
+  },
   ambients: {
     getAll() {
       let ambients = [];
-      const storage = localStorage.getItem('FM_ambients');
+      const storage = ipcRenderer.sendSync('get-db-file');
 
       if (storage !== null) {
-        ambients = JSON.parse(storage);
+        ambients = JSON.parse(storage).ambients;
+      } else {
+        dbHandler.global.initData();
       }
-
-      // sends a synchronous IPC message to the IPC listener on the 'main' process
-      //  requesting the data provided by the 'getPath' method, which itself is
-      //  a custom method implemented to return the user path from the 'main' process.
-      // console.log(ipcRenderer.sendSync('get-user-data-folder', 'getPath'));
-      // const result = ipcRenderer.sendSync('update-db-file', ambients);
-
-      // TODO: Re-evaluate and remove from 'getAll' method
-      // if (!result) {
-      //   throw new Error('Error while saving settings file');
-      // }
 
       return ambients;
     },
     saveNew(ambientData: AmbientDataInterface) {
-      let ambients = [];
-      const storage = localStorage.getItem('FM_ambients');
+      let storage = ipcRenderer.sendSync('get-db-file');
 
       if (storage !== null) {
-        ambients = JSON.parse(storage);
+        storage = JSON.parse(storage);
+      } else {
+        storage = dbHandler.global.initData();
       }
 
-      ambients.push(ambientData);
+      storage.ambients.push(ambientData);
 
-      localStorage.setItem('FM_ambients', JSON.stringify(ambients));
+      const result = ipcRenderer.sendSync(
+        'update-db-file',
+        JSON.stringify(storage)
+      );
+      if (!result) {
+        throw new Error('Error updating database file');
+      }
       return true;
     },
     getByUUID(uuid: string) {
