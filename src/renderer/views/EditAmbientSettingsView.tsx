@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useParams } from 'react-router';
+import { Redirect, useParams } from 'react-router';
 import {
   FiAlertCircle,
   FiAlertTriangle,
@@ -20,12 +20,9 @@ import testConnection from '../../services/testConnection';
 import formUtils from '../../utils/formUtils';
 
 function EditAmbientSettingsView(): JSX.Element {
-  console.log('-- EditAmbientSettingsView --');
   const { ambientUUID }: AmbientViewParams = useParams();
-  console.log({ ambientUUID });
   const ambientData: AmbientDataInterface =
     dbHandler.ambients.getByUUID(ambientUUID);
-  console.log({ ambientData });
 
   const [name, setName] = useState(ambientData.name);
   const [domainUrl, setDomainUrl] = useState(ambientData.baseUrl);
@@ -54,6 +51,7 @@ function EditAmbientSettingsView(): JSX.Element {
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
+  const [confirmBtnClicked, setConfirmBtnClicked] = useState(false);
 
   function sendTestConnection() {
     const auth = {
@@ -169,12 +167,31 @@ function EditAmbientSettingsView(): JSX.Element {
     );
 
     setTimeout(() => {
-      window.location.replace('/');
+      setValidationMessage(<Redirect to="/" />);
     }, 3000);
   }
 
   function confirmDelete() {
-    // TODO: Implement
+    if (!confirmBtnClicked) {
+      setConfirmBtnClicked(true);
+      setValidationMessage(
+        <span className="info-blip has-warning">
+          <FiAlertCircle />
+          Clique novamente para confirmar a exclusão.
+        </span>
+      );
+    } else {
+      setValidationMessage(
+        <span className="info-blip has-success">
+          <FiCheck />
+          Ambiente excluído com sucesso. Redirecionando para a tela principal...
+        </span>
+      );
+      setTimeout(() => {
+        dbHandler.ambients.deleteByUUID(ambientUUID);
+        setValidationMessage(<Redirect to="/" />);
+      }, 3000);
+    }
   }
 
   return (

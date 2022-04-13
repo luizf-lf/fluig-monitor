@@ -9,7 +9,8 @@ import {
   FiWifi,
 } from 'react-icons/fi';
 import { v4 as uuidv4 } from 'uuid';
-import localStorageHandler from '../../utils/dbHandler';
+import { Redirect } from 'react-router';
+import dbHandler from '../../utils/dbHandler';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
 import globalContainerVariants from '../../utils/globalContainerVariants';
@@ -61,7 +62,7 @@ export default function CreateAmbientView() {
     const { isValid, message } = formUtils.validate(formData);
 
     if (isValid) {
-      localStorageHandler.ambients.saveNew(formData);
+      dbHandler.ambients.saveNew(formData);
       setValidationMessage(
         <span className="info-blip has-success">
           <FiCheck />
@@ -70,7 +71,7 @@ export default function CreateAmbientView() {
       );
 
       setTimeout(() => {
-        window.location.replace('/');
+        setValidationMessage(<Redirect to="/" />);
       }, 3000);
     } else {
       setValidationMessage(
