@@ -12,6 +12,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import * as fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -116,8 +117,40 @@ ipcMain.on('get-user-data-folder', (event, arg) => {
     // so the return value of the event is the getPath() method of
     //  the electron 'app' process.
     // it should return something like C:\Users\<user>\AppData\Roaming on Windows
-    event.returnValue = app.getPath('appData');
+    event.returnValue = path.resolve(app.getPath('appData'), 'fluig-monitor');
   }
+});
+
+// TODO: Evaluate method
+// IPC listener - save local settings file
+ipcMain.on('update-db-file', (event, arg) => {
+  const pathName = path.resolve(app.getPath('appData'), 'fluig-monitor');
+
+  fs.writeFile(
+    `${pathName}/user-settings.json`,
+    JSON.stringify(arg),
+    (result) => {
+      console.log(result);
+    }
+  );
+
+  event.returnValue = true;
+});
+
+// TODO: Evaluate method
+// IPC listener to get settings file
+ipcMain.on('update-db-file', (event, arg) => {
+  const pathName = path.resolve(app.getPath('appData'), 'fluig-monitor');
+
+  fs.writeFile(
+    `${pathName}/user-settings.json`,
+    JSON.stringify(arg),
+    (result) => {
+      console.log(result);
+    }
+  );
+
+  event.returnValue = true;
 });
 
 app.on('window-all-closed', () => {

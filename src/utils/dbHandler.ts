@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import AmbientDataInterface from '../renderer/interfaces/AmbientDataInterface';
 
+// TODO: use ipcRenderer to get/save data to local file
 const dbHandler = {
   ambients: {
     getAll() {
@@ -14,7 +15,13 @@ const dbHandler = {
       // sends a synchronous IPC message to the IPC listener on the 'main' process
       //  requesting the data provided by the 'getPath' method, which itself is
       //  a custom method implemented to return the user path from the 'main' process.
-      console.log(ipcRenderer.sendSync('get-user-data-folder', 'getPath'));
+      // console.log(ipcRenderer.sendSync('get-user-data-folder', 'getPath'));
+      // const result = ipcRenderer.sendSync('update-db-file', ambients);
+
+      // TODO: Re-evaluate and remove from 'getAll' method
+      // if (!result) {
+      //   throw new Error('Error while saving settings file');
+      // }
 
       return ambients;
     },
