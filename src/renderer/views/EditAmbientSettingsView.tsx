@@ -17,6 +17,7 @@ import ambientKinds from '../../utils/defaultAmbientKinds';
 import updateFrequencies from '../../utils/defaultUpdateFrequencies';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
+import formUtils from '../../utils/formUtils';
 
 function EditAmbientSettingsView(): JSX.Element {
   console.log('-- EditAmbientSettingsView --');
@@ -112,9 +113,64 @@ function EditAmbientSettingsView(): JSX.Element {
     }
   }
 
-  function handleSave(event: FormEvent) {
+  function handleUpdateData(event: FormEvent) {
     event.preventDefault();
-    // TODO: Implement
+
+    const formData = {
+      name,
+      baseUrl: domainUrl,
+      kind: kind ?? '',
+      auth: {
+        consumerKey,
+        consumerSecret,
+        accessToken,
+        tokenSecret,
+      },
+      update: {
+        frequency: updateFrequency ?? '',
+        from: updateFrequencyFrom,
+        to: updateFrequencyTo,
+        onlyOnWorkDays: updateOnWorkDays,
+      },
+      uuid: ambientUUID,
+    };
+
+    const { isValid, message } = formUtils.validate(formData);
+
+    if (!isValid) {
+      setValidationMessage(
+        <span className="info-blip has-error">
+          <FiAlertCircle />
+          {message}
+        </span>
+      );
+
+      return;
+    }
+
+    const result = dbHandler.ambients.updateByUUID(ambientUUID, formData);
+
+    if (!result) {
+      setValidationMessage(
+        <span className="info-blip has-error">
+          <FiAlertCircle />
+          Erro ao atualizar informações do ambiente, tente novamente.
+        </span>
+      );
+
+      return;
+    }
+
+    setValidationMessage(
+      <span className="info-blip has-success">
+        <FiCheck />
+        Ambiente atualizado com sucesso. Redirecionando para a tela inicial...
+      </span>
+    );
+
+    setTimeout(() => {
+      window.location.replace('/');
+    }, 3000);
   }
 
   function confirmDelete() {
@@ -132,7 +188,7 @@ function EditAmbientSettingsView(): JSX.Element {
     >
       <h1>Editar ambiente</h1>
 
-      <form action="#" onSubmit={handleSave}>
+      <form action="#" onSubmit={handleUpdateData}>
         <h3>Dados do ambiente</h3>
 
         <div className="form-group">
@@ -336,6 +392,8 @@ function EditAmbientSettingsView(): JSX.Element {
           >
             <FiX /> Excluir Ambiente
           </button>
+
+          {validationMessage}
         </div>
       </form>
     </motion.div>

@@ -74,6 +74,48 @@ const dbHandler = {
 
       return null;
     },
+    updateByUUID(uuid: string, updatedAmbient: AmbientDataInterface) {
+      const storage = JSON.parse(ipcRenderer.sendSync('get-db-file'));
+      const { ambients } = storage;
+
+      const index = ambients.findIndex(
+        (element: AmbientDataInterface) => element.uuid === uuid
+      );
+
+      if (index === -1) {
+        return false;
+      }
+
+      console.log({ storage });
+      console.log({ storageAmbients: storage.ambients[index] });
+
+      storage.ambients[index] = updatedAmbient;
+
+      const result = ipcRenderer.sendSync(
+        'update-db-file',
+        JSON.stringify(storage)
+      );
+      if (!result) {
+        throw new Error('Error updating database file');
+      }
+      return true;
+    },
+    // deleteByUUID(uuid: string) {
+    //   const db = ipcRenderer.sendSync('get-db-file');
+    //   const { ambients } = db;
+
+    //   ambients.map((ambient: AmbientDataInterface, idx: number) => {
+    //     if (ambient.uuid === uuid) {
+    //       ambients.splice(idx, 1);
+    //       return true;
+    //     }
+    //     return false;
+    //   });
+
+    //   console.log(ambients);
+    //   db.ambients = ambients;
+    //   console.log(db);
+    // },
   },
 };
 
