@@ -1,28 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
-import dbHandler from '../../utils/dbHandler';
 import '../assets/styles/components/SidebarContent.scss';
 import CreateAmbientButton from './CreateAmbientButton';
 import AmbientListItem from './AmbientListItem';
-
-function getAmbientList() {
-  const ambients = dbHandler.ambients.getAll();
-  if (ambients.length === 0) {
-    return (
-      <span style={{ color: 'var(--fade)' }}>Nenhum ambiente cadastrado.</span>
-    );
-  }
-  return ambients.map((ambient: AmbientDataInterface) => {
-    return <AmbientListItem data={ambient} key={ambient.uuid} />;
-  });
-}
+import AmbientListContext from '../contexts/AmbientListContext';
 
 export default function SidebarContent(): JSX.Element {
-  const [ambientList, setAmbientList] = useState(<></>);
-
-  useEffect(() => {
-    setAmbientList(getAmbientList());
-  }, []);
+  const [ambientList] = useContext(AmbientListContext);
 
   return (
     <div id="SidebarContentContainer">
@@ -30,7 +14,15 @@ export default function SidebarContent(): JSX.Element {
         <h3>Seus ambientes</h3>
       </div>
       <section id="ambientList">
-        {ambientList}
+        {ambientList.length === 0 ? (
+          <span style={{ color: 'var(--fade)' }}>
+            Nenhum ambiente cadastrado.
+          </span>
+        ) : (
+          ambientList.map((ambient: AmbientDataInterface) => (
+            <AmbientListItem data={ambient} key={ambient.uuid} />
+          ))
+        )}
         <CreateAmbientButton />
       </section>
     </div>

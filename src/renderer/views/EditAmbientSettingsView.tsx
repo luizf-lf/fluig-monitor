@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Redirect, useParams } from 'react-router';
 import {
@@ -18,6 +18,7 @@ import updateFrequencies from '../../utils/defaultUpdateFrequencies';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
 import formUtils from '../../utils/formUtils';
+import AmbientListContext from '../contexts/AmbientListContext';
 
 function EditAmbientSettingsView(): JSX.Element {
   const { ambientUUID }: AmbientViewParams = useParams();
@@ -52,6 +53,8 @@ function EditAmbientSettingsView(): JSX.Element {
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
   const [confirmBtnClicked, setConfirmBtnClicked] = useState(false);
+
+  const [setAmbientList] = useContext(AmbientListContext);
 
   function sendTestConnection() {
     const auth = {
@@ -167,6 +170,7 @@ function EditAmbientSettingsView(): JSX.Element {
     );
 
     setTimeout(() => {
+      setAmbientList(dbHandler.ambients.getAll());
       setValidationMessage(<Redirect to="/" />);
     }, 3000);
   }

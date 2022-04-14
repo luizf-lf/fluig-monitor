@@ -29,7 +29,7 @@ const dbHandler = {
       if (storage !== null) {
         ambients = JSON.parse(storage).ambients;
       } else {
-        dbHandler.global.initData();
+        ambients = dbHandler.global.initData().ambients;
       }
 
       return ambients;

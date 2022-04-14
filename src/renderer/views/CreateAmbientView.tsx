@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { motion } from 'framer-motion';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import {
   FiAlertCircle,
   FiAlertTriangle,
@@ -18,6 +18,7 @@ import globalContainerVariants from '../../utils/globalContainerVariants';
 import ambientKinds from '../../utils/defaultAmbientKinds';
 import updateFrequencies from '../../utils/defaultUpdateFrequencies';
 import formUtils from '../../utils/formUtils';
+import AmbientListContext from '../contexts/AmbientListContext';
 
 export default function CreateAmbientView() {
   const [name, setName] = useState('');
@@ -36,6 +37,8 @@ export default function CreateAmbientView() {
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
+
+  const [ambients, setAmbients] = useContext(AmbientListContext);
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -71,6 +74,7 @@ export default function CreateAmbientView() {
       );
 
       setTimeout(() => {
+        setAmbients(dbHandler.ambients.getAll());
         setValidationMessage(<Redirect to="/" />);
       }, 3000);
     } else {
