@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import '../assets/styles/components/SidebarContent.scss';
 import CreateAmbientButton from './CreateAmbientButton';
@@ -14,16 +15,43 @@ export default function SidebarContent(): JSX.Element {
         <h3>Seus ambientes</h3>
       </div>
       <section id="ambientList">
-        {ambientList.length === 0 ? (
-          <span style={{ color: 'var(--fade)' }}>
-            Nenhum ambiente cadastrado.
-          </span>
-        ) : (
-          ambientList.map((ambient: AmbientDataInterface) => (
-            <AmbientListItem data={ambient} key={ambient.uuid} />
-          ))
-        )}
-        <CreateAmbientButton />
+        <AnimatePresence>
+          {ambientList.length === 0 ? (
+            <motion.span
+              style={{ color: 'var(--fade)' }}
+              initial={{ opacity: 0, x: '-100px' }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                transition: { ease: 'easeInOut', duration: 1 },
+              }}
+              exit={{ opacity: 0, x: '-100px' }}
+              key="EMPTY_AMBIENT_LIST_ITEM"
+            >
+              Nenhum ambiente cadastrado.
+            </motion.span>
+          ) : (
+            ambientList.map((ambient: AmbientDataInterface) => (
+              <motion.div
+                initial={{ opacity: 0, scale: '75%' }}
+                animate={{
+                  opacity: 1,
+                  scale: '100%',
+                  transition: { ease: 'easeInOut', duration: 0.5 },
+                }}
+                exit={{
+                  opacity: 0,
+                  x: '-300px',
+                  transition: { ease: 'easeInOut', duration: 0.3 },
+                }}
+                key={ambient.uuid}
+              >
+                <AmbientListItem data={ambient} />
+              </motion.div>
+            ))
+          )}
+          <CreateAmbientButton />
+        </AnimatePresence>
       </section>
     </div>
   );

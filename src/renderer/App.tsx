@@ -18,11 +18,15 @@ export default function App() {
 
   return (
     <AmbientListContext.Provider value={[ambients, setAmbients]}>
-      <AnimatePresence exitBeforeEnter>
-        <div id="appWrapper">
-          <Sidebar />
-          <main id="mainWindow">
-            <Switch location={location} key={location.key}>
+      <div id="appWrapper">
+        <Sidebar />
+        <main id="mainWindow">
+          <AnimatePresence exitBeforeEnter>
+            {/*
+              The key prop must be configured as below
+                otherwise, the exit animation will not work
+            */}
+            <Switch location={location} key={location.pathname}>
               <Route exact path="/" component={AmbientView} />
               <Route
                 path="/settings/ambients/new"
@@ -38,9 +42,9 @@ export default function App() {
                 component={EditAmbientSettingsView}
               />
             </Switch>
-          </main>
-        </div>
-      </AnimatePresence>
+          </AnimatePresence>
+        </main>
+      </div>
     </AmbientListContext.Provider>
   );
 }
