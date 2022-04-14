@@ -1,11 +1,15 @@
 import { ipcRenderer } from 'electron';
+import DatabaseInterface from '../renderer/interfaces/DatabaseInterface';
 import AmbientDataInterface from '../renderer/interfaces/AmbientDataInterface';
 
 const dbHandler = {
   global: {
     initData() {
-      const initData = {
-        userSettings: {},
+      const initData: DatabaseInterface = {
+        userSettings: {
+          theme: 'LIGHT',
+          openOnLastServer: false,
+        },
         ambients: [],
         monitoringHistory: [],
       };
