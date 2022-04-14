@@ -6,4 +6,4 @@
 [] create alert message component (info-blip)
 [] implement localization (i18n)
 [] fetch ambient data from api to ambientView
-[] save ambient updates to database
+[] save ambient api requests to database
