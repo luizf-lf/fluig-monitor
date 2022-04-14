@@ -54,7 +54,7 @@ function EditAmbientSettingsView(): JSX.Element {
   const [validationMessage, setValidationMessage] = useState(<></>);
   const [confirmBtnClicked, setConfirmBtnClicked] = useState(false);
 
-  const [setAmbientList] = useContext(AmbientListContext);
+  const [ambientList, setAmbientList] = useContext(AmbientListContext);
 
   function sendTestConnection() {
     const auth = {
@@ -192,8 +192,8 @@ function EditAmbientSettingsView(): JSX.Element {
         </span>
       );
       setTimeout(() => {
-        dbHandler.ambients.deleteByUUID(ambientUUID);
         setValidationMessage(<Redirect to="/" />);
+        dbHandler.ambients.deleteByUUID(ambientUUID);
       }, 3000);
     }
   }
