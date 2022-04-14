@@ -20,6 +20,9 @@
   --light-blue: #e0e7ff;
   --blue-outline: #7dd3fc;
   --blue-medium: #60a5fa;
+
+  --card-shadow: 0px 0px 40px rgba(0, 0, 0, 0.03);
+  --card-border-radius: 1rem;
 }
 
 * {
@@ -86,7 +89,7 @@ h3 {
 
 /*/ Scroll Bar  /*/
 ::-webkit-scrollbar {
-  width: 0.7rem;
+  width: 0.5rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -95,6 +98,7 @@ h3 {
 
 ::-webkit-scrollbar-thumb {
   background: #3f3f46;
+  border-radius: 0.5rem;
 
   &:hover {
     background: #52525b;

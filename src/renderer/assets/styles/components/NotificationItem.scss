@@ -1,0 +1,66 @@
+.notificationItemContainer {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  max-width: 60vw;
+  box-shadow: var(--card-shadow);
+  border-radius: var(--card-border-radius);
+
+  background-color: var(--card-bg);
+
+  display: flex;
+
+  .iconContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 1rem 0 0 1rem;
+
+    svg {
+      font-size: 1.5rem;
+    }
+  }
+
+  .messageContainer {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    max-height: 10rem;
+    overflow-y: auto;
+  }
+
+  &.has-info {
+    border: 2px solid var(--blue);
+    .iconContainer {
+      background-color: var(--light-blue);
+      color: var(--blue);
+    }
+  }
+
+  &.has-success {
+    border: 2px solid var(--green);
+    .iconContainer {
+      background-color: var(--light-green);
+      color: var(--green);
+    }
+  }
+
+  &.has-warning {
+    border: 2px solid var(--yellow);
+    .iconContainer {
+      background-color: var(--light-yellow);
+      color: var(--yellow);
+    }
+  }
+
+  &.has-error {
+    border: 2px solid var(--red);
+    .iconContainer {
+      background-color: var(--light-red);
+      color: var(--red);
+    }
+  }
+}
