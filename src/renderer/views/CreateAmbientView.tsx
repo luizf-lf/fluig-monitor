@@ -4,11 +4,13 @@ import { FormEvent, useContext, useState } from 'react';
 import {
   FiAlertCircle,
   FiAlertTriangle,
+  FiArrowLeft,
   FiCheck,
   FiRefreshCw,
   FiWifi,
 } from 'react-icons/fi';
 import { v4 as uuidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import dbHandler from '../../utils/dbHandler';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
@@ -154,6 +156,10 @@ export default function CreateAmbientView() {
       id="createAmbientContainer"
       className="ambientFormContainer"
     >
+      <Link to="/" className="top-return-button">
+        <FiArrowLeft />
+        Voltar
+      </Link>
       <h1>Cadastrar novo ambiente</h1>
 
       <form action="#" onSubmit={handleSubmit}>

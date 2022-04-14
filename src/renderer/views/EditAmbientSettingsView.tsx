@@ -5,11 +5,13 @@ import { Redirect, useParams } from 'react-router';
 import {
   FiAlertCircle,
   FiAlertTriangle,
+  FiArrowLeft,
   FiCheck,
   FiRefreshCw,
   FiWifi,
   FiX,
 } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import AmbientViewParams from '../interfaces/AmbientViewParams';
 import globalContainerVariants from '../../utils/globalContainerVariants';
 import dbHandler from '../../utils/dbHandler';
@@ -207,6 +209,10 @@ function EditAmbientSettingsView(): JSX.Element {
       id="centerViewContainer"
       className="ambientFormContainer"
     >
+      <Link to="/" className="top-return-button">
+        <FiArrowLeft />
+        Voltar
+      </Link>
       <h1>Editar ambiente</h1>
 
       <form action="#" onSubmit={handleUpdateData}>

@@ -50,6 +50,24 @@
   }
 }
 
+.top-return-button {
+  background-color: transparent;
+  color: var(--title-secondary);
+  text-decoration: none;
+  width: fit-content;
+  gap: 0.5rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 0.5rem;
+
+  svg {
+    font-size: 1.1rem;
+  }
+}
+
 /*
   Forms group
 */
