@@ -46,7 +46,10 @@ export default function App() {
           </AnimatePresence>
         </main>
 
-        <NotificationItem type="warning" />
+        <NotificationItem
+          type="success"
+          message="Ambiente criado com sucesso. Redirecionando para a página inicial..."
+        />
       </div>
     </AmbientListContext.Provider>
   );

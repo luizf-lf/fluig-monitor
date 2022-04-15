@@ -1,4 +1,4 @@
-.notificationItemContainer {
+.floatingNotificationContainer {
   position: fixed;
   top: 40px;
   right: 40px;
@@ -30,6 +30,14 @@
 
     max-height: 10rem;
     overflow-y: auto;
+
+    color: var(--title);
+  }
+
+  .closeButtonContainer {
+    background-color: var(--background);
+    border-radius: 0 1rem 1rem 0;
+    padding: 1rem;
   }
 
   &.has-info {
