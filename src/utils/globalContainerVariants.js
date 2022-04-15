@@ -1,19 +1,19 @@
 const globalContainerVariants = {
   hidden: {
     opacity: 0,
-    x: '100px',
+    scale: '110%',
   },
   visible: {
     opacity: 1,
-    x: 0,
-    transition: { ease: 'easeInOut', duration: 0.5 },
+    scale: '100%',
+    transition: { ease: 'easeInOut', duration: 0.3 },
   },
   exit: {
-    x: '-100px',
+    scale: '90%',
     opacity: 0,
     transition: {
       ease: 'easeInOut',
-      duration: 0.5,
+      duration: 0.3,
     },
   },
 };
