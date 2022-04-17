@@ -1,8 +1,5 @@
 .floatingNotificationContainer {
-  position: fixed;
-  top: 40px;
-  right: 40px;
-  max-width: 60vw;
+  width: 100%;
   box-shadow: var(--card-shadow);
   border-radius: var(--card-border-radius);
 

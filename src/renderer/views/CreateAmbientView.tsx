@@ -21,6 +21,7 @@ import ambientKinds from '../../utils/defaultAmbientKinds';
 import updateFrequencies from '../../utils/defaultUpdateFrequencies';
 import formUtils from '../../utils/formUtils';
 import AmbientListContext from '../contexts/AmbientListContext';
+import { useNotifications } from '../contexts/NotificationsContext';
 
 export default function CreateAmbientView() {
   const [name, setName] = useState('');
@@ -41,6 +42,7 @@ export default function CreateAmbientView() {
   const [validationMessage, setValidationMessage] = useState(<></>);
 
   const [ambients, setAmbients] = useContext(AmbientListContext);
+  const { createShortNotification } = useNotifications();
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -68,24 +70,19 @@ export default function CreateAmbientView() {
 
     if (isValid) {
       dbHandler.ambients.saveNew(formData);
-      setValidationMessage(
-        <span className="info-blip has-success">
-          <FiCheck />
-          Ambiente cadastrado com sucesso. Redirecionando para a tela inicial...
-        </span>
-      );
+      createShortNotification({
+        id: Date.now(),
+        type: 'success',
+        message:
+          'Ambiente cadastrado com sucesso. Redirecionando para a tela inicial...',
+      });
 
       setTimeout(() => {
         setAmbients(dbHandler.ambients.getAll());
         setValidationMessage(<Redirect to="/" />);
       }, 3000);
     } else {
-      setValidationMessage(
-        <span className="info-blip has-error">
-          <FiAlertCircle />
-          {message}
-        </span>
-      );
+      createShortNotification({ id: Date.now(), type: 'error', message });
     }
   }
 
