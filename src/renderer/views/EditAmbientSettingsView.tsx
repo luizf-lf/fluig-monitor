@@ -21,6 +21,7 @@ import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
 import formUtils from '../../utils/formUtils';
 import AmbientListContext from '../contexts/AmbientListContext';
+import { useNotifications } from '../contexts/NotificationsContext';
 
 function EditAmbientSettingsView(): JSX.Element {
   const { ambientUUID }: AmbientViewParams = useParams();
@@ -57,6 +58,7 @@ function EditAmbientSettingsView(): JSX.Element {
   const [confirmBtnClicked, setConfirmBtnClicked] = useState(false);
 
   const [ambientList, setAmbientList] = useContext(AmbientListContext);
+  const { createShortNotification } = useNotifications();
 
   function sendTestConnection() {
     const auth = {
@@ -141,12 +143,11 @@ function EditAmbientSettingsView(): JSX.Element {
     const { isValid, message } = formUtils.validate(formData);
 
     if (!isValid) {
-      setValidationMessage(
-        <span className="info-blip has-error">
-          <FiAlertCircle />
-          {message}
-        </span>
-      );
+      createShortNotification({
+        id: Date.now(),
+        type: 'error',
+        message,
+      });
 
       return;
     }
@@ -154,22 +155,21 @@ function EditAmbientSettingsView(): JSX.Element {
     const result = dbHandler.ambients.updateByUUID(ambientUUID, formData);
 
     if (!result) {
-      setValidationMessage(
-        <span className="info-blip has-error">
-          <FiAlertCircle />
-          Erro ao atualizar informações do ambiente, tente novamente.
-        </span>
-      );
+      createShortNotification({
+        id: Date.now(),
+        type: 'error',
+        message: 'Erro ao atualizar informações do ambiente, tente novamente.',
+      });
 
       return;
     }
 
-    setValidationMessage(
-      <span className="info-blip has-success">
-        <FiCheck />
-        Ambiente atualizado com sucesso. Redirecionando para a tela inicial...
-      </span>
-    );
+    createShortNotification({
+      id: Date.now(),
+      type: 'success',
+      message:
+        'Ambiente atualizado com sucesso. Redirecionando para a tela inicial...',
+    });
 
     setTimeout(() => {
       setAmbientList(dbHandler.ambients.getAll());
@@ -180,19 +180,18 @@ function EditAmbientSettingsView(): JSX.Element {
   function confirmDelete() {
     if (!confirmBtnClicked) {
       setConfirmBtnClicked(true);
-      setValidationMessage(
-        <span className="info-blip has-warning">
-          <FiAlertCircle />
-          Clique novamente para confirmar a exclusão.
-        </span>
-      );
+      createShortNotification({
+        id: Date.now(),
+        type: 'warning',
+        message: 'Clique novamente para confirmar a exclusão.',
+      });
     } else {
-      setValidationMessage(
-        <span className="info-blip has-success">
-          <FiCheck />
-          Ambiente excluído com sucesso. Redirecionando para a tela principal...
-        </span>
-      );
+      createShortNotification({
+        id: Date.now(),
+        type: 'success',
+        message:
+          'Ambiente excluído com sucesso. Redirecionando para a tela principal...',
+      });
       setTimeout(() => {
         setValidationMessage(<Redirect to="/" />);
         dbHandler.ambients.deleteByUUID(ambientUUID);
