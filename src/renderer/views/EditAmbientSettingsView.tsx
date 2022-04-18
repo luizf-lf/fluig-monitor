@@ -172,7 +172,6 @@ function EditAmbientSettingsView(): JSX.Element {
     });
 
     setTimeout(() => {
-      setAmbientList(dbHandler.ambients.getAll());
       setValidationMessage(<Redirect to="/" />);
     }, 3000);
   }
