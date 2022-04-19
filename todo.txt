@@ -2,5 +2,5 @@
 [] fetch ambient data from api to ambientView
 [] dbHandler: Update ipc method (use "handle/invoke"); Ref: https://www.electronjs.org/pt/docs/latest/tutorial/ipc#1-listen-for-events-with-ipcmainhandle
 [] encrypt oAuth keys in user-settings.json with node-forge (AES-256);
-[] implement localization (i18n)
+[] implement localization (i18n); Ref: https://react.i18next.com/
 [] save ambient api requests to database

@@ -14,11 +14,10 @@ interface NotificationsContextProviderProps {
 interface NotificationsContextData {
   notificationList: NotificationInterface[];
   createNotification: ({ id, type, message }: NotificationInterface) => void;
-  createShortNotification: ({
-    id,
-    type,
-    message,
-  }: NotificationInterface) => void;
+  createShortNotification: (
+    { id, type, message }: NotificationInterface,
+    timeout?: number
+  ) => void;
   removeNotification: (id: number) => void;
 }
 

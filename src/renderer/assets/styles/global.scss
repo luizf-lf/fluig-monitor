@@ -45,6 +45,11 @@ button {
   &:focus-visible {
     outline: 3px solid var(--blue-outline);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    filter: opacity(0.75);
+  }
 }
 
 h1,

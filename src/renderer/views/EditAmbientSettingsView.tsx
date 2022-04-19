@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Redirect, useParams } from 'react-router';
 import {
@@ -20,7 +20,6 @@ import updateFrequencies from '../../utils/defaultUpdateFrequencies';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
 import formUtils from '../../utils/formUtils';
-import AmbientListContext from '../contexts/AmbientListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 
 function EditAmbientSettingsView(): JSX.Element {
@@ -56,8 +55,8 @@ function EditAmbientSettingsView(): JSX.Element {
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
   const [confirmBtnClicked, setConfirmBtnClicked] = useState(false);
+  const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
 
-  const [ambientList, setAmbientList] = useContext(AmbientListContext);
   const { createShortNotification } = useNotifications();
 
   function sendTestConnection() {
@@ -164,6 +163,7 @@ function EditAmbientSettingsView(): JSX.Element {
       return;
     }
 
+    setActionButtonsDisabled(true);
     createShortNotification({
       id: Date.now(),
       type: 'success',
@@ -178,13 +178,19 @@ function EditAmbientSettingsView(): JSX.Element {
 
   function confirmDelete() {
     if (!confirmBtnClicked) {
+      const timeout = 5000;
       setConfirmBtnClicked(true);
-      createShortNotification({
-        id: Date.now(),
-        type: 'warning',
-        message: 'Clique novamente para confirmar a exclusão.',
-      });
+      createShortNotification(
+        {
+          id: Date.now(),
+          type: 'warning',
+          message: 'Clique novamente para confirmar a exclusão.',
+        },
+        timeout
+      );
+      setTimeout(() => setConfirmBtnClicked(false), timeout);
     } else {
+      setActionButtonsDisabled(true);
       createShortNotification({
         id: Date.now(),
         type: 'success',
@@ -407,13 +413,18 @@ function EditAmbientSettingsView(): JSX.Element {
         </div>
 
         <div className="button-action-row mt-1 mb-2">
-          <button className="button is-default" type="submit">
+          <button
+            className="button is-default"
+            type="submit"
+            disabled={actionButtonsDisabled}
+          >
             <FiCheck /> Salvar
           </button>
           <button
             className="button is-danger"
             type="button"
             onClick={confirmDelete}
+            disabled={actionButtonsDisabled}
           >
             <FiX /> Excluir Ambiente
           </button>

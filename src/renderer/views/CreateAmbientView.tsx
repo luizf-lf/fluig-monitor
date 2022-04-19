@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { motion } from 'framer-motion';
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import {
   FiAlertCircle,
   FiAlertTriangle,
@@ -20,7 +20,6 @@ import globalContainerVariants from '../../utils/globalContainerVariants';
 import ambientKinds from '../../utils/defaultAmbientKinds';
 import updateFrequencies from '../../utils/defaultUpdateFrequencies';
 import formUtils from '../../utils/formUtils';
-import AmbientListContext from '../contexts/AmbientListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 
 export default function CreateAmbientView() {
@@ -41,7 +40,8 @@ export default function CreateAmbientView() {
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
 
-  const [ambients, setAmbients] = useContext(AmbientListContext);
+  const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
+
   const { createShortNotification } = useNotifications();
 
   function handleSubmit(event: FormEvent) {
@@ -70,6 +70,8 @@ export default function CreateAmbientView() {
 
     if (isValid) {
       dbHandler.ambients.saveNew(formData);
+
+      setActionButtonsDisabled(true);
       createShortNotification({
         id: Date.now(),
         type: 'success',
@@ -78,7 +80,6 @@ export default function CreateAmbientView() {
       });
 
       setTimeout(() => {
-        setAmbients(dbHandler.ambients.getAll());
         setValidationMessage(<Redirect to="/" />);
       }, 3000);
     } else {
@@ -346,14 +347,17 @@ export default function CreateAmbientView() {
               }}
             />
             <label htmlFor="updateInWorkDays">
-              {' '}
               Atualizar apenas em dias úteis
             </label>
           </span>
         </div>
 
         <div className="button-action-row mt-1 mb-2">
-          <button className="button is-default" type="submit">
+          <button
+            className="button is-default"
+            type="submit"
+            disabled={actionButtonsDisabled}
+          >
             <FiCheck /> Confirmar
           </button>
 
