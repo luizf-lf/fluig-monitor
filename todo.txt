@@ -1,4 +1,7 @@
-[] update erb scripts
+[] update global layout
+  [] change sidebar to navbar
+  [] update ambientList
+  [] update ambient view
 [] fetch ambient data from api to ambientView
 [] dbHandler: Update ipc method (use "handle/invoke"); Ref: https://www.electronjs.org/pt/docs/latest/tutorial/ipc#1-listen-for-events-with-ipcmainhandle
 [] encrypt oAuth keys in user-settings.json with node-forge (AES-256);
