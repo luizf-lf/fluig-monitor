@@ -1,9 +1,9 @@
 [] add jsdoc everywhere, before it's too late
 [] update global layout
   [✅] change sidebar to navbar
-    [] add logo
+    [✅] add logo
+    [✅] update ambientList
     [] add profile container
-  [] update ambientList
   [] update ambient view
 [] create modal component (overlay on window)
 [] fetch ambient data from api to ambientView

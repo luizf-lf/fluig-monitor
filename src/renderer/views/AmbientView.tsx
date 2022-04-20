@@ -22,7 +22,7 @@ export default function AmbientView(): JSX.Element {
     <div className="empty-server-view">
       <img src={serverImg} alt="Server" className="icon" />
       <span>
-        Selecione o ambiente ao lado ou utilize o botão <b>&quot;Novo&quot; </b>
+        Selecione o ambiente acima ou utilize o botão <b>&quot;Novo&quot; </b>
         para criar um novo ambiente.
       </span>
     </div>

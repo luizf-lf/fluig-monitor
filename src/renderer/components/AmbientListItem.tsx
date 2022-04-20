@@ -1,4 +1,3 @@
-import { FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import SmallTag from './SmallTag';
@@ -14,6 +13,7 @@ export default function AmbientListItem({
   isExpanded,
 }: AmbientListItemInterface) {
   let ambientKindTitle = '';
+  const isOnline = true; // TODO: update via props
 
   switch (data.kind) {
     case 'PROD':
@@ -31,18 +31,35 @@ export default function AmbientListItem({
       break;
   }
 
+  const ambientNameArray = data.name.split(' ');
+  const ambientInitials =
+    ambientNameArray.length === 1
+      ? ambientNameArray[0].substring(0, 2).toUpperCase()
+      : ambientNameArray[0].substring(0, 1) +
+        ambientNameArray[1].substring(0, 1);
+  const ambientTitle = `${data.name} [${
+    isOnline ? 'Online' : 'Offline'
+  }] [${ambientKindTitle}]`;
+
   if (isExpanded) {
     return (
       <Link
         to={`/ambient/${data.uuid}`}
-        id="ambientName"
         className="ambient-item-container is-expanded"
+        title={ambientTitle}
       >
-        {/* TODO: Finish styling */}
-        <div>{/* logo */}</div>
-        <div>
+        <div className="initials">{ambientInitials}</div>
+        <div className="data">
           <div>{data.name}</div>
-          <div>{/* statuses */}</div>
+          <div className="bottom">
+            <div className={`statusIndicator${isOnline ? '' : ' is-offline'}`}>
+              <div className="dot" />
+              <div className="description">
+                {isOnline ? 'Online' : ' Offline'}
+              </div>
+            </div>
+            <SmallTag kind={data.kind} />
+          </div>
         </div>
       </Link>
     );
@@ -51,14 +68,14 @@ export default function AmbientListItem({
   return (
     <Link
       to={`/ambient/${data.uuid}`}
-      id="ambientName"
       className="ambient-item-container"
-      title={`${data.name} [Online] [${ambientKindTitle}]`}
+      title={ambientTitle}
     >
-      {data.name.split(' ').length === 1
-        ? data.name.split(' ')[0].substring(0, 2).toUpperCase()
-        : data.name.split(' ')[0].substring(0, 1) +
-          data.name.split(' ')[1].substring(0, 1)}
+      {ambientInitials}
+      <div className="ambient-indicators">
+        <div className={`online-indicator${isOnline ? '' : ' is-offline'}`} />
+        <div className={`kind-indicator is-${data.kind.toLowerCase()}`} />
+      </div>
     </Link>
   );
 }

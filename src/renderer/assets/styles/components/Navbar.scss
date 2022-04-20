@@ -1,5 +1,5 @@
 #mainNavbar {
-  background: var(--card-bg);
+  background: var(--card);
   position: fixed;
   top: 0;
   left: 0;
@@ -13,8 +13,49 @@
 
   z-index: 20;
 
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #logoContainer {
+    display: flex;
+    align-items: center;
+
+    padding-right: 1rem;
+    margin-right: 1rem;
+    border-right: 2px solid var(--border-light);
+
+    img {
+      height: 3rem;
+    }
+
+    .logoData {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      margin-left: 0.75rem;
+
+      .title {
+        font-family: Righteous, 'sans-serif';
+        color: #ff4d4d;
+        font-size: 1.25rem;
+      }
+
+      .version {
+        color: var(--font-soft);
+        font-weight: 300;
+        font-size: 0.75rem;
+      }
+    }
+  }
+
   #ambientList {
     display: flex;
     gap: 1rem;
+
+    padding-right: 1rem;
+    border-right: 2px solid var(--border-light);
   }
 }

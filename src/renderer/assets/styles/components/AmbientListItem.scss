@@ -1,6 +1,6 @@
 .ambient-item-container {
   background-color: var(--background);
-  color: var(--title);
+  color: var(--font-secondary);
   font-weight: bold;
 
   display: flex;
@@ -12,14 +12,109 @@
 
   text-decoration: none;
   transition: transform 300ms;
-  background-color: var(--card-bg);
-  border: 2px solid var(--border);
+  background-color: var(--card);
+  border: 2px solid var(--border-light);
+
+  position: relative;
+
+  .ambient-indicators {
+    position: absolute;
+
+    bottom: 0.5rem;
+    left: 0.5rem;
+
+    display: flex;
+
+    .online-indicator {
+      height: 0.35rem;
+      width: 0.35rem;
+      border-radius: 100%;
+      background-color: var(--green);
+
+      margin-right: 0.25rem;
+
+      &.is-offline {
+        background-color: var(--red);
+      }
+    }
+
+    .kind-indicator {
+      height: 0.35rem;
+      width: 0.35rem;
+      border-radius: 100%;
+
+      &.is-prod {
+        background-color: var(--green);
+      }
+
+      &.is-hml {
+        background-color: var(--yellow);
+      }
+
+      &.is-dev {
+        background-color: var(--blue);
+      }
+    }
+  }
 
   &:active {
-    transform: scale(75%);
+    transform: scale(95%);
   }
 
   &.is-expanded {
-    font-weight: normal;
+    padding: 0.35rem;
+
+    .initials {
+      background-color: var(--blue);
+      color: var(--font-white);
+      padding: 0.65rem;
+      border-radius: 0.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .data {
+      display: flex;
+      flex-direction: column;
+
+      .bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+
+        .statusIndicator {
+          display: flex;
+          align-items: center;
+
+          margin-right: 0.5rem;
+
+          .dot {
+            height: 0.35rem;
+            width: 0.35rem;
+            border-radius: 100%;
+            background-color: var(--green);
+
+            margin-right: 0.25rem;
+          }
+
+          .description {
+            text-transform: uppercase;
+            font-size: 0.5rem;
+            color: var(--green);
+
+            font-weight: 500;
+          }
+
+          &.is-offline {
+            .dot {
+              background-color: var(--red);
+            }
+
+            .description {
+              color: var(--red);
+            }
+          }
+        }
+      }
+    }
   }
 }
