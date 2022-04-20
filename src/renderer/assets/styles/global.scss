@@ -1,15 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Righteous&display=swap');
 
 :root {
-  --title: #1e293b;
-  --title-secondary: #334155;
-  --title-info: #9ca3af;
+  --font-primary: #1e293b;
+  --font-secondary: #334155;
+  --font-soft: #9ca3af;
+  --font-white: #f1f5f9;
   --background: #f1f5f9;
-  --card-bg: #ffffff;
-  --card-shadow: #f1f5f9;
-  --fade: #c2c4c7;
+  --card: #ffffff;
   --border: #9ca3af;
-  --soft-border: #e5e7eb;
+  --border-light: #e5e7eb;
 
   --green: #10b981;
   --light-green: #dcfce7;
@@ -29,6 +28,7 @@
 * {
   font-family: 'Inter';
   font-size: 16px;
+  color: var(--font-primary);
 
   margin: 0;
   border: 0;
@@ -112,7 +112,7 @@ h3 {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--card-bg);
+  background: var(--card);
 }
 
 ::-webkit-scrollbar-thumb {

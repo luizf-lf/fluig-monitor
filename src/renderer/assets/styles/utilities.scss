@@ -23,17 +23,17 @@
   }
 
   &.is-secondary {
-    background-color: var(--card-bg);
-    color: var(--title-secondary);
+    background-color: var(--card);
+    color: var(--font-secondary);
 
     &:hover {
-      outline: 3px solid var(--fade);
+      outline: 3px solid var(--border-light);
     }
   }
 
   &.is-success {
     background-color: var(--green);
-    color: var(--card-bg);
+    color: var(--card);
 
     &:hover {
       outline: 3px solid var(--light-green);
@@ -42,7 +42,7 @@
 
   &.is-danger {
     background-color: var(--red);
-    color: var(--card-bg);
+    color: var(--card);
 
     &:hover {
       outline: 3px solid var(--light-red);
@@ -52,7 +52,7 @@
 
 .top-return-button {
   background-color: transparent;
-  color: var(--title-secondary);
+  color: var(--font-secondary);
   text-decoration: none;
   width: fit-content;
   gap: 0.5rem;
@@ -101,7 +101,7 @@
   small {
     font-size: 0.85rem;
     margin-top: 0.3rem;
-    color: var(--title-info);
+    color: var(--font-soft);
   }
 }
 

@@ -18,7 +18,7 @@ export default function SidebarContent(): JSX.Element {
         <AnimatePresence>
           {ambientList.length === 0 ? (
             <motion.span
-              style={{ color: 'var(--fade)' }}
+              style={{ color: 'var(--border-light)' }}
               initial={{ opacity: 0, x: '-100px' }}
               animate={{
                 opacity: 1,
