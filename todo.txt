@@ -3,7 +3,7 @@
   [✅] change sidebar to navbar
     [✅] add logo
     [✅] update ambientList
-    [] add profile container
+    [✅] add profile container
   [] update ambient view
 [] create modal component (overlay on window)
 [] fetch ambient data from api to ambientView

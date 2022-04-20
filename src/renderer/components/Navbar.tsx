@@ -6,6 +6,7 @@ import CreateAmbientButton from './CreateAmbientButton';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import AmbientListItem from './AmbientListItem';
 import logoImage from '../assets/img/logo.png';
+import defaultUserProfile from '../assets/img/default-user-profile.png';
 import { version } from '../../../release/app/package.json';
 
 function Navbar() {
@@ -67,7 +68,15 @@ function Navbar() {
           </AnimatePresence>
         </section>
       </div>
-      <div>{/* User Profile */}</div>
+      <div>
+        <section id="user-profile">
+          <div className="user-info">
+            <span className="name">Johnny Silverhand</span>
+            <span className="role">admin</span>
+          </div>
+          <img src={defaultUserProfile} alt="User" />
+        </section>
+      </div>
     </motion.nav>
   );
 }

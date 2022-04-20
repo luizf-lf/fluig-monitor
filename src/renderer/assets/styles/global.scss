@@ -28,9 +28,11 @@
 * {
   font-family: 'Inter';
   font-size: 16px;
+  font-weight: 500;
   color: var(--font-primary);
 
   margin: 0;
+  padding: 0;
   border: 0;
   box-sizing: border-box;
 }
@@ -69,6 +71,10 @@ h2 {
 
 h3 {
   font-size: 1.2rem;
+}
+
+b {
+  font-weight: 700;
 }
 
 #mainWindow {

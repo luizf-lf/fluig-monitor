@@ -55,7 +55,7 @@ export default function AmbientListItem({
             <div className={`statusIndicator${isOnline ? '' : ' is-offline'}`}>
               <div className="dot" />
               <div className="description">
-                {isOnline ? 'Online' : ' Offline'}
+                {isOnline ? 'Online' : 'Offline'}
               </div>
             </div>
             <SmallTag kind={data.kind} />

@@ -6,7 +6,6 @@ import { AnimatePresence } from 'framer-motion';
 import AmbientView from './views/AmbientView';
 import CreateAmbientView from './views/CreateAmbientView';
 import EditAmbientSettingsView from './views/EditAmbientSettingsView';
-// import Sidebar from './components/Sidebar';
 
 import './assets/styles/global.scss';
 import './assets/styles/utilities.scss';
@@ -23,7 +22,6 @@ export default function App() {
       <NotificationsContextProvider>
         <div id="appWrapper">
           <Navbar />
-          {/* <Sidebar /> */}
           <main id="mainWindow">
             <AnimatePresence exitBeforeEnter>
               <Switch location={location} key={location.pathname}>
