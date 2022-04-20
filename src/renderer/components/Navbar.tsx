@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useContext } from 'react';
 import AmbientListContext from '../contexts/AmbientListContext';
@@ -23,13 +24,13 @@ function Navbar() {
       id="mainNavbar"
     >
       <div>
-        <section id="logoContainer">
+        <Link to="/" id="logoContainer">
           <img src={logoImage} alt="Fluig Monitor" />
           <div className="logoData">
             <span className="title">Fluig Monitor</span>
             <span className="version">v{version}</span>
           </div>
-        </section>
+        </Link>
         <section id="ambientList">
           <AnimatePresence>
             {ambientList.length === 0
