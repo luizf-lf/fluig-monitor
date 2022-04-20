@@ -6,9 +6,13 @@ import '../assets/styles/components/AmbientListItem.scss';
 
 interface AmbientListItemInterface {
   data: AmbientDataInterface;
+  isExpanded: boolean;
 }
 
-export default function AmbientListItem({ data }: AmbientListItemInterface) {
+export default function AmbientListItem({
+  data,
+  isExpanded,
+}: AmbientListItemInterface) {
   let ambientKindTitle = '';
 
   switch (data.kind) {
@@ -23,29 +27,38 @@ export default function AmbientListItem({ data }: AmbientListItemInterface) {
       break;
 
     default:
-      ambientKindTitle = 'Desconhecido';
+      ambientKindTitle = 'Desconhecido (┬┬﹏┬┬)';
       break;
   }
+
+  if (isExpanded) {
+    return (
+      <Link
+        to={`/ambient/${data.uuid}`}
+        id="ambientName"
+        className="ambient-item-container is-expanded"
+      >
+        {/* TODO: Finish styling */}
+        <div>{/* logo */}</div>
+        <div>
+          <div>{data.name}</div>
+          <div>{/* statuses */}</div>
+        </div>
+      </Link>
+    );
+  }
+
   return (
-    <div className="ambient-item-container">
-      <div className="ambient-item-row">
-        <Link to={`/ambient/${data.uuid}`} id="ambientName">
-          {data.name}
-        </Link>
-        <Link to={`/ambient/${data.uuid}/edit`}>
-          <FiSettings />
-        </Link>
-      </div>
-      <div className="ambient-item-row">
-        {/* <span className="ambientStatusIndicator is-offline"> */}
-        <span className="ambientStatusIndicator">
-          <div id="indicatorDot" />
-          <span id="indicatorText">online</span>
-        </span>
-        <span title={ambientKindTitle}>
-          <SmallTag kind={data.kind} />
-        </span>
-      </div>
-    </div>
+    <Link
+      to={`/ambient/${data.uuid}`}
+      id="ambientName"
+      className="ambient-item-container"
+      title={`${data.name} [Online] [${ambientKindTitle}]`}
+    >
+      {data.name.split(' ').length === 1
+        ? data.name.split(' ')[0].substring(0, 2).toUpperCase()
+        : data.name.split(' ')[0].substring(0, 1) +
+          data.name.split(' ')[1].substring(0, 1)}
+    </Link>
   );
 }

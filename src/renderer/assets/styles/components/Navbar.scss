@@ -1,0 +1,20 @@
+#mainNavbar {
+  background: var(--card-bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  box-shadow: var(--card-shadow);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  z-index: 20;
+
+  #ambientList {
+    display: flex;
+    gap: 1rem;
+  }
+}

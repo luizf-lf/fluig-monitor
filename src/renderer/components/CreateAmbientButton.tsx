@@ -6,7 +6,7 @@ import '../assets/styles/components/CreateAmbientButton.scss';
 export default function CreateAmbientButton() {
   return (
     <Link to="/settings/ambients/new" id="createAmbientButton">
-      <FiPlus /> &nbsp;Novo
+      <FiPlus />
     </Link>
   );
 }

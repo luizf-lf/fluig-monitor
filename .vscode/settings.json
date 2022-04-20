@@ -22,7 +22,5 @@
     "*.{css,sass,scss}.d.ts": true
   },
   "totvsLanguageServer.welcomePage": false,
-  "cSpell.words": [
-    "Wifi"
-  ]
+  "cSpell.words": ["esnext", "Wifi"]
 }

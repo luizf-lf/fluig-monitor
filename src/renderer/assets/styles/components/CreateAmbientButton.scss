@@ -5,17 +5,19 @@
   display: flex;
   text-decoration: none;
 
-  margin: 1rem 0;
-
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   font-size: 1.2rem;
-  padding: 0.75rem;
+  padding: 0.75rem 1.15rem;
   align-items: center;
   justify-content: center;
   opacity: 0.5;
-  transition: opacity 300ms;
+  transition: all 300ms;
 
   &:hover {
     opacity: 1;
+  }
+
+  &:active {
+    transform: scale(75%);
   }
 }
