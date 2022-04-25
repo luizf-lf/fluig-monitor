@@ -123,11 +123,12 @@ ipcMain.on('get-user-data-folder', (event, arg) => {
 
 // IPC listener to save local settings file
 ipcMain.on('update-db-file', (event, arg) => {
-  const filePath = path.resolve(
-    app.getPath('appData'),
-    'fluig-monitor',
-    'user-settings.json'
-  );
+  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
+  const filePath = path.resolve(folderPath, 'user-settings.json');
+
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+  }
 
   console.log(
     `[${new Date().toLocaleString()}] IPC: Writing database file to ${filePath}`

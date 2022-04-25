@@ -1,4 +1,3 @@
-[] check if /appdata/fluig-monitor/ folder exists before initializing db file
 [] add jsdoc everywhere, before it's too late
 [] update global layout
   [✅] change sidebar to navbar
