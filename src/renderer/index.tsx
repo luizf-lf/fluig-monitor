@@ -3,7 +3,7 @@ import { HashRouter } from 'react-router-dom';
 import App from './App';
 
 render(
-  /* O componente HashRouter deve ser colocado neste arquivo para funcionamento do hook useLocation */
+  /* The HashRouter component must be used here in order for the useLocation hook to work. */
   <HashRouter>
     <App />
   </HashRouter>,

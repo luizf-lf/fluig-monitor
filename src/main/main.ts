@@ -105,24 +105,6 @@ const createWindow = async () => {
   });
 };
 
-/**
- * Add event listeners...
- */
-
-// Example: creates a custom IPC listener
-//  the 'get-user-data-folder' is the custom channel name.
-//  A channel can have multiple methods described by the 'arg' variable,
-//  which can return different values according to your logic.
-ipcMain.on('get-user-data-folder', (event, arg) => {
-  // in this case, the required method is 'getPath'
-  if (arg === 'getPath') {
-    // so the return value of the event is the getPath() method of
-    //  the electron 'app' process.
-    // it should return something like 'C:\Users\<user>\AppData\Roaming' on Windows
-    event.returnValue = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  }
-});
-
 // IPC listener to save local settings file
 ipcMain.on('update-db-file', (event, arg) => {
   const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');

@@ -1,19 +1,23 @@
 import { useState } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
-
 import { AnimatePresence } from 'framer-motion';
 
+// views / components
 import AmbientView from './views/AmbientView';
 import CreateAmbientView from './views/CreateAmbientView';
 import EditAmbientSettingsView from './views/EditAmbientSettingsView';
-
-import './assets/styles/global.scss';
-import './assets/styles/utilities.scss';
-import AmbientListContext from './contexts/AmbientListContext';
-import { NotificationsContextProvider } from './contexts/NotificationsContext';
 import Navbar from './components/Navbar';
 
+// assets
+import './assets/styles/global.scss';
+import './assets/styles/utilities.scss';
+
+// contexts
+import AmbientListContext from './contexts/AmbientListContext';
+import { NotificationsContextProvider } from './contexts/NotificationsContext';
+
 export default function App() {
+  // the useLocation hook is used to render a specific component per route
   const location = useLocation();
   const [ambients, setAmbients] = useState([]);
 
