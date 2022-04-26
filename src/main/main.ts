@@ -15,14 +15,9 @@ import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
 import * as fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import i18n from '../renderer/i18n';
 
 let mainWindow: BrowserWindow | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -62,15 +57,17 @@ const createWindow = async () => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
+  // get the window size from the user's main display
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: width * 0.8,
+    width: width * 0.8, // initial width and height should be 80% of the screen
     height: height * 0.8,
     minWidth: 1024,
     minHeight: 728,
     icon: getAssetPath('icon.png'),
+    autoHideMenuBar: false, // sets if the navbar should automatically hide
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -79,6 +76,18 @@ const createWindow = async () => {
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
+
+  const menuBuilder = new MenuBuilder(mainWindow);
+
+  i18n.on('languageChanged', (/* lang: i18n */) => {
+    // if the buildMenu function is not called, the default dev menu will be rendered
+    menuBuilder.buildMenu(); // TODO: Pass the 'lang' to the menu builder? Check if it is optimal
+  });
+
+  // change the language to Portuguese by default on i18n initialization
+  // i18n.on('initialized', () => {
+  i18n.changeLanguage('pt');
+  // });
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
@@ -94,9 +103,6 @@ const createWindow = async () => {
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
-
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
 
   // Open urls in the user's browser
   mainWindow.webContents.on('new-window', (event, url) => {

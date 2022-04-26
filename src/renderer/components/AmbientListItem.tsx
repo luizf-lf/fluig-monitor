@@ -13,7 +13,7 @@ export default function AmbientListItem({
   isExpanded,
 }: AmbientListItemInterface) {
   let ambientKindTitle = '';
-  const isOnline = true; // TODO: update via props
+  const isOnline = true; // TODO: Update via props
 
   switch (data.kind) {
     case 'PROD':

@@ -10,4 +10,8 @@
 [] dbHandler: Update ipc method (use "handle/invoke"); Ref: https://www.electronjs.org/pt/docs/latest/tutorial/ipc#1-listen-for-events-with-ipcmainhandle
 [] encrypt oAuth keys in user-settings.json with node-forge (AES-256);
 [] implement localization (i18n); Ref: https://react.i18next.com/
+  [✅] add i18n libs
+  [✅] implement i18n to menu
+  [] add i18n to interface; Ref: https://phrase.com/blog/posts/building-an-electron-app-with-internationalization-i18n/
+  [] cache selected language
 [] save ambient api requests to database

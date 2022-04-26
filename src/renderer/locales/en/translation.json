@@ -1,0 +1,22 @@
+{
+  "menu": {
+    "about": {
+      "label": "About",
+      "aboutApp": "About Fluig Monitor"
+    },
+    "languages": {
+      "label": "Language",
+      "pt": "Portuguese",
+      "en": "English",
+      "es": "Spanish"
+    },
+    "view": {
+      "label": "View",
+      "toggleFS": "Toggle full screen"
+    },
+    "file": {
+      "label": "File",
+      "quit": "Quit"
+    }
+  }
+}

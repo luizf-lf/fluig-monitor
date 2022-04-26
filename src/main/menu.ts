@@ -3,7 +3,10 @@ import {
   shell,
   BrowserWindow,
   MenuItemConstructorOptions,
+  app,
 } from 'electron';
+import { t } from 'i18next';
+import i18n from '../renderer/i18n';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -13,13 +16,6 @@ export default class MenuBuilder {
   }
 
   buildMenu(): Menu {
-    if (
-      process.env.NODE_ENV === 'development' ||
-      process.env.DEBUG_PROD === 'true'
-    ) {
-      this.setupDevelopmentEnvironment();
-    }
-
     const template =
       process.platform === 'darwin'
         ? this.buildDarwinTemplate()
@@ -29,21 +25,6 @@ export default class MenuBuilder {
     Menu.setApplicationMenu(menu);
 
     return menu;
-  }
-
-  setupDevelopmentEnvironment(): void {
-    this.mainWindow.webContents.on('context-menu', (_, props) => {
-      const { x, y } = props;
-
-      Menu.buildFromTemplate([
-        {
-          label: 'Inspect element',
-          click: () => {
-            this.mainWindow.webContents.inspectElement(x, y);
-          },
-        },
-      ]).popup({ window: this.mainWindow });
-    });
   }
 
   buildDarwinTemplate(): MenuItemConstructorOptions[] {
@@ -87,7 +68,7 @@ export default class MenuBuilder {
     };
 
     const subMenuHelp: MenuItemConstructorOptions = {
-      label: 'Help',
+      label: t('menu.about.label'),
       submenu: [
         {
           label: 'Github',
@@ -95,6 +76,36 @@ export default class MenuBuilder {
             shell.openExternal('https://github.com/luizf-lf/fluig-monitor');
           },
         },
+        {
+          label: t('menu.about.aboutApp'),
+          click() {
+            // TODO: Open about window
+          },
+        },
+      ],
+    };
+
+    const subMenuLanguages: MenuItemConstructorOptions = {
+      label: t('menu.languages.label'),
+      submenu: [
+        {
+          label: t('menu.languages.pt'),
+          click: () => {
+            i18n.changeLanguage('pt');
+          },
+        },
+        {
+          label: t('menu.languages.en'),
+          click: () => {
+            i18n.changeLanguage('en');
+          },
+        },
+        // {
+        //   label: t('menu.languages.es'),
+        //   click: () => {
+        //     i18n.changeLanguage('es');
+        //   },
+        // },
       ],
     };
 
@@ -104,14 +115,24 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuView, subMenuHelp];
+    return [subMenuView, subMenuLanguages, subMenuHelp];
   }
 
   // here we can change the menu buttons
   buildDefaultTemplate() {
     const templateDefault = [
       {
-        label: '&View',
+        label: t('menu.file.label'),
+        submenu: [
+          {
+            label: t('menu.file.quit'),
+            accelerator: 'Ctrl+W',
+            click: () => app.quit(),
+          },
+        ],
+      },
+      {
+        label: t('menu.view.label'),
         submenu:
           process.env.NODE_ENV === 'development' ||
           process.env.DEBUG_PROD === 'true'
@@ -124,7 +145,7 @@ export default class MenuBuilder {
                   },
                 },
                 {
-                  label: 'Toggle &Full Screen',
+                  label: t('menu.view.toggleFS'),
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
@@ -142,7 +163,7 @@ export default class MenuBuilder {
               ]
             : [
                 {
-                  label: 'Toggle &Full Screen',
+                  label: t('menu.view.toggleFS'),
                   accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
@@ -153,12 +174,43 @@ export default class MenuBuilder {
               ],
       },
       {
-        label: 'Help',
+        label: t('menu.languages.label'),
+        submenu: [
+          {
+            label: t('menu.languages.pt'),
+            accelerator: 'Ctrl+L+1',
+            click: () => {
+              i18n.changeLanguage('pt');
+            },
+          },
+          {
+            label: t('menu.languages.en'),
+            accelerator: 'Ctrl+L+2',
+            click: () => {
+              i18n.changeLanguage('en');
+            },
+          },
+          // {
+          //   label: t('menu.languages.es'),
+          //   click: () => {
+          //     i18n.changeLanguage('es');
+          //   },
+          // },
+        ],
+      },
+      {
+        label: t('menu.about.label'),
         submenu: [
           {
             label: 'Github',
             click() {
               shell.openExternal('https://github.com/luizf-lf/fluig-monitor');
+            },
+          },
+          {
+            label: t('menu.about.aboutApp'),
+            click() {
+              // TODO: Open about window
             },
           },
         ],
