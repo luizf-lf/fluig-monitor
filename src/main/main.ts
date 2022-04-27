@@ -15,7 +15,7 @@ import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
 import * as fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import i18n from '../renderer/i18n';
+import i18n from '../i18n/i18n';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -79,12 +79,17 @@ const createWindow = async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
 
-  i18n.on('languageChanged', (/* lang: i18n */) => {
-    // if the buildMenu function is not called, the default dev menu will be rendered
+  i18n.on('languageChanged', (lang: string) => {
+    // if the buildMenu function is not called, the default electron dev menu will be rendered
     menuBuilder.buildMenu(); // TODO: Pass the 'lang' to the menu builder? Check if it is optimal
+    mainWindow?.webContents.send('language-changed', {
+      language: lang,
+      namespace: 'translation',
+      resource: i18n.getResourceBundle(lang, 'translation'),
+    });
   });
 
-  // change the language to Portuguese by default on i18n initialization
+  // change the language to Portuguese by default // on i18n initialization
   // i18n.on('initialized', () => {
   i18n.changeLanguage('pt');
   // });

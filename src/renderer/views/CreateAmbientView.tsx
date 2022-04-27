@@ -12,20 +12,20 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import { useNotifications } from '../contexts/NotificationsContext';
 import dbHandler from '../../utils/dbHandler';
 import AmbientDataInterface from '../interfaces/AmbientDataInterface';
 import testConnection from '../../services/testConnection';
 import globalContainerVariants from '../../utils/globalContainerVariants';
 
-import ambientKinds from '../../utils/defaultAmbientKinds';
 import updateFrequencies from '../../utils/defaultUpdateFrequencies';
 import formUtils from '../../utils/formUtils';
-import { useNotifications } from '../contexts/NotificationsContext';
 
 export default function CreateAmbientView() {
   const [name, setName] = useState('');
   const [domainUrl, setDomainUrl] = useState('');
-  const [kind, setKind] = useState(ambientKinds[0].value);
+  const [kind, setKind] = useState('PROD');
   const [consumerKey, setConsumerKey] = useState('');
   const [consumerSecret, setConsumerSecret] = useState('');
   const [accessToken, setAccessToken] = useState('');
@@ -43,6 +43,7 @@ export default function CreateAmbientView() {
   const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
 
   const { createShortNotification } = useNotifications();
+  const { t } = useTranslation();
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -75,8 +76,7 @@ export default function CreateAmbientView() {
       createShortNotification({
         id: Date.now(),
         type: 'success',
-        message:
-          'Ambiente cadastrado com sucesso. Redirecionando para a tela inicial...',
+        message: t('views.CreateAmbientView.createdSuccessfully'),
       });
 
       setTimeout(() => {
@@ -104,7 +104,8 @@ export default function CreateAmbientView() {
     ) {
       setTestMessage(
         <span className="info-blip">
-          <FiRefreshCw className="rotating" /> Conectando...
+          <FiRefreshCw className="rotating" />{' '}
+          {t('views.CreateAmbientView.connecting')}
         </span>
       );
 
@@ -115,22 +116,22 @@ export default function CreateAmbientView() {
           if (result.status !== 200) {
             setTestMessage(
               <span className="info-blip has-warning">
-                <FiAlertCircle /> Erro na conexão: {result.status}:{' '}
-                {result.statusText}
+                <FiAlertCircle /> {t('views.CreateAmbientView.connectionError')}{' '}
+                {result.status}: {result.statusText}
               </span>
             );
           } else {
             setTestMessage(
               <span className="info-blip has-success">
-                <FiCheck /> Conexão Ok
+                <FiCheck /> {t('views.CreateAmbientView.connectionOk')}
               </span>
             );
           }
         } else {
           setTestMessage(
             <span className="info-blip has-error">
-              <FiAlertTriangle /> Erro de conexão. Verifique a URL de domínio e
-              a disponibilidade do servidor.
+              <FiAlertTriangle />{' '}
+              {t('views.CreateAmbientView.connectionUnavailable')}
             </span>
           );
         }
@@ -139,7 +140,7 @@ export default function CreateAmbientView() {
       setTestMessage(
         <span className="info-blip has-warning">
           <FiAlertCircle />
-          Preencha os campos de URL e autenticação para continuar.
+          {t('views.CreateAmbientView.authFieldsValidation')}
         </span>
       );
     }
@@ -156,20 +157,24 @@ export default function CreateAmbientView() {
     >
       <Link to="/" className="top-return-button">
         <FiArrowLeft />
-        Voltar
+        {t('views.CreateAmbientView.back')}
       </Link>
-      <h1>Cadastrar novo ambiente</h1>
+      <h1>{t('views.CreateAmbientView.form.title')}</h1>
 
       <form action="#" onSubmit={handleSubmit}>
-        <h3>Dados do ambiente</h3>
+        <h3>{t('views.CreateAmbientView.form.ambientDataSection')}</h3>
 
         <div className="form-group">
-          <label htmlFor="ambientName">Nome do ambiente:</label>
+          <label htmlFor="ambientName">
+            {t('views.CreateAmbientView.form.ambientName.label')}
+          </label>
           <input
             type="text"
             name="ambientName"
             id="ambientName"
-            placeholder="Ex.: Ambiente Exemplo 01"
+            placeholder={t(
+              'views.CreateAmbientView.form.ambientName.placeholder'
+            )}
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -179,12 +184,16 @@ export default function CreateAmbientView() {
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="domainUrl">URL De Domínio:</label>
+            <label htmlFor="domainUrl">
+              {t('views.CreateAmbientView.form.domainUrl.label')}
+            </label>
             <input
               type="text"
               name="domainUrl"
               id="domainUrl"
-              placeholder="Ex.: https://teste.fluig.com/"
+              placeholder={t(
+                'views.CreateAmbientView.form.domainUrl.placeholder'
+              )}
               value={domainUrl}
               onChange={(event) => {
                 setDomainUrl(event.target.value);
@@ -193,7 +202,9 @@ export default function CreateAmbientView() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="ambientKind">Tipo:</label>
+            <label htmlFor="ambientKind">
+              {t('views.CreateAmbientView.form.ambientKind.label')}
+            </label>
             <select
               name="ambientKind"
               id="ambientKind"
@@ -202,26 +213,34 @@ export default function CreateAmbientView() {
                 setKind(event.target.value);
               }}
             >
-              {ambientKinds.map(({ value, description }) => {
-                return (
-                  <option key={value} value={value}>
-                    {description}
-                  </option>
-                );
-              })}
+              <option value="PROD">
+                {t('views.CreateAmbientView.form.ambientKind.options.prod')}
+              </option>
+              <option value="HML">
+                {t('views.CreateAmbientView.form.ambientKind.options.hml')}
+              </option>
+              <option value="DEV">
+                {t('views.CreateAmbientView.form.ambientKind.options.dev')}
+              </option>
             </select>
           </div>
         </div>
 
-        <h3 className="mt-1">Autenticação</h3>
+        <h3 className="mt-1">
+          {t('views.CreateAmbientView.form.ambientAuthSection')}
+        </h3>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="consumerKey">Consumer Key:</label>
+            <label htmlFor="consumerKey">
+              {t('views.CreateAmbientView.form.consumerKey.label')}
+            </label>
             <input
               type="text"
               name="consumerKey"
               id="consumerKey"
-              placeholder="Informe a consumer key"
+              placeholder={t(
+                'views.CreateAmbientView.form.consumerKey.placeholder'
+              )}
               value={consumerKey}
               onChange={(event) => {
                 setConsumerKey(event.target.value);
@@ -229,12 +248,16 @@ export default function CreateAmbientView() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="consumerSecret">Consumer Secret:</label>
+            <label htmlFor="consumerSecret">
+              {t('views.CreateAmbientView.form.consumerSecret.label')}
+            </label>
             <input
               type="text"
               name="consumerSecret"
               id="consumerSecret"
-              placeholder="Informe a consumer secret"
+              placeholder={t(
+                'views.CreateAmbientView.form.consumerSecret.placeholder'
+              )}
               value={consumerSecret}
               onChange={(event) => {
                 setConsumerSecret(event.target.value);
@@ -245,12 +268,16 @@ export default function CreateAmbientView() {
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="accessToken">Access Token:</label>
+            <label htmlFor="accessToken">
+              {t('views.CreateAmbientView.form.accessToken.label')}
+            </label>
             <input
               type="text"
               name="accessToken"
               id="accessToken"
-              placeholder="Informe o access token"
+              placeholder={t(
+                'views.CreateAmbientView.form.accessToken.placeholder'
+              )}
               value={accessToken}
               onChange={(event) => {
                 setAccessToken(event.target.value);
@@ -258,12 +285,16 @@ export default function CreateAmbientView() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="tokenSecret">Token Secret:</label>
+            <label htmlFor="tokenSecret">
+              {t('views.CreateAmbientView.form.tokenSecret.label')}
+            </label>
             <input
               type="text"
               name="tokenSecret"
               id="tokenSecret"
-              placeholder="Informe o token secret"
+              placeholder={t(
+                'views.CreateAmbientView.form.tokenSecret.placeholder'
+              )}
               value={tokenSecret}
               onChange={(event) => {
                 setTokenSecret(event.target.value);
@@ -278,16 +309,18 @@ export default function CreateAmbientView() {
             className="button is-secondary"
             onClick={sendTestConnection}
           >
-            <FiWifi /> Testar Conexão
+            <FiWifi /> {t('views.CreateAmbientView.form.testConnection')}
           </button>
 
           <span>{testMessage}</span>
         </div>
 
-        <h3>Configurações</h3>
+        <h3>{t('views.CreateAmbientView.form.settingsSection')}</h3>
 
         <div className="form-group">
-          <label htmlFor="updateFrequency">Frequência de atualização:</label>
+          <label htmlFor="updateFrequency">
+            {t('views.CreateAmbientView.form.updateFrequency.label')}
+          </label>
           <select
             name="updateFrequency"
             id="updateFrequency"
@@ -296,20 +329,40 @@ export default function CreateAmbientView() {
               setUpdateFrequency(event.target.value);
             }}
           >
-            {updateFrequencies.map(({ value, description }) => {
-              return (
-                <option value={value} key={value}>
-                  {description}
-                </option>
-              );
-            })}
+            <option value="5m">
+              {t('views.CreateAmbientView.form.updateFrequency.options.5m')}
+            </option>
+            <option value="10m">
+              {t('views.CreateAmbientView.form.updateFrequency.options.10m')}
+            </option>
+            <option value="15m">
+              {t('views.CreateAmbientView.form.updateFrequency.options.15m')}
+            </option>
+            <option value="30m">
+              {t('views.CreateAmbientView.form.updateFrequency.options.30m')}
+            </option>
+            <option value="1h">
+              {t('views.CreateAmbientView.form.updateFrequency.options.1h')}
+            </option>
+            <option value="2h">
+              {t('views.CreateAmbientView.form.updateFrequency.options.2h')}
+            </option>
+            <option value="3h">
+              {t('views.CreateAmbientView.form.updateFrequency.options.3h')}
+            </option>
+            <option value="6h">
+              {t('views.CreateAmbientView.form.updateFrequency.options.6h')}
+            </option>
+            <option value="12h">
+              {t('views.CreateAmbientView.form.updateFrequency.options.12h')}
+            </option>
           </select>
         </div>
 
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="updateFrequencyFrom">
-              Atualizar entre este horário:
+              {t('views.CreateAmbientView.form.updateFrequencyFrom')}
             </label>
             <input
               type="time"
@@ -320,7 +373,9 @@ export default function CreateAmbientView() {
                 setUpdateFrequencyFrom(event.target.value);
               }}
             />
-            <small>Início</small>
+            <small>
+              {t('views.CreateAmbientView.form.updateFrequencyFromHelper')}
+            </small>
           </div>
           <div className="form-group">
             <input
@@ -332,7 +387,9 @@ export default function CreateAmbientView() {
                 setUpdateFrequencyTo(event.target.value);
               }}
             />
-            <small>Fim</small>
+            <small>
+              {t('views.CreateAmbientView.form.updateFrequencyToHelper')}
+            </small>
           </div>
         </div>
         <div className="form-group">
@@ -347,7 +404,8 @@ export default function CreateAmbientView() {
               }}
             />
             <label htmlFor="updateInWorkDays">
-              Atualizar apenas em dias úteis
+              {' '}
+              {t('views.CreateAmbientView.form.updateInWorkDays')}
             </label>
           </span>
         </div>
@@ -358,7 +416,7 @@ export default function CreateAmbientView() {
             type="submit"
             disabled={actionButtonsDisabled}
           >
-            <FiCheck /> Confirmar
+            <FiCheck /> {t('views.CreateAmbientView.form.buttonSubmit')}
           </button>
 
           {validationMessage}

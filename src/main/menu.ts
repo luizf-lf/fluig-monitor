@@ -6,7 +6,7 @@ import {
   app,
 } from 'electron';
 import { t } from 'i18next';
-import i18n from '../renderer/i18n';
+import i18n from '../i18n/i18n';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -178,6 +178,7 @@ export default class MenuBuilder {
         submenu: [
           {
             label: t('menu.languages.pt'),
+            // type: 'radio',
             accelerator: 'Ctrl+L+1',
             click: () => {
               i18n.changeLanguage('pt');
@@ -185,6 +186,7 @@ export default class MenuBuilder {
           },
           {
             label: t('menu.languages.en'),
+            // type: 'radio',
             accelerator: 'Ctrl+L+2',
             click: () => {
               i18n.changeLanguage('en');
