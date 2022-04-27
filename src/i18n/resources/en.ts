@@ -1,21 +1,21 @@
 const en = {
   menu: {
     about: {
-      label: 'About',
+      label: '&About',
       aboutApp: 'About Fluig Monitor',
     },
     languages: {
-      label: 'Language',
+      label: '&Language',
       pt: '🇧🇷 Portuguese',
       en: '🇺🇸 English',
       es: '🇲🇽 Spanish',
     },
     view: {
-      label: 'View',
+      label: '&View',
       toggleFS: 'Toggle full screen',
     },
     file: {
-      label: 'File',
+      label: '&File',
       quit: 'Quit',
     },
   },

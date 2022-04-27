@@ -14,14 +14,11 @@ const resources = {
   },
 };
 
+// i18next detection/caching will not be used, since saving the language selected language to a local file is easier
 i18n.use(detector).init({
   resources,
   interpolation: {
     escapeValue: false,
-  },
-  detection: {
-    order: ['localStorage'],
-    caches: ['localStorage'], // FIXME: Cached language doesn't load on app menu bar
   },
   fallbackLng: 'pt',
   debug: true,

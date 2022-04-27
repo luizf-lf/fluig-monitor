@@ -31,6 +31,47 @@ if (isDevelopment) {
   require('electron-debug')();
 }
 
+function setSavedLanguage(lang: string) {
+  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
+  const filePath = path.resolve(folderPath, 'user-lang');
+
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+  }
+
+  console.log(
+    `[${new Date().toLocaleString()}] Writing user-language file to ${filePath}`
+  );
+
+  try {
+    fs.writeFileSync(filePath, lang);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+function getSavedLanguage() {
+  const filePath = path.resolve(
+    app.getPath('appData'),
+    'fluig-monitor',
+    'user-lang'
+  );
+  console.log(
+    `[${new Date().toLocaleString()}] Reading user-language file from ${filePath}`
+  );
+  try {
+    return fs.readFileSync(filePath, 'utf-8');
+  } catch (e) {
+    console.log(e);
+    console.log(
+      `[${new Date().toLocaleString()}] Language file not found, using portuguese as default.`
+    );
+    return 'pt';
+  }
+}
+
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -76,22 +117,27 @@ const createWindow = async () => {
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
-
   const menuBuilder = new MenuBuilder(mainWindow);
+
+  const savedLanguage = getSavedLanguage();
 
   i18n.on('languageChanged', (lang: string) => {
     // if the buildMenu function is not called, the default electron dev menu will be rendered
-    menuBuilder.buildMenu(); // TODO: Pass the 'lang' to the menu builder? Check if it is optimal
+    menuBuilder.buildMenu();
     mainWindow?.webContents.send('language-changed', {
       language: lang,
       namespace: 'translation',
       resource: i18n.getResourceBundle(lang, 'translation'),
     });
+    // if the locally saved language is different from the changed language, saves the set language locally
+    if (savedLanguage !== lang) {
+      setSavedLanguage(lang);
+    }
   });
 
   // change the language to Portuguese by default // on i18n initialization
   // i18n.on('initialized', () => {
-  i18n.changeLanguage('pt');
+  i18n.changeLanguage(savedLanguage);
   // });
 
   mainWindow.on('ready-to-show', () => {
@@ -156,6 +202,11 @@ ipcMain.on('get-db-file', (event) => {
     console.log(err);
     event.returnValue = null;
   }
+});
+
+// listens to a get-language event from renderer, and returns the locally saved language
+ipcMain.on('get-language', (event) => {
+  event.returnValue = getSavedLanguage();
 });
 
 app.on('window-all-closed', () => {

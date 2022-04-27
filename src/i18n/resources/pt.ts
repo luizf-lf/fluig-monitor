@@ -1,21 +1,21 @@
 const pt = {
   menu: {
     about: {
-      label: 'Sobre',
+      label: '&Sobre',
       aboutApp: 'Sobre o Fluig Monitor',
     },
     languages: {
-      label: 'Idioma',
+      label: '&Idioma',
       pt: '🇧🇷 Português',
       en: '🇺🇸 Inglês',
       es: '🇲🇽 Espanhol',
     },
     view: {
-      label: 'Visualizar',
+      label: '&Visualizar',
       toggleFS: 'Alternar tela cheia',
     },
     file: {
-      label: 'Arquivo',
+      label: '&Arquivo',
       quit: 'Sair',
     },
   },
