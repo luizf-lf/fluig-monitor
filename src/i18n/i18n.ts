@@ -14,7 +14,7 @@ const resources = {
   },
 };
 
-// i18next detection/caching will not be used, since saving the language selected language to a local file is easier
+// i18next native detection/caching will not be used, since saving the selected language to a local file is easier
 i18n.use(detector).init({
   resources,
   interpolation: {

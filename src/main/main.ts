@@ -31,6 +31,8 @@ if (isDevelopment) {
   require('electron-debug')();
 }
 
+/* Auxiliary functions */
+
 function setSavedLanguage(lang: string) {
   const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
   const filePath = path.resolve(folderPath, 'user-lang');
@@ -69,6 +71,48 @@ function getSavedLanguage() {
       `[${new Date().toLocaleString()}] Language file not found, using portuguese as default.`
     );
     return 'pt';
+  }
+}
+
+// gets the database file
+function getDbFile() {
+  const filePath = path.resolve(
+    app.getPath('appData'),
+    'fluig-monitor',
+    'user-settings.json'
+  );
+
+  console.log(
+    `[${new Date().toLocaleString()}] Reading database file from ${filePath}`
+  );
+
+  try {
+    return fs.readFileSync(filePath, 'utf-8');
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+// updates the database file
+function updateDbFile(data: string) {
+  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
+  const filePath = path.resolve(folderPath, 'user-settings.json');
+
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath);
+  }
+
+  console.log(
+    `[${new Date().toLocaleString()}] Writing database file to ${filePath}`
+  );
+
+  try {
+    fs.writeFileSync(filePath, data);
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 }
 
@@ -164,44 +208,12 @@ const createWindow = async () => {
 
 // IPC listener to save local settings file
 ipcMain.on('update-db-file', (event, arg) => {
-  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'user-settings.json');
-
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
-  }
-
-  console.log(
-    `[${new Date().toLocaleString()}] IPC: Writing database file to ${filePath}`
-  );
-
-  try {
-    fs.writeFileSync(filePath, arg);
-    event.returnValue = true;
-  } catch (err) {
-    console.log(err);
-    event.returnValue = false;
-  }
+  event.returnValue = updateDbFile(arg);
 });
 
 // IPC listener to get settings file
 ipcMain.on('get-db-file', (event) => {
-  const filePath = path.resolve(
-    app.getPath('appData'),
-    'fluig-monitor',
-    'user-settings.json'
-  );
-
-  console.log(
-    `[${new Date().toLocaleString()}] IPC: Reading database file from ${filePath}`
-  );
-
-  try {
-    event.returnValue = fs.readFileSync(filePath, 'utf-8');
-  } catch (err) {
-    console.log(err);
-    event.returnValue = null;
-  }
+  event.returnValue = getDbFile();
 });
 
 // listens to a get-language event from renderer, and returns the locally saved language
