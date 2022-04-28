@@ -16,7 +16,7 @@ Esta aplicação está sendo desenvolvida para fins **didáticos**, com a inten�
 
 ![Desktop](./docs/img/desktop_LT2022-04_AmbientView.png)
 
-> A imagem acime é um **protótipo** da aplicação, e irá sofrer mudanças.
+> A imagem acima é um **protótipo** da aplicação, e irá sofrer mudanças.
 
 ## Funcionalidades
 
