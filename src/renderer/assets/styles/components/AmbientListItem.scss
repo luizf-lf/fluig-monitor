@@ -12,7 +12,7 @@
 
   text-decoration: none;
   transition: transform 300ms;
-  background-color: var(--card);
+  background-color: transparent;
   border: 2px solid var(--border-light);
   font-weight: 500;
 
@@ -53,7 +53,7 @@
       }
 
       &.is-dev {
-        background-color: var(--blue);
+        background-color: var(--purple);
       }
     }
   }
@@ -66,8 +66,8 @@
     padding: 0.35rem;
 
     .initials {
-      background-color: var(--blue);
-      color: var(--font-white);
+      background-color: var(--purple);
+      color: #fff;
       padding: 0.65rem;
       border-radius: 0.5rem;
       margin-right: 0.5rem;

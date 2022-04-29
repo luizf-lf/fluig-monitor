@@ -3,8 +3,6 @@
   box-shadow: var(--card-shadow);
   border-radius: var(--card-border-radius);
 
-  background-color: var(--card);
-
   display: flex;
 
   .iconContainer {
@@ -24,6 +22,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--card);
+    border-radius: 0 1rem 1rem 0;
 
     max-height: 10rem;
     overflow-y: auto;
@@ -38,10 +38,10 @@
   }
 
   &.has-info {
-    border: 2px solid var(--blue);
+    border: 2px solid var(--purple);
     .iconContainer {
-      background-color: var(--light-blue);
-      color: var(--blue);
+      background-color: var(--light-purple);
+      color: var(--purple);
     }
   }
 

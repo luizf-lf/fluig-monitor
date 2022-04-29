@@ -24,7 +24,7 @@ function Navbar() {
       id="mainNavbar"
     >
       <div>
-        <Link to="/" id="logoContainer">
+        <Link to="/" id="logo-container">
           <img src={logoImage} alt="Fluig Monitor" />
           <div className="logoData">
             <span className="title">Fluig Monitor</span>

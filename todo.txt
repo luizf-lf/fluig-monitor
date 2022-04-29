@@ -7,7 +7,9 @@
     [✅] add logo
     [✅] update ambientList
     [✅] add profile container
-  [] update ambient view
+[] fix global color transition
+[] update ambient view
+[] update home view
 [] create modal component (overlay on window)
 [] fetch ambient data from api to ambientView
 [] dbHandler: Update ipc method (use "handle/invoke"); Ref: https://www.electronjs.org/pt/docs/latest/tutorial/ipc#1-listen-for-events-with-ipcmainhandle

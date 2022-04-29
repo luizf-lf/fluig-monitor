@@ -8,17 +8,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 200ms;
+  outline: 3px solid transparent;
 
   svg {
     margin-right: 0.5rem;
   }
 
   &.is-default {
-    background-color: var(--blue);
-    color: var(--background);
+    background-color: var(--purple);
+    color: #fff;
 
     &:hover {
-      outline: 3px solid var(--blue-outline);
+      outline: 3px solid var(--light-blue);
     }
   }
 
@@ -92,9 +94,11 @@
   select {
     padding: 0.5rem;
     border-radius: 0.35rem;
+    background-color: var(--card);
+    color: var(--font-secondary);
 
     &:focus-visible {
-      outline: 3px solid var(--blue-outline);
+      outline: 3px solid var(--light-blue);
     }
   }
 
@@ -117,9 +121,9 @@
 }
 
 .info-blip {
-  border: 1px solid var(--blue);
-  color: var(--blue);
-  background-color: var(--light-blue);
+  border: 1px solid var(--purple);
+  color: var(--purple);
+  background-color: var(--light-purple);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
 

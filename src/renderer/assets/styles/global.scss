@@ -4,7 +4,6 @@
   --font-primary: #1e293b;
   --font-secondary: #334155;
   --font-soft: #9ca3af;
-  --font-white: #f1f5f9;
   --background: #f1f5f9;
   --card: #ffffff;
   --border: #9ca3af;
@@ -16,13 +15,30 @@
   --light-yellow: #fef9c3;
   --red: #ef4444;
   --light-red: #fee2e2;
-  --blue: #6366f1;
-  --light-blue: #e0e7ff;
-  --blue-outline: #7dd3fc;
-  --blue-medium: #60a5fa;
+  --purple: #6366f1;
+  --light-purple: #e0e7ff;
+  --blue: #60a5fa;
+  --light-blue: #7dd3fc;
 
   --card-shadow: 0px 0px 40px rgba(0, 0, 0, 0.05);
   --card-border-radius: 1rem;
+  --transition: 300ms;
+}
+
+.dark-theme {
+  --font-primary: #fafafa;
+  --font-secondary: #e4e4e4;
+  --font-soft: #9ca3af;
+  --background: #111827;
+  --card: #1f2937;
+  --border: #374151;
+  --border-light: #374151;
+
+  #logo-container {
+    img {
+      filter: brightness(0.9);
+    }
+  }
 }
 
 * {
@@ -45,7 +61,7 @@ button {
   cursor: pointer;
 
   &:focus-visible {
-    outline: 3px solid var(--blue-outline);
+    outline: 3px solid var(--light-blue);
   }
 
   &:disabled {
