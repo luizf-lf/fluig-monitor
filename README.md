@@ -10,13 +10,19 @@ Uma aplicação desktop, desenvolvida em **Electron**, utilizada para monitorar 
 
 O monitoramento é realizado através das **APIs** de monitoramento e estatísticas, conforme a [documentação](https://tdn.engpro.totvs.com.br/pages/releaseview.action?pageId=284881802).
 
-Esta aplicação está sendo desenvolvida para fins **didáticos**, com a intenção de aprender um pouco sobre o desenvolvimento com `React`, `Electron`, `Typescript`, e o uso das `APIs` do Fluig.
+Esta aplicação está sendo desenvolvida para fins **didáticos**, com a intenção de aprender um pouco sobre UI/UX, desenvolvimento com `React`, `Electron`, `Typescript`, e o uso das `APIs` do Fluig.
 
 ## Imagens
 
+### Modo Claro
+
 ![Desktop](./docs/img/desktop_LT2022-04_AmbientView.png)
 
-> A imagem acima é um **protótipo** da aplicação, e irá sofrer mudanças.
+### Modo Escuro
+
+![Desktop Dark](./docs/img/desktop_LT2022-04_AmbientView_Dark.png)
+
+> As imagens acima são **protótipos** da aplicação, e estão sujeiras à mudanças.
 
 ## Funcionalidades
 

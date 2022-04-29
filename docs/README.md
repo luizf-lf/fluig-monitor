@@ -8,15 +8,21 @@
 
 A desktop application, developed with **Electron**, used to monitor **Fluig** ambients.
 
-The monitoring is done trough the monitoring and statistics **API**, as shown on the [documentation](https://tdn.engpro.totvs.com.br/pages/releaseview.action?pageId=284881802).
+The monitoring is done trough the monitoring and statistics **API**, as shown on the [documentation](https://tdn.totvs.com/display/fluigeng/Platform+%7C+Platform+Services+Monitor).
 
-This application is being developed for **educational** purposes, with the intention of learning a bit more about `React`, `Electron`, `Typescript`, and the use of Fluig `APIs`.
+This application is being developed for **educational** purposes, with the intention of learning a bit more about UI/UX, development with `React`, `Electron`, `Typescript`, and the use of Fluig `APIs`.
 
 ## Images
 
+### White Theme
+
 ![Desktop](./img/desktop_LT2022-04_AmbientView.png)
 
-> The above image is a **prototype**, and is heavily subject to changes.
+### Dark Theme
+
+![Desktop Dark](./img/desktop_LT2022-04_AmbientView_Dark.png)
+
+> The above images are **prototypes**, and are subject to changes.
 
 ## Features
 

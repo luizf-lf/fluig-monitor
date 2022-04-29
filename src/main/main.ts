@@ -179,10 +179,8 @@ const createWindow = async () => {
     }
   });
 
-  // change the language to Portuguese by default // on i18n initialization
-  // i18n.on('initialized', () => {
+  // change the language to the locally saved language
   i18n.changeLanguage(savedLanguage);
-  // });
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
