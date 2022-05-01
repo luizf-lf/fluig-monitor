@@ -22,7 +22,7 @@ Esta aplicação está sendo desenvolvida para fins **didáticos**, com a inten�
 
 ![Desktop Dark](./docs/img/desktop_LT2022-04_AmbientView_Dark.png)
 
-> As imagens acima são **protótipos** da aplicação, e estão sujeiras à mudanças.
+> As imagens acima são **protótipos** da aplicação, e estão sujeitas à mudanças.
 
 ## Funcionalidades
 
