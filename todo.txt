@@ -23,3 +23,10 @@
 [] dbHandler: Update ipc method (use "handle/invoke"); Ref: https://www.electronjs.org/pt/docs/latest/tutorial/ipc#1-listen-for-events-with-ipcmainhandle
 [] fetch ambient data from api to ambientView
   [] save ambient api requests to database
+
+
+--=== Global ===--
+[] update project folder structure / separate main & renderer artifacts
+  [] interfaces
+  [] utils
+  [] services
