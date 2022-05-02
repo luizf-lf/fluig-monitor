@@ -64,6 +64,8 @@ export default function CreateAmbientView() {
         to: updateFrequencyTo,
         onlyOnWorkDays: updateOnWorkDays,
       },
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
       uuid: uuidv4(),
     };
 

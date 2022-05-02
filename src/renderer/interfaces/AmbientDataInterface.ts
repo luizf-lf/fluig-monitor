@@ -14,5 +14,7 @@ export default interface AmbientDataInterface {
     to: string;
     onlyOnWorkDays: boolean;
   };
+  createdAt: EpochTimeStamp;
+  updatedAt: EpochTimeStamp;
   uuid: string;
 }

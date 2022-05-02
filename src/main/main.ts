@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
 /**
@@ -16,6 +17,8 @@ import * as fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import i18n from '../i18n/i18n';
+import UserSettingsDatabaseInterface from '../renderer/interfaces/database/UserSettingsDatabaseInterface';
+import AmbientDatabaseInterface from '../renderer/interfaces/database/AmbientDatabaseInterface';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -33,78 +36,96 @@ if (isDevelopment) {
 
 /* Auxiliary functions */
 
-function setSavedLanguage(lang: string) {
+// get the user settings file saved on the file system
+function getUserSettingsFile() {
   const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'user-lang');
+  const filePath = path.resolve(folderPath, 'user-settings.json');
 
+  console.log(
+    `[${new Date().toLocaleString()}] Reading user settings file from ${filePath}`
+  );
+
+  // checks if the app folder exists, and if not, creates it.
   if (!fs.existsSync(folderPath)) {
+    console.log(
+      `[${new Date().toLocaleString()}] Folder ${folderPath} does not exists and will be created.`
+    );
     fs.mkdirSync(folderPath);
   }
 
-  console.log(
-    `[${new Date().toLocaleString()}] Writing user-language file to ${filePath}`
-  );
-
-  try {
-    fs.writeFileSync(filePath, lang);
-    return true;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
-
-function getSavedLanguage() {
-  const filePath = path.resolve(
-    app.getPath('appData'),
-    'fluig-monitor',
-    'user-lang'
-  );
-  console.log(
-    `[${new Date().toLocaleString()}] Reading user-language file from ${filePath}`
-  );
-  try {
-    return fs.readFileSync(filePath, 'utf-8');
-  } catch (e) {
-    console.log(e);
+  // checks if the user settings file exists, and if not, creates it with default values
+  if (!fs.existsSync(filePath)) {
+    const userSettingsData: UserSettingsDatabaseInterface = {
+      language: 'pt',
+      theme: 'LIGHT',
+      openOnLastServer: false,
+    };
     console.log(
-      `[${new Date().toLocaleString()}] Language file not found, using portuguese as default.`
+      `[${new Date().toLocaleString()}] File ${filePath} does not exists and will be created.`
     );
-    return 'pt';
+    fs.writeFileSync(filePath, JSON.stringify(userSettingsData));
+
+    // returns the default values
+    return userSettingsData;
   }
-}
 
-// gets the database file
-function getDbFile() {
-  const filePath = path.resolve(
-    app.getPath('appData'),
-    'fluig-monitor',
-    'user-settings.json'
-  );
-
-  console.log(
-    `[${new Date().toLocaleString()}] Reading database file from ${filePath}`
-  );
-
+  // if the file already exists, returns it's value;
   try {
-    return fs.readFileSync(filePath, 'utf-8');
-  } catch (err) {
-    console.log(err);
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (error) {
+    console.log(error);
+    // in case of and error, return null
     return null;
   }
 }
 
-// updates the database file
-function updateDbFile(data: string) {
+function getAmbientsFile() {
   const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'user-settings.json');
+  const filePath = path.resolve(folderPath, 'ambient-data.json');
 
+  console.log(
+    `[${new Date().toLocaleString()}] Reading ambient data file from ${filePath}`
+  );
+
+  // checks if the app folder exists, and if not, creates it.
   if (!fs.existsSync(folderPath)) {
+    console.log(
+      `[${new Date().toLocaleString()}] Folder ${folderPath} does not exists and will be created.`
+    );
     fs.mkdirSync(folderPath);
   }
 
+  // checks if the ambient data file exists, and if not, creates it with default values
+  if (!fs.existsSync(filePath)) {
+    const ambientData: AmbientDatabaseInterface = {
+      ambients: [],
+      monitoringHistory: [],
+    };
+    console.log(
+      `[${new Date().toLocaleString()}] File ${filePath} does not exists and will be created.`
+    );
+    fs.writeFileSync(filePath, JSON.stringify(ambientData));
+
+    // returns the default values
+    return ambientData;
+  }
+
+  // if the file already exists, returns it's value;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (error) {
+    console.log(error);
+    // in case of and error, return null
+    return null;
+  }
+}
+
+function updateAmbientsFile(data: string) {
+  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
+  const filePath = path.resolve(folderPath, 'ambient-data.json');
+
   console.log(
-    `[${new Date().toLocaleString()}] Writing database file to ${filePath}`
+    `[${new Date().toLocaleString()}] Writing ambient data file to ${filePath}`
   );
 
   try {
@@ -114,6 +135,45 @@ function updateDbFile(data: string) {
     console.log(err);
     return false;
   }
+}
+
+function updateSettingsFile(data: string) {
+  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
+  const filePath = path.resolve(folderPath, 'user-settings.json');
+
+  console.log(
+    `[${new Date().toLocaleString()}] Writing user settings file to ${filePath}`
+  );
+
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data));
+    return true;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+// gets the saved language setting from the user settings file
+function getSavedLanguage() {
+  const userSettings = getUserSettingsFile();
+
+  // checks if there's a valid return, and returns the saved language
+  if (userSettings !== null) {
+    return userSettings.language;
+  }
+
+  // returns 'portuguese' as the default language, if null is returned
+  return 'pt';
+}
+
+// sets the chosen language to a local file
+function setSavedLanguage(language: string) {
+  const data = getUserSettingsFile();
+
+  data.language = language;
+
+  updateSettingsFile(data);
 }
 
 const installExtensions = async () => {
@@ -144,10 +204,12 @@ const createWindow = async () => {
 
   // get the window size from the user's main display
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  // initial width should be 80% of the screen, unless it's bigger than 1920 pixels (ultra wide monitors)
+  const initialWidth = width > 1920 ? 1920 : width * 0.8;
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: width * 0.8, // initial width and height should be 80% of the screen
+    width: initialWidth, // initial width and height should be 80% of the screen
     height: height * 0.8,
     minWidth: 1024,
     minHeight: 728,
@@ -174,9 +236,8 @@ const createWindow = async () => {
       resource: i18n.getResourceBundle(lang, 'translation'),
     });
     // if the locally saved language is different from the changed language, saves the set language locally
-    if (savedLanguage !== lang) {
-      setSavedLanguage(lang);
-    }
+
+    setSavedLanguage(lang);
   });
 
   // change the language to the locally saved language
@@ -204,18 +265,28 @@ const createWindow = async () => {
   });
 };
 
-// IPC listener to save local settings file
-ipcMain.on('update-db-file', (event, arg) => {
-  event.returnValue = updateDbFile(arg);
+// IPC listener to save local userSettings file
+ipcMain.on('updateSettingsFile', (event, arg) => {
+  event.returnValue = updateSettingsFile(arg);
 });
 
-// IPC listener to get settings file
-ipcMain.on('get-db-file', (event) => {
-  event.returnValue = getDbFile();
+// IPC listener to save local ambient data file
+ipcMain.on('updateAmbientsFile', (event, arg) => {
+  event.returnValue = updateAmbientsFile(arg);
+});
+
+// IPC listener to get user settings file
+ipcMain.on('getSettingsFile', (event) => {
+  event.returnValue = getUserSettingsFile();
+});
+
+// IPC listener to get ambient file
+ipcMain.on('getAmbientsFile', (event) => {
+  event.returnValue = getAmbientsFile();
 });
 
 // listens to a get-language event from renderer, and returns the locally saved language
-ipcMain.on('get-language', (event) => {
+ipcMain.on('getLanguage', (event) => {
   event.returnValue = getSavedLanguage();
 });
 

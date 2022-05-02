@@ -1,56 +1,20 @@
 import { ipcRenderer } from 'electron';
-import DatabaseInterface from '../renderer/interfaces/DatabaseInterface';
 import AmbientDataInterface from '../renderer/interfaces/AmbientDataInterface';
 
 const dbHandler = {
-  global: {
-    initData() {
-      const initData: DatabaseInterface = {
-        userSettings: {
-          theme: 'LIGHT',
-          openOnLastServer: false,
-        },
-        ambients: [],
-        monitoringHistory: [],
-      };
-
-      const result = ipcRenderer.sendSync(
-        'update-db-file',
-        JSON.stringify(initData)
-      );
-      if (!result) {
-        throw new Error('Error initializing database file');
-      }
-
-      return initData;
-    },
-  },
   ambients: {
     getAll() {
-      let ambients = [];
-      const storage = ipcRenderer.sendSync('get-db-file');
+      const storage = ipcRenderer.sendSync('getAmbientsFile');
 
-      if (storage !== null) {
-        ambients = JSON.parse(storage).ambients;
-      } else {
-        ambients = dbHandler.global.initData().ambients;
-      }
-
-      return ambients;
+      return storage.ambients;
     },
     saveNew(ambientData: AmbientDataInterface) {
-      let storage = ipcRenderer.sendSync('get-db-file');
-
-      if (storage !== null) {
-        storage = JSON.parse(storage);
-      } else {
-        storage = dbHandler.global.initData();
-      }
+      const storage = ipcRenderer.sendSync('getAmbientsFile');
 
       storage.ambients.push(ambientData);
 
       const result = ipcRenderer.sendSync(
-        'update-db-file',
+        'updateAmbientsFile',
         JSON.stringify(storage)
       );
       if (!result) {
@@ -79,7 +43,7 @@ const dbHandler = {
       return null;
     },
     updateByUUID(uuid: string, updatedAmbient: AmbientDataInterface) {
-      const storage = JSON.parse(ipcRenderer.sendSync('get-db-file'));
+      const storage = ipcRenderer.sendSync('getAmbientsFile');
       const { ambients } = storage;
 
       const index = ambients.findIndex(
@@ -93,7 +57,7 @@ const dbHandler = {
       storage.ambients[index] = updatedAmbient;
 
       const result = ipcRenderer.sendSync(
-        'update-db-file',
+        'updateAmbientsFile',
         JSON.stringify(storage)
       );
       if (!result) {
@@ -102,7 +66,7 @@ const dbHandler = {
       return true;
     },
     deleteByUUID(uuid: string) {
-      const storage = JSON.parse(ipcRenderer.sendSync('get-db-file'));
+      const storage = JSON.parse(ipcRenderer.sendSync('getAmbientsFile'));
       const { ambients } = storage;
 
       ambients.map((ambient: AmbientDataInterface, idx: number) => {
@@ -116,7 +80,7 @@ const dbHandler = {
       storage.ambients = ambients;
 
       const result = ipcRenderer.sendSync(
-        'update-db-file',
+        'updateAmbientsFile',
         JSON.stringify(storage)
       );
       if (!result) {

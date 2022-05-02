@@ -19,7 +19,7 @@ ipcRenderer.on(
 );
 
 // ensures that the initial rendered language is the one saved locally
-i18n.language = ipcRenderer.sendSync('get-language');
+i18n.language = ipcRenderer.sendSync('getLanguage');
 
 render(
   <Suspense fallback="Loading">

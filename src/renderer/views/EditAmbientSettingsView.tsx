@@ -136,7 +136,9 @@ function EditAmbientSettingsView(): JSX.Element {
         to: updateFrequencyTo,
         onlyOnWorkDays: updateOnWorkDays,
       },
-      uuid: ambientUUID,
+      createdAt: ambientData.createdAt,
+      updatedAt: Date.now(),
+      uuid: ambientData.uuid,
     };
 
     const { isValid, message } = formUtils.validate(formData);
