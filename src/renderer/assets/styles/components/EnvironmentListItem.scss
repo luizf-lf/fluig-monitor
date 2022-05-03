@@ -1,4 +1,4 @@
-.ambient-item-container {
+.environment-item-container {
   background-color: var(--background);
   color: var(--font-secondary);
   font-weight: bold;
@@ -18,7 +18,7 @@
 
   position: relative;
 
-  .ambient-indicators {
+  .environment-indicators {
     position: absolute;
 
     bottom: 0.5rem;

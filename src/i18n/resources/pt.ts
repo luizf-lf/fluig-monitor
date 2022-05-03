@@ -20,11 +20,11 @@ const pt = {
     },
   },
   views: {
-    AmbientView: {
+    EnvironmentView: {
       empty:
         'Selecione o ambiente acima ou utilize o botão "Novo" para criar um novo ambiente.',
     },
-    CreateAmbientView: {
+    CreateEnvironmentView: {
       createdSuccessfully:
         'Ambiente cadastrado com sucesso. Redirecionando para a tela inicial...',
       connecting: 'Conectando ...',
@@ -37,8 +37,8 @@ const pt = {
       back: 'Voltar',
       form: {
         title: 'Cadastrar novo ambiente',
-        ambientDataSection: 'Dados do ambiente',
-        ambientName: {
+        environmentDataSection: 'Dados do ambiente',
+        environmentName: {
           label: 'Nome do ambiente:',
           placeholder: 'Ex.: Ambiente Exemplo 01',
         },
@@ -46,7 +46,7 @@ const pt = {
           label: 'URL De Domínio:',
           placeholder: 'Ex.: https://teste.fluig.com/',
         },
-        ambientKind: {
+        environmentKind: {
           label: 'Tipo:',
           options: {
             prod: 'Produção',
@@ -54,7 +54,7 @@ const pt = {
             dev: 'Desenvolvimento',
           },
         },
-        ambientAuthSection: 'Autenticação',
+        environmentAuthSection: 'Autenticação',
         consumerKey: {
           label: 'Consumer Key:',
           placeholder: 'Informe a consumer key',

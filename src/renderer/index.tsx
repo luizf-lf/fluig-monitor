@@ -6,9 +6,9 @@ import { HashRouter } from 'react-router-dom';
 import App from './App';
 import i18n from '../i18n/i18n';
 
-// listens for the custom 'language-changed' event from main, triggering the language change on the renderer
+// listens for the custom 'languageChanged' event from main, triggering the language change on the renderer
 ipcRenderer.on(
-  'language-changed',
+  'languageChanged',
   (_event, { language, namespace, resource }) => {
     if (!i18n.hasResourceBundle(language, namespace)) {
       i18n.addResourceBundle(language, namespace, resource);

@@ -1,17 +1,17 @@
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useContext } from 'react';
-import AmbientListContext from '../contexts/AmbientListContext';
+import EnvironmentListContext from '../contexts/EnvironmentListContext';
 import '../assets/styles/components/Navbar.scss';
-import CreateAmbientButton from './CreateAmbientButton';
-import AmbientDataInterface from '../interfaces/AmbientDataInterface';
-import AmbientListItem from './AmbientListItem';
+import CreateEnvironmentButton from './CreateEnvironmentButton';
+import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
+import EnvironmentListItem from './EnvironmentListItem';
 import logoImage from '../assets/img/logo.png';
 import defaultUserProfile from '../assets/img/default-user-profile.png';
 import { version } from '../../../release/app/package.json';
 
 function Navbar() {
-  const [ambientList] = useContext(AmbientListContext);
+  const [environmentList] = useContext(EnvironmentListContext);
 
   return (
     <motion.nav
@@ -31,12 +31,12 @@ function Navbar() {
             <span className="version">v{version}</span>
           </div>
         </Link>
-        <section id="ambientList">
+        <section id="environmentList">
           <AnimatePresence>
-            {ambientList.length === 0
+            {environmentList.length === 0
               ? ''
-              : ambientList.map(
-                  (ambient: AmbientDataInterface, idx: number) => {
+              : environmentList.map(
+                  (environment: EnvironmentDataInterface, idx: number) => {
                     return (
                       <motion.div
                         initial={{ opacity: 0, y: '-100px' }}
@@ -54,18 +54,18 @@ function Navbar() {
                           y: '-100px',
                           transition: { ease: 'easeInOut', duration: 0.3 },
                         }}
-                        key={ambient.uuid}
+                        key={environment.uuid}
                       >
-                        <AmbientListItem
-                          data={ambient}
-                          key={ambient.uuid}
+                        <EnvironmentListItem
+                          data={environment}
+                          key={environment.uuid}
                           isExpanded={idx === 0}
                         />
                       </motion.div>
                     );
                   }
                 )}
-            <CreateAmbientButton />
+            <CreateEnvironmentButton />
           </AnimatePresence>
         </section>
       </div>

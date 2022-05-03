@@ -16,11 +16,11 @@ Esta aplicação está sendo desenvolvida para fins **didáticos**, com a inten�
 
 ### Modo Claro
 
-![Desktop](./docs/img/desktop_LT2022-04_AmbientView.png)
+![Desktop](./docs/img/desktop_LT2022-04_EnvironmentView.png)
 
 ### Modo Escuro
 
-![Desktop Dark](./docs/img/desktop_LT2022-04_AmbientView_Dark.png)
+![Desktop Dark](./docs/img/desktop_LT2022-04_EnvironmentView_Dark.png)
 
 > As imagens acima são **protótipos** da aplicação, e estão sujeitas à mudanças.
 

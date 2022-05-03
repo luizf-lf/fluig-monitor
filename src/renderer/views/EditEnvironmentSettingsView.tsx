@@ -12,44 +12,50 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import AmbientViewParams from '../interfaces/AmbientViewParams';
-import globalContainerVariants from '../../utils/globalContainerVariants';
-import dbHandler from '../../utils/dbHandler';
-import ambientKinds from '../../utils/defaultAmbientKinds';
-import updateFrequencies from '../../utils/defaultUpdateFrequencies';
-import AmbientDataInterface from '../interfaces/AmbientDataInterface';
-import testConnection from '../../services/testConnection';
-import formUtils from '../../utils/formUtils';
+import EnvironmentViewParams from '../interfaces/EnvironmentViewParams';
+import globalContainerVariants from '../utils/globalContainerVariants';
+import dbHandler from '../utils/dbHandler';
+import environmentKinds from '../utils/defaultEnvironmentKinds';
+import updateFrequencies from '../utils/defaultUpdateFrequencies';
+import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
+import testConnection from '../services/testConnection';
+import formUtils from '../utils/formUtils';
 import { useNotifications } from '../contexts/NotificationsContext';
 
-function EditAmbientSettingsView(): JSX.Element {
-  const { ambientUUID }: AmbientViewParams = useParams();
-  const ambientData: AmbientDataInterface =
-    dbHandler.ambients.getByUUID(ambientUUID);
+function EditEnvironmentSettingsView(): JSX.Element {
+  const { environmentUUID }: EnvironmentViewParams = useParams();
+  const environmentData: EnvironmentDataInterface =
+    dbHandler.environments.getByUUID(environmentUUID);
 
-  const [name, setName] = useState(ambientData.name);
-  const [domainUrl, setDomainUrl] = useState(ambientData.baseUrl);
+  const [name, setName] = useState(environmentData.name);
+  const [domainUrl, setDomainUrl] = useState(environmentData.baseUrl);
   const [kind, setKind] = useState(
-    ambientKinds.find((i) => i.value === ambientData.kind)?.value
+    environmentKinds.find((i) => i.value === environmentData.kind)?.value
   );
-  const [consumerKey, setConsumerKey] = useState(ambientData.auth.consumerKey);
+  const [consumerKey, setConsumerKey] = useState(
+    environmentData.auth.consumerKey
+  );
   const [consumerSecret, setConsumerSecret] = useState(
-    ambientData.auth.consumerSecret
+    environmentData.auth.consumerSecret
   );
-  const [accessToken, setAccessToken] = useState(ambientData.auth.accessToken);
-  const [tokenSecret, setTokenSecret] = useState(ambientData.auth.tokenSecret);
+  const [accessToken, setAccessToken] = useState(
+    environmentData.auth.accessToken
+  );
+  const [tokenSecret, setTokenSecret] = useState(
+    environmentData.auth.tokenSecret
+  );
   const [updateFrequency, setUpdateFrequency] = useState(
-    updateFrequencies.find((i) => i.value === ambientData.update.frequency)
+    updateFrequencies.find((i) => i.value === environmentData.update.frequency)
       ?.value
   );
   const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState(
-    ambientData.update.from
+    environmentData.update.from
   );
   const [updateFrequencyTo, setUpdateFrequencyTo] = useState(
-    ambientData.update.to
+    environmentData.update.to
   );
   const [updateOnWorkDays, setUpdateOnWorkDays] = useState(
-    ambientData.update.onlyOnWorkDays
+    environmentData.update.onlyOnWorkDays
   );
 
   const [testMessage, setTestMessage] = useState(<></>);
@@ -136,9 +142,9 @@ function EditAmbientSettingsView(): JSX.Element {
         to: updateFrequencyTo,
         onlyOnWorkDays: updateOnWorkDays,
       },
-      createdAt: ambientData.createdAt,
+      createdAt: environmentData.createdAt,
       updatedAt: Date.now(),
-      uuid: ambientData.uuid,
+      uuid: environmentData.uuid,
     };
 
     const { isValid, message } = formUtils.validate(formData);
@@ -153,13 +159,17 @@ function EditAmbientSettingsView(): JSX.Element {
       return;
     }
 
-    const result = dbHandler.ambients.updateByUUID(ambientUUID, formData);
+    const result = dbHandler.environments.updateByUUID(
+      environmentUUID,
+      formData
+    );
 
     if (!result) {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message: 'Erro ao atualizar informações do ambiente, tente novamente.',
+        message:
+          'Erro ao atualizar informações do environment, tente novamente.',
       });
 
       return;
@@ -201,7 +211,7 @@ function EditAmbientSettingsView(): JSX.Element {
       });
       setTimeout(() => {
         setValidationMessage(<Redirect to="/" />);
-        dbHandler.ambients.deleteByUUID(ambientUUID);
+        dbHandler.environments.deleteByUUID(environmentUUID);
       }, 3000);
     }
   }
@@ -213,7 +223,7 @@ function EditAmbientSettingsView(): JSX.Element {
       animate="visible"
       exit="exit"
       id="centerViewContainer"
-      className="ambientFormContainer"
+      className="environmentFormContainer"
     >
       <Link to="/" className="top-return-button">
         <FiArrowLeft />
@@ -225,12 +235,12 @@ function EditAmbientSettingsView(): JSX.Element {
         <h3>Dados do ambiente</h3>
 
         <div className="form-group">
-          <label htmlFor="ambientName">Nome do ambiente:</label>
+          <label htmlFor="environmentName">Nome do ambiente:</label>
           <input
             type="text"
-            name="ambientName"
-            id="ambientName"
-            placeholder="Ex.: Ambiente Exemplo 01"
+            name="environmentName"
+            id="environmentName"
+            placeholder="Ex.: Environment Exemplo 01"
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -254,16 +264,16 @@ function EditAmbientSettingsView(): JSX.Element {
           </div>
 
           <div className="form-group">
-            <label htmlFor="ambientKind">Tipo:</label>
+            <label htmlFor="environmentKind">Tipo:</label>
             <select
-              name="ambientKind"
-              id="ambientKind"
+              name="environmentKind"
+              id="environmentKind"
               value={kind}
               onChange={(event) => {
                 setKind(event.target.value);
               }}
             >
-              {ambientKinds.map(({ value, description }) => {
+              {environmentKinds.map(({ value, description }) => {
                 return (
                   <option key={value} value={value}>
                     {description}
@@ -438,4 +448,4 @@ function EditAmbientSettingsView(): JSX.Element {
   );
 }
 
-export default EditAmbientSettingsView;
+export default EditEnvironmentSettingsView;

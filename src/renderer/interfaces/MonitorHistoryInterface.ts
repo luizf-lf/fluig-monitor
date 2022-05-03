@@ -123,7 +123,7 @@ interface FluigAPIStatisticsInterface {
 
 // final (conciliated) response data from server
 export default interface MonitorHistoryInterface {
-  ambientPK: {
+  environmentPK: {
     uuid: string;
     url: string;
   };

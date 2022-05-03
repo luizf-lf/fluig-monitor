@@ -5,12 +5,13 @@
 [✅] update global layout
   [✅] change sidebar to navbar
     [✅] add logo
-    [✅] update ambientList
+    [✅] update environmentList
     [✅] add profile container
+[] update EnvironmentList context
 [] auto parse url on field focus out
-[] add translation to ambient edit view
+[] add translation to environment edit view
 [] fix global color transition
-[] update ambient view
+[] update environment view
 [] update home view
 [] create modal component (overlay on window)
 [] encrypt oAuth keys in user-settings.json with node-forge (AES-256);
@@ -18,14 +19,15 @@
 
 --=== Main ===--
 [✅] check if 'fluig-monitor' folder exists before initializing db file
-[✅] split database file into user-settings / ambient-data
+[✅] split database file into user-settings / environment-data
 [] optimize read/write local files with a common function
 [] dbHandler: Update ipc method (use "handle/invoke"); Ref: https://www.electronjs.org/pt/docs/latest/tutorial/ipc#1-listen-for-events-with-ipcmainhandle
-[] fetch ambient data from api to ambientView
-  [] save ambient api requests to database
+[] fetch environment data from api to environmentView
+  [] save environment api requests to database
 
 
 --=== Global ===--
+[] rename 'ambients' to 'environment'
 [] update project folder structure / separate main & renderer artifacts
   [] interfaces
   [] utils

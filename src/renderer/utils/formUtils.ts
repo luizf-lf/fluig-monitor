@@ -1,7 +1,7 @@
-import AmbientDataInterface from '../renderer/interfaces/AmbientDataInterface';
+import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
 
 const formUtils = {
-  validate(formData: AmbientDataInterface) {
+  validate(formData: EnvironmentDataInterface) {
     let isValid = false;
     let message = '';
     if (formData) {

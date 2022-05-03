@@ -20,13 +20,13 @@ const en = {
     },
   },
   views: {
-    AmbientView: {
+    EnvironmentView: {
       empty:
-        'Select the ambient above or use the "New" button to create a new ambient.',
+        'Select the environment above or use the "New" button to create a new environment.',
     },
-    CreateAmbientView: {
+    CreateEnvironmentView: {
       createdSuccessfully:
-        'Ambient created successfully. Redirecting to main page...',
+        'Environment created successfully. Redirecting to main page...',
       connecting: 'Connecting ...',
       connectionError: 'Connection Error: ',
       connectionOk: 'Connection Ok',
@@ -36,17 +36,17 @@ const en = {
         'Fill the url and authentication fields before continuing.',
       back: 'Back',
       form: {
-        title: 'Create a new ambient',
-        ambientDataSection: 'Ambient Info',
-        ambientName: {
-          label: 'Ambient Name:',
-          placeholder: 'Ex.: Example Ambient 1',
+        title: 'Create a new environment',
+        environmentDataSection: 'Environment Info',
+        environmentName: {
+          label: 'Environment Name:',
+          placeholder: 'Ex.: Example Environment 1',
         },
         domainUrl: {
           label: 'Domain URL:',
           placeholder: 'Ex.: https://test.fluig.com/',
         },
-        ambientKind: {
+        environmentKind: {
           label: 'Kind:',
           options: {
             prod: 'Production',
@@ -54,7 +54,7 @@ const en = {
             dev: 'Development',
           },
         },
-        ambientAuthSection: 'Authentication',
+        environmentAuthSection: 'Authentication',
         consumerKey: {
           label: 'Consumer Key:',
           placeholder: 'Inform the consumer key',

@@ -3,9 +3,9 @@ import { Switch, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // views / components
-import AmbientView from './views/AmbientView';
-import CreateAmbientView from './views/CreateAmbientView';
-import EditAmbientSettingsView from './views/EditAmbientSettingsView';
+import EnvironmentView from './views/EnvironmentView';
+import CreateEnvironmentView from './views/CreateEnvironmentView';
+import EditEnvironmentSettingsView from './views/EditEnvironmentSettingsView';
 import Navbar from './components/Navbar';
 
 // assets
@@ -13,41 +13,41 @@ import './assets/styles/global.scss';
 import './assets/styles/utilities.scss';
 
 // contexts
-import AmbientListContext from './contexts/AmbientListContext';
+import EnvironmentListContext from './contexts/EnvironmentListContext';
 import { NotificationsContextProvider } from './contexts/NotificationsContext';
 
 export default function App() {
   // the useLocation hook is used to render a specific component per route
   const location = useLocation();
-  const [ambients, setAmbients] = useState([]);
+  const [environments, setEnvironments] = useState([]);
 
   return (
-    <AmbientListContext.Provider value={[ambients, setAmbients]}>
+    <EnvironmentListContext.Provider value={[environments, setEnvironments]}>
       <NotificationsContextProvider>
         <div id="appWrapper">
           <Navbar />
           <main id="mainWindow">
             <AnimatePresence exitBeforeEnter>
               <Switch location={location} key={location.pathname}>
-                <Route exact path="/" component={AmbientView} />
+                <Route exact path="/" component={EnvironmentView} />
                 <Route
-                  path="/settings/ambients/new"
-                  component={CreateAmbientView}
+                  path="/settings/environments/new"
+                  component={CreateEnvironmentView}
                 />
                 <Route
                   exact
-                  path="/ambient/:ambientUUID"
-                  component={AmbientView}
+                  path="/environment/:environmentUUID"
+                  component={EnvironmentView}
                 />
                 <Route
-                  path="/ambient/:ambientUUID/edit"
-                  component={EditAmbientSettingsView}
+                  path="/environment/:environmentUUID/edit"
+                  component={EditEnvironmentSettingsView}
                 />
               </Switch>
             </AnimatePresence>
           </main>
         </div>
       </NotificationsContextProvider>
-    </AmbientListContext.Provider>
+    </EnvironmentListContext.Provider>
   );
 }

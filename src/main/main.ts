@@ -18,7 +18,7 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import i18n from '../i18n/i18n';
 import UserSettingsDatabaseInterface from '../renderer/interfaces/database/UserSettingsDatabaseInterface';
-import AmbientDatabaseInterface from '../renderer/interfaces/database/AmbientDatabaseInterface';
+import EnvironmentDatabaseInterface from '../renderer/interfaces/database/EnvironmentDatabaseInterface';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -79,12 +79,12 @@ function getUserSettingsFile() {
   }
 }
 
-function getAmbientsFile() {
+function getEnvironmentsFile() {
   const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'ambient-data.json');
+  const filePath = path.resolve(folderPath, 'environment-data.json');
 
   console.log(
-    `[${new Date().toLocaleString()}] Reading ambient data file from ${filePath}`
+    `[${new Date().toLocaleString()}] Reading environment data file from ${filePath}`
   );
 
   // checks if the app folder exists, and if not, creates it.
@@ -95,19 +95,19 @@ function getAmbientsFile() {
     fs.mkdirSync(folderPath);
   }
 
-  // checks if the ambient data file exists, and if not, creates it with default values
+  // checks if the environment data file exists, and if not, creates it with default values
   if (!fs.existsSync(filePath)) {
-    const ambientData: AmbientDatabaseInterface = {
-      ambients: [],
+    const environmentData: EnvironmentDatabaseInterface = {
+      environments: [],
       monitoringHistory: [],
     };
     console.log(
       `[${new Date().toLocaleString()}] File ${filePath} does not exists and will be created.`
     );
-    fs.writeFileSync(filePath, JSON.stringify(ambientData));
+    fs.writeFileSync(filePath, JSON.stringify(environmentData));
 
     // returns the default values
-    return ambientData;
+    return environmentData;
   }
 
   // if the file already exists, returns it's value;
@@ -120,12 +120,12 @@ function getAmbientsFile() {
   }
 }
 
-function updateAmbientsFile(data: string) {
+function updateEnvironmentsFile(data: string) {
   const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'ambient-data.json');
+  const filePath = path.resolve(folderPath, 'environment-data.json');
 
   console.log(
-    `[${new Date().toLocaleString()}] Writing ambient data file to ${filePath}`
+    `[${new Date().toLocaleString()}] Writing environment data file to ${filePath}`
   );
 
   try {
@@ -230,7 +230,7 @@ const createWindow = async () => {
   i18n.on('languageChanged', (lang: string) => {
     // if the buildMenu function is not called, the default electron dev menu will be rendered
     menuBuilder.buildMenu();
-    mainWindow?.webContents.send('language-changed', {
+    mainWindow?.webContents.send('languageChanged', {
       language: lang,
       namespace: 'translation',
       resource: i18n.getResourceBundle(lang, 'translation'),
@@ -270,9 +270,9 @@ ipcMain.on('updateSettingsFile', (event, arg) => {
   event.returnValue = updateSettingsFile(arg);
 });
 
-// IPC listener to save local ambient data file
-ipcMain.on('updateAmbientsFile', (event, arg) => {
-  event.returnValue = updateAmbientsFile(arg);
+// IPC listener to save local environment data file
+ipcMain.on('updateEnvironmentsFile', (event, arg) => {
+  event.returnValue = updateEnvironmentsFile(arg);
 });
 
 // IPC listener to get user settings file
@@ -280,9 +280,9 @@ ipcMain.on('getSettingsFile', (event) => {
   event.returnValue = getUserSettingsFile();
 });
 
-// IPC listener to get ambient file
-ipcMain.on('getAmbientsFile', (event) => {
-  event.returnValue = getAmbientsFile();
+// IPC listener to get environment file
+ipcMain.on('getEnvironmentsFile', (event) => {
+  event.returnValue = getEnvironmentsFile();
 });
 
 // listens to a get-language event from renderer, and returns the locally saved language

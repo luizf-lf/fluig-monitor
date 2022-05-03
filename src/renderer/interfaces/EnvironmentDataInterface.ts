@@ -1,4 +1,4 @@
-export default interface AmbientDataInterface {
+export default interface EnvironmentDataInterface {
   name: string;
   baseUrl: string;
   kind: string;

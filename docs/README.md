@@ -6,7 +6,7 @@
 
 ## About
 
-A desktop application, developed with **Electron**, used to monitor **Fluig** ambients.
+A desktop application, developed with **Electron**, used as a monitoring dashboards for **Fluig** environments.
 
 The monitoring is done trough the monitoring and statistics **API**, as shown on the [documentation](https://tdn.totvs.com/display/fluigeng/Platform+%7C+Platform+Services+Monitor).
 
@@ -16,11 +16,11 @@ This application is being developed for **educational** purposes, with the inten
 
 ### White Theme
 
-![Desktop](./img/desktop_LT2022-04_AmbientView.png)
+![Desktop](./img/desktop_LT2022-04_EnvironmentView.png)
 
 ### Dark Theme
 
-![Desktop Dark](./img/desktop_LT2022-04_AmbientView_Dark.png)
+![Desktop Dark](./img/desktop_LT2022-04_EnvironmentView_Dark.png)
 
 > The above images are **prototypes**, and are subject to changes.
 
@@ -30,8 +30,8 @@ Some features that will be (or already are) implemented:
 
 - Dark mode
 - Internationalization (i18n)
-- Ambient history analysis
-- Predictive ambient health analysis
+- Environment history analysis
+- Predictive environment health analysis
 - Desktop notifications
 
 ## Running this project
