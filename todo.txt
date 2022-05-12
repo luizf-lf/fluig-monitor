@@ -13,6 +13,7 @@
 [] fix global color transition
 [] update environment view
 [] update home view
+[] implement home page load timing benchmark
 [] create modal component (overlay on window)
 [] encrypt oAuth keys in user-settings.json with node-forge (AES-256);
 
@@ -27,7 +28,7 @@
 
 
 --=== Global ===--
-[] rename 'ambients' to 'environment'
+[✅] rename 'ambients' to 'environment'
 [] update project folder structure / separate main & renderer artifacts
   [] interfaces
   [] utils
