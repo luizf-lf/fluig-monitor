@@ -1,3 +1,7 @@
+# 0.0.11
+
+- Updated project folder structure strategy
+
 # 0.0.10
 
 - Fixed a big typo

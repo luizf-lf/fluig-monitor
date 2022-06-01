@@ -14,13 +14,13 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useNotifications } from '../contexts/NotificationsContext';
-import dbHandler from '../utils/dbHandler';
-import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
-import testConnection from '../services/testConnection';
-import globalContainerVariants from '../utils/globalContainerVariants';
+import dbHandler from '../../utils/dbHandler';
+import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
+import testConnection from '../../services/testConnection';
+import globalContainerVariants from '../../utils/globalContainerVariants';
 
-import updateFrequencies from '../utils/defaultUpdateFrequencies';
-import formUtils from '../utils/formUtils';
+import updateFrequencies from '../../utils/defaultUpdateFrequencies';
+import formUtils from '../../utils/formUtils';
 
 export default function CreateEnvironmentView() {
   const [name, setName] = useState('');

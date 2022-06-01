@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import EnvironmentListContext from '../contexts/EnvironmentListContext';
 import '../assets/styles/components/Navbar.scss';
 import CreateEnvironmentButton from './CreateEnvironmentButton';
-import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
+import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
 import EnvironmentListItem from './EnvironmentListItem';
 import logoImage from '../assets/img/logo.png';
 import defaultUserProfile from '../assets/img/default-user-profile.png';

@@ -29,7 +29,4 @@
 
 --=== Global ===--
 [✅] rename 'ambients' to 'environment'
-[] update project folder structure / separate main & renderer artifacts
-  [] interfaces
-  [] utils
-  [] services
+[✅] update project folder structure / separate main & renderer artifacts

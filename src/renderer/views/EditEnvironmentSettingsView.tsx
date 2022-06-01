@@ -12,14 +12,14 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import EnvironmentViewParams from '../interfaces/EnvironmentViewParams';
-import globalContainerVariants from '../utils/globalContainerVariants';
-import dbHandler from '../utils/dbHandler';
-import environmentKinds from '../utils/defaultEnvironmentKinds';
-import updateFrequencies from '../utils/defaultUpdateFrequencies';
-import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
-import testConnection from '../services/testConnection';
-import formUtils from '../utils/formUtils';
+import EnvironmentViewParams from '../../interfaces/EnvironmentViewParams';
+import globalContainerVariants from '../../utils/globalContainerVariants';
+import dbHandler from '../../utils/dbHandler';
+import environmentKinds from '../../utils/defaultEnvironmentKinds';
+import updateFrequencies from '../../utils/defaultUpdateFrequencies';
+import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
+import testConnection from '../../services/testConnection';
+import formUtils from '../../utils/formUtils';
 import { useNotifications } from '../contexts/NotificationsContext';
 
 function EditEnvironmentSettingsView(): JSX.Element {

@@ -17,8 +17,8 @@ import * as fs from 'fs';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import i18n from '../i18n/i18n';
-import UserSettingsDatabaseInterface from '../renderer/interfaces/database/UserSettingsDatabaseInterface';
-import EnvironmentDatabaseInterface from '../renderer/interfaces/database/EnvironmentDatabaseInterface';
+import UserSettingsDatabaseInterface from '../interfaces/database/UserSettingsDatabaseInterface';
+import EnvironmentDatabaseInterface from '../interfaces/database/EnvironmentDatabaseInterface';
 
 let mainWindow: BrowserWindow | null = null;
 
