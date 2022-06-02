@@ -30,3 +30,4 @@
 --=== Global ===--
 [✅] rename 'ambients' to 'environment'
 [✅] update project folder structure / separate main & renderer artifacts
+[] possibly group TSX components and scss files to the same folder?

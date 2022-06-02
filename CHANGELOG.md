@@ -1,3 +1,8 @@
+# 0.0.12-rc
+
+- Updated navbar components
+- Remove profile picture
+
 # 0.0.11
 
 - Updated project folder structure strategy

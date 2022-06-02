@@ -6,7 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 import EnvironmentView from './views/EnvironmentView';
 import CreateEnvironmentView from './views/CreateEnvironmentView';
 import EditEnvironmentSettingsView from './views/EditEnvironmentSettingsView';
-import Navbar from './components/Navbar';
+import Navbar from './components/Navbar/Navbar';
 
 // assets
 import './assets/styles/global.scss';
