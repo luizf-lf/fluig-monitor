@@ -1,7 +1,8 @@
 # 0.0.12-rc
 
 - Updated navbar components
-- Remove profile picture
+- Removed profile picture
+- Updated home environment list view
 
 # 0.0.11
 

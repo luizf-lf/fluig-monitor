@@ -1,4 +1,4 @@
-#createEnvironmentButton {
+.createEnvironmentButton {
   border: 2px dashed var(--border-light);
   color: var(--border-light);
   display: flex;
@@ -9,14 +9,28 @@
   padding: 0.75rem 1rem;
   align-items: center;
   justify-content: center;
-  opacity: 0.5;
   transition: all 300ms;
 
   &:hover {
-    opacity: 1;
+    border: 2px dashed var(--border);
+    color: var(--border);
   }
 
   &:active {
-    transform: scale(95%);
+    transform: scale(90%);
+  }
+
+  &.is-expanded {
+    border: 2px dashed var(--border);
+    color: var(--border);
+    height: inherit;
+    min-height: 100%;
+    padding: 2rem;
+
+    margin-right: 2rem;
+
+    &:hover {
+      box-shadow: var(--card-shadow);
+    }
   }
 }

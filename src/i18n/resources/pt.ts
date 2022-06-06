@@ -94,6 +94,11 @@ const pt = {
         buttonSubmit: 'Confirmar',
       },
     },
+    HomeAmbientListView: {
+      header: 'Seus Ambientes',
+      createAmbientHelper:
+        'Cadastre um novo ambiente utilizando o botão ao lado.',
+    },
   },
 };
 

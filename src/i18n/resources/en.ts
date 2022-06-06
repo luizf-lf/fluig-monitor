@@ -94,6 +94,11 @@ const en = {
         buttonSubmit: 'Confirm',
       },
     },
+    HomeAmbientListView: {
+      header: 'Your environments',
+      createAmbientHelper:
+        'Register a new environment using the button on the side.',
+    },
   },
 };
 
