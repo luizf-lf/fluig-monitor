@@ -20,7 +20,8 @@
   .messageContainer {
     padding: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    width: inherit;
     align-items: center;
     background-color: var(--card);
     border-radius: 0 1rem 1rem 0;
