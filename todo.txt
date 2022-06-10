@@ -7,7 +7,8 @@
     [✅] add logo
     [✅] update environmentList
     [✅] add profile container
-[] update EnvironmentList context
+[✅] update EnvironmentList context
+[] update small tag component (add expanded option)
 [] auto parse url on field focus out
 [] add translation to environment edit view
 [] fix global color transition
@@ -21,6 +22,7 @@
 --=== Main ===--
 [✅] check if 'fluig-monitor' folder exists before initializing db file
 [✅] split database file into user-settings / environment-data
+[] implement local sql db instead of json file
 [] optimize read/write local files with a common function
 [] dbHandler: Update ipc method (use "handle/invoke"); Ref: https://www.electronjs.org/pt/docs/latest/tutorial/ipc#1-listen-for-events-with-ipcmainhandle
 [] fetch environment data from api to environmentView
@@ -31,3 +33,4 @@
 [✅] rename 'ambients' to 'environment'
 [✅] update project folder structure / separate main & renderer artifacts
 [] possibly group TSX components and scss files to the same folder?
+[] implement environment status indicators (is online / operative)

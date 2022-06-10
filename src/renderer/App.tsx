@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Switch, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
@@ -14,16 +13,15 @@ import './assets/styles/global.scss';
 import './assets/styles/utilities.scss';
 
 // contexts
-import EnvironmentListContext from './contexts/EnvironmentListContext';
+import { EnvironmentListContextProvider } from './contexts/EnvironmentListContext';
 import { NotificationsContextProvider } from './contexts/NotificationsContext';
 
 export default function App() {
   // the useLocation hook is used to render a specific component per route
   const location = useLocation();
-  const [environments, setEnvironments] = useState([]);
 
   return (
-    <EnvironmentListContext.Provider value={[environments, setEnvironments]}>
+    <EnvironmentListContextProvider>
       <NotificationsContextProvider>
         <div id="appWrapper">
           <Navbar />
@@ -49,6 +47,6 @@ export default function App() {
           </main>
         </div>
       </NotificationsContextProvider>
-    </EnvironmentListContext.Provider>
+    </EnvironmentListContextProvider>
   );
 }

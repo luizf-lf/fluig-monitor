@@ -1,18 +1,28 @@
-import { useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiChevronLeft } from 'react-icons/fi';
+import { FiChevronLeft, FiSettings, FiStar } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
+import SmallTag from '../components/SmallTag';
 
+import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
 import CreateEnvironmentButton from '../components/CreateEnvironmentButton';
-import EnvironmentListContext from '../contexts/EnvironmentListContext';
+import { useEnvironmentList } from '../contexts/EnvironmentListContext';
+import { useNotifications } from '../contexts/NotificationsContext';
 
 import globalContainerVariants from '../../utils/globalContainerVariants';
 import '../assets/styles/Views/HomeAmbientListView.scss';
+import graphPlaceholder from '../assets/img/graphPlaceholder.png'; // to be removed when the mini graph is implemented
 import colorServer from '../assets/svg/color-server.svg';
 
 function HomeAmbientListView() {
-  const [environmentList] = useContext(EnvironmentListContext);
+  const { environmentList } = useEnvironmentList();
+  const { updateEnvironmentList } = useEnvironmentList();
+  const { createShortNotification } = useNotifications();
   const { t } = useTranslation();
+
+  useEffect(() => updateEnvironmentList(), []);
 
   const createAmbientHelper = (
     <div className="createAmbientCard">
@@ -26,6 +36,14 @@ function HomeAmbientListView() {
     </div>
   );
 
+  function showTempMessage() {
+    createShortNotification({
+      id: Date.now(),
+      type: 'warning',
+      message: 'Favorites not available right now.',
+    });
+  }
+
   return (
     <motion.div
       variants={globalContainerVariants}
@@ -37,8 +55,36 @@ function HomeAmbientListView() {
       <h2>{t('views.HomeAmbientListView.header')}</h2>
       <div id="ambientListContent">
         <CreateEnvironmentButton isExpanded />
-        {/* // TODO: map environment list */}
-        {environmentList.length === 0 ? createAmbientHelper : <div>lista</div>}
+        {environmentList.length === 0
+          ? createAmbientHelper
+          : environmentList.map((environment: EnvironmentDataInterface) => {
+              return (
+                <div className="ambientCard" key={environment.uuid}>
+                  <div className="heading">
+                    <div className="ambientName">
+                      <Link to={`/environment/${environment.uuid}`}>
+                        <h3>{environment.name}</h3>
+                        <small>{environment.baseUrl}</small>
+                      </Link>
+                    </div>
+                    <div className="actionButtons">
+                      <button type="button" onClick={showTempMessage}>
+                        <FiStar />
+                      </button>
+                      <Link to={`/environment/${environment.uuid}/edit`}>
+                        <FiSettings />
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="graphContainer">
+                    <img src={graphPlaceholder} alt="Graph Preview" />
+                  </div>
+                  <div className="footer">
+                    <SmallTag kind={environment.kind} />
+                  </div>
+                </div>
+              );
+            })}
       </div>
     </motion.div>
   );

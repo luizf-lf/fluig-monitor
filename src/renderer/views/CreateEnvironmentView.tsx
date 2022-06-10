@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import dbHandler from '../../utils/dbHandler';
 import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
@@ -43,6 +44,7 @@ export default function CreateEnvironmentView() {
   const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
 
   const { createShortNotification } = useNotifications();
+  const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
 
   function handleSubmit(event: FormEvent) {
@@ -82,6 +84,7 @@ export default function CreateEnvironmentView() {
       });
 
       setTimeout(() => {
+        updateEnvironmentList();
         setValidationMessage(<Redirect to="/" />);
       }, 3000);
     } else {

@@ -1,4 +1,3 @@
-import { useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -7,15 +6,11 @@ import dbHandler from '../../utils/dbHandler';
 import EnvironmentViewParams from '../../interfaces/EnvironmentViewParams';
 import serverImg from '../assets/img/server.png';
 import '../assets/styles/components/CenterView.scss';
-import EnvironmentListContext from '../contexts/EnvironmentListContext';
 
 export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();
   let environmentView = null;
   const { environmentUUID }: EnvironmentViewParams = useParams();
-  const [environmentList, setEnvironmentList] = useContext(
-    EnvironmentListContext
-  );
 
   // if a environment is selected, get it's data from the database, and display the data (to be implemented)
   if (typeof environmentUUID !== 'undefined') {
@@ -30,10 +25,6 @@ export default function EnvironmentView(): JSX.Element {
       <span>{t('views.EnvironmentView.empty')}</span>
     </div>
   );
-
-  useEffect(() => {
-    setEnvironmentList(dbHandler.environments.getAll());
-  }, [setEnvironmentList]);
 
   return (
     <motion.div

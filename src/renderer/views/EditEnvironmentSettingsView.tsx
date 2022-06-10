@@ -21,6 +21,7 @@ import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface'
 import testConnection from '../../services/testConnection';
 import formUtils from '../../utils/formUtils';
 import { useNotifications } from '../contexts/NotificationsContext';
+import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentUUID }: EnvironmentViewParams = useParams();
@@ -64,6 +65,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
 
   const { createShortNotification } = useNotifications();
+  const { updateEnvironmentList } = useEnvironmentList();
 
   function sendTestConnection() {
     const auth = {
@@ -184,6 +186,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     });
 
     setTimeout(() => {
+      updateEnvironmentList();
       setValidationMessage(<Redirect to="/" />);
     }, 3000);
   }

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useContext } from 'react';
-import EnvironmentListContext from '../../contexts/EnvironmentListContext';
+import { useEnvironmentList } from '../../contexts/EnvironmentListContext';
 import CreateEnvironmentButton from '../CreateEnvironmentButton';
 import EnvironmentList from './EnvironmentList';
 
@@ -10,7 +9,7 @@ import Logo from './Logo';
 import RightButtons from './RightButtons';
 
 function Navbar() {
-  const [environmentList] = useContext(EnvironmentListContext);
+  const { environmentList } = useEnvironmentList();
 
   return (
     <motion.nav
