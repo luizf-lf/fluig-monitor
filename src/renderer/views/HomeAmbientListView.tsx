@@ -80,7 +80,7 @@ function HomeAmbientListView() {
                     <img src={graphPlaceholder} alt="Graph Preview" />
                   </div>
                   <div className="footer">
-                    <SmallTag kind={environment.kind} />
+                    <SmallTag kind={environment.kind} expanded />
                   </div>
                 </div>
               );

@@ -1,11 +1,18 @@
+/* eslint-disable react/require-default-props */
+import { useTranslation } from 'react-i18next';
 import '../assets/styles/components/SmallTag.scss';
 
 interface SmallTagInterface {
   kind: string;
+  expanded?: boolean;
 }
 
-export default function SmallTag({ kind }: SmallTagInterface) {
+export default function SmallTag({
+  kind,
+  expanded = false,
+}: SmallTagInterface) {
   let className = 'small-tag';
+  const { t } = useTranslation();
 
   switch (kind) {
     case 'PROD':
@@ -21,5 +28,13 @@ export default function SmallTag({ kind }: SmallTagInterface) {
       break;
   }
 
-  return <div className={className}>{kind}</div>;
+  if (expanded) {
+    className += ' is-expanded';
+  }
+
+  return (
+    <div className={className}>
+      {expanded ? t(`global.environmentKinds.${kind}`) : kind}
+    </div>
+  );
 }

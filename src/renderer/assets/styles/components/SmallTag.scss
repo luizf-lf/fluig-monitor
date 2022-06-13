@@ -1,16 +1,33 @@
 .small-tag {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   font-weight: 500;
 
   &.is-production {
     color: var(--green);
+    &.is-expanded {
+      border: 2px solid var(--green);
+      background-color: var(--light-green);
+    }
   }
 
   &.is-homolog {
     color: var(--yellow);
+    &.is-expanded {
+      border: 2px solid var(--yellow);
+      background-color: var(--light-yellow);
+    }
   }
 
   &.is-dev {
     color: var(--purple);
+    &.is-expanded {
+      border: 2px solid var(--purple);
+      background-color: var(--light-purple);
+    }
+  }
+
+  &.is-expanded {
+    padding: 0.15rem;
+    border-radius: 0.25rem;
   }
 }

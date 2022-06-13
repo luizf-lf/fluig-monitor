@@ -100,6 +100,13 @@ const en = {
         'Register a new environment using the button on the side.',
     },
   },
+  global: {
+    environmentKinds: {
+      HML: 'Staging',
+      DEV: 'Development',
+      PROD: 'Production',
+    },
+  },
 };
 
 export default en;

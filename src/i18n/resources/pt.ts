@@ -100,6 +100,13 @@ const pt = {
         'Cadastre um novo ambiente utilizando o botão ao lado.',
     },
   },
+  global: {
+    environmentKinds: {
+      HML: 'Homologação',
+      DEV: 'Desenvolvimento',
+      PROD: 'Produção',
+    },
+  },
 };
 
 export default pt;
