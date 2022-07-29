@@ -34,3 +34,5 @@
 [✅] update project folder structure / separate main & renderer artifacts
 [] possibly group TSX components and scss files to the same folder?
 [] implement environment status indicators (is online / operative)
+[] implement structured database (change json files to SQL/NoSQL DB)
+[] Implement relay mode (allow monitoring data forwarding to another application instance)
