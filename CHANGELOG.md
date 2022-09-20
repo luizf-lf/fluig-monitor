@@ -1,4 +1,8 @@
-# 0.0.12-rc
+# 0.1.0-rc
+
+- Implemented database structure with Prisma ORM
+
+# 0.0.12
 
 - Updated navbar components
 - Removed profile picture
