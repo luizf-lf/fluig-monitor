@@ -33,12 +33,26 @@
   "build": {
     "productName": "Fluig Monitor",
     "appId": "net.luizflf.FluigMonitor",
-    "asar": true,
-    "asarUnpack": "**\\*.{node,dll}",
     "files": [
       "dist",
+      "prisma/**/*",
+      "!prisma/app.db",
       "node_modules",
-      "package.json"
+      "package.json",
+      "!**/node_modules/@prisma/engines/introspection-engine*",
+      "!**/node_modules/@prisma/engines/migration-engine*",
+      "!**/node_modules/@prisma/engines/prisma-fmt*",
+      "!**/node_modules/@prisma/engines/query_engine-*",
+      "!**/node_modules/@prisma/engines/libquery_engine*",
+      "!**/node_modules/prisma/query_engine*",
+      "!**/node_modules/prisma/libquery_engine*",
+      "!**/node_modules/prisma/**/*.mjs"
+    ],
+    "extraResources": [
+      "./assets/**",
+      "node_modules/@prisma/engines/migration-engine*",
+      "node_modules/@prisma/engines/query*",
+      "node_modules/@prisma/engines/libquery*"
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
@@ -72,22 +86,29 @@
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "asar": {
+        "smartUnpack": false
+      },
+      "asarUnpack": [
+        "prisma"
+      ],
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "linux": {
       "target": [
         "AppImage"
       ],
-      "category": "Development"
+      "category": "Development",
+      "asarUnpack": [
+        "prisma"
+      ]
     },
     "directories": {
       "app": "release/app",
       "buildResources": "assets",
       "output": "release/build"
     },
-    "extraResources": [
-      "./assets/**"
-    ],
     "publish": {
       "provider": "github",
       "owner": "electron-react-boilerplate",
@@ -158,6 +179,7 @@
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
+    "@types/core-js": "^2.5.5",
     "@types/enzyme": "^3.10.10",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/history": "4.7.9",
@@ -233,7 +255,7 @@
     "@prisma/client": "^4.3.1",
     "axios": "^0.24.0",
     "electron-debug": "^3.2.0",
-    "electron-log": "^4.4.1",
+    "electron-log": "^4.4.8",
     "electron-updater": "^4.3.9",
     "framer-motion": "^5.3.3",
     "history": "4.x.x",

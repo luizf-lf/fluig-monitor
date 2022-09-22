@@ -60,16 +60,16 @@ model AppSetting {
 }
 
 model Notification {
-  id Int @id @default(autoincrement())
-  type String
-  title String?
-  body String
+  id        Int      @id @default(autoincrement())
+  type      String
+  title     String?
+  body      String
   createdAt DateTime @default(now())
 }
 
 model Log {
-  id Int @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   timestamp DateTime @default(now())
-  type String
-  message String
+  type      String
+  message   String
 }

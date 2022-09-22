@@ -14,11 +14,28 @@ import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
 import * as fs from 'fs';
+import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import i18n from '../i18n/i18n';
-import UserSettingsDatabaseInterface from '../interfaces/database/UserSettingsDatabaseInterface';
-import EnvironmentDatabaseInterface from '../interfaces/database/EnvironmentDatabaseInterface';
+import {
+  dbPath,
+  dbUrl,
+  isDevelopment,
+  latestMigration,
+  Migration,
+} from './utils/defaultConstants';
+import getAppDataFolder from './utils/fsUtils';
+import prismaClient from './database/prismaContext';
+import runPrismaCommand from './utils/runPrismaCommand';
+import seed from './database/seed';
+
+log.transports.file.resolvePath = () =>
+  path.resolve(
+    getAppDataFolder(),
+    'logs',
+    isDevelopment ? 'app.dev.log' : 'app.log'
+  );
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -27,141 +44,12 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-const isDevelopment =
-  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-
 if (isDevelopment) {
   require('electron-debug')();
 }
 
-/* Auxiliary functions */
-
-// get the user settings file saved on the file system
-function getUserSettingsFile() {
-  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'user-settings.json');
-
-  console.log(
-    `[${new Date().toLocaleString()}] Reading user settings file from ${filePath}`
-  );
-
-  // checks if the app folder exists, and if not, creates it.
-  if (!fs.existsSync(folderPath)) {
-    console.log(
-      `[${new Date().toLocaleString()}] Folder ${folderPath} does not exists and will be created.`
-    );
-    fs.mkdirSync(folderPath);
-  }
-
-  // checks if the user settings file exists, and if not, creates it with default values
-  if (!fs.existsSync(filePath)) {
-    const userSettingsData: UserSettingsDatabaseInterface = {
-      language: 'pt',
-      theme: 'LIGHT',
-      openOnLastServer: false,
-    };
-    console.log(
-      `[${new Date().toLocaleString()}] File ${filePath} does not exists and will be created.`
-    );
-    fs.writeFileSync(filePath, JSON.stringify(userSettingsData));
-
-    // returns the default values
-    return userSettingsData;
-  }
-
-  // if the file already exists, returns it's value;
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (error) {
-    console.log(error);
-    // in case of and error, return null
-    return null;
-  }
-}
-
-function getEnvironmentsFile() {
-  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'environment-data.json');
-
-  console.log(
-    `[${new Date().toLocaleString()}] Reading environment data file from ${filePath}`
-  );
-
-  // checks if the app folder exists, and if not, creates it.
-  if (!fs.existsSync(folderPath)) {
-    console.log(
-      `[${new Date().toLocaleString()}] Folder ${folderPath} does not exists and will be created.`
-    );
-    fs.mkdirSync(folderPath);
-  }
-
-  // checks if the environment data file exists, and if not, creates it with default values
-  if (!fs.existsSync(filePath)) {
-    const environmentData: EnvironmentDatabaseInterface = {
-      environments: [],
-      monitoringHistory: [],
-    };
-    console.log(
-      `[${new Date().toLocaleString()}] File ${filePath} does not exists and will be created.`
-    );
-    fs.writeFileSync(filePath, JSON.stringify(environmentData));
-
-    // returns the default values
-    return environmentData;
-  }
-
-  // if the file already exists, returns it's value;
-  try {
-    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-  } catch (error) {
-    console.log(error);
-    // in case of and error, return null
-    return null;
-  }
-}
-
-function updateEnvironmentsFile(data: string) {
-  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'environment-data.json');
-
-  console.log(
-    `[${new Date().toLocaleString()}] Writing environment data file to ${filePath}`
-  );
-
-  try {
-    fs.writeFileSync(filePath, data);
-    return true;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
-
-function updateSettingsFile(data: string) {
-  const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
-  const filePath = path.resolve(folderPath, 'user-settings.json');
-
-  console.log(
-    `[${new Date().toLocaleString()}] Writing user settings file to ${filePath}`
-  );
-
-  try {
-    fs.writeFileSync(filePath, JSON.stringify(data));
-    return true;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-}
-
-// gets the saved language setting from the user settings file
 function getSavedLanguage() {
-  const userSettings = getUserSettingsFile();
-
-  // checks if there's a valid return, and returns the saved language
-  if (userSettings !== null) {
-    return userSettings.language;
-  }
+  // TODO: Get saved language from database once connection is implemented
 
   // returns 'portuguese' as the default language, if null is returned
   return 'pt';
@@ -169,11 +57,8 @@ function getSavedLanguage() {
 
 // sets the chosen language to a local file
 function setSavedLanguage(language: string) {
-  const data = getUserSettingsFile();
-
-  data.language = language;
-
-  updateSettingsFile(data);
+  console.log(language);
+  // TODO: Update user language on the database
 }
 
 const installExtensions = async () => {
@@ -190,7 +75,72 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
+  log.info('Creating a new window');
+
+  /**
+   * @see https://github.com/awohletz/electron-prisma-template
+   */
+  let needsMigration = false;
+  let mustSeed = false;
+  log.info(`Checking database at ${dbPath}`);
+  const dbExists = fs.existsSync(dbPath);
+
+  if (!dbExists) {
+    log.info('Database does not exists. Migration and seeding is needed.');
+    needsMigration = true;
+    mustSeed = true;
+    // since prisma has trouble if the database file does not exist, touches an empty file
+    log.info('Touching database file.');
+    fs.closeSync(fs.openSync(dbPath, 'w'));
+  } else {
+    log.info('Database exists. Verifying the latest migration');
+    try {
+      const latest: Migration[] =
+        await prismaClient.$queryRaw`select * from _prisma_migrations order by finished_at`;
+      log.info(
+        `Latest migration: ${latest[latest.length - 1]?.migration_name}`
+      );
+      needsMigration =
+        latest[latest.length - 1]?.migration_name !== latestMigration;
+    } catch (e) {
+      log.info('Latest migration could not be found, migration is needed');
+      log.error(e);
+      needsMigration = true;
+    }
+  }
+
+  if (needsMigration) {
+    try {
+      const schemaPath = isDevelopment
+        ? path.resolve(__dirname, '../', '../', 'prisma', 'schema.prisma')
+        : path.join(
+            app.getAppPath().replace('app.asar', 'app.asar.unpacked'),
+            'prisma',
+            'schema.prisma'
+          );
+      log.info(
+        `Database needs a migration. Running prisma migrate with schema path ${schemaPath}`
+      );
+
+      await runPrismaCommand({
+        command: ['migrate', 'deploy', '--schema', schemaPath],
+        dbUrl,
+      });
+      log.info('Migration done.');
+
+      if (mustSeed) {
+        await seed(prismaClient);
+      }
+    } catch (e) {
+      log.error(e);
+      process.exit(1);
+    }
+  } else {
+    log.info('Does not need migration');
+  }
+
   if (isDevelopment) {
+    log.info('Installing additional dev extensions');
     await installExtensions();
   }
 
@@ -204,12 +154,10 @@ const createWindow = async () => {
 
   // get the window size from the user's main display
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
-  // initial width should be 80% of the screen, unless it's bigger than 1920 pixels (ultra wide monitors)
-  const initialWidth = width > 1920 ? 1920 : width * 0.8;
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: initialWidth, // initial width and height should be 80% of the screen
+    width: width * 0.8, // initial width and height should be 80% of the screen
     height: height * 0.8,
     minWidth: 1024,
     minHeight: 728,
@@ -228,6 +176,9 @@ const createWindow = async () => {
   const savedLanguage = getSavedLanguage();
 
   i18n.on('languageChanged', (lang: string) => {
+    log.info(
+      'Language changed, rebuilding menu and sending signal to renderer'
+    );
     // if the buildMenu function is not called, the default electron dev menu will be rendered
     menuBuilder.buildMenu();
     mainWindow?.webContents.send('languageChanged', {
@@ -267,40 +218,50 @@ const createWindow = async () => {
 
 // IPC listener to save local userSettings file
 ipcMain.on('updateSettingsFile', (event, arg) => {
-  event.returnValue = updateSettingsFile(arg);
+  // event.returnValue = updateSettingsFile(arg);
+  console.log(arg);
+  event.returnValue = null;
 });
 
 // IPC listener to save local environment data file
 ipcMain.on('updateEnvironmentsFile', (event, arg) => {
-  event.returnValue = updateEnvironmentsFile(arg);
+  // event.returnValue = updateEnvironmentsFile(arg);
+  console.log(arg);
+  event.returnValue = null;
 });
 
 // IPC listener to get user settings file
 ipcMain.on('getSettingsFile', (event) => {
-  event.returnValue = getUserSettingsFile();
+  // event.returnValue = getUserSettingsFile();
+  event.returnValue = null;
 });
 
 // IPC listener to get environment file
 ipcMain.on('getEnvironmentsFile', (event) => {
-  event.returnValue = getEnvironmentsFile();
+  log.info('IPC Listener -> Recovering the environments file');
+  // event.returnValue = getEnvironmentsFile();
+  event.returnValue = { environments: [] };
 });
 
 // listens to a get-language event from renderer, and returns the locally saved language
 ipcMain.on('getLanguage', (event) => {
+  log.info('IPC Listener -> Recovering the saved user language');
   event.returnValue = getSavedLanguage();
 });
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
+    log.info('Main windows closed. Exiting the app.');
   }
 });
 
 app
   .whenReady()
   .then(() => {
+    log.info('App started', isDevelopment && 'in development mode');
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
@@ -308,4 +269,8 @@ app
       if (mainWindow === null) createWindow();
     });
   })
-  .catch(console.log);
+  .catch((e) => {
+    log.error('An unknown error occurred:');
+    log.error(e);
+    app.quit();
+  });

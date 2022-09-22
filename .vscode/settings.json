@@ -22,5 +22,7 @@
     "*.{css,sass,scss}.d.ts": true
   },
   "totvsLanguageServer.welcomePage": false,
-  "cSpell.words": ["esnext", "Wifi"]
+  "cSpell.words": ["esnext", "Wifi"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [120]
 }
