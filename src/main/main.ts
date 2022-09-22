@@ -153,7 +153,7 @@ const createWindow = async () => {
   };
 
   // get the window size from the user's main display
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+  const { width, height } = screen.getPrimaryDisplay().size;
 
   mainWindow = new BrowserWindow({
     show: false,
