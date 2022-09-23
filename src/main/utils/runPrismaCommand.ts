@@ -14,8 +14,6 @@ export default async function runPrismaCommand({
   log.info('Migration engine path', mePath);
   log.info('Query engine path', qePath);
 
-  // TODO: Fix prisma scheme not being package to production build
-
   // Currently we don't have any direct method to invoke prisma migration programatically.
   // As a workaround, we spawn migration script as a child process and wait for its completion.
   // Please also refer to the following GitHub issue: https://github.com/prisma/prisma/issues/4703

@@ -32,3 +32,5 @@ npm-debug.log.*
 
 *.db
 *.db-journal
+
+src/main/generated

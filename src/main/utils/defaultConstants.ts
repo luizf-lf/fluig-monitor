@@ -44,7 +44,7 @@ export const platformToExecutables: any = {
       'node_modules/@prisma/engines/libquery_engine-darwin-arm64.dylib.node',
   },
 };
-const extraResourcesPath = isDevelopment
+export const extraResourcesPath = isDevelopment
   ? path.resolve(__dirname, '../../../')
   : app.getAppPath().replace('app.asar', '');
 

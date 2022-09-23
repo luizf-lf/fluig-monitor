@@ -1,6 +1,7 @@
 {
   "name": "fluig-monitor",
   "description": "Aplicação para monitoramento de ambientes Fluig com métricas disponibilizadas via API",
+  "version": "0.1.0-rc",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -35,8 +36,8 @@
     "appId": "net.luizflf.FluigMonitor",
     "files": [
       "dist",
-      "prisma/**/*",
-      "!prisma/app.db",
+      "**/prisma*",
+      "!prisma/*.db",
       "node_modules",
       "package.json",
       "!**/node_modules/@prisma/engines/introspection-engine*",
@@ -52,7 +53,8 @@
       "./assets/**",
       "node_modules/@prisma/engines/migration-engine*",
       "node_modules/@prisma/engines/query*",
-      "node_modules/@prisma/engines/libquery*"
+      "node_modules/@prisma/engines/libquery*",
+      "node_modules/prisma/build/*.js"
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
@@ -97,6 +99,7 @@
     },
     "linux": {
       "target": [
+        "snap",
         "AppImage"
       ],
       "category": "Development",

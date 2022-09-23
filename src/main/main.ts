@@ -21,6 +21,7 @@ import i18n from '../i18n/i18n';
 import {
   dbPath,
   dbUrl,
+  extraResourcesPath,
   isDevelopment,
   latestMigration,
   Migration,
@@ -29,6 +30,7 @@ import getAppDataFolder from './utils/fsUtils';
 import prismaClient from './database/prismaContext';
 import runPrismaCommand from './utils/runPrismaCommand';
 import seed from './database/seed';
+import logSystemConfigs from './utils/logSystemConfigs';
 
 log.transports.file.resolvePath = () =>
   path.resolve(
@@ -77,9 +79,6 @@ const installExtensions = async () => {
 const createWindow = async () => {
   log.info('Creating a new window');
 
-  /**
-   * @see https://github.com/awohletz/electron-prisma-template
-   */
   let needsMigration = false;
   let mustSeed = false;
   log.info(`Checking database at ${dbPath}`);
@@ -112,12 +111,8 @@ const createWindow = async () => {
   if (needsMigration) {
     try {
       const schemaPath = isDevelopment
-        ? path.resolve(__dirname, '../', '../', 'prisma', 'schema.prisma')
-        : path.join(
-            app.getAppPath().replace('app.asar', 'app.asar.unpacked'),
-            'prisma',
-            'schema.prisma'
-          );
+        ? path.resolve(extraResourcesPath, 'prisma', 'schema.prisma')
+        : path.resolve(app.getAppPath(), 'dist', 'main', 'schema.prisma');
       log.info(
         `Database needs a migration. Running prisma migrate with schema path ${schemaPath}`
       );
@@ -186,9 +181,11 @@ const createWindow = async () => {
       namespace: 'translation',
       resource: i18n.getResourceBundle(lang, 'translation'),
     });
-    // if the locally saved language is different from the changed language, saves the set language locally
 
-    setSavedLanguage(lang);
+    // if the locally saved language is different from the changed language, saves the set language locally
+    if (savedLanguage !== lang) {
+      setSavedLanguage(lang);
+    }
   });
 
   // change the language to the locally saved language
@@ -261,7 +258,12 @@ app.on('window-all-closed', async () => {
 app
   .whenReady()
   .then(() => {
-    log.info('App started', isDevelopment && 'in development mode');
+    logSystemConfigs();
+
+    log.info(
+      'App started',
+      isDevelopment ? 'in development mode' : 'in production mode'
+    );
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
