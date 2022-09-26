@@ -128,7 +128,7 @@ const createWindow = async () => {
     try {
       const schemaPath = isDevelopment
         ? path.resolve(extraResourcesPath, 'prisma', 'schema.prisma')
-        : path.resolve(app.getAppPath(), 'dist', 'main', 'schema.prisma');
+        : path.resolve(app.getAppPath(), '..', 'prisma', 'schema.prisma');
       log.info(
         `Database needs a migration. Running prisma migrate with schema path ${schemaPath}`
       );
@@ -137,12 +137,14 @@ const createWindow = async () => {
         command: ['migrate', 'deploy', '--schema', schemaPath],
         dbUrl,
       });
+
       log.info('Migration done.');
 
       if (mustSeed) {
         await seed(prismaClient);
       }
     } catch (e) {
+      log.error('Migration executed with error.');
       log.error(e);
       process.exit(1);
     }

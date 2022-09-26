@@ -39,29 +39,30 @@ export default async function runPrismaCommand({
       });
 
       child.on('message', (msg) => {
-        log.info(msg);
+        log.info('Message from child:', msg);
       });
 
       child.on('error', (err) => {
-        log.error('Child process got error:', err);
+        log.error('Child process got an error:', err);
       });
 
       child.on('close', (code) => {
+        log.info('Child process is being closed. (Exit code', code, ')');
         resolve(code);
       });
 
-      child.stdout?.on('data', function (data) {
-        log.info('prisma: ', data.toString());
+      child.stdout?.on('data', (data) => {
+        log.info('prisma info: ', data.toString());
       });
 
-      child.stderr?.on('data', function (data) {
-        log.error('prisma: ', data.toString());
+      child.stderr?.on('data', (data) => {
+        log.error('prisma error: ', data.toString());
       });
     });
 
-    if (exitCode !== 0)
+    if (exitCode !== 0) {
       throw Error(`command ${command} failed with exit code ${exitCode}`);
-
+    }
     return exitCode;
   } catch (e) {
     log.error(e);

@@ -1,7 +1,7 @@
 {
   "name": "fluig-monitor",
   "description": "Aplicação para monitoramento de ambientes Fluig com métricas disponibilizadas via API",
-  "version": "0.1.0-rc",
+  "version": "0.1.0",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts && ts-node ./scripts/copySchema.ts",
@@ -39,20 +39,15 @@
       "**/prisma*",
       "!prisma/*.db",
       "node_modules",
-      "package.json",
-      "!**/node_modules/@prisma/engines/**/*",
-      "!**/node_modules/@prisma/engines/migration-engine*",
-      "!**/node_modules/@prisma/engines/prisma-fmt*",
-      "!**/node_modules/@prisma/engines/query_engine-*",
-      "!**/node_modules/@prisma/engines/libquery_engine*",
-      "!**/node_modules/prisma/query_engine*",
-      "!**/node_modules/prisma/libquery_engine*",
-      "!**/node_modules/prisma/**/*.mjs"
+      "package.json"
     ],
     "extraResources": [
       "./assets/**",
+      "prisma",
+      "!prisma/*.db",
       "node_modules/@prisma/engines/**/*",
-      "node_modules/prisma/build/**/*"
+      "node_modules/prisma/build/**/*",
+      "node_modules/prisma/package.json"
     ],
     "afterSign": ".erb/scripts/notarize.js",
     "mac": {
