@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
-import dbHandler from '../../utils/dbHandler';
+import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
+import dbHandler from '../utils/dbHandler';
 
 // const EnvironmentListContext = createContext(dbHandler.environments.getAll());
 

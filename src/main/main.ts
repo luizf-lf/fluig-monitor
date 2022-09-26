@@ -23,6 +23,7 @@ import getAppDataFolder from './utils/fsUtils';
 import prismaClient from './database/prismaContext';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
+import { getAllEnvironments } from './database/dbHandler';
 
 log.transports.file.resolvePath = () =>
   path.resolve(
@@ -168,29 +169,10 @@ const createWindow = async () => {
   });
 };
 
-// IPC listener to save local userSettings file
-ipcMain.on('updateSettingsFile', (event, arg) => {
-  // event.returnValue = updateSettingsFile(arg);
-  event.returnValue = null;
-});
-
-// IPC listener to save local environment data file
-ipcMain.on('updateEnvironmentsFile', (event, arg) => {
-  // event.returnValue = updateEnvironmentsFile(arg);
-  event.returnValue = null;
-});
-
-// IPC listener to get user settings file
-ipcMain.on('getSettingsFile', (event) => {
-  // event.returnValue = getUserSettingsFile();
-  event.returnValue = null;
-});
-
-// IPC listener to get environment file
-ipcMain.on('getEnvironmentsFile', (event) => {
-  log.info('IPC Listener -> Recovering environments');
-  // event.returnValue = getEnvironmentsFile();
-  event.returnValue = { environments: [] };
+// IPC listener to get all environments
+ipcMain.on('getAllEnvironments', async (event) => {
+  log.info('IPC Listener -> Recovering all environments');
+  event.returnValue = await getAllEnvironments();
 });
 
 // listens to a get-language event from renderer, and returns the locally saved language

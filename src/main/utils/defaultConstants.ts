@@ -17,7 +17,7 @@ export const dbUrl =
   (isDevelopment ? process.env.DATABASE_URL : `file:${dbPath}`) || '';
 
 // Must be updated every time a migration is created
-export const latestMigration = '20220921164606_create_initial_tables';
+export const latestMigration = '20220926200737_created_initial_log_fields';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const platformToExecutables: any = {

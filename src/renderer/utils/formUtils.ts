@@ -1,4 +1,4 @@
-import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
+import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
 
 const formUtils = {
   validate(formData: EnvironmentDataInterface) {

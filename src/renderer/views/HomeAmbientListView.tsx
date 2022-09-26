@@ -6,12 +6,12 @@ import { FiChevronLeft, FiSettings, FiStar } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import SmallTag from '../components/SmallTag';
 
-import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
+import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
 import CreateEnvironmentButton from '../components/CreateEnvironmentButton';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 
-import globalContainerVariants from '../../utils/globalContainerVariants';
+import globalContainerVariants from '../utils/globalContainerVariants';
 import '../assets/styles/Views/HomeAmbientListView.scss';
 import graphPlaceholder from '../assets/img/graphPlaceholder.png'; // to be removed when the mini graph is implemented
 import colorServer from '../assets/svg/color-server.svg';

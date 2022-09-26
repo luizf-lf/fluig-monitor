@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import globalContainerVariants from '../../utils/globalContainerVariants';
-import dbHandler from '../../utils/dbHandler';
-import EnvironmentViewParams from '../../interfaces/EnvironmentViewParams';
+import globalContainerVariants from '../utils/globalContainerVariants';
+import dbHandler from '../utils/dbHandler';
+import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import serverImg from '../assets/img/server.png';
 import '../assets/styles/components/CenterView.scss';
 

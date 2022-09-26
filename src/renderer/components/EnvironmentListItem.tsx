@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
+import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
 import SmallTag from './SmallTag';
 import '../assets/styles/components/EnvironmentListItem.scss';
 

@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import EnvironmentDataInterface from '../../../interfaces/EnvironmentDataInterface';
+import EnvironmentDataInterface from '../../../common/interfaces/EnvironmentDataInterface';
 import EnvironmentListItem from './EnvironmentListItem';
 
+// TODO: Fix EnvironmentList as undefined
 type EnvironmentListProps = {
   environmentList: EnvironmentDataInterface[];
 };
