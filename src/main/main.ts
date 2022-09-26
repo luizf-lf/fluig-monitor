@@ -50,17 +50,33 @@ if (isDevelopment) {
   require('electron-debug')();
 }
 
-function getSavedLanguage() {
-  // TODO: Get saved language from database once connection is implemented
+async function getSavedLanguage() {
+  log.info('Querying system language from database');
+
+  const language = await prismaClient.appSetting.findFirst({
+    where: { settingId: 'APP_LANGUAGE' },
+  });
+
+  if (language != null) {
+    return language.value;
+  }
 
   // returns 'portuguese' as the default language, if null is returned
   return 'pt';
 }
 
 // sets the chosen language to a local file
-function setSavedLanguage(language: string) {
-  console.log(language);
-  // TODO: Update user language on the database
+async function setSavedLanguage(language: string) {
+  log.info('Updating system language on the database');
+
+  await prismaClient.appSetting.update({
+    where: {
+      settingId: 'APP_LANGUAGE',
+    },
+    data: {
+      value: language,
+    },
+  });
 }
 
 const installExtensions = async () => {
@@ -168,9 +184,9 @@ const createWindow = async () => {
   mainWindow.loadURL(resolveHtmlPath('index.html'));
   const menuBuilder = new MenuBuilder(mainWindow);
 
-  const savedLanguage = getSavedLanguage();
+  const savedLanguage = await getSavedLanguage();
 
-  i18n.on('languageChanged', (lang: string) => {
+  i18n.on('languageChanged', async (lang: string) => {
     log.info(
       'Language changed, rebuilding menu and sending signal to renderer'
     );
@@ -184,7 +200,7 @@ const createWindow = async () => {
 
     // if the locally saved language is different from the changed language, saves the set language locally
     if (savedLanguage !== lang) {
-      setSavedLanguage(lang);
+      await setSavedLanguage(lang);
     }
   });
 
@@ -241,9 +257,9 @@ ipcMain.on('getEnvironmentsFile', (event) => {
 });
 
 // listens to a get-language event from renderer, and returns the locally saved language
-ipcMain.on('getLanguage', (event) => {
+ipcMain.on('getLanguage', async (event) => {
   log.info('IPC Listener -> Recovering the saved user language');
-  event.returnValue = getSavedLanguage();
+  event.returnValue = await getSavedLanguage();
 });
 
 app.on('window-all-closed', async () => {

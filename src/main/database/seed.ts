@@ -19,6 +19,13 @@ export default async function seed(prisma: PrismaClient) {
       group: 'SYSTEM',
     },
   });
+  await prisma.appSetting.create({
+    data: {
+      settingId: 'APP_RELAY_MODE',
+      value: 'MASTER', // or RELAY
+      group: 'SYSTEM',
+    },
+  });
 
   // log messages
   await prisma.log.create({
