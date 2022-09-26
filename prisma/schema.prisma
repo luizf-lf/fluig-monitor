@@ -16,12 +16,13 @@ model Environment {
   release          String
   baseUrl          String
   kind             String
-  createdAt        DateTime         @default(now())
-  updateAt         DateTime         @default(now())
   oAuthKeys        String?
   updateScheduleId Int?             @unique
   updateSchedule   UpdateSchedule?
   monitorHistory   MonitorHistory[]
+  logCreatedAt     DateTime         @default(now())
+  logUpdateAt      DateTime         @default(now())
+  logDeleted       Boolean          @default(false)
 }
 
 model UpdateSchedule {
@@ -66,6 +67,7 @@ model Notification {
   title     String?
   body      String
   createdAt DateTime @default(now())
+  readed    Boolean  @default(false)
 }
 
 model Log {

@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import EnvironmentDataInterface from '../interfaces/EnvironmentDataInterface';
 
+// TODO: Update handler to properly use the database
 const dbHandler = {
   environments: {
     getAll() {

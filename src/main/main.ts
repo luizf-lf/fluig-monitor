@@ -171,14 +171,12 @@ const createWindow = async () => {
 // IPC listener to save local userSettings file
 ipcMain.on('updateSettingsFile', (event, arg) => {
   // event.returnValue = updateSettingsFile(arg);
-  console.log(arg);
   event.returnValue = null;
 });
 
 // IPC listener to save local environment data file
 ipcMain.on('updateEnvironmentsFile', (event, arg) => {
   // event.returnValue = updateEnvironmentsFile(arg);
-  console.log(arg);
   event.returnValue = null;
 });
 
@@ -190,7 +188,7 @@ ipcMain.on('getSettingsFile', (event) => {
 
 // IPC listener to get environment file
 ipcMain.on('getEnvironmentsFile', (event) => {
-  log.info('IPC Listener -> Recovering the environments file');
+  log.info('IPC Listener -> Recovering environments');
   // event.returnValue = getEnvironmentsFile();
   event.returnValue = { environments: [] };
 });
