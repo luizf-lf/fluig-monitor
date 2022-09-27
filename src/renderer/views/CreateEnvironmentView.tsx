@@ -9,21 +9,18 @@ import {
   FiRefreshCw,
   FiWifi,
 } from 'react-icons/fi';
-import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { createEnvironment } from '../utils/ipcHandler';
-import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
 import testConnection from '../services/testConnection';
 import globalContainerVariants from '../utils/globalContainerVariants';
-
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
 import formUtils from '../utils/formUtils';
 
-export default async function CreateEnvironmentView(): Promise<JSX.Element> {
+export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
   const [domainUrl, setDomainUrl] = useState('');
   const [kind, setKind] = useState('PROD');
@@ -54,12 +51,12 @@ export default async function CreateEnvironmentView(): Promise<JSX.Element> {
       name,
       baseUrl: domainUrl,
       kind,
-      auth: JSON.stringify({
+      auth: {
         consumerKey,
         consumerSecret,
         accessToken,
         tokenSecret,
-      }),
+      },
       update: {
         frequency: updateFrequency,
         from: updateFrequencyFrom,
@@ -68,12 +65,15 @@ export default async function CreateEnvironmentView(): Promise<JSX.Element> {
       },
     };
 
-    // const { isValid, message } = formUtils.validate(formData);
-    const isValid = true;
-    const message = '';
+    const { isValid, message } = formUtils.validate(formData);
 
     if (isValid) {
-      await createEnvironment(formData);
+      // await createEnvironment({
+      //   baseUrl: formData.baseUrl,
+      //   name: formData.name,
+      //   kind: formData.kind,
+      //   oAuthKeys: json.stringify(formData.auth)
+      // });
 
       setActionButtonsDisabled(true);
       createShortNotification({

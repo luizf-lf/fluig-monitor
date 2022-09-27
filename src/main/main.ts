@@ -139,12 +139,12 @@ const createWindow = async () => {
 };
 
 ipcMain.on('getAllEnvironments', async (event) => {
-  log.info('IPC Listener -> Recovering environment by uuid');
+  log.info('IPC Listener -> Recovering all environments');
   event.returnValue = await getAllEnvironments();
 });
 
 ipcMain.on('getEnvironmentById', async (event, uuid: string) => {
-  log.info('IPC Listener -> Recovering all environments');
+  log.info('IPC Listener -> Recovering environment by uuid');
   event.returnValue = await getEnvironmentById(uuid);
 });
 
@@ -170,6 +170,7 @@ app.on('window-all-closed', async () => {
 app
   .whenReady()
   .then(() => {
+    log.info(' ');
     log.info(
       'Starting app',
       isDevelopment ? 'in development mode' : 'in production mode'

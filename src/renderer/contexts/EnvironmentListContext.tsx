@@ -19,12 +19,10 @@ export const EnvironmentListContext = createContext(
   {} as EnvironmentListContextData
 );
 
-export async function EnvironmentListContextProvider({
+export function EnvironmentListContextProvider({
   children,
 }: EnvironmentListContextProviderProps) {
-  const [environmentList, setEnvironmentList] = useState(
-    await getAllEnvironmentsIPC()
-  );
+  const [environmentList, setEnvironmentList] = useState([] as Environment[]);
 
   async function updateEnvironmentList() {
     setEnvironmentList(await getAllEnvironmentsIPC());

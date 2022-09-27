@@ -76,6 +76,13 @@ export default async function runDbMigrations() {
           body: 'O banco de dados foi migrado devido à atualização de versão do aplicativo.',
         },
       });
+
+      await prismaClient.log.create({
+        data: {
+          type: 'info',
+          message: 'Database migration executed',
+        },
+      });
     } catch (e) {
       log.error('Migration executed with error.');
       log.error(e);
