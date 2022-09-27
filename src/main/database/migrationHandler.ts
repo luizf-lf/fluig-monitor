@@ -33,12 +33,16 @@ export default async function runDbMigrations() {
       const latest: Migration[] =
         await prismaClient.$queryRaw`select * from _prisma_migrations order by finished_at`;
       log.info(
-        `Latest migration: ${latest[latest.length - 1]?.migration_name}`
+        `Latest migration on the database: ${
+          latest[latest.length - 1]?.migration_name
+        }`
       );
       needsMigration =
         latest[latest.length - 1]?.migration_name !== latestMigration;
     } catch (e) {
-      log.info('Latest migration could not be found, migration is needed');
+      log.info(
+        'Latest migration could not be found, migration is needed. Error details:'
+      );
       log.error(e);
       needsMigration = true;
     }
@@ -63,6 +67,15 @@ export default async function runDbMigrations() {
       if (mustSeed) {
         await seed(prismaClient);
       }
+
+      log.info('Creating a database migration notification');
+      await prismaClient.notification.create({
+        data: {
+          type: 'info',
+          title: 'Base de dados migrada',
+          body: 'O banco de dados foi migrado devido à atualização de versão do aplicativo.',
+        },
+      });
     } catch (e) {
       log.error('Migration executed with error.');
       log.error(e);

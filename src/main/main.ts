@@ -1,29 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `npm run build` or `npm run build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, screen } from 'electron';
+import { app, BrowserWindow, shell, screen, ipcMain } from 'electron';
 
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import i18n from '../i18n/i18n';
+import i18n from '../common/i18n/i18n';
 import { isDevelopment } from './utils/defaultConstants';
 import getAppDataFolder from './utils/fsUtils';
-import prismaClient from './database/prismaContext';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
-import { getAllEnvironments } from './database/dbHandler';
+import {
+  createEnvironment,
+  getAllEnvironments,
+  getEnvironmentById,
+  getSavedLanguage,
+  setSavedLanguage,
+} from './database/dbHandler';
+import { Environment } from './generated/client';
 
 log.transports.file.resolvePath = () =>
   path.resolve(
@@ -41,35 +39,6 @@ if (process.env.NODE_ENV === 'production') {
 
 if (isDevelopment) {
   require('electron-debug')();
-}
-
-async function getSavedLanguage() {
-  log.info('Querying system language from database');
-
-  const language = await prismaClient.appSetting.findFirst({
-    where: { settingId: 'APP_LANGUAGE' },
-  });
-
-  if (language != null) {
-    return language.value;
-  }
-
-  // returns 'portuguese' as the default language, if null is returned
-  return 'pt';
-}
-
-// sets the chosen language to a local file
-async function setSavedLanguage(language: string) {
-  log.info('Updating system language on the database');
-
-  await prismaClient.appSetting.update({
-    where: {
-      settingId: 'APP_LANGUAGE',
-    },
-    data: {
-      value: language,
-    },
-  });
 }
 
 const installExtensions = async () => {
@@ -169,16 +138,24 @@ const createWindow = async () => {
   });
 };
 
-// IPC listener to get all environments
 ipcMain.on('getAllEnvironments', async (event) => {
-  log.info('IPC Listener -> Recovering all environments');
+  log.info('IPC Listener -> Recovering environment by uuid');
   event.returnValue = await getAllEnvironments();
 });
 
-// listens to a get-language event from renderer, and returns the locally saved language
+ipcMain.on('getEnvironmentById', async (event, uuid: string) => {
+  log.info('IPC Listener -> Recovering all environments');
+  event.returnValue = await getEnvironmentById(uuid);
+});
+
 ipcMain.on('getLanguage', async (event) => {
-  log.info('IPC Listener -> Recovering the saved user language');
+  log.info('IPC Listener -> Recovering user language');
   event.returnValue = await getSavedLanguage();
+});
+
+ipcMain.on('createEnvironment', async (event, environment: Environment) => {
+  log.info('IPC Listener -> Saving environment');
+  event.returnValue = await createEnvironment(environment);
 });
 
 app.on('window-all-closed', async () => {
@@ -193,12 +170,12 @@ app.on('window-all-closed', async () => {
 app
   .whenReady()
   .then(() => {
-    logSystemConfigs();
-
     log.info(
-      'App started',
+      'Starting app',
       isDevelopment ? 'in development mode' : 'in production mode'
     );
+    logSystemConfigs();
+
     createWindow();
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

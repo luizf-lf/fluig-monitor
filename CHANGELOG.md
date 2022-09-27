@@ -1,6 +1,8 @@
-# 0.1.0-rc
+# 0.1.0
 
 - Implemented database structure with Prisma ORM
+- Migrated data interfaces on the front end
+- Segregated main, renderer and common artifacts
 
 # 0.0.12
 

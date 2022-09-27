@@ -14,7 +14,7 @@ import {
 import { Link } from 'react-router-dom';
 import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import globalContainerVariants from '../utils/globalContainerVariants';
-import dbHandler from '../utils/dbHandler';
+import {} from '../utils/ipcHandler';
 import environmentKinds from '../utils/defaultEnvironmentKinds';
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
 import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
@@ -161,6 +161,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       return;
     }
 
+    // TODO: Update
     const result = dbHandler.environments.updateByUUID(
       environmentUUID,
       formData
@@ -214,6 +215,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
       });
       setTimeout(() => {
         setValidationMessage(<Redirect to="/" />);
+
+        // TODO: Update
         dbHandler.environments.deleteByUUID(environmentUUID);
       }, 3000);
     }

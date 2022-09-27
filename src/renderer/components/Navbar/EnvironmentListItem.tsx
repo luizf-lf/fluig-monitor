@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import EnvironmentDataInterface from '../../../common/interfaces/EnvironmentDataInterface';
+import { Environment } from '../../../main/generated/client';
 import SmallTag from '../SmallTag';
 import '../../assets/styles/components/EnvironmentListItem.scss';
 
 interface EnvironmentListItemInterface {
-  data: EnvironmentDataInterface;
+  data: Environment;
   isExpanded: boolean;
 }
 
@@ -44,7 +44,7 @@ export default function EnvironmentListItem({
   if (isExpanded) {
     return (
       <Link
-        to={`/environment/${data.uuid}`}
+        to={`/environment/${data.id}`}
         className="environment-item-container is-expanded"
         title={environmentTitle}
       >
@@ -67,7 +67,7 @@ export default function EnvironmentListItem({
 
   return (
     <Link
-      to={`/environment/${data.uuid}`}
+      to={`/environment/${data.id}`}
       className="environment-item-container"
       title={environmentTitle}
     >

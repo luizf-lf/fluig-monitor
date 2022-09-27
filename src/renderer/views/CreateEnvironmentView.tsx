@@ -15,7 +15,7 @@ import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
-import dbHandler from '../utils/dbHandler';
+import { createEnvironment } from '../utils/ipcHandler';
 import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
 import testConnection from '../services/testConnection';
 import globalContainerVariants from '../utils/globalContainerVariants';
@@ -23,7 +23,7 @@ import globalContainerVariants from '../utils/globalContainerVariants';
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
 import formUtils from '../utils/formUtils';
 
-export default function CreateEnvironmentView() {
+export default async function CreateEnvironmentView(): Promise<JSX.Element> {
   const [name, setName] = useState('');
   const [domainUrl, setDomainUrl] = useState('');
   const [kind, setKind] = useState('PROD');
@@ -47,34 +47,33 @@ export default function CreateEnvironmentView() {
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    const formData: EnvironmentDataInterface = {
+    const formData = {
       name,
       baseUrl: domainUrl,
       kind,
-      auth: {
+      auth: JSON.stringify({
         consumerKey,
         consumerSecret,
         accessToken,
         tokenSecret,
-      },
+      }),
       update: {
         frequency: updateFrequency,
         from: updateFrequencyFrom,
         to: updateFrequencyTo,
         onlyOnWorkDays: updateOnWorkDays,
       },
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      uuid: uuidv4(),
     };
 
-    const { isValid, message } = formUtils.validate(formData);
+    // const { isValid, message } = formUtils.validate(formData);
+    const isValid = true;
+    const message = '';
 
     if (isValid) {
-      dbHandler.environments.saveNew(formData);
+      await createEnvironment(formData);
 
       setActionButtonsDisabled(true);
       createShortNotification({
