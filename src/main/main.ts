@@ -14,14 +14,9 @@ import { isDevelopment } from './utils/defaultConstants';
 import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
-import {
-  createEnvironment,
-  getEnvironmentById,
-  getSavedLanguage,
-  setSavedLanguage,
-} from './database/dbHandler';
 import { Environment } from './generated/client';
-import EnvironmentController from './controllers/environmentController';
+import EnvironmentController from './controllers/EnvironmentController';
+import LanguageController from './controllers/languageController';
 
 log.transports.file.resolvePath = () =>
   path.resolve(
@@ -93,7 +88,7 @@ const createWindow = async () => {
   mainWindow.loadURL(resolveHtmlPath('index.html'));
   const menuBuilder = new MenuBuilder(mainWindow);
 
-  const savedLanguage = await getSavedLanguage();
+  const savedLanguage = await new LanguageController().get();
 
   i18n.on('languageChanged', async (lang: string) => {
     log.info(
@@ -109,7 +104,7 @@ const createWindow = async () => {
 
     // if the locally saved language is different from the changed language, saves the set language locally
     if (savedLanguage !== lang) {
-      await setSavedLanguage(lang);
+      await new LanguageController().update(lang);
     }
   });
 
@@ -145,17 +140,17 @@ ipcMain.on('getAllEnvironments', async (event) => {
 
 ipcMain.on('getEnvironmentById', async (event, id: number) => {
   log.info('[main] IPC Listener: Recovering environment by id');
-  event.returnValue = await getEnvironmentById(id);
+  event.returnValue = await new EnvironmentController().getById(id);
 });
 
 ipcMain.on('getLanguage', async (event) => {
   log.info('[main] IPC Listener: Recovering user language');
-  event.returnValue = await getSavedLanguage();
+  event.returnValue = await new LanguageController().get();
 });
 
 ipcMain.on('createEnvironment', async (event, environment: Environment) => {
   log.info('[main] IPC Listener: Saving environment');
-  event.returnValue = await createEnvironment(environment);
+  event.returnValue = await new EnvironmentController().new(environment);
 });
 
 app.on('window-all-closed', async () => {
@@ -172,7 +167,7 @@ app
   .then(() => {
     log.info(' ');
     log.info(
-      'Starting app',
+      '[main] Starting app',
       isDevelopment ? 'in development mode' : 'in production mode'
     );
     logSystemConfigs();
