@@ -14,9 +14,10 @@ import { isDevelopment } from './utils/defaultConstants';
 import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
-import { Environment } from './generated/client';
 import EnvironmentController from './controllers/EnvironmentController';
 import LanguageController from './controllers/languageController';
+import UpdateScheduleController from './controllers/UpdateScheduleController';
+import { CreateEnvironmentProps } from '../renderer/ipc/ipcHandler';
 
 log.transports.file.resolvePath = () =>
   path.resolve(
@@ -148,10 +149,27 @@ ipcMain.on('getLanguage', async (event) => {
   event.returnValue = await new LanguageController().get();
 });
 
-ipcMain.on('createEnvironment', async (event, environment: Environment) => {
-  log.info('[main] IPC Listener: Saving environment');
-  event.returnValue = await new EnvironmentController().new(environment);
-});
+ipcMain.handle(
+  'createEnvironment',
+  async (event, { environment, updateSchedule }: CreateEnvironmentProps) => {
+    log.info('[main] IPC Listener: Saving environment');
+
+    // TODO: Create auth keys
+
+    const createdEnvironment = await new EnvironmentController().new(
+      environment
+    );
+    const createdUpdateSchedule = await new UpdateScheduleController().new({
+      environmentId: createdEnvironment.id,
+      from: updateSchedule.from,
+      to: updateSchedule.to,
+      onlyOnWorkDays: updateSchedule.onlyOnWorkDays,
+      frequency: updateSchedule.frequency,
+    });
+
+    event.returnValue = { createdEnvironment, createdUpdateSchedule };
+  }
+);
 
 app.on('window-all-closed', async () => {
   // Respect the OSX convention of having the application in memory even

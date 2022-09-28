@@ -2,10 +2,6 @@ import { createContext, ReactNode, useContext, useState } from 'react';
 import { Environment } from '../../main/generated/client';
 import { getAllEnvironments } from '../ipc/ipcHandler';
 
-// const EnvironmentListContext = createContext(dbHandler.environments.getAll());
-
-// export default EnvironmentListContext;
-
 interface EnvironmentListContextProviderProps {
   children: ReactNode;
 }
