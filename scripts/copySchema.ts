@@ -13,8 +13,8 @@ const destination = path.resolve(
   'schema.prisma'
 );
 
-console.log('Copying prisma schema to build folder.');
+console.log('📦 Copying prisma schema to build folder.');
 
 fs.copyFileSync(source, destination);
 
-console.log(`${source} has been copied to ${destination}`);
+console.log(`✅ ${source} has been copied to ${destination}`);
