@@ -18,6 +18,7 @@ import EnvironmentController from './controllers/EnvironmentController';
 import LanguageController from './controllers/languageController';
 import UpdateScheduleController from './controllers/UpdateScheduleController';
 import { CreateEnvironmentProps } from '../renderer/ipc/ipcHandler';
+import AuthKeysController from './controllers/AuthKeysController';
 
 log.transports.file.resolvePath = () =>
   path.resolve(
@@ -151,10 +152,11 @@ ipcMain.on('getLanguage', async (event) => {
 
 ipcMain.handle(
   'createEnvironment',
-  async (event, { environment, updateSchedule }: CreateEnvironmentProps) => {
+  async (
+    event,
+    { environment, updateSchedule, environmentAuthKeys }: CreateEnvironmentProps
+  ) => {
     log.info('[main] IPC Listener: Saving environment');
-
-    // TODO: Create auth keys
 
     const createdEnvironment = await new EnvironmentController().new(
       environment
@@ -166,8 +168,17 @@ ipcMain.handle(
       onlyOnWorkDays: updateSchedule.onlyOnWorkDays,
       frequency: updateSchedule.frequency,
     });
+    const createdAuthKeys = await new AuthKeysController().new({
+      environmentId: createdEnvironment.id,
+      payload: JSON.stringify(environmentAuthKeys),
+      hash: 'json',
+    });
 
-    event.returnValue = { createdEnvironment, createdUpdateSchedule };
+    event.returnValue = {
+      createdEnvironment,
+      createdUpdateSchedule,
+      createdAuthKeys,
+    };
   }
 );
 
