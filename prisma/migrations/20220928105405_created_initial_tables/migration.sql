@@ -1,14 +1,15 @@
 -- CreateTable
 CREATE TABLE "Environment" (
-    "id" TEXT NOT NULL PRIMARY KEY,
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" TEXT NOT NULL,
     "release" TEXT NOT NULL,
     "baseUrl" TEXT NOT NULL,
     "kind" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updateAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "oAuthKeys" TEXT,
-    "updateScheduleId" INTEGER
+    "updateScheduleId" INTEGER,
+    "logCreatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "logUpdateAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "logDeleted" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateTable
@@ -26,7 +27,7 @@ CREATE TABLE "UpdateSchedule" (
 CREATE TABLE "MonitorHistory" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "environmentId" TEXT NOT NULL,
+    "environmentId" INTEGER NOT NULL,
     CONSTRAINT "MonitorHistory_environmentId_fkey" FOREIGN KEY ("environmentId") REFERENCES "Environment" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
@@ -56,7 +57,8 @@ CREATE TABLE "Notification" (
     "type" TEXT NOT NULL,
     "title" TEXT,
     "body" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "readed" BOOLEAN NOT NULL DEFAULT false
 );
 
 -- CreateTable

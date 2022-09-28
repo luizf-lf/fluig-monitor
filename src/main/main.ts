@@ -143,9 +143,9 @@ ipcMain.on('getAllEnvironments', async (event) => {
   event.returnValue = await getAllEnvironments();
 });
 
-ipcMain.on('getEnvironmentById', async (event, uuid: string) => {
-  log.info('IPC Listener -> Recovering environment by uuid');
-  event.returnValue = await getEnvironmentById(uuid);
+ipcMain.on('getEnvironmentById', async (event, id: number) => {
+  log.info('IPC Listener -> Recovering environment by id');
+  event.returnValue = await getEnvironmentById(id);
 });
 
 ipcMain.on('getLanguage', async (event) => {

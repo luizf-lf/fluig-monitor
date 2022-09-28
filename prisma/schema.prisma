@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Environment {
-  id               String           @id @default(uuid())
+  id               Int              @id @default(autoincrement())
   name             String
   release          String
   baseUrl          String
@@ -38,7 +38,7 @@ model UpdateSchedule {
 model MonitorHistory {
   id            Int           @id @default(autoincrement())
   timestamp     DateTime      @default(now())
-  environmentId String
+  environmentId Int
   environment   Environment?  @relation(fields: [environmentId], references: [id])
   apiResponse   APIResponse[]
 }

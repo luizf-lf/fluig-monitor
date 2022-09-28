@@ -14,7 +14,7 @@ export async function getAllEnvironments(): Promise<Environment[] | null> {
 }
 
 export async function getEnvironmentById(
-  id: string
+  id: number
 ): Promise<Environment | null> {
   log.info('Querying environment from database with the id', id);
   const environmentData = await prismaClient.environment.findUnique({
@@ -51,7 +51,7 @@ export async function updateEnvironment(
   return updated;
 }
 
-export async function deleteEnvironment(id: string): Promise<Environment> {
+export async function deleteEnvironment(id: number): Promise<Environment> {
   const deleted = await prismaClient.environment.update({
     where: {
       id,
