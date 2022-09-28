@@ -1,23 +1,10 @@
 import log from 'electron-log';
+import {
+  EnvironmentControllerInterface,
+  EnvironmentUpdateControllerInterface,
+} from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
 import { Environment } from '../generated/client';
-
-interface EnvironmentControllerInterface {
-  name: string;
-  release: string;
-  baseUrl: string;
-  kind: string;
-  logDeleted?: boolean;
-}
-
-interface EnvironmentUpdateControllerInterface {
-  id: number;
-  name?: string;
-  release?: string;
-  baseUrl?: string;
-  kind?: string;
-  logDeleted?: boolean;
-}
 
 export default class EnvironmentController {
   environments: Environment[];

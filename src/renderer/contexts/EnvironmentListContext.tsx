@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { Environment } from '../../main/generated/client';
-import { getAllEnvironmentsIPC } from '../utils/ipcHandler';
+import { getAllEnvironments } from '../ipc/ipcHandler';
 
 // const EnvironmentListContext = createContext(dbHandler.environments.getAll());
 
@@ -25,7 +25,7 @@ export function EnvironmentListContextProvider({
   const [environmentList, setEnvironmentList] = useState([] as Environment[]);
 
   async function updateEnvironmentList() {
-    setEnvironmentList(await getAllEnvironmentsIPC());
+    setEnvironmentList(await getAllEnvironments());
   }
 
   return (

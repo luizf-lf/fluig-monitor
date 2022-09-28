@@ -35,11 +35,11 @@ export default function App() {
                 />
                 <Route
                   exact
-                  path="/environment/:environmentUUID"
+                  path="/environment/:environmentId"
                   component={EnvironmentView}
                 />
                 <Route
-                  path="/environment/:environmentUUID/edit"
+                  path="/environment/:environmentId/edit"
                   component={EditEnvironmentSettingsView}
                 />
               </Switch>

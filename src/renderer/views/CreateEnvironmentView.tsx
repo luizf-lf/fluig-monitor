@@ -14,7 +14,7 @@ import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
-import { createEnvironment } from '../utils/ipcHandler';
+import { createEnvironment } from '../ipc/ipcHandler';
 import testConnection from '../services/testConnection';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
@@ -68,12 +68,12 @@ export default function CreateEnvironmentView(): JSX.Element {
     const { isValid, message } = formUtils.validate(formData);
 
     if (isValid) {
-      // await createEnvironment({
-      //   baseUrl: formData.baseUrl,
-      //   name: formData.name,
-      //   kind: formData.kind,
-      //   oAuthKeys: json.stringify(formData.auth)
-      // });
+      await createEnvironment({
+        baseUrl: formData.baseUrl,
+        name: formData.name,
+        kind: formData.kind,
+        release: '',
+      });
 
       setActionButtonsDisabled(true);
       createShortNotification({

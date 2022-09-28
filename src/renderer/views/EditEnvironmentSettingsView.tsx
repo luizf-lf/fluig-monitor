@@ -14,19 +14,19 @@ import {
 import { Link } from 'react-router-dom';
 import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import globalContainerVariants from '../utils/globalContainerVariants';
-import {} from '../utils/ipcHandler';
+import { getEnvironmentById } from '../ipc/ipcHandler';
 import environmentKinds from '../utils/defaultEnvironmentKinds';
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
-import EnvironmentDataInterface from '../../common/interfaces/EnvironmentDataInterface';
 import testConnection from '../services/testConnection';
 import formUtils from '../utils/formUtils';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
+import { EnvironmentControllerInterface } from '../../common/interfaces/EnvironmentControllerInterface';
 
-function EditEnvironmentSettingsView(): JSX.Element {
-  const { environmentUUID }: EnvironmentViewParams = useParams();
-  const environmentData: EnvironmentDataInterface =
-    dbHandler.environments.getByUUID(environmentUUID);
+async function EditEnvironmentSettingsView(): Promise<JSX.Element> {
+  const { environmentId }: EnvironmentViewParams = useParams();
+  const environmentData: EnvironmentControllerInterface =
+    await getEnvironmentById(environmentId);
 
   const [name, setName] = useState(environmentData.name);
   const [domainUrl, setDomainUrl] = useState(environmentData.baseUrl);
@@ -162,10 +162,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     }
 
     // TODO: Update
-    const result = dbHandler.environments.updateByUUID(
-      environmentUUID,
-      formData
-    );
+    const result = dbHandler.environments.updateByUUID(environmentId, formData);
 
     if (!result) {
       createShortNotification({
@@ -217,7 +214,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
         setValidationMessage(<Redirect to="/" />);
 
         // TODO: Update
-        dbHandler.environments.deleteByUUID(environmentUUID);
+        dbHandler.environments.deleteByUUID(environmentId);
       }, 3000);
     }
   }
