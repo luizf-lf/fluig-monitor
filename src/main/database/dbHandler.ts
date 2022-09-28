@@ -2,11 +2,35 @@ import log from 'electron-log';
 import { AppSetting, Environment } from '../generated/client';
 import prismaClient from './prismaContext';
 
-export async function getAllEnvironments(): Promise<Environment[] | null> {
-  log.info('Querying all environments from database.');
+export interface EnvironmentControllerInterface {
+  name: string;
+  release: string;
+  baseUrl: string;
+  kind: string;
+  logDeleted?: boolean;
+}
+
+export interface EnvironmentUpdateControllerInterface {
+  id: number;
+  name?: string;
+  release?: string;
+  baseUrl?: string;
+  kind?: string;
+  logDeleted?: boolean;
+}
+
+export async function getAllEnvironments(
+  includeMonitorHistory = false
+): Promise<Environment[]> {
+  log.info('[main] Querying all environments from database.');
   const environments = await prismaClient.environment.findMany({
     where: {
       logDeleted: false,
+    },
+    include: {
+      oAuthKeysId: true,
+      updateScheduleId: true,
+      monitorHistory: includeMonitorHistory,
     },
   });
 
@@ -16,7 +40,7 @@ export async function getAllEnvironments(): Promise<Environment[] | null> {
 export async function getEnvironmentById(
   id: number
 ): Promise<Environment | null> {
-  log.info('Querying environment from database with the id', id);
+  log.info('[main] Querying environment from database with the id', id);
   const environmentData = await prismaClient.environment.findUnique({
     where: {
       id,
@@ -27,9 +51,9 @@ export async function getEnvironmentById(
 }
 
 export async function createEnvironment(
-  data: Environment
+  data: EnvironmentControllerInterface
 ): Promise<Environment> {
-  log.info('Saving a new environment on the database');
+  log.info('[main] Saving a new environment on the database');
   const created = await prismaClient.environment.create({
     data,
   });
@@ -38,20 +62,31 @@ export async function createEnvironment(
 }
 
 export async function updateEnvironment(
-  data: Environment
+  data: EnvironmentUpdateControllerInterface
 ): Promise<Environment> {
-  log.info('Updating environment with uuid ', data.id);
+  log.info('[main] Updating environment with id', data.id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updatedData: any = {};
+
+  if (data.name) updatedData.name = data.name;
+  if (data.release) updatedData.release = data.release;
+  if (data.baseUrl) updatedData.baseUrl = data.baseUrl;
+  if (data.kind) updatedData.kind = data.kind;
+
+  updatedData.logUpdateAt = new Date().toISOString();
+
   const updated = await prismaClient.environment.update({
     where: {
       id: data.id,
     },
-    data,
+    data: updatedData,
   });
 
   return updated;
 }
 
 export async function deleteEnvironment(id: number): Promise<Environment> {
+  log.info('[main] Deleting environment with id', id, 'and related fields');
   const deleted = await prismaClient.environment.update({
     where: {
       id,
@@ -65,7 +100,7 @@ export async function deleteEnvironment(id: number): Promise<Environment> {
 }
 
 export async function getSavedLanguage(): Promise<string> {
-  log.info('Querying system language from database');
+  log.info('[main] Querying system language from database');
 
   const language = await prismaClient.appSetting.findFirst({
     where: { settingId: 'APP_LANGUAGE' },
@@ -81,7 +116,7 @@ export async function getSavedLanguage(): Promise<string> {
 
 // sets the chosen language to a local file
 export async function setSavedLanguage(language: string): Promise<AppSetting> {
-  log.info('Updating system language on the database');
+  log.info('[main] Updating system language on the database');
 
   const updated = await prismaClient.appSetting.update({
     where: {

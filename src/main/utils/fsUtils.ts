@@ -16,7 +16,7 @@ export default function getAppDataFolder(): string {
   // checks if the app folder exists, and if not, creates it.
   if (!fs.existsSync(folderPath)) {
     fs.mkdirSync(folderPath);
-    log.info(`Folder ${folderPath} does not exist and will be created.`);
+    log.info(`[main] Folder ${folderPath} does not exist and will be created.`);
   }
 
   return folderPath;

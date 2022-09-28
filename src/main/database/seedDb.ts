@@ -2,7 +2,7 @@ import log from 'electron-log';
 import { PrismaClient } from '../generated/client';
 
 export default async function seedDb(prisma: PrismaClient) {
-  log.info('Seeding the database with default values');
+  log.info('[main] Seeding the database with default values');
 
   // app settings
   await prisma.appSetting.create({

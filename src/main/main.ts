@@ -16,12 +16,12 @@ import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
 import {
   createEnvironment,
-  getAllEnvironments,
   getEnvironmentById,
   getSavedLanguage,
   setSavedLanguage,
 } from './database/dbHandler';
 import { Environment } from './generated/client';
+import EnvironmentController from './controllers/environmentController';
 
 log.transports.file.resolvePath = () =>
   path.resolve(
@@ -55,12 +55,12 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
-  log.info('Creating a new window');
+  log.info('[main] Creating a new window');
 
   await runDbMigrations();
 
   if (isDevelopment) {
-    log.info('Installing additional dev extensions');
+    log.info('[main] Installing additional dev extensions');
     await installExtensions();
   }
 
@@ -97,7 +97,7 @@ const createWindow = async () => {
 
   i18n.on('languageChanged', async (lang: string) => {
     log.info(
-      'Language changed, rebuilding menu and sending signal to renderer'
+      '[main] Language changed, rebuilding menu and sending signal to renderer'
     );
     // if the buildMenu function is not called, the default electron dev menu will be rendered
     menuBuilder.buildMenu();
@@ -139,22 +139,22 @@ const createWindow = async () => {
 };
 
 ipcMain.on('getAllEnvironments', async (event) => {
-  log.info('IPC Listener -> Recovering all environments');
-  event.returnValue = await getAllEnvironments();
+  log.info('[main] IPC Listener: Recovering all environments');
+  event.returnValue = await new EnvironmentController().getAll();
 });
 
 ipcMain.on('getEnvironmentById', async (event, id: number) => {
-  log.info('IPC Listener -> Recovering environment by id');
+  log.info('[main] IPC Listener: Recovering environment by id');
   event.returnValue = await getEnvironmentById(id);
 });
 
 ipcMain.on('getLanguage', async (event) => {
-  log.info('IPC Listener -> Recovering user language');
+  log.info('[main] IPC Listener: Recovering user language');
   event.returnValue = await getSavedLanguage();
 });
 
 ipcMain.on('createEnvironment', async (event, environment: Environment) => {
-  log.info('IPC Listener -> Saving environment');
+  log.info('[main] IPC Listener: Saving environment');
   event.returnValue = await createEnvironment(environment);
 });
 
@@ -163,7 +163,7 @@ app.on('window-all-closed', async () => {
   // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
-    log.info('Main windows closed. Exiting the app.');
+    log.info('[main] Main windows closed. Exiting the app.');
   }
 });
 

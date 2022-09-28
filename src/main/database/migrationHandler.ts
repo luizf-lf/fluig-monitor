@@ -17,23 +17,25 @@ import seedDb from './seedDb';
 export default async function runDbMigrations() {
   let needsMigration = false;
   let mustSeed = false;
-  log.info(`Checking database at ${dbPath}`);
+  log.info(`[main] Checking database at ${dbPath}`);
   const dbExists = fs.existsSync(dbPath);
 
   if (!dbExists) {
-    log.info('Database does not exists. Migration and seeding is needed.');
+    log.info(
+      '[main] Database does not exists. Migration and seeding is needed.'
+    );
     needsMigration = true;
     mustSeed = true;
     // since prisma has trouble if the database file does not exist, touches an empty file
-    log.info('Touching database file.');
+    log.info('[main] Touching database file.');
     fs.closeSync(fs.openSync(dbPath, 'w'));
   } else {
-    log.info('Database exists. Verifying the latest migration');
+    log.info('[main] Database exists. Verifying the latest migration');
     try {
       const latest: Migration[] =
         await prismaClient.$queryRaw`select * from _prisma_migrations order by finished_at`;
       log.info(
-        `Latest migration on the database: ${
+        `[main] Latest migration on the database: ${
           latest[latest.length - 1]?.migration_name
         }`
       );
@@ -62,13 +64,13 @@ export default async function runDbMigrations() {
         dbUrl,
       });
 
-      log.info('Migration done.');
+      log.info('[main] Migration done.');
 
       if (mustSeed) {
         await seedDb(prismaClient);
       }
 
-      log.info('Creating a database migration notification');
+      log.info('[main] Creating a database migration notification');
       await prismaClient.notification.create({
         data: {
           type: 'info',
@@ -89,6 +91,6 @@ export default async function runDbMigrations() {
       process.exit(1);
     }
   } else {
-    log.info('Does not need migration');
+    log.info('[main] Does not need migration');
   }
 }
