@@ -11,18 +11,25 @@ datasource db {
 }
 
 model Environment {
-  id               Int              @id @default(autoincrement())
+  id               Int                  @id @default(autoincrement())
   name             String
   release          String
   baseUrl          String
   kind             String
-  oAuthKeys        String?
-  updateScheduleId Int?             @unique
-  updateSchedule   UpdateSchedule?
+  oAuthKeysId      EnvironmentAuthKeys?
+  updateScheduleId UpdateSchedule?
   monitorHistory   MonitorHistory[]
-  logCreatedAt     DateTime         @default(now())
-  logUpdateAt      DateTime         @default(now())
-  logDeleted       Boolean          @default(false)
+  logCreatedAt     DateTime             @default(now())
+  logUpdateAt      DateTime             @default(now())
+  logDeleted       Boolean              @default(false)
+}
+
+model EnvironmentAuthKeys {
+  id            Int         @id @default(autoincrement())
+  payload       String
+  hash          String
+  environmentId Int         @unique
+  environment   Environment @relation(fields: [environmentId], references: [id])
 }
 
 model UpdateSchedule {
@@ -32,7 +39,7 @@ model UpdateSchedule {
   to             String
   onlyOnWorkDays Boolean      @default(false)
   environmentId  Int          @unique
-  environment    Environment? @relation(fields: [environmentId], references: [updateScheduleId])
+  environment    Environment? @relation(fields: [environmentId], references: [id])
 }
 
 model MonitorHistory {

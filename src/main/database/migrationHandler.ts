@@ -12,7 +12,7 @@ import {
   Migration,
 } from '../utils/defaultConstants';
 import prismaClient from './prismaContext';
-import seed from './seed';
+import seedDb from './seedDb';
 
 export default async function runDbMigrations() {
   let needsMigration = false;
@@ -65,7 +65,7 @@ export default async function runDbMigrations() {
       log.info('Migration done.');
 
       if (mustSeed) {
-        await seed(prismaClient);
+        await seedDb(prismaClient);
       }
 
       log.info('Creating a database migration notification');
