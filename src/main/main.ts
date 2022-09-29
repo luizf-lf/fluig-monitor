@@ -10,7 +10,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import i18n from '../common/i18n/i18n';
-import { isDevelopment } from './utils/defaultConstants';
+import { isDevelopment, logStringFormat } from './utils/defaultConstants';
 import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
@@ -20,12 +20,16 @@ import UpdateScheduleController from './controllers/UpdateScheduleController';
 import { CreateEnvironmentProps } from '../renderer/ipc/ipcHandler';
 import AuthKeysController from './controllers/AuthKeysController';
 
+import { version } from '../../package.json';
+
 log.transports.file.resolvePath = () =>
   path.resolve(
     getAppDataFolder(),
     'logs',
     isDevelopment ? 'app.dev.log' : 'app.log'
   );
+log.transports.file.format = logStringFormat;
+log.transports.console.format = logStringFormat;
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -52,12 +56,12 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
-  log.info('[main] Creating a new window');
+  log.info('Creating a new window');
 
   await runDbMigrations();
 
   if (isDevelopment) {
-    log.info('[main] Installing additional dev extensions');
+    log.info('Installing additional dev extensions');
     await installExtensions();
   }
 
@@ -94,7 +98,7 @@ const createWindow = async () => {
 
   i18n.on('languageChanged', async (lang: string) => {
     log.info(
-      '[main] Language changed, rebuilding menu and sending signal to renderer'
+      'Language changed, rebuilding menu and sending signal to renderer'
     );
     // if the buildMenu function is not called, the default electron dev menu will be rendered
     menuBuilder.buildMenu();
@@ -136,17 +140,17 @@ const createWindow = async () => {
 };
 
 ipcMain.on('getAllEnvironments', async (event) => {
-  log.info('[main] IPC Listener: Recovering all environments');
+  log.info('IPC Listener: Recovering all environments');
   event.returnValue = await new EnvironmentController().getAll();
 });
 
 ipcMain.on('getEnvironmentById', async (event, id: number) => {
-  log.info('[main] IPC Listener: Recovering environment by id');
+  log.info('IPC Listener: Recovering environment by id');
   event.returnValue = await new EnvironmentController().getById(id);
 });
 
 ipcMain.on('getLanguage', async (event) => {
-  log.info('[main] IPC Listener: Recovering user language');
+  log.info('IPC Listener: Recovering user language');
   event.returnValue = await new LanguageController().get();
 });
 
@@ -156,7 +160,7 @@ ipcMain.handle(
     event,
     { environment, updateSchedule, environmentAuthKeys }: CreateEnvironmentProps
   ) => {
-    log.info('[main] IPC Listener: Saving environment');
+    log.info('IPC Listener: Saving environment');
 
     const createdEnvironment = await new EnvironmentController().new(
       environment
@@ -187,7 +191,7 @@ app.on('window-all-closed', async () => {
   // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
-    log.info('[main] Main windows closed. Exiting the app.');
+    log.info('Main windows closed. Exiting the app.');
   }
 });
 
@@ -195,8 +199,9 @@ app
   .whenReady()
   .then(() => {
     log.info(' ');
+    log.info(`Fluig Monitor - v${version}`);
     log.info(
-      '[main] Starting app',
+      'Starting app',
       isDevelopment ? 'in development mode' : 'in production mode'
     );
     logSystemConfigs();

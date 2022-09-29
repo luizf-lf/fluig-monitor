@@ -11,8 +11,8 @@ export default async function runPrismaCommand({
   command: string[];
   dbUrl: string;
 }): Promise<number> {
-  log.info('[main] Migration engine path', mePath);
-  log.info('[main] Query engine path', qePath);
+  log.info('Migration engine path', mePath);
+  log.info('Query engine path', qePath);
 
   // Currently we don't have any direct method to invoke prisma migration programatically.
   // As a workaround, we spawn migration script as a child process and wait for its completion.
@@ -26,7 +26,7 @@ export default async function runPrismaCommand({
         '..',
         'node_modules/prisma/build/index.js'
       );
-      log.info('[main] Prisma path', prismaPath);
+      log.info('Prisma path', prismaPath);
 
       const child = fork(prismaPath, command, {
         env: {
@@ -39,7 +39,7 @@ export default async function runPrismaCommand({
       });
 
       child.on('message', (msg) => {
-        log.info('[main] Message from child:', msg);
+        log.info('Message from child:', msg);
       });
 
       child.on('error', (err) => {
@@ -47,12 +47,12 @@ export default async function runPrismaCommand({
       });
 
       child.on('close', (code) => {
-        log.info('[main] Child process is being closed. (Exit code', code, ')');
+        log.info('Child process is being closed. (Exit code', code, ')');
         resolve(code);
       });
 
       child.stdout?.on('data', (data) => {
-        log.info('[main] prisma info: ', data.toString());
+        log.info('prisma info: ', data.toString());
       });
 
       child.stderr?.on('data', (data) => {

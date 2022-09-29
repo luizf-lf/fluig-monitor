@@ -12,6 +12,7 @@ import {
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import log from 'electron-log';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { createEnvironment } from '../ipc/ipcHandler';
@@ -45,6 +46,7 @@ export default function CreateEnvironmentView(): JSX.Element {
   const { t } = useTranslation();
 
   async function handleSubmit(event: FormEvent) {
+    log.info('CreateEnvironmentView: handling form submit.');
     event.preventDefault();
 
     const formData = {
@@ -65,19 +67,30 @@ export default function CreateEnvironmentView(): JSX.Element {
       },
     };
 
+    log.info('CreateEnvironmentView: validating form data.');
     // const { isValid, message } = formUtils.validate(formData);
     const message = '';
     const isValid = true;
 
     if (isValid) {
-      // TODO: Fix params
+      log.info('CreateEnvironmentView: Form is valid, creating environment.');
       await createEnvironment({
-        baseUrl: formData.baseUrl,
-        name: formData.name,
-        kind: formData.kind,
-        release: '',
+        environment: {
+          baseUrl: formData.baseUrl,
+          kind: formData.kind,
+          name: formData.name,
+          release: 'unknown',
+        },
+        updateSchedule: formData.update,
+        environmentAuthKeys: {
+          payload: JSON.stringify(formData.auth),
+          hash: 'json',
+        },
       });
 
+      log.info(
+        'CreateEnvironmentView: Environment created, redirecting to home view'
+      );
       setActionButtonsDisabled(true);
       createShortNotification({
         id: Date.now(),
@@ -109,6 +122,7 @@ export default function CreateEnvironmentView(): JSX.Element {
         accessToken !== '' ||
         tokenSecret !== '')
     ) {
+      log.info('CreateEnvironmentView: Sending test connection to', domainUrl);
       setTestMessage(
         <span className="info-blip">
           <FiRefreshCw className="rotating" />{' '}

@@ -1,15 +1,13 @@
 import { ipcRenderer } from 'electron';
+import { UpdateScheduleFormControllerInterface } from '../../common/interfaces/UpdateScheduleControllerInterface';
 import { EnvironmentControllerInterface } from '../../common/interfaces/EnvironmentControllerInterface';
-import {
-  Environment,
-  EnvironmentAuthKeys,
-  UpdateSchedule,
-} from '../../main/generated/client';
+import { AuthKeysFormControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
+import { Environment } from '../../main/generated/client';
 
 export interface CreateEnvironmentProps {
   environment: EnvironmentControllerInterface;
-  updateSchedule: UpdateSchedule;
-  environmentAuthKeys: EnvironmentAuthKeys;
+  updateSchedule: UpdateScheduleFormControllerInterface;
+  environmentAuthKeys: AuthKeysFormControllerInterface;
 }
 
 export async function getAllEnvironments(): Promise<Environment[]> {

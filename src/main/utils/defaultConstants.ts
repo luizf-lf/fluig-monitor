@@ -10,6 +10,9 @@ if (isDevelopment) {
   require('dotenv').config();
 }
 
+export const logStringFormat =
+  '[{y}-{m}-{d} {h}:{i}:{s}.{ms} {z}] [{level}] [{processType}] {text}';
+
 export const dbPath = isDevelopment
   ? path.resolve(__dirname, '../../../', 'prisma', 'app.db')
   : path.resolve(getAppDataFolder(), 'app.db');

@@ -12,7 +12,7 @@ export default class UpdateScheduleController {
 
   async new(data: UpdateScheduleControllerInterface): Promise<UpdateSchedule> {
     log.info(
-      '[main] UpdateScheduleController: Creating a new environment update schedule.'
+      'UpdateScheduleController: Creating a new environment update schedule.'
     );
     this.created = await prismaClient.updateSchedule.create({
       data,

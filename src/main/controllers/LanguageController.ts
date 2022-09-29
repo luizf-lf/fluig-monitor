@@ -13,9 +13,7 @@ export default class LanguageController {
   }
 
   async get(): Promise<string> {
-    log.info(
-      '[main] LanguageController: Querying saved language from database'
-    );
+    log.info('LanguageController: Querying saved language from database');
     const language = await prismaClient.appSetting.findFirst({
       where: { settingId: 'APP_LANGUAGE' },
     });
@@ -29,9 +27,7 @@ export default class LanguageController {
   }
 
   async update(language: string): Promise<AppSetting> {
-    log.info(
-      '[main] LanguageController: Updating app language on the database'
-    );
+    log.info('LanguageController: Updating app language on the database');
 
     this.updated = await prismaClient.appSetting.update({
       where: {

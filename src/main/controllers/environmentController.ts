@@ -26,9 +26,7 @@ export default class EnvironmentController {
   }
 
   async getAll(includeMonitorHistory = false): Promise<Environment[]> {
-    log.info(
-      '[main] EnvironmentController: Querying all environments from database.'
-    );
+    log.info('EnvironmentController: Querying all environments from database.');
     this.environments = await prismaClient.environment.findMany({
       where: {
         logDeleted: false,
@@ -45,7 +43,7 @@ export default class EnvironmentController {
 
   async getById(id: number): Promise<Environment | null> {
     log.info(
-      '[main] EnvironmentController: Querying environment from database with the id',
+      'EnvironmentController: Querying environment from database with the id',
       id
     );
     this.found = await prismaClient.environment.findUnique({
@@ -58,9 +56,7 @@ export default class EnvironmentController {
   }
 
   async new(data: EnvironmentControllerInterface): Promise<Environment> {
-    log.info(
-      '[main] EnvironmentController: Saving a new environment on the database'
-    );
+    log.info('EnvironmentController: Saving a new environment on the database');
     this.created = await prismaClient.environment.create({
       data,
     });
@@ -71,10 +67,7 @@ export default class EnvironmentController {
   async update(
     data: EnvironmentUpdateControllerInterface
   ): Promise<Environment> {
-    log.info(
-      '[main] EnvironmentController: Updating environment with id',
-      data.id
-    );
+    log.info('EnvironmentController: Updating environment with id', data.id);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updatedData: any = {};
 
@@ -96,7 +89,7 @@ export default class EnvironmentController {
   }
 
   async delete(id: number): Promise<Environment> {
-    log.info('[main] Deleting environment with id', id, 'and related fields');
+    log.info('Deleting environment with id', id, 'and related fields');
     this.deleted = await prismaClient.environment.update({
       where: {
         id,
