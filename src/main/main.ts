@@ -100,7 +100,7 @@ const createWindow = async () => {
 
   i18n.on('languageChanged', async (lang: string) => {
     log.info(
-      'Language changed, rebuilding menu and sending signal to renderer'
+      'i18n: Language changed, rebuilding menu and sending signal to renderer'
     );
     // if the buildMenu function is not called, the default electron dev menu will be rendered
     menuBuilder.buildMenu();

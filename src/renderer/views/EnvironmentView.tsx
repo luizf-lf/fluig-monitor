@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -7,26 +8,36 @@ import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams
 import serverImg from '../assets/img/server.png';
 import '../assets/styles/components/CenterView.scss';
 
-export default async function EnvironmentView(): Promise<JSX.Element> {
+export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();
-  let environmentView = null;
   const { environmentId }: EnvironmentViewParams = useParams();
+  const [environmentView, setEnvironmentView] = useState(<></>);
+  // const [environmentById, setEnvironmentById] = useState();
+  const [defaultMessage, setDefaultMessage] = useState(<></>);
 
-  // if a environment is selected, get it's data from the database, and display the data (to be implemented)
-  if (typeof environmentId !== 'undefined') {
-    const environmentData = await getEnvironmentById(environmentId);
-    if (environmentData) {
-      environmentView = <div>{environmentData.name}</div>; // it should receive a component containing all rendered data later on
+  useEffect(() => {
+    let environmentData = null;
+
+    async function getEnvironmentData() {
+      // if a environment is selected, get it's data from the database, and display the data (to be implemented)
+      environmentData = await getEnvironmentById(Number(environmentId));
+      if (environmentData) {
+        setEnvironmentView(<div>{environmentData.name}</div>); // it should receive a component containing all rendered data later on
+      }
+
+      // shows a default message if no server is selected
+      setDefaultMessage(
+        <div className="empty-server-view">
+          <img src={serverImg} alt="Server" className="icon" />
+          <span>{t('views.EnvironmentView.empty')}</span>
+        </div>
+      );
     }
-  }
 
-  // shows a default message if no server is selected
-  const defaultMsg = (
-    <div className="empty-server-view">
-      <img src={serverImg} alt="Server" className="icon" />
-      <span>{t('views.EnvironmentView.empty')}</span>
-    </div>
-  );
+    if (typeof environmentId !== 'undefined') {
+      getEnvironmentData();
+    }
+  }, [environmentId, t]);
 
   return (
     <motion.div
@@ -36,7 +47,7 @@ export default async function EnvironmentView(): Promise<JSX.Element> {
       exit="exit"
       id="centerViewContainer"
     >
-      {environmentView === null ? defaultMsg : environmentView}
+      {environmentView === null ? defaultMessage : environmentView}
     </motion.div>
   );
 }

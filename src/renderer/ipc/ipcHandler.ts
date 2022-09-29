@@ -16,7 +16,7 @@ export async function getAllEnvironments(): Promise<Environment[]> {
   return environments;
 }
 
-export async function getEnvironmentById(id: string): Promise<Environment> {
+export async function getEnvironmentById(id: number): Promise<Environment> {
   if (!id) {
     throw new Error('id is required');
   }

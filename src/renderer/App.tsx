@@ -25,7 +25,6 @@ export default function App() {
   log.transports.file.fileName = isDevelopment ? 'app.dev.log' : 'app.log';
   log.transports.file.format = logStringFormat;
 
-  log.info('Renderer process started');
   // the useLocation hook is used to render a specific component per route
   const location = useLocation();
 

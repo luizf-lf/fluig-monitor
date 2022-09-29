@@ -23,10 +23,10 @@ import { useNotifications } from '../contexts/NotificationsContext';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { EnvironmentControllerInterface } from '../../common/interfaces/EnvironmentControllerInterface';
 
-async function EditEnvironmentSettingsView(): Promise<JSX.Element> {
+function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId }: EnvironmentViewParams = useParams();
   const environmentData: EnvironmentControllerInterface =
-    await getEnvironmentById(environmentId);
+    await getEnvironmentById(Number(environmentId));
 
   const [name, setName] = useState(environmentData.name);
   const [domainUrl, setDomainUrl] = useState(environmentData.baseUrl);
