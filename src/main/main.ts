@@ -8,7 +8,7 @@ import { app, BrowserWindow, shell, screen, ipcMain } from 'electron';
 
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { resolveHtmlPath } from './util';
+import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import i18n from '../common/i18n/i18n';
 import {
   isDevelopment,
@@ -24,6 +24,7 @@ import { CreateEnvironmentProps } from '../renderer/ipc/ipcHandler';
 import AuthKeysController from './controllers/AuthKeysController';
 
 import { version } from '../../package.json';
+import rotateLogFile from './utils/logRotation';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -199,6 +200,8 @@ app.on('window-all-closed', async () => {
 app
   .whenReady()
   .then(() => {
+    rotateLogFile();
+
     log.info(' ');
     log.info(`Fluig Monitor - v${version}`);
     log.info(
