@@ -67,6 +67,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       },
     };
 
+    // TODO: Update form validator
     log.info('CreateEnvironmentView: validating form data.');
     // const { isValid, message } = formUtils.validate(formData);
     const message = '';

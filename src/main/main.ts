@@ -176,7 +176,7 @@ ipcMain.handle(
     });
     const createdAuthKeys = await new AuthKeysController().new({
       environmentId: createdEnvironment.id,
-      payload: JSON.stringify(environmentAuthKeys),
+      payload: JSON.stringify(environmentAuthKeys.payload),
       hash: 'json',
     });
 
