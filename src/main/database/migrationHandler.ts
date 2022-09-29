@@ -9,10 +9,10 @@ import {
   extraResourcesPath,
   isDevelopment,
   latestMigration,
-  Migration,
-} from '../utils/defaultConstants';
+} from '../../common/utils/globalConstants';
 import prismaClient from './prismaContext';
 import seedDb from './seedDb';
+import { Migration } from '../interfaces/MigrationInterface';
 
 export default async function runDbMigrations() {
   let needsMigration = false;

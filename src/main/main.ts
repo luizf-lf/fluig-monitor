@@ -10,8 +10,11 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import i18n from '../common/i18n/i18n';
-import { isDevelopment, logStringFormat } from './utils/defaultConstants';
-import getAppDataFolder from './utils/fsUtils';
+import {
+  isDevelopment,
+  logStringFormat,
+} from '../common/utils/globalConstants';
+// import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
 import EnvironmentController from './controllers/EnvironmentController';
@@ -22,14 +25,12 @@ import AuthKeysController from './controllers/AuthKeysController';
 
 import { version } from '../../package.json';
 
-log.transports.file.resolvePath = () =>
-  path.resolve(
-    getAppDataFolder(),
-    'logs',
-    isDevelopment ? 'app.dev.log' : 'app.log'
-  );
+// log.transports.file.resolvePath = () =>
+//   path.resolve(getAppDataFolder(), 'logs');
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
+log.transports.file.fileName = isDevelopment ? 'app.dev.log' : 'app.log';
+log.transports.file.maxSize = 0; // disable default electron log rotation
 
 let mainWindow: BrowserWindow | null = null;
 

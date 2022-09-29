@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 import path from 'path';
 import { app } from 'electron';
-import getAppDataFolder from './fsUtils';
+import getAppDataFolder from '../../main/utils/fsUtils';
 
 export const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -70,14 +70,3 @@ export const qePath = path.join(
   extraResourcesPath,
   platformToExecutables[platformName].queryEngine
 );
-
-export interface Migration {
-  id: string;
-  checksum: string;
-  finished_at: string;
-  migration_name: string;
-  logs: string;
-  rolled_back_at: string;
-  started_at: string;
-  applied_steps_count: string;
-}
