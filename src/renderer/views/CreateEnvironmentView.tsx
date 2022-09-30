@@ -67,7 +67,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       },
     };
 
-    const envFormValidator = new EnvironmentFormValidator(formData);
+    const envFormValidator = new EnvironmentFormValidator().validate(formData);
 
     const { isValid, lastMessage } = envFormValidator;
 

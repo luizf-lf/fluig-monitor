@@ -151,18 +151,30 @@ ipcMain.on('getLanguage', async (event) => {
   event.returnValue = await new LanguageController().get();
 });
 
-ipcMain.handle('getEnvironmentById', async (event, id: number) => {
-  log.info('IPC Listener: Recovering environment by id');
-  event.returnValue = await new EnvironmentController().getById(id);
-});
+ipcMain.handle(
+  'getEnvironmentById',
+  async (
+    _event: Electron.IpcMainInvokeEvent,
+    id: number,
+    includeRelatedData: boolean
+  ) => {
+    log.info('IPC Handler: Recovering environment by id');
+    const environment = await new EnvironmentController().getById(
+      id,
+      includeRelatedData
+    );
+
+    return environment;
+  }
+);
 
 ipcMain.handle(
   'createEnvironment',
   async (
-    event,
+    _event: Electron.IpcMainInvokeEvent,
     { environment, updateSchedule, environmentAuthKeys }: CreateEnvironmentProps
   ) => {
-    log.info('IPC Listener: Saving environment');
+    log.info('IPC Handler: Saving environment');
 
     const createdEnvironment = await new EnvironmentController().new(
       environment
@@ -180,11 +192,24 @@ ipcMain.handle(
       hash: 'json',
     });
 
-    event.returnValue = {
+    return {
       createdEnvironment,
       createdUpdateSchedule,
       createdAuthKeys,
     };
+  }
+);
+
+ipcMain.handle(
+  'updateEnvironment',
+  async (
+    _event: Electron.IpcMainInvokeEvent,
+    id: number,
+    { environment, updateSchedule, environmentAuthKeys }: CreateEnvironmentProps
+  ) => {
+    log.info('IPC Handler: Updating environment');
+
+    // TODO: Finish implementation
   }
 );
 

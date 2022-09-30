@@ -4,6 +4,10 @@ import log from 'electron-log';
 import { isDevelopment } from '../../common/utils/globalConstants';
 import getAppDataFolder from './fsUtils';
 
+/**
+ * Archives the app log file on a daily basis with a custom name, preventing it from being too large.
+ * @since 0.1.0
+ */
 export default function rotateLogFile(): void {
   const todayDateFormat = new Date()
     .toLocaleDateString('pt')

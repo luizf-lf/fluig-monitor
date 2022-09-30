@@ -4,6 +4,7 @@ import * as fs from 'fs';
 
 const appData = process.env.APPDATA;
 
+// TODO: Clear all log files on the log folder
 console.log('🧹 Starting log file cleanup');
 if (appData) {
   const logPath = path.resolve(appData, 'fluig-monitor', 'logs', 'app.dev.log');

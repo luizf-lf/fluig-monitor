@@ -2,6 +2,7 @@ import log from 'electron-log';
 import {
   EnvironmentControllerInterface,
   EnvironmentUpdateControllerInterface,
+  EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
 import { Environment } from '../generated/client';
@@ -41,14 +42,23 @@ export default class EnvironmentController {
     return this.environments;
   }
 
-  async getById(id: number): Promise<Environment | null> {
+  async getById(
+    id: number,
+    includeRelatedData = false
+  ): Promise<Environment | EnvironmentWithRelatedData | null> {
     log.info(
       'EnvironmentController: Querying environment from database with the id',
-      id
+      id,
+      includeRelatedData === true ? 'with related data.' : ''
     );
     this.found = await prismaClient.environment.findUnique({
       where: {
         id,
+      },
+      include: {
+        updateScheduleId: includeRelatedData,
+        oAuthKeysId: includeRelatedData,
+        monitorHistory: includeRelatedData,
       },
     });
 

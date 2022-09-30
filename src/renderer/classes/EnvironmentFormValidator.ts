@@ -1,4 +1,5 @@
 import log from 'electron-log';
+import FormValidator from './FormValidator';
 
 interface EnvironmentFormData {
   name: string;
@@ -18,21 +19,9 @@ interface EnvironmentFormData {
   };
 }
 
-export default class EnvironmentFormValidator {
-  /**
-   * Last helper message from the validator
-   */
-  lastMessage: string;
-
-  /**
-   * If the form is valid
-   */
-  isValid: boolean;
-
-  constructor(formData: EnvironmentFormData) {
+export default class EnvironmentFormValidator extends FormValidator {
+  validate(formData: EnvironmentFormData) {
     log.info('EnvironmentFormValidator: Validating form data');
-    this.isValid = false;
-    this.lastMessage = 'Form not properly validated';
 
     // TODO: Implement message id's for i18n instead of fixed messages
     if (formData) {
@@ -54,5 +43,7 @@ export default class EnvironmentFormValidator {
         this.isValid = true;
       }
     }
+
+    return { isValid: this.isValid, lastMessage: this.lastMessage };
   }
 }
