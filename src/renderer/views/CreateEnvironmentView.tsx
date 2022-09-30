@@ -19,7 +19,7 @@ import { createEnvironment } from '../ipc/ipcHandler';
 import testConnection from '../services/testConnection';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
-import formUtils from '../utils/formUtils';
+import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -67,11 +67,9 @@ export default function CreateEnvironmentView(): JSX.Element {
       },
     };
 
-    // TODO: Update form validator
-    log.info('CreateEnvironmentView: validating form data.');
-    // const { isValid, message } = formUtils.validate(formData);
-    const message = '';
-    const isValid = true;
+    const envFormValidator = new EnvironmentFormValidator(formData);
+
+    const { isValid, lastMessage } = envFormValidator;
 
     if (isValid) {
       log.info('CreateEnvironmentView: Form is valid, creating environment.');
@@ -104,7 +102,11 @@ export default function CreateEnvironmentView(): JSX.Element {
         setValidationMessage(<Redirect to="/" />);
       }, 3000);
     } else {
-      createShortNotification({ id: Date.now(), type: 'error', message });
+      createShortNotification({
+        id: Date.now(),
+        type: 'error',
+        message: lastMessage,
+      });
     }
   }
 
