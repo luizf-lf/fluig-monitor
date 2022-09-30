@@ -2,7 +2,9 @@
 
 - Implemented database structure with Prisma ORM
 - Migrated data interfaces on the front end
-- Segregated main, renderer and common artifacts
+- Separated main, renderer and common project files
+- Use of controller classes implemented
+- Daily log rotation implemented
 
 # 0.0.12
 
