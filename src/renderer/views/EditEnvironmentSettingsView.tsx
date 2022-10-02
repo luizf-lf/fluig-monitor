@@ -70,7 +70,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
 
   useEffect(() => {
     if (environmentData.id) {
-      // const oAuthKeys = decodeKeys(oAuthKeys) // TODO Implement
+      // const oAuthKeys = decodeKeys(oAuthKeys) // TODO Implement auth keys encode/decode
       const oAuthKeys = JSON.parse(
         JSON.parse(environmentData.oAuthKeysId.payload)
       );
@@ -118,6 +118,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
         const result = await testConnection(domainUrl, auth);
 
         if (typeof result !== 'undefined') {
+          log.info('Test connection failed with status', result.status);
           if (result.status !== 200) {
             setTestMessage(
               <span className="info-blip has-warning">
@@ -126,6 +127,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               </span>
             );
           } else {
+            log.info('Test connection done successfully (', result.status, ')');
             setTestMessage(
               <span className="info-blip has-success">
                 <FiCheck /> Conexão Ok
@@ -133,6 +135,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
             );
           }
         } else {
+          log.info('Test connection failed (server may be unavailable)');
           setTestMessage(
             <span className="info-blip has-error">
               <FiAlertTriangle /> Erro de conexão. Verifique a URL de domínio e

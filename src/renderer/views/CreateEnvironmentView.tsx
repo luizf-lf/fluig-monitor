@@ -138,6 +138,7 @@ export default function CreateEnvironmentView(): JSX.Element {
 
         if (typeof result !== 'undefined') {
           if (result.status !== 200) {
+            log.info('Test connection failed with status', result.status);
             setTestMessage(
               <span className="info-blip has-warning">
                 <FiAlertCircle />{' '}
@@ -146,6 +147,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               </span>
             );
           } else {
+            log.info('Test connection done successfully (', result.status, ')');
             setTestMessage(
               <span className="info-blip has-success">
                 <FiCheck /> {t('views.CreateEnvironmentView.connectionOk')}
@@ -153,6 +155,7 @@ export default function CreateEnvironmentView(): JSX.Element {
             );
           }
         } else {
+          log.info('Test connection failed (server may be unavailable)');
           setTestMessage(
             <span className="info-blip has-error">
               <FiAlertTriangle />{' '}
