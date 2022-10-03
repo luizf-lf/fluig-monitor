@@ -97,10 +97,8 @@ export default function CreateEnvironmentView(): JSX.Element {
         message: t('views.CreateEnvironmentView.createdSuccessfully'),
       });
 
-      setTimeout(() => {
-        updateEnvironmentList();
-        setValidationMessage(<Redirect to="/" />);
-      }, 3000);
+      updateEnvironmentList();
+      setValidationMessage(<Redirect to="/" />);
     } else {
       createShortNotification({
         id: Date.now(),

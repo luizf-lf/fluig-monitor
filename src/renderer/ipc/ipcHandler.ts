@@ -1,12 +1,18 @@
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
-import { UpdateScheduleFormControllerInterface } from '../../common/interfaces/UpdateScheduleControllerInterface';
+import {
+  UpdateScheduleControllerInterface,
+  UpdateScheduleFormControllerInterface,
+} from '../../common/interfaces/UpdateScheduleControllerInterface';
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentUpdateControllerInterface,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
-import { AuthKeysFormControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
+import {
+  AuthKeysControllerInterface,
+  AuthKeysFormControllerInterface,
+} from '../../common/interfaces/AuthKeysControllerInterface';
 import { Environment } from '../../main/generated/client';
 
 export interface CreateEnvironmentProps {
@@ -59,12 +65,18 @@ export async function createEnvironment({
 }
 
 export async function updateEnvironment(
-  environment: EnvironmentUpdateControllerInterface
+  environment: EnvironmentUpdateControllerInterface,
+  updateSchedule: UpdateScheduleControllerInterface,
+  authKeys: AuthKeysControllerInterface
 ): Promise<Environment> {
   log.info('IPC Invoker: Requesting an environment update');
-  const updatedEnvironment = await ipcRenderer.invoke('updateEnvironment', {
+
+  const updatedEnvironment = await ipcRenderer.invoke(
+    'updateEnvironment',
     environment,
-  });
+    updateSchedule,
+    authKeys
+  );
 
   return updatedEnvironment;
 }

@@ -26,6 +26,8 @@ import AuthKeysController from './controllers/AuthKeysController';
 import { version } from '../../package.json';
 import rotateLogFile from './utils/logRotation';
 import { EnvironmentUpdateControllerInterface } from '../common/interfaces/EnvironmentControllerInterface';
+import { UpdateScheduleControllerInterface } from '../common/interfaces/UpdateScheduleControllerInterface';
+import { AuthKeysControllerInterface } from '../common/interfaces/AuthKeysControllerInterface';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -189,15 +191,11 @@ ipcMain.handle(
     });
     const createdAuthKeys = await new AuthKeysController().new({
       environmentId: createdEnvironment.id,
-      payload: JSON.stringify(environmentAuthKeys.payload),
+      payload: environmentAuthKeys.payload,
       hash: 'json',
     });
 
-    return {
-      createdEnvironment,
-      createdUpdateSchedule,
-      createdAuthKeys,
-    };
+    return { createdEnvironment, createdUpdateSchedule, createdAuthKeys };
   }
 );
 
@@ -205,16 +203,21 @@ ipcMain.handle(
   'updateEnvironment',
   async (
     _event: Electron.IpcMainInvokeEvent,
-    environment: EnvironmentUpdateControllerInterface
+    environment: EnvironmentUpdateControllerInterface,
+    updateSchedule: UpdateScheduleControllerInterface,
+    authKeys: AuthKeysControllerInterface
   ) => {
     log.info('IPC Handler: Updating environment');
 
-    // TODO: Update related data (auth keys & update schedule)
     const updatedEnvironment = await new EnvironmentController().update(
       environment
     );
+    const updatedUpdateSchedule = await new UpdateScheduleController().update(
+      updateSchedule
+    );
+    const updatedAuthKeys = await new AuthKeysController().update(authKeys);
 
-    return updatedEnvironment;
+    return { updatedEnvironment, updatedUpdateSchedule, updatedAuthKeys };
   }
 );
 

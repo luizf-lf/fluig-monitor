@@ -6,8 +6,11 @@ import { AuthKeysControllerInterface } from '../../common/interfaces/AuthKeysCon
 export default class AuthKeysController {
   created: EnvironmentAuthKeys | null;
 
+  updated: EnvironmentAuthKeys | null;
+
   constructor() {
     this.created = null;
+    this.updated = null;
   }
 
   async new(data: AuthKeysControllerInterface): Promise<EnvironmentAuthKeys> {
@@ -17,5 +20,20 @@ export default class AuthKeysController {
     });
 
     return this.created;
+  }
+
+  async update(
+    data: AuthKeysControllerInterface
+  ): Promise<EnvironmentAuthKeys> {
+    log.info('AuthKeysController: Updating environment auth keys.');
+
+    this.updated = await prismaClient.environmentAuthKeys.update({
+      where: {
+        id: data.environmentId,
+      },
+      data,
+    });
+
+    return this.updated;
   }
 }

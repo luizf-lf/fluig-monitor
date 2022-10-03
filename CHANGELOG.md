@@ -3,8 +3,10 @@
 - Implemented database structure with Prisma ORM
 - Migrated data interfaces on the front end
 - Separated main, renderer and common project files
-- Use of controller classes implemented
-- Daily log rotation implemented
+- Use of classes implemented
+  - Class based controllers for all database operations
+  - Custom form validator
+- File logging with daily log rotation implemented
 
 # 0.0.12
 

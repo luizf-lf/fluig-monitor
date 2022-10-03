@@ -6,8 +6,11 @@ import { UpdateScheduleControllerInterface } from '../../common/interfaces/Updat
 export default class UpdateScheduleController {
   created: UpdateSchedule | null;
 
+  updated: UpdateSchedule | null;
+
   constructor() {
     this.created = null;
+    this.updated = null;
   }
 
   async new(data: UpdateScheduleControllerInterface): Promise<UpdateSchedule> {
@@ -19,5 +22,22 @@ export default class UpdateScheduleController {
     });
 
     return this.created;
+  }
+
+  async update(
+    data: UpdateScheduleControllerInterface
+  ): Promise<UpdateSchedule> {
+    log.info(
+      'UpdateScheduleController: Updating an environment update schedule.'
+    );
+
+    this.updated = await prismaClient.updateSchedule.update({
+      where: {
+        environmentId: data.environmentId,
+      },
+      data,
+    });
+
+    return this.updated;
   }
 }

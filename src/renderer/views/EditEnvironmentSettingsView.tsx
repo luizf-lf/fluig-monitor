@@ -75,9 +75,10 @@ function EditEnvironmentSettingsView(): JSX.Element {
   useEffect(() => {
     if (environmentData.id) {
       // const oAuthKeys = decodeKeys(oAuthKeys) // TODO Implement auth keys encode/decode
-      const oAuthKeys = JSON.parse(
-        JSON.parse(environmentData.oAuthKeysId.payload)
-      );
+      const oAuthKeys =
+        environmentData.oAuthKeysId.hash === 'json'
+          ? JSON.parse(environmentData.oAuthKeysId.payload)
+          : environmentData.oAuthKeysId.payload;
 
       setName(environmentData.name);
       setDomainUrl(environmentData.baseUrl);
@@ -199,13 +200,27 @@ function EditEnvironmentSettingsView(): JSX.Element {
       'EditEnvironmentSettingsView: Form data is valid, updating environment'
     );
 
-    const result = await updateEnvironment({
-      id: formData.id,
-      baseUrl: formData.baseUrl,
-      kind: formData.kind,
-      name: formData.name,
-      release: 'unknown',
-    });
+    const result = await updateEnvironment(
+      {
+        id: formData.id,
+        baseUrl: formData.baseUrl,
+        kind: formData.kind,
+        name: formData.name,
+        release: 'unknown',
+      },
+      {
+        environmentId: formData.id,
+        frequency: formData.update.frequency,
+        from: formData.update.from,
+        to: formData.update.to,
+        onlyOnWorkDays: formData.update.onlyOnWorkDays,
+      },
+      {
+        environmentId: formData.id,
+        payload: JSON.stringify(formData.auth),
+        hash: 'json',
+      }
+    );
 
     if (!result) {
       createShortNotification({
@@ -221,14 +236,11 @@ function EditEnvironmentSettingsView(): JSX.Element {
     createShortNotification({
       id: Date.now(),
       type: 'success',
-      message:
-        'Ambiente atualizado com sucesso. Redirecionando para a tela inicial.',
+      message: 'Ambiente atualizado com sucesso',
     });
 
-    setTimeout(() => {
-      updateEnvironmentList();
-      setValidationMessage(<Redirect to="/" />);
-    }, 3000);
+    updateEnvironmentList();
+    setValidationMessage(<Redirect to="/" />);
   }
 
   async function confirmDelete() {
@@ -250,8 +262,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       createShortNotification({
         id: Date.now(),
         type: 'success',
-        message:
-          'Ambiente excluído com sucesso. Redirecionando para a tela principal.',
+        message: 'Ambiente excluído com sucesso.',
       });
       setValidationMessage(<Redirect to="/" />);
     }
