@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Redirect, useParams } from 'react-router';
+import log from 'electron-log';
 import {
   FiAlertCircle,
   FiAlertTriangle,
@@ -12,52 +13,39 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import EnvironmentViewParams from '../../interfaces/EnvironmentViewParams';
-import globalContainerVariants from '../../utils/globalContainerVariants';
-import dbHandler from '../../utils/dbHandler';
-import environmentKinds from '../../utils/defaultEnvironmentKinds';
-import updateFrequencies from '../../utils/defaultUpdateFrequencies';
-import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
-import testConnection from '../../services/testConnection';
-import formUtils from '../../utils/formUtils';
+import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
+import globalContainerVariants from '../utils/globalContainerVariants';
+import {
+  deleteEnvironment,
+  getEnvironmentById,
+  updateEnvironment,
+} from '../ipc/ipcHandler';
+import environmentKinds from '../utils/defaultEnvironmentKinds';
+import updateFrequencies from '../utils/defaultUpdateFrequencies';
+import testConnection from '../services/testConnection';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
+import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
+import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 
 function EditEnvironmentSettingsView(): JSX.Element {
-  const { environmentUUID }: EnvironmentViewParams = useParams();
-  const environmentData: EnvironmentDataInterface =
-    dbHandler.environments.getByUUID(environmentUUID);
+  const { environmentId }: EnvironmentViewParams = useParams();
 
-  const [name, setName] = useState(environmentData.name);
-  const [domainUrl, setDomainUrl] = useState(environmentData.baseUrl);
-  const [kind, setKind] = useState(
-    environmentKinds.find((i) => i.value === environmentData.kind)?.value
+  const [environmentData, setEnvironmentData] = useState(
+    {} as EnvironmentWithRelatedData
   );
-  const [consumerKey, setConsumerKey] = useState(
-    environmentData.auth.consumerKey
-  );
-  const [consumerSecret, setConsumerSecret] = useState(
-    environmentData.auth.consumerSecret
-  );
-  const [accessToken, setAccessToken] = useState(
-    environmentData.auth.accessToken
-  );
-  const [tokenSecret, setTokenSecret] = useState(
-    environmentData.auth.tokenSecret
-  );
-  const [updateFrequency, setUpdateFrequency] = useState(
-    updateFrequencies.find((i) => i.value === environmentData.update.frequency)
-      ?.value
-  );
-  const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState(
-    environmentData.update.from
-  );
-  const [updateFrequencyTo, setUpdateFrequencyTo] = useState(
-    environmentData.update.to
-  );
-  const [updateOnWorkDays, setUpdateOnWorkDays] = useState(
-    environmentData.update.onlyOnWorkDays
-  );
+
+  const [name, setName] = useState('');
+  const [domainUrl, setDomainUrl] = useState('');
+  const [kind, setKind] = useState('');
+  const [consumerKey, setConsumerKey] = useState('');
+  const [consumerSecret, setConsumerSecret] = useState('');
+  const [accessToken, setAccessToken] = useState('');
+  const [tokenSecret, setTokenSecret] = useState('');
+  const [updateFrequency, setUpdateFrequency] = useState('');
+  const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState('');
+  const [updateFrequencyTo, setUpdateFrequencyTo] = useState('');
+  const [updateOnWorkDays, setUpdateOnWorkDays] = useState(false);
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
@@ -66,6 +54,45 @@ function EditEnvironmentSettingsView(): JSX.Element {
 
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
+
+  useEffect(() => {
+    async function getEnvironmentData() {
+      const environmentDataById = await getEnvironmentById(
+        Number(environmentId),
+        true
+      );
+
+      if (environmentDataById) {
+        setEnvironmentData(environmentDataById);
+      }
+    }
+
+    if (typeof environmentId !== 'undefined') {
+      getEnvironmentData();
+    }
+  }, [environmentId]);
+
+  useEffect(() => {
+    if (environmentData.id) {
+      // const oAuthKeys = decodeKeys(oAuthKeys) // TODO Implement auth keys encode/decode
+      const oAuthKeys =
+        environmentData.oAuthKeysId.hash === 'json'
+          ? JSON.parse(environmentData.oAuthKeysId.payload)
+          : environmentData.oAuthKeysId.payload;
+
+      setName(environmentData.name);
+      setDomainUrl(environmentData.baseUrl);
+      setKind(environmentData.kind);
+      setConsumerKey(oAuthKeys.consumerKey);
+      setConsumerSecret(oAuthKeys.consumerSecret);
+      setAccessToken(oAuthKeys.accessToken);
+      setTokenSecret(oAuthKeys.tokenSecret);
+      setUpdateFrequency(environmentData.updateScheduleId.frequency);
+      setUpdateFrequencyFrom(environmentData.updateScheduleId.from);
+      setUpdateFrequencyTo(environmentData.updateScheduleId.to);
+      setUpdateOnWorkDays(environmentData.updateScheduleId.onlyOnWorkDays);
+    }
+  }, [environmentData]);
 
   function sendTestConnection() {
     const auth = {
@@ -82,6 +109,10 @@ function EditEnvironmentSettingsView(): JSX.Element {
         accessToken !== '' ||
         tokenSecret !== '')
     ) {
+      log.info(
+        'EditEnvironmentSettingsView: Sending test connection to',
+        domainUrl
+      );
       setTestMessage(
         <span className="info-blip">
           <FiRefreshCw className="rotating" /> Conectando...
@@ -92,6 +123,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
         const result = await testConnection(domainUrl, auth);
 
         if (typeof result !== 'undefined') {
+          log.info('Test connection failed with status', result.status);
           if (result.status !== 200) {
             setTestMessage(
               <span className="info-blip has-warning">
@@ -100,6 +132,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               </span>
             );
           } else {
+            log.info('Test connection done successfully (', result.status, ')');
             setTestMessage(
               <span className="info-blip has-success">
                 <FiCheck /> Conexão Ok
@@ -107,6 +140,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
             );
           }
         } else {
+          log.info('Test connection failed (server may be unavailable)');
           setTestMessage(
             <span className="info-blip has-error">
               <FiAlertTriangle /> Erro de conexão. Verifique a URL de domínio e
@@ -125,10 +159,12 @@ function EditEnvironmentSettingsView(): JSX.Element {
     }
   }
 
-  function handleUpdateData(event: FormEvent) {
+  async function handleUpdateData(event: FormEvent) {
+    log.info('EditEnvironmentSettingsView: Handling form submit');
     event.preventDefault();
 
     const formData = {
+      id: environmentData.id,
       name,
       baseUrl: domainUrl,
       kind: kind ?? '',
@@ -144,34 +180,53 @@ function EditEnvironmentSettingsView(): JSX.Element {
         to: updateFrequencyTo,
         onlyOnWorkDays: updateOnWorkDays,
       },
-      createdAt: environmentData.createdAt,
-      updatedAt: Date.now(),
-      uuid: environmentData.uuid,
     };
 
-    const { isValid, message } = formUtils.validate(formData);
+    const envFormValidator = new EnvironmentFormValidator().validate(formData);
+
+    const { isValid, lastMessage } = envFormValidator;
 
     if (!isValid) {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message,
+        message: lastMessage,
       });
 
       return;
     }
 
-    const result = dbHandler.environments.updateByUUID(
-      environmentUUID,
-      formData
+    log.info(
+      'EditEnvironmentSettingsView: Form data is valid, updating environment'
+    );
+
+    const result = await updateEnvironment(
+      {
+        id: formData.id,
+        baseUrl: formData.baseUrl,
+        kind: formData.kind,
+        name: formData.name,
+        release: 'unknown',
+      },
+      {
+        environmentId: formData.id,
+        frequency: formData.update.frequency,
+        from: formData.update.from,
+        to: formData.update.to,
+        onlyOnWorkDays: formData.update.onlyOnWorkDays,
+      },
+      {
+        environmentId: formData.id,
+        payload: JSON.stringify(formData.auth),
+        hash: 'json',
+      }
     );
 
     if (!result) {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message:
-          'Erro ao atualizar informações do environment, tente novamente.',
+        message: 'Erro ao atualizar informações do ambiente, tente novamente.',
       });
 
       return;
@@ -181,17 +236,14 @@ function EditEnvironmentSettingsView(): JSX.Element {
     createShortNotification({
       id: Date.now(),
       type: 'success',
-      message:
-        'Ambiente atualizado com sucesso. Redirecionando para a tela inicial...',
+      message: 'Ambiente atualizado com sucesso',
     });
 
-    setTimeout(() => {
-      updateEnvironmentList();
-      setValidationMessage(<Redirect to="/" />);
-    }, 3000);
+    updateEnvironmentList();
+    setValidationMessage(<Redirect to="/" />);
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
     if (!confirmBtnClicked) {
       const timeout = 5000;
       setConfirmBtnClicked(true);
@@ -206,16 +258,13 @@ function EditEnvironmentSettingsView(): JSX.Element {
       setTimeout(() => setConfirmBtnClicked(false), timeout);
     } else {
       setActionButtonsDisabled(true);
+      await deleteEnvironment(Number(environmentId));
       createShortNotification({
         id: Date.now(),
         type: 'success',
-        message:
-          'Ambiente excluído com sucesso. Redirecionando para a tela principal...',
+        message: 'Ambiente excluído com sucesso.',
       });
-      setTimeout(() => {
-        setValidationMessage(<Redirect to="/" />);
-        dbHandler.environments.deleteByUUID(environmentUUID);
-      }, 3000);
+      setValidationMessage(<Redirect to="/" />);
     }
   }
 

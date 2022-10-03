@@ -1,17 +1,13 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
-import dbHandler from '../../utils/dbHandler';
-
-// const EnvironmentListContext = createContext(dbHandler.environments.getAll());
-
-// export default EnvironmentListContext;
+import { Environment } from '../../main/generated/client';
+import { getAllEnvironments } from '../ipc/ipcHandler';
 
 interface EnvironmentListContextProviderProps {
   children: ReactNode;
 }
 
 interface EnvironmentListContextData {
-  environmentList: EnvironmentDataInterface[];
+  environmentList: Environment[];
   updateEnvironmentList: () => void;
 }
 
@@ -22,12 +18,10 @@ export const EnvironmentListContext = createContext(
 export function EnvironmentListContextProvider({
   children,
 }: EnvironmentListContextProviderProps) {
-  const [environmentList, setEnvironmentList] = useState(
-    dbHandler.environments.getAll()
-  );
+  const [environmentList, setEnvironmentList] = useState([] as Environment[]);
 
-  function updateEnvironmentList() {
-    setEnvironmentList(dbHandler.environments.getAll());
+  async function updateEnvironmentList() {
+    setEnvironmentList(await getAllEnvironments());
   }
 
   return (

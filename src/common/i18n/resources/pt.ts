@@ -25,8 +25,7 @@ const pt = {
         'Selecione o ambiente acima ou utilize o botão "Novo" para criar um novo ambiente.',
     },
     CreateEnvironmentView: {
-      createdSuccessfully:
-        'Ambiente cadastrado com sucesso. Redirecionando para a tela inicial...',
+      createdSuccessfully: 'Ambiente cadastrado com sucesso.',
       connecting: 'Conectando ...',
       connectionError: 'Erro na conexão: ',
       connectionOk: 'Conexão Ok',

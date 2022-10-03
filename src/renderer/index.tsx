@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { I18nextProvider } from 'react-i18next';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
-import i18n from '../i18n/i18n';
+import i18n from '../common/i18n/i18n';
 
 // listens for the custom 'languageChanged' event from main, triggering the language change on the renderer
 ipcRenderer.on(

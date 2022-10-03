@@ -9,21 +9,19 @@ import {
   FiRefreshCw,
   FiWifi,
 } from 'react-icons/fi';
-import { v4 as uuidv4 } from 'uuid';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import log from 'electron-log';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
-import dbHandler from '../../utils/dbHandler';
-import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
-import testConnection from '../../services/testConnection';
-import globalContainerVariants from '../../utils/globalContainerVariants';
+import { createEnvironment } from '../ipc/ipcHandler';
+import testConnection from '../services/testConnection';
+import globalContainerVariants from '../utils/globalContainerVariants';
+import updateFrequencies from '../utils/defaultUpdateFrequencies';
+import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 
-import updateFrequencies from '../../utils/defaultUpdateFrequencies';
-import formUtils from '../../utils/formUtils';
-
-export default function CreateEnvironmentView() {
+export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
   const [domainUrl, setDomainUrl] = useState('');
   const [kind, setKind] = useState('PROD');
@@ -47,10 +45,11 @@ export default function CreateEnvironmentView() {
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
 
-  function handleSubmit(event: FormEvent) {
+  async function handleSubmit(event: FormEvent) {
+    log.info('CreateEnvironmentView: handling form submit.');
     event.preventDefault();
 
-    const formData: EnvironmentDataInterface = {
+    const formData = {
       name,
       baseUrl: domainUrl,
       kind,
@@ -66,16 +65,31 @@ export default function CreateEnvironmentView() {
         to: updateFrequencyTo,
         onlyOnWorkDays: updateOnWorkDays,
       },
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-      uuid: uuidv4(),
     };
 
-    const { isValid, message } = formUtils.validate(formData);
+    const envFormValidator = new EnvironmentFormValidator().validate(formData);
+
+    const { isValid, lastMessage } = envFormValidator;
 
     if (isValid) {
-      dbHandler.environments.saveNew(formData);
+      log.info('CreateEnvironmentView: Form is valid, creating environment.');
+      await createEnvironment({
+        environment: {
+          baseUrl: formData.baseUrl,
+          kind: formData.kind,
+          name: formData.name,
+          release: 'unknown',
+        },
+        updateSchedule: formData.update,
+        environmentAuthKeys: {
+          payload: JSON.stringify(formData.auth),
+          hash: 'json',
+        },
+      });
 
+      log.info(
+        'CreateEnvironmentView: Environment created, redirecting to home view'
+      );
       setActionButtonsDisabled(true);
       createShortNotification({
         id: Date.now(),
@@ -83,12 +97,14 @@ export default function CreateEnvironmentView() {
         message: t('views.CreateEnvironmentView.createdSuccessfully'),
       });
 
-      setTimeout(() => {
-        updateEnvironmentList();
-        setValidationMessage(<Redirect to="/" />);
-      }, 3000);
+      updateEnvironmentList();
+      setValidationMessage(<Redirect to="/" />);
     } else {
-      createShortNotification({ id: Date.now(), type: 'error', message });
+      createShortNotification({
+        id: Date.now(),
+        type: 'error',
+        message: lastMessage,
+      });
     }
   }
 
@@ -107,6 +123,7 @@ export default function CreateEnvironmentView() {
         accessToken !== '' ||
         tokenSecret !== '')
     ) {
+      log.info('CreateEnvironmentView: Sending test connection to', domainUrl);
       setTestMessage(
         <span className="info-blip">
           <FiRefreshCw className="rotating" />{' '}
@@ -119,6 +136,7 @@ export default function CreateEnvironmentView() {
 
         if (typeof result !== 'undefined') {
           if (result.status !== 200) {
+            log.info('Test connection failed with status', result.status);
             setTestMessage(
               <span className="info-blip has-warning">
                 <FiAlertCircle />{' '}
@@ -127,6 +145,7 @@ export default function CreateEnvironmentView() {
               </span>
             );
           } else {
+            log.info('Test connection done successfully (', result.status, ')');
             setTestMessage(
               <span className="info-blip has-success">
                 <FiCheck /> {t('views.CreateEnvironmentView.connectionOk')}
@@ -134,6 +153,7 @@ export default function CreateEnvironmentView() {
             );
           }
         } else {
+          log.info('Test connection failed (server may be unavailable)');
           setTestMessage(
             <span className="info-blip has-error">
               <FiAlertTriangle />{' '}

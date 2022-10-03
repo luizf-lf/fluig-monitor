@@ -6,7 +6,7 @@ import {
   app,
 } from 'electron';
 import { t } from 'i18next';
-import i18n from '../i18n/i18n';
+import i18n from '../common/i18n/i18n';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;

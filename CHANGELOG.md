@@ -1,4 +1,14 @@
-# 0.0.12-rc
+# 0.1.0
+
+- Implemented database structure with Prisma ORM
+- Migrated data interfaces on the front end
+- Separated main, renderer and common project files
+- Use of classes implemented
+  - Class based controllers for all database operations
+  - Custom form validator
+- File logging with daily log rotation implemented
+
+# 0.0.12
 
 - Updated navbar components
 - Removed profile picture

@@ -1,3 +1,3 @@
 export default interface EnvironmentViewParams {
-  environmentUUID: string;
+  environmentId: string;
 }

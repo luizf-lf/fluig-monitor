@@ -6,15 +6,15 @@ import { FiChevronLeft, FiSettings, FiStar } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import SmallTag from '../components/SmallTag';
 
-import EnvironmentDataInterface from '../../interfaces/EnvironmentDataInterface';
 import CreateEnvironmentButton from '../components/CreateEnvironmentButton';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 
-import globalContainerVariants from '../../utils/globalContainerVariants';
+import globalContainerVariants from '../utils/globalContainerVariants';
 import '../assets/styles/Views/HomeAmbientListView.scss';
 import graphPlaceholder from '../assets/img/graphPlaceholder.png'; // to be removed when the mini graph is implemented
 import colorServer from '../assets/svg/color-server.svg';
+import { Environment } from '../../main/generated/client';
 
 function HomeAmbientListView() {
   const { environmentList } = useEnvironmentList();
@@ -57,12 +57,12 @@ function HomeAmbientListView() {
         <CreateEnvironmentButton isExpanded />
         {environmentList.length === 0
           ? createAmbientHelper
-          : environmentList.map((environment: EnvironmentDataInterface) => {
+          : environmentList.map((environment: Environment) => {
               return (
-                <div className="ambientCard" key={environment.uuid}>
+                <div className="ambientCard" key={environment.id}>
                   <div className="heading">
                     <div className="ambientName">
-                      <Link to={`/environment/${environment.uuid}`}>
+                      <Link to={`/environment/${environment.id}`}>
                         <h3>{environment.name}</h3>
                         <small>{environment.baseUrl}</small>
                       </Link>
@@ -71,7 +71,7 @@ function HomeAmbientListView() {
                       <button type="button" onClick={showTempMessage}>
                         <FiStar />
                       </button>
-                      <Link to={`/environment/${environment.uuid}/edit`}>
+                      <Link to={`/environment/${environment.id}/edit`}>
                         <FiSettings />
                       </Link>
                     </div>

@@ -1,5 +1,6 @@
 import { Switch, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import log from 'electron-log';
 
 // views / components
 import EnvironmentView from './views/EnvironmentView';
@@ -15,8 +16,15 @@ import './assets/styles/utilities.scss';
 // contexts
 import { EnvironmentListContextProvider } from './contexts/EnvironmentListContext';
 import { NotificationsContextProvider } from './contexts/NotificationsContext';
+import {
+  isDevelopment,
+  logStringFormat,
+} from '../common/utils/globalConstants';
 
 export default function App() {
+  log.transports.file.fileName = isDevelopment ? 'app.dev.log' : 'app.log';
+  log.transports.file.format = logStringFormat;
+
   // the useLocation hook is used to render a specific component per route
   const location = useLocation();
 
@@ -35,11 +43,11 @@ export default function App() {
                 />
                 <Route
                   exact
-                  path="/environment/:environmentUUID"
+                  path="/environment/:environmentId"
                   component={EnvironmentView}
                 />
                 <Route
-                  path="/environment/:environmentUUID/edit"
+                  path="/environment/:environmentId/edit"
                   component={EditEnvironmentSettingsView}
                 />
               </Switch>

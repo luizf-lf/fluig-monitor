@@ -25,8 +25,7 @@ const en = {
         'Select the environment above or use the "New" button to create a new environment.',
     },
     CreateEnvironmentView: {
-      createdSuccessfully:
-        'Environment created successfully. Redirecting to main page...',
+      createdSuccessfully: 'Environment created successfully',
       connecting: 'Connecting ...',
       connectionError: 'Connection Error: ',
       connectionOk: 'Connection Ok',

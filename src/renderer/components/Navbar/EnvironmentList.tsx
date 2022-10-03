@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion';
-import EnvironmentDataInterface from '../../../interfaces/EnvironmentDataInterface';
+import { Environment } from '../../../main/generated/client';
 import EnvironmentListItem from './EnvironmentListItem';
 
 type EnvironmentListProps = {
-  environmentList: EnvironmentDataInterface[];
+  environmentList: Environment[];
 };
 
 function EnvironmentList({ environmentList }: EnvironmentListProps) {
@@ -11,36 +11,34 @@ function EnvironmentList({ environmentList }: EnvironmentListProps) {
     <></>
   ) : (
     <>
-      {environmentList.map(
-        (environment: EnvironmentDataInterface, idx: number) => {
-          return (
-            <motion.div
-              initial={{ opacity: 0, y: '-100px' }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                transition: {
-                  ease: 'easeInOut',
-                  duration: 0.5,
-                  delay: idx * 0.2,
-                },
-              }}
-              exit={{
-                opacity: 0,
-                y: '-100px',
-                transition: { ease: 'easeInOut', duration: 0.3 },
-              }}
-              key={environment.uuid}
-            >
-              <EnvironmentListItem
-                data={environment}
-                key={environment.uuid}
-                isExpanded={idx === 0}
-              />
-            </motion.div>
-          );
-        }
-      )}
+      {environmentList.map((environment: Environment, idx: number) => {
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: '-100px' }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              transition: {
+                ease: 'easeInOut',
+                duration: 0.5,
+                delay: idx * 0.2,
+              },
+            }}
+            exit={{
+              opacity: 0,
+              y: '-100px',
+              transition: { ease: 'easeInOut', duration: 0.3 },
+            }}
+            key={environment.id}
+          >
+            <EnvironmentListItem
+              data={environment}
+              key={environment.id}
+              isExpanded={idx === 0}
+            />
+          </motion.div>
+        );
+      })}
     </>
   );
 }
