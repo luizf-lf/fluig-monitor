@@ -5,7 +5,7 @@ import {
   UpdateSchedule,
 } from '../../main/generated/client';
 
-export interface EnvironmentControllerInterface {
+export interface EnvironmentCreateControllerInterface {
   name: string;
   release: string;
   baseUrl: string;
@@ -13,13 +13,9 @@ export interface EnvironmentControllerInterface {
   logDeleted?: boolean;
 }
 
-export interface EnvironmentUpdateControllerInterface {
+export interface EnvironmentUpdateControllerInterface
+  extends EnvironmentCreateControllerInterface {
   id: number;
-  name?: string;
-  release?: string;
-  baseUrl?: string;
-  kind?: string;
-  logDeleted?: boolean;
 }
 
 export interface EnvironmentWithRelatedData extends Environment {

@@ -2,16 +2,20 @@ import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import { UpdateScheduleFormControllerInterface } from '../../common/interfaces/UpdateScheduleControllerInterface';
 import {
-  EnvironmentControllerInterface,
+  EnvironmentCreateControllerInterface,
+  EnvironmentUpdateControllerInterface,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import { AuthKeysFormControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
 import { Environment } from '../../main/generated/client';
 
 export interface CreateEnvironmentProps {
-  environment: EnvironmentControllerInterface;
+  environment: EnvironmentCreateControllerInterface;
   updateSchedule: UpdateScheduleFormControllerInterface;
   environmentAuthKeys: AuthKeysFormControllerInterface;
+}
+export interface UpdateEnvironmentProps {
+  environment: EnvironmentUpdateControllerInterface;
 }
 
 export async function getAllEnvironments(): Promise<Environment[]> {
@@ -57,15 +61,12 @@ export async function createEnvironment({
   return createdEnvironment;
 }
 
-export async function updateEnvironment(
-  id: number,
-  { environment, updateSchedule, environmentAuthKeys }: CreateEnvironmentProps
-): Promise<Environment> {
+export async function updateEnvironment({
+  environment,
+}: UpdateEnvironmentProps): Promise<Environment> {
   log.info('IPC Invoker: Requesting an environment update');
-  const updatedEnvironment = await ipcRenderer.invoke('updateEnvironment', id, {
+  const updatedEnvironment = await ipcRenderer.invoke('updateEnvironment', {
     environment,
-    updateSchedule,
-    environmentAuthKeys,
   });
 
   return updatedEnvironment;

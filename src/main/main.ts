@@ -20,7 +20,10 @@ import runDbMigrations from './database/migrationHandler';
 import EnvironmentController from './controllers/EnvironmentController';
 import LanguageController from './controllers/languageController';
 import UpdateScheduleController from './controllers/UpdateScheduleController';
-import { CreateEnvironmentProps } from '../renderer/ipc/ipcHandler';
+import {
+  CreateEnvironmentProps,
+  UpdateEnvironmentProps,
+} from '../renderer/ipc/ipcHandler';
 import AuthKeysController from './controllers/AuthKeysController';
 
 import { version } from '../../package.json';
@@ -204,12 +207,16 @@ ipcMain.handle(
   'updateEnvironment',
   async (
     _event: Electron.IpcMainInvokeEvent,
-    id: number,
-    { environment, updateSchedule, environmentAuthKeys }: CreateEnvironmentProps
+    { environment }: UpdateEnvironmentProps
   ) => {
     log.info('IPC Handler: Updating environment');
 
-    // TODO: Finish implementation
+    // TODO: Update related data (auth keys & update schedule)
+    const updatedEnvironment = await new EnvironmentController().update(
+      environment
+    );
+
+    return updatedEnvironment;
   }
 );
 

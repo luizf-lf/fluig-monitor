@@ -1,6 +1,6 @@
 import log from 'electron-log';
 import {
-  EnvironmentControllerInterface,
+  EnvironmentCreateControllerInterface,
   EnvironmentUpdateControllerInterface,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
@@ -65,7 +65,7 @@ export default class EnvironmentController {
     return this.found;
   }
 
-  async new(data: EnvironmentControllerInterface): Promise<Environment> {
+  async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {
     log.info('EnvironmentController: Saving a new environment on the database');
     this.created = await prismaClient.environment.create({
       data,

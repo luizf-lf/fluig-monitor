@@ -15,7 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import globalContainerVariants from '../utils/globalContainerVariants';
-import { getEnvironmentById } from '../ipc/ipcHandler';
+import { getEnvironmentById, updateEnvironment } from '../ipc/ipcHandler';
 import environmentKinds from '../utils/defaultEnvironmentKinds';
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
 import testConnection from '../services/testConnection';
@@ -154,7 +154,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     }
   }
 
-  function handleUpdateData(event: FormEvent) {
+  async function handleUpdateData(event: FormEvent) {
     log.info('EditEnvironmentSettingsView: Handling form submit');
     event.preventDefault();
 
@@ -195,7 +195,15 @@ function EditEnvironmentSettingsView(): JSX.Element {
       'EditEnvironmentSettingsView: Form data is valid, updating environment'
     );
 
-    const result = null; // dbHandler.environments.updateByUUID(environmentId, formData);
+    const result = await updateEnvironment({
+      environment: {
+        id: formData.id,
+        baseUrl: formData.baseUrl,
+        kind: formData.kind,
+        name: formData.name,
+        release: 'unknown',
+      },
+    });
 
     if (!result) {
       createShortNotification({

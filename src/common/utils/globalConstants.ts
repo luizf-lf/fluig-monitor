@@ -20,7 +20,7 @@ export const dbUrl =
   (isDevelopment ? process.env.DATABASE_URL : `file:${dbPath}`) || '';
 
 // Must be updated every time a migration is created
-export const latestMigration = '20220928122100_auth_keys_table_created';
+export const latestMigration = '20221002005308_add_favorite_env_field';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const platformToExecutables: any = {
