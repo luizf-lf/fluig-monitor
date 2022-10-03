@@ -14,9 +14,6 @@ export interface CreateEnvironmentProps {
   updateSchedule: UpdateScheduleFormControllerInterface;
   environmentAuthKeys: AuthKeysFormControllerInterface;
 }
-export interface UpdateEnvironmentProps {
-  environment: EnvironmentUpdateControllerInterface;
-}
 
 export async function getAllEnvironments(): Promise<Environment[]> {
   log.info('IPC Handler: Requesting all environments');
@@ -61,13 +58,21 @@ export async function createEnvironment({
   return createdEnvironment;
 }
 
-export async function updateEnvironment({
-  environment,
-}: UpdateEnvironmentProps): Promise<Environment> {
+export async function updateEnvironment(
+  environment: EnvironmentUpdateControllerInterface
+): Promise<Environment> {
   log.info('IPC Invoker: Requesting an environment update');
   const updatedEnvironment = await ipcRenderer.invoke('updateEnvironment', {
     environment,
   });
 
   return updatedEnvironment;
+}
+
+export async function deleteEnvironment(id: number): Promise<boolean> {
+  log.info('IPC Invoker: Deleting environment', id);
+
+  const deleted = await ipcRenderer.invoke('deleteEnvironment', id);
+
+  return deleted;
 }

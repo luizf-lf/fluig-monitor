@@ -20,14 +20,12 @@ import runDbMigrations from './database/migrationHandler';
 import EnvironmentController from './controllers/EnvironmentController';
 import LanguageController from './controllers/languageController';
 import UpdateScheduleController from './controllers/UpdateScheduleController';
-import {
-  CreateEnvironmentProps,
-  UpdateEnvironmentProps,
-} from '../renderer/ipc/ipcHandler';
+import { CreateEnvironmentProps } from '../renderer/ipc/ipcHandler';
 import AuthKeysController from './controllers/AuthKeysController';
 
 import { version } from '../../package.json';
 import rotateLogFile from './utils/logRotation';
+import { EnvironmentUpdateControllerInterface } from '../common/interfaces/EnvironmentControllerInterface';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -207,7 +205,7 @@ ipcMain.handle(
   'updateEnvironment',
   async (
     _event: Electron.IpcMainInvokeEvent,
-    { environment }: UpdateEnvironmentProps
+    environment: EnvironmentUpdateControllerInterface
   ) => {
     log.info('IPC Handler: Updating environment');
 
@@ -217,6 +215,17 @@ ipcMain.handle(
     );
 
     return updatedEnvironment;
+  }
+);
+
+ipcMain.handle(
+  'deleteEnvironment',
+  async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+    log.info('IPC Handler: Deleting environment');
+
+    const deleted = await new EnvironmentController().delete(id);
+
+    return deleted;
   }
 );
 

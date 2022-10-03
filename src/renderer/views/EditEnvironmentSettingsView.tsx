@@ -15,7 +15,11 @@ import {
 import { Link } from 'react-router-dom';
 import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import globalContainerVariants from '../utils/globalContainerVariants';
-import { getEnvironmentById, updateEnvironment } from '../ipc/ipcHandler';
+import {
+  deleteEnvironment,
+  getEnvironmentById,
+  updateEnvironment,
+} from '../ipc/ipcHandler';
 import environmentKinds from '../utils/defaultEnvironmentKinds';
 import updateFrequencies from '../utils/defaultUpdateFrequencies';
 import testConnection from '../services/testConnection';
@@ -196,13 +200,11 @@ function EditEnvironmentSettingsView(): JSX.Element {
     );
 
     const result = await updateEnvironment({
-      environment: {
-        id: formData.id,
-        baseUrl: formData.baseUrl,
-        kind: formData.kind,
-        name: formData.name,
-        release: 'unknown',
-      },
+      id: formData.id,
+      baseUrl: formData.baseUrl,
+      kind: formData.kind,
+      name: formData.name,
+      release: 'unknown',
     });
 
     if (!result) {
@@ -220,7 +222,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       id: Date.now(),
       type: 'success',
       message:
-        'Ambiente atualizado com sucesso. Redirecionando para a tela inicial...',
+        'Ambiente atualizado com sucesso. Redirecionando para a tela inicial.',
     });
 
     setTimeout(() => {
@@ -229,7 +231,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     }, 3000);
   }
 
-  function confirmDelete() {
+  async function confirmDelete() {
     if (!confirmBtnClicked) {
       const timeout = 5000;
       setConfirmBtnClicked(true);
@@ -244,18 +246,14 @@ function EditEnvironmentSettingsView(): JSX.Element {
       setTimeout(() => setConfirmBtnClicked(false), timeout);
     } else {
       setActionButtonsDisabled(true);
+      await deleteEnvironment(Number(environmentId));
       createShortNotification({
         id: Date.now(),
         type: 'success',
         message:
-          'Ambiente excluído com sucesso. Redirecionando para a tela principal...',
+          'Ambiente excluído com sucesso. Redirecionando para a tela principal.',
       });
-      setTimeout(() => {
-        setValidationMessage(<Redirect to="/" />);
-
-        // TODO: Update
-        // dbHandler.environments.deleteByUUID(environmentId);
-      }, 3000);
+      setValidationMessage(<Redirect to="/" />);
     }
   }
 
