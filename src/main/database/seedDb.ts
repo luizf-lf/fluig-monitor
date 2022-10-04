@@ -26,12 +26,4 @@ export default async function seedDb(prisma: PrismaClient) {
       group: 'SYSTEM',
     },
   });
-
-  // log messages
-  await prisma.log.create({
-    data: {
-      type: 'info',
-      message: 'Initial database seed executed with default values',
-    },
-  });
 }

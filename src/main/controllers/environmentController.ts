@@ -98,7 +98,7 @@ export default class EnvironmentController {
     return this.updated;
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: number): Promise<Environment> {
     log.info('Deleting environment with id', id, 'and related fields');
     this.deleted = await prismaClient.environment.update({
       where: {
@@ -109,6 +109,6 @@ export default class EnvironmentController {
       },
     });
 
-    return this.deleted !== null;
+    return this.deleted;
   }
 }

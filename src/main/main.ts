@@ -28,6 +28,7 @@ import rotateLogFile from './utils/logRotation';
 import { EnvironmentUpdateControllerInterface } from '../common/interfaces/EnvironmentControllerInterface';
 import { UpdateScheduleControllerInterface } from '../common/interfaces/UpdateScheduleControllerInterface';
 import { AuthKeysControllerInterface } from '../common/interfaces/AuthKeysControllerInterface';
+import LogController from './controllers/LogController';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -195,6 +196,11 @@ ipcMain.handle(
       hash: 'json',
     });
 
+    await new LogController().writeLog({
+      type: 'info',
+      message: `Environment ${createdEnvironment.id} created with related data via ipcMain handler`,
+    });
+
     return { createdEnvironment, createdUpdateSchedule, createdAuthKeys };
   }
 );
@@ -217,6 +223,11 @@ ipcMain.handle(
     );
     const updatedAuthKeys = await new AuthKeysController().update(authKeys);
 
+    await new LogController().writeLog({
+      type: 'info',
+      message: `Environment ${updatedEnvironment.id} updated with related data via ipcMain handler`,
+    });
+
     return { updatedEnvironment, updatedUpdateSchedule, updatedAuthKeys };
   }
 );
@@ -227,6 +238,11 @@ ipcMain.handle(
     log.info('IPC Handler: Deleting environment');
 
     const deleted = await new EnvironmentController().delete(id);
+
+    await new LogController().writeLog({
+      type: 'info',
+      message: `Environment ${deleted.id} deleted logically via ipcMain handler`,
+    });
 
     return deleted;
   }

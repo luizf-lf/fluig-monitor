@@ -13,6 +13,7 @@ import {
 import prismaClient from './prismaContext';
 import seedDb from './seedDb';
 import { Migration } from '../interfaces/MigrationInterface';
+import LogController from '../controllers/LogController';
 
 export default async function runDbMigrations() {
   let needsMigration = false;
@@ -66,6 +67,11 @@ export default async function runDbMigrations() {
 
       if (mustSeed) {
         await seedDb(prismaClient);
+
+        await new LogController().writeLog({
+          type: 'info',
+          message: 'Initial database seed executed with default values',
+        });
       }
 
       log.info('Creating a database migration notification');
@@ -77,15 +83,18 @@ export default async function runDbMigrations() {
         },
       });
 
-      await prismaClient.log.create({
-        data: {
-          type: 'info',
-          message: 'Database migration executed',
-        },
+      await new LogController().writeLog({
+        type: 'info',
+        message: 'Database migration executed',
       });
     } catch (e) {
       log.error('Migration executed with error.');
       log.error(e);
+
+      await new LogController().writeLog({
+        type: 'error',
+        message: `Database migration executed with error: ${e}`,
+      });
       process.exit(1);
     }
   } else {
