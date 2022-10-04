@@ -7,7 +7,7 @@ import EnvironmentView from './views/EnvironmentView';
 import CreateEnvironmentView from './views/CreateEnvironmentView';
 import EditEnvironmentSettingsView from './views/EditEnvironmentSettingsView';
 import Navbar from './components/Navbar/Navbar';
-import HomeAmbientListView from './views/HomeAmbientListView';
+import HomeEnvironmentListView from './views/HomeEnvironmentListView';
 
 // assets
 import './assets/styles/global.scss';
@@ -36,7 +36,7 @@ export default function App() {
           <main id="mainWindow">
             <AnimatePresence exitBeforeEnter>
               <Switch location={location} key={location.pathname}>
-                <Route exact path="/" component={HomeAmbientListView} />
+                <Route exact path="/" component={HomeEnvironmentListView} />
                 <Route
                   path="/settings/environments/new"
                   component={CreateEnvironmentView}

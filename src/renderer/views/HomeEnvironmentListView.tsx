@@ -16,7 +16,7 @@ import graphPlaceholder from '../assets/img/graphPlaceholder.png'; // to be remo
 import colorServer from '../assets/svg/color-server.svg';
 import { Environment } from '../../main/generated/client';
 
-function HomeAmbientListView() {
+export default function HomeEnvironmentListView() {
   const { environmentList } = useEnvironmentList();
   const { updateEnvironmentList } = useEnvironmentList();
   const { createShortNotification } = useNotifications();
@@ -89,5 +89,3 @@ function HomeAmbientListView() {
     </motion.div>
   );
 }
-
-export default HomeAmbientListView;
