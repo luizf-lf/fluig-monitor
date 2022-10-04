@@ -21,8 +21,6 @@ import {
   getEnvironmentById,
   updateEnvironment,
 } from '../ipc/ipcHandler';
-import environmentKinds from '../utils/defaultEnvironmentKinds';
-import updateFrequencies from '../utils/defaultUpdateFrequencies';
 import testConnection from '../services/testConnection';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
@@ -340,13 +338,21 @@ function EditEnvironmentSettingsView(): JSX.Element {
                 setKind(event.target.value);
               }}
             >
-              {environmentKinds.map(({ value, description }) => {
-                return (
-                  <option key={value} value={value}>
-                    {description}
-                  </option>
-                );
-              })}
+              <option value="PROD">
+                {t(
+                  'views.EditEnvironmentView.form.environmentKind.options.prod'
+                )}
+              </option>
+              <option value="HML">
+                {t(
+                  'views.EditEnvironmentView.form.environmentKind.options.hml'
+                )}
+              </option>
+              <option value="DEV">
+                {t(
+                  'views.EditEnvironmentView.form.environmentKind.options.dev'
+                )}
+              </option>
             </select>
           </div>
         </div>
@@ -453,13 +459,33 @@ function EditEnvironmentSettingsView(): JSX.Element {
               setUpdateFrequency(event.target.value);
             }}
           >
-            {updateFrequencies.map(({ value, description }) => {
-              return (
-                <option value={value} key={value}>
-                  {description}
-                </option>
-              );
-            })}
+            <option value="5m">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.5m')}
+            </option>
+            <option value="10m">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.10m')}
+            </option>
+            <option value="15m">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.15m')}
+            </option>
+            <option value="30m">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.30m')}
+            </option>
+            <option value="1h">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.1h')}
+            </option>
+            <option value="2h">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.2h')}
+            </option>
+            <option value="3h">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.3h')}
+            </option>
+            <option value="6h">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.6h')}
+            </option>
+            <option value="12h">
+              {t('views.EditEnvironmentView.form.updateFrequency.options.12h')}
+            </option>
           </select>
         </div>
 

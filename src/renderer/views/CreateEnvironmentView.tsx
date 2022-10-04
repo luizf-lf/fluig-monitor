@@ -18,7 +18,6 @@ import { useNotifications } from '../contexts/NotificationsContext';
 import { createEnvironment } from '../ipc/ipcHandler';
 import testConnection from '../services/testConnection';
 import globalContainerVariants from '../utils/globalContainerVariants';
-import updateFrequencies from '../utils/defaultUpdateFrequencies';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 
 export default function CreateEnvironmentView(): JSX.Element {
@@ -29,9 +28,7 @@ export default function CreateEnvironmentView(): JSX.Element {
   const [consumerSecret, setConsumerSecret] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [tokenSecret, setTokenSecret] = useState('');
-  const [updateFrequency, setUpdateFrequency] = useState(
-    updateFrequencies[2].value
-  );
+  const [updateFrequency, setUpdateFrequency] = useState('15m');
   const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState('');
   const [updateFrequencyTo, setUpdateFrequencyTo] = useState('');
   const [updateOnWorkDays, setUpdateOnWorkDays] = useState(false);

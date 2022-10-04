@@ -119,6 +119,11 @@ const en = {
         },
         environmentKind: {
           label: 'Kind:',
+          options: {
+            prod: 'Production',
+            hml: 'Staging',
+            dev: 'Development',
+          },
         },
         environmentAuthSection: 'Authentication',
         consumerKey: {
@@ -141,6 +146,17 @@ const en = {
         settingsSection: 'Settings',
         updateFrequency: {
           label: 'Update Frequency:',
+          options: {
+            '5m': '5 Minutes',
+            '10m': '10 Minutes',
+            '15m': '15 Minutes',
+            '30m': '30 Minutes',
+            '1h': '1 Hour',
+            '2h': '2 Hours',
+            '3h': '3 Hours',
+            '6h': '6 Hours',
+            '12h': '12 Hours',
+          },
         },
         updateFrequencyFrom: 'Update between these hours:',
         updateFrequencyFromHelper: 'Start',

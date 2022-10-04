@@ -73,7 +73,7 @@ const pt = {
         testConnection: 'Testar Conexão',
         settingsSection: 'Configurações',
         updateFrequency: {
-          label: 'Frequência de atualização::',
+          label: 'Frequência de atualização:',
           options: {
             '5m': '5 Minutos',
             '10m': '10 Minutos',
@@ -120,6 +120,11 @@ const pt = {
         },
         environmentKind: {
           label: 'Tipo:',
+          options: {
+            prod: 'Produção',
+            hml: 'Homologação',
+            dev: 'Desenvolvimento',
+          },
         },
         environmentAuthSection: 'Autenticação',
         consumerKey: {
@@ -142,6 +147,17 @@ const pt = {
         settingsSection: 'Configurações',
         updateFrequency: {
           label: 'Frequência de atualização:',
+          options: {
+            '5m': '5 Minutos',
+            '10m': '10 Minutos',
+            '15m': '15 Minutos',
+            '30m': '30 Minutos',
+            '1h': '1 Hora',
+            '2h': '2 Horas',
+            '3h': '3 Horas',
+            '6h': '6 Horas',
+            '12h': '12 Horas',
+          },
         },
         updateFrequencyFrom: 'Atualizar entre este horário:',
         updateFrequencyFromHelper: 'Início',
