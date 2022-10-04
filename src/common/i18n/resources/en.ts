@@ -93,6 +93,63 @@ const en = {
         buttonSubmit: 'Confirm',
       },
     },
+    EditEnvironmentView: {
+      connecting: 'Connecting...',
+      connectionError: 'Connection error',
+      connectionOk: 'Connection Ok',
+      connectionUnavailable:
+        'Connection Error. Check the domain url and the server availability',
+      authFieldsValidation:
+        'Fill out the Domain URL and authentication fields to continue.',
+      updateError: 'Error updating environment info, try again.',
+      updatedSuccessfully: 'Environment updated successfully.',
+      clickAgain: 'Click again to confirm the environment deletion',
+      deletedSuccessfully: 'Environment deleted successfully.',
+      back: 'Back',
+      form: {
+        title: 'Edit Environment',
+        environmentDataSection: 'Environment Data',
+        environmentName: {
+          label: 'Environment Name:',
+          placeholder: 'Eg.: Staging Environment',
+        },
+        domainUrl: {
+          label: 'Domain URL:',
+          placeholder: 'Eg.: https://staging.environment:8080',
+        },
+        environmentKind: {
+          label: 'Kind:',
+        },
+        environmentAuthSection: 'Authentication',
+        consumerKey: {
+          label: 'Consumer Key:',
+          placeholder: 'Fill out the consumer key',
+        },
+        consumerSecret: {
+          label: 'Consumer Secret:',
+          placeholder: 'Fill out the consumer secret',
+        },
+        accessToken: {
+          label: 'Access Token:',
+          placeholder: 'Fill out the access token',
+        },
+        tokenSecret: {
+          label: 'Token Secret:',
+          placeholder: 'Fill out the token secret',
+        },
+        testConnection: 'Test Connection',
+        settingsSection: 'Settings',
+        updateFrequency: {
+          label: 'Update Frequency:',
+        },
+        updateFrequencyFrom: 'Update between these hours:',
+        updateFrequencyFromHelper: 'Start',
+        updateFrequencyToHelper: 'End',
+        updateInWorkDays: 'Update only on working days',
+        buttonSave: 'Save',
+        buttonDelete: 'Delete',
+      },
+    },
     HomeAmbientListView: {
       header: 'Your environments',
       createAmbientHelper:
@@ -104,6 +161,11 @@ const en = {
       HML: 'Staging',
       DEV: 'Development',
       PROD: 'Production',
+    },
+    environmentKindsShort: {
+      HML: 'STG',
+      DEV: 'DEV',
+      PROD: 'PRD',
     },
   },
 };

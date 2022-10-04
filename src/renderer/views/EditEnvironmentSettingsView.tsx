@@ -13,6 +13,7 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import {
@@ -54,6 +55,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
 
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function getEnvironmentData() {
@@ -115,7 +118,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
       );
       setTestMessage(
         <span className="info-blip">
-          <FiRefreshCw className="rotating" /> Conectando...
+          <FiRefreshCw className="rotating" />
+          {t('views.EditEnvironmentView.connecting')}
         </span>
       );
 
@@ -127,15 +131,16 @@ function EditEnvironmentSettingsView(): JSX.Element {
           if (result.status !== 200) {
             setTestMessage(
               <span className="info-blip has-warning">
-                <FiAlertCircle /> Erro na conexão: {result.status}:{' '}
-                {result.statusText}
+                <FiAlertCircle />
+                {t('views.EditEnvironmentView.connectionError')} {result.status}
+                : {result.statusText}
               </span>
             );
           } else {
             log.info('Test connection done successfully (', result.status, ')');
             setTestMessage(
               <span className="info-blip has-success">
-                <FiCheck /> Conexão Ok
+                <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}
               </span>
             );
           }
@@ -143,8 +148,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
           log.info('Test connection failed (server may be unavailable)');
           setTestMessage(
             <span className="info-blip has-error">
-              <FiAlertTriangle /> Erro de conexão. Verifique a URL de domínio e
-              a disponibilidade do servidor.
+              <FiAlertTriangle />
+              {t('views.EditEnvironmentView.connectionUnavailable')}
             </span>
           );
         }
@@ -153,7 +158,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       setTestMessage(
         <span className="info-blip has-warning">
           <FiAlertCircle />
-          Preencha os campos de URL e autenticação para continuar.
+          {t('views.EditEnvironmentView.authFieldsValidation')}
         </span>
       );
     }
@@ -226,7 +231,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message: 'Erro ao atualizar informações do ambiente, tente novamente.',
+        message: t('views.EditEnvironmentView.updateError'),
       });
 
       return;
@@ -236,7 +241,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     createShortNotification({
       id: Date.now(),
       type: 'success',
-      message: 'Ambiente atualizado com sucesso',
+      message: t('views.EditEnvironmentView.updatedSuccessfully'),
     });
 
     updateEnvironmentList();
@@ -251,7 +256,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
         {
           id: Date.now(),
           type: 'warning',
-          message: 'Clique novamente para confirmar a exclusão.',
+          message: t('views.EditEnvironmentView.clickAgain'),
         },
         timeout
       );
@@ -262,7 +267,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       createShortNotification({
         id: Date.now(),
         type: 'success',
-        message: 'Ambiente excluído com sucesso.',
+        message: t('views.EditEnvironmentView.deletedSuccessfully'),
       });
       setValidationMessage(<Redirect to="/" />);
     }
@@ -279,20 +284,24 @@ function EditEnvironmentSettingsView(): JSX.Element {
     >
       <Link to="/" className="top-return-button">
         <FiArrowLeft />
-        Voltar
+        {t('views.EditEnvironmentView.back')}
       </Link>
-      <h1>Editar ambiente</h1>
+      <h1>{t('views.EditEnvironmentView.form.title')}</h1>
 
       <form action="#" onSubmit={handleUpdateData}>
-        <h3>Dados do ambiente</h3>
+        <h3>{t('views.EditEnvironmentView.form.environmentDataSection')}</h3>
 
         <div className="form-group">
-          <label htmlFor="environmentName">Nome do ambiente:</label>
+          <label htmlFor="environmentName">
+            {t('views.EditEnvironmentView.form.environmentName.label')}
+          </label>
           <input
             type="text"
             name="environmentName"
             id="environmentName"
-            placeholder="Ex.: Environment Exemplo 01"
+            placeholder={t(
+              'views.EditEnvironmentView.form.environmentName.placeholder'
+            )}
             value={name}
             onChange={(event) => {
               setName(event.target.value);
@@ -302,12 +311,16 @@ function EditEnvironmentSettingsView(): JSX.Element {
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="domainUrl">URL De Domínio:</label>
+            <label htmlFor="domainUrl">
+              {t('views.EditEnvironmentView.form.domainUrl.label')}
+            </label>
             <input
               type="text"
               name="domainUrl"
               id="domainUrl"
-              placeholder="Ex.: https://teste.fluig.com/"
+              placeholder={t(
+                'views.EditEnvironmentView.form.domainUrl.placeholder'
+              )}
               value={domainUrl}
               onChange={(event) => {
                 setDomainUrl(event.target.value);
@@ -316,7 +329,9 @@ function EditEnvironmentSettingsView(): JSX.Element {
           </div>
 
           <div className="form-group">
-            <label htmlFor="environmentKind">Tipo:</label>
+            <label htmlFor="environmentKind">
+              {t('views.EditEnvironmentView.form.environmentKind.label')}
+            </label>
             <select
               name="environmentKind"
               id="environmentKind"
@@ -336,15 +351,21 @@ function EditEnvironmentSettingsView(): JSX.Element {
           </div>
         </div>
 
-        <h3 className="mt-1">Autenticação</h3>
+        <h3 className="mt-1">
+          {t('views.EditEnvironmentView.form.environmentAuthSection')}
+        </h3>
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="consumerKey">Consumer Key:</label>
+            <label htmlFor="consumerKey">
+              {t('views.EditEnvironmentView.form.consumerKey.label')}
+            </label>
             <input
               type="text"
               name="consumerKey"
               id="consumerKey"
-              placeholder="Informe a consumer key"
+              placeholder={t(
+                'views.EditEnvironmentView.form.consumerKey.placeholder'
+              )}
               value={consumerKey}
               onChange={(event) => {
                 setConsumerKey(event.target.value);
@@ -352,12 +373,16 @@ function EditEnvironmentSettingsView(): JSX.Element {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="consumerSecret">Consumer Secret:</label>
+            <label htmlFor="consumerSecret">
+              {t('views.EditEnvironmentView.form.consumerSecret.label')}
+            </label>
             <input
               type="text"
               name="consumerSecret"
               id="consumerSecret"
-              placeholder="Informe a consumer secret"
+              placeholder={t(
+                'views.EditEnvironmentView.form.consumerSecret.placeholder'
+              )}
               value={consumerSecret}
               onChange={(event) => {
                 setConsumerSecret(event.target.value);
@@ -368,12 +393,16 @@ function EditEnvironmentSettingsView(): JSX.Element {
 
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="accessToken">Access Token:</label>
+            <label htmlFor="accessToken">
+              {t('views.EditEnvironmentView.form.accessToken.label')}
+            </label>
             <input
               type="text"
               name="accessToken"
               id="accessToken"
-              placeholder="Informe o access token"
+              placeholder={t(
+                'views.EditEnvironmentView.form.accessToken.placeholder'
+              )}
               value={accessToken}
               onChange={(event) => {
                 setAccessToken(event.target.value);
@@ -381,12 +410,16 @@ function EditEnvironmentSettingsView(): JSX.Element {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="tokenSecret">Token Secret:</label>
+            <label htmlFor="tokenSecret">
+              {t('views.EditEnvironmentView.form.tokenSecret.label')}
+            </label>
             <input
               type="text"
               name="tokenSecret"
               id="tokenSecret"
-              placeholder="Informe o token secret"
+              placeholder={t(
+                'views.EditEnvironmentView.form.tokenSecret.placeholder'
+              )}
               value={tokenSecret}
               onChange={(event) => {
                 setTokenSecret(event.target.value);
@@ -401,15 +434,17 @@ function EditEnvironmentSettingsView(): JSX.Element {
             className="button is-secondary"
             onClick={sendTestConnection}
           >
-            <FiWifi /> Testar Conexão
+            <FiWifi /> {t('views.EditEnvironmentView.form.testConnection')}
           </button>
 
           <span>{testMessage}</span>
         </div>
 
-        <h3>Configurações</h3>
+        <h3>{t('views.EditEnvironmentView.form.settingsSection')}</h3>
         <div className="form-group">
-          <label htmlFor="updateFrequency">Frequência de atualização:</label>
+          <label htmlFor="updateFrequency">
+            {t('views.EditEnvironmentView.form.updateFrequency.label')}
+          </label>
           <select
             name="updateFrequency"
             id="updateFrequency"
@@ -431,7 +466,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
         <div className="form-row">
           <div className="form-group">
             <label htmlFor="updateFrequencyFrom">
-              Atualizar entre este horário:
+              {t('views.EditEnvironmentView.form.updateFrequencyFrom')}
             </label>
             <input
               type="time"
@@ -442,7 +477,9 @@ function EditEnvironmentSettingsView(): JSX.Element {
                 setUpdateFrequencyFrom(event.target.value);
               }}
             />
-            <small>Início</small>
+            <small>
+              {t('views.EditEnvironmentView.form.updateFrequencyFromHelper')}
+            </small>
           </div>
           <div className="form-group">
             <input
@@ -454,7 +491,9 @@ function EditEnvironmentSettingsView(): JSX.Element {
                 setUpdateFrequencyTo(event.target.value);
               }}
             />
-            <small>Fim</small>
+            <small>
+              {t('views.EditEnvironmentView.form.updateFrequencyToHelper')}
+            </small>
           </div>
         </div>
         <div className="form-group">
@@ -471,7 +510,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
             />
             <label htmlFor="updateInWorkDays">
               {' '}
-              Atualizar apenas em dias úteis
+              {t('views.EditEnvironmentView.form.updateInWorkDays')}
             </label>
           </span>
         </div>
@@ -482,7 +521,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
             type="submit"
             disabled={actionButtonsDisabled}
           >
-            <FiCheck /> Salvar
+            <FiCheck /> {t('views.EditEnvironmentView.form.buttonSave')}
           </button>
           <button
             className="button is-danger"
@@ -490,7 +529,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
             onClick={confirmDelete}
             disabled={actionButtonsDisabled}
           >
-            <FiX /> Excluir Ambiente
+            <FiX /> {t('views.EditEnvironmentView.form.buttonDelete')}
           </button>
 
           {validationMessage}

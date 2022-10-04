@@ -34,7 +34,9 @@ export default function SmallTag({
 
   return (
     <div className={className}>
-      {expanded ? t(`global.environmentKinds.${kind}`) : kind}
+      {expanded
+        ? t(`global.environmentKinds.${kind}`)
+        : t(`global.environmentKindsShort.${kind}`)}
     </div>
   );
 }

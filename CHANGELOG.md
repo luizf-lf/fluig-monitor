@@ -1,3 +1,7 @@
+# 0.1.1-rc
+
+- Translated environment edit view
+
 # 0.1.0
 
 - Implemented database structure with Prisma ORM

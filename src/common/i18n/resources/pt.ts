@@ -93,6 +93,64 @@ const pt = {
         buttonSubmit: 'Confirmar',
       },
     },
+    EditEnvironmentView: {
+      connecting: 'Conectando...',
+      connectionError: 'Erro na conexão',
+      connectionOk: 'Conexão Ok',
+      connectionUnavailable:
+        'Erro de conexão. Verifique a URL de domínio e a disponibilidade do servidor.',
+      authFieldsValidation:
+        'Preencha os campos de URL e autenticação para continuar.',
+      updateError:
+        'Erro ao atualizar informações do ambiente, tente novamente.',
+      updatedSuccessfully: 'Ambiente atualizado com sucesso',
+      clickAgain: 'Clique novamente para confirmar a exclusão.',
+      deletedSuccessfully: 'Ambiente excluído com sucesso.',
+      back: 'Voltar',
+      form: {
+        title: 'Editar ambiente',
+        environmentDataSection: 'Dados do ambiente',
+        environmentName: {
+          label: 'Nome do ambiente:',
+          placeholder: 'Ex.: Ambiente Homologação',
+        },
+        domainUrl: {
+          label: 'URL de domínio:',
+          placeholder: 'Ex.: https://ambiente.teste:8080',
+        },
+        environmentKind: {
+          label: 'Tipo:',
+        },
+        environmentAuthSection: 'Autenticação',
+        consumerKey: {
+          label: 'Consumer Key:',
+          placeholder: 'Informe a consumer key',
+        },
+        consumerSecret: {
+          label: 'Consumer Secret:',
+          placeholder: 'Informe a consumer secret',
+        },
+        accessToken: {
+          label: 'Access Token:',
+          placeholder: 'Informe o access token',
+        },
+        tokenSecret: {
+          label: 'Token Secret:',
+          placeholder: 'Informe o token secret',
+        },
+        testConnection: 'Testar Conexão',
+        settingsSection: 'Configurações',
+        updateFrequency: {
+          label: 'Frequência de atualização:',
+        },
+        updateFrequencyFrom: 'Atualizar entre este horário:',
+        updateFrequencyFromHelper: 'Início',
+        updateFrequencyToHelper: 'Fim',
+        updateInWorkDays: 'Atualizar apenas em dias úteis',
+        buttonSave: 'Salvar',
+        buttonDelete: 'Excluir',
+      },
+    },
     HomeAmbientListView: {
       header: 'Seus Ambientes',
       createAmbientHelper:
@@ -104,6 +162,11 @@ const pt = {
       HML: 'Homologação',
       DEV: 'Desenvolvimento',
       PROD: 'Produção',
+    },
+    environmentKindsShort: {
+      HML: 'HML',
+      DEV: 'DEV',
+      PROD: 'PRD',
     },
   },
 };
