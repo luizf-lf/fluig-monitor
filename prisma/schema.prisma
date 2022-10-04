@@ -5,24 +5,34 @@ generator client {
   output   = "../src/main/generated/client"
 }
 
+generator erd {
+  provider = "prisma-erd-generator"
+  output   = "./ERD.svg"
+}
+
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Environment {
-  id               Int                  @id @default(autoincrement())
+  id               Int                       @id @default(autoincrement())
   name             String
   release          String
   baseUrl          String
   kind             String
   oAuthKeysId      EnvironmentAuthKeys?
   updateScheduleId UpdateSchedule?
+  httpResponses    HTTPResponse[]
+  licenceHistory   LicenceHistory[]
   monitorHistory   MonitorHistory[]
-  logCreatedAt     DateTime             @default(now())
-  logUpdateAt      DateTime             @default(now())
-  logDeleted       Boolean              @default(false)
-  isFavorite       Boolean              @default(false)
+  statisticHistory StatisticsHistory[]
+  logCreatedAt     DateTime                  @default(now())
+  logUpdateAt      DateTime                  @default(now())
+  logDeleted       Boolean                   @default(false)
+  logDeletedAt     DateTime                  @default(now())
+  isFavorite       Boolean                   @default(false)
+  favoritedAt      DateTime                  @default(now())
 }
 
 model EnvironmentAuthKeys {
@@ -43,23 +53,59 @@ model UpdateSchedule {
   environment    Environment? @relation(fields: [environmentId], references: [id])
 }
 
-model MonitorHistory {
-  id            Int           @id @default(autoincrement())
-  timestamp     DateTime      @default(now())
-  environmentId Int
-  environment   Environment?  @relation(fields: [environmentId], references: [id])
-  apiResponse   APIResponse[]
+model HTTPResponse {
+  id               Int                @id @default(autoincrement())
+  environmentId    Int                @unique
+  environment      Environment        @relation(fields: [environmentId], references: [id])
+  timestamp        DateTime           @default(now())
+  statusCode       Int
+  responseTimeMs   Int
+  licenseHistory   LicenceHistory?
+  monitorHistory   MonitorHistory?
+  statisticHistory StatisticsHistory?
 }
 
-model APIResponse {
-  id                 Int             @id @default(autoincrement())
-  endpoint           String
-  monitorigApiId     String?
-  responseStatusCode Int
-  responseBody       String
-  responseTimeMs     Int
-  monitorHistoryId   Int?
-  monitorHistory     MonitorHistory? @relation(fields: [monitorHistoryId], references: [id])
+model LicenceHistory {
+  id                Int                     @id @default(autoincrement())
+  environmentId     Int
+  environment       Environment             @relation(fields: [environmentId], references: [id])
+  httpResponseId    Int                     @unique
+  httpResponse      HTTPResponse @relation(fields: [httpResponseId], references: [id])
+  tenantId          Int
+  activeUsers       Int
+  totalLicenses     Int
+  remainingLicenses Int
+}
+
+model MonitorHistory {
+  id             Int                     @id @default(autoincrement())
+  environmentId  Int
+  environment    Environment             @relation(fields: [environmentId], references: [id])
+  httpResponseId Int                     @unique
+  httpResponse   HTTPResponse @relation(fields: [httpResponseId], references: [id])
+  analytics      String?
+  licenseServer  String?
+  mailServer     String?
+  solrServer     String?
+  viewer         String?
+  openOffice     String?
+  realTime       String?
+  MSOffice       String?
+}
+
+model StatisticsHistory {
+  id             Int                     @id @default(autoincrement())
+  environmentId  Int
+  environment    Environment             @relation(fields: [environmentId], references: [id])
+  httpResponseId Int                     @unique
+  httpResponse   HTTPResponse @relation(fields: [httpResponseId], references: [id])
+
+  // TODO: Finish model map
+  fullResponse  String?
+
+  // dataSourceFluigDs String?
+  // dataSourceFluigDsRo String?
+  // databaseInfo String?
 }
 
 model AppSetting {

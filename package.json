@@ -149,6 +149,7 @@
   ],
   "homepage": "https://github.com/luizf-lf/fluig-monitor#readme",
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^9.1.7",
     "@pmmmwh/react-refresh-webpack-plugin": "0.5.1",
     "@swc/jest": "^0.2.22",
     "@teamsupercell/typings-for-css-modules-loader": "^2.5.1",
@@ -206,6 +207,7 @@
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^2.4.1",
     "prisma": "^4.4.0",
+    "prisma-erd-generator": "^1.2.1",
     "react-refresh": "^0.10.0",
     "react-refresh-typescript": "^2.0.2",
     "react-test-renderer": "^17.0.2",

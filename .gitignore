@@ -34,3 +34,5 @@ npm-debug.log.*
 *.db-journal
 
 src/main/generated
+
+prisma/ERD.svg

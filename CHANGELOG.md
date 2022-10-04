@@ -1,6 +1,7 @@
 # 0.1.1-rc
 
 - Translated environment edit view
+- Updated database fields to include monitoring history
 
 # 0.1.0
 
