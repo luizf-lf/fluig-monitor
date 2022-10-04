@@ -16,7 +16,7 @@ datasource db {
 }
 
 model Environment {
-  id               Int                       @id @default(autoincrement())
+  id               Int                  @id @default(autoincrement())
   name             String
   release          String
   baseUrl          String
@@ -27,12 +27,12 @@ model Environment {
   licenceHistory   LicenceHistory[]
   monitorHistory   MonitorHistory[]
   statisticHistory StatisticsHistory[]
-  logCreatedAt     DateTime                  @default(now())
-  logUpdateAt      DateTime                  @default(now())
-  logDeleted       Boolean                   @default(false)
-  logDeletedAt     DateTime                  @default(now())
-  isFavorite       Boolean                   @default(false)
-  favoritedAt      DateTime                  @default(now())
+  logCreatedAt     DateTime             @default(now())
+  logUpdateAt      DateTime             @default(now())
+  logDeleted       Boolean              @default(false)
+  logDeletedAt     DateTime             @default(now())
+  isFavorite       Boolean              @default(false)
+  favoritedAt      DateTime             @default(now())
 }
 
 model EnvironmentAuthKeys {
@@ -66,11 +66,12 @@ model HTTPResponse {
 }
 
 model LicenceHistory {
-  id                Int                     @id @default(autoincrement())
-  environmentId     Int
-  environment       Environment             @relation(fields: [environmentId], references: [id])
-  httpResponseId    Int                     @unique
-  httpResponse      HTTPResponse @relation(fields: [httpResponseId], references: [id])
+  id             Int          @id @default(autoincrement())
+  environmentId  Int
+  environment    Environment  @relation(fields: [environmentId], references: [id])
+  httpResponseId Int          @unique
+  httpResponse   HTTPResponse @relation(fields: [httpResponseId], references: [id])
+
   tenantId          Int
   activeUsers       Int
   totalLicenses     Int
@@ -78,34 +79,63 @@ model LicenceHistory {
 }
 
 model MonitorHistory {
-  id             Int                     @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   environmentId  Int
-  environment    Environment             @relation(fields: [environmentId], references: [id])
-  httpResponseId Int                     @unique
+  environment    Environment  @relation(fields: [environmentId], references: [id])
+  httpResponseId Int          @unique
   httpResponse   HTTPResponse @relation(fields: [httpResponseId], references: [id])
-  analytics      String?
-  licenseServer  String?
-  mailServer     String?
-  solrServer     String?
-  viewer         String?
-  openOffice     String?
-  realTime       String?
-  MSOffice       String?
+
+  analytics     String?
+  licenseServer String?
+  mailServer    String?
+  solrServer    String?
+  viewer        String?
+  openOffice    String?
+  realTime      String?
+  MSOffice      String?
 }
 
 model StatisticsHistory {
-  id             Int                     @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   environmentId  Int
-  environment    Environment             @relation(fields: [environmentId], references: [id])
-  httpResponseId Int                     @unique
+  environment    Environment  @relation(fields: [environmentId], references: [id])
+  httpResponseId Int          @unique
   httpResponse   HTTPResponse @relation(fields: [httpResponseId], references: [id])
 
-  // TODO: Finish model map
-  fullResponse  String?
-
-  // dataSourceFluigDs String?
-  // dataSourceFluigDsRo String?
-  // databaseInfo String?
+  dataSourceFluigDs      String?
+  dataSourceFluigDsRo    String?
+  dbName                 String?
+  dbVersion              String?
+  dbDriverName           String?
+  dbDriverVersion        String?
+  connectedUsers         Int?
+  memoryHeap             Int?
+  nonMemoryHeap          Int?
+  dbTraficRecieved       String?
+  dbTraficSent           String?
+  dbSize                 Int?
+  artifactsApps          String?
+  artifactsCore          String?
+  artifactsSystem        String?
+  externalConverter      Boolean?
+  runtimeStart           DateTime?
+  runtimeUptime          Int?
+  threadingCount         Int?
+  threadingPeakCount     Int?
+  threadingDaemonCount   Int?
+  threadingTotalStarted  Int?
+  detailedMemory         String?
+  systemServerMemorySize Int?
+  systemServerMemoryFree Int?
+  systemServerHDSize     String?
+  systemServerHDFree     String?
+  systemServerCoreCount  Int?
+  systemServerArch       String?
+  systemTmpFolderSize    Int?
+  systemLogFolderSize    Int?
+  systemHeapMaxSize      Int?
+  systemHeapSize         Int?
+  systemUptime           Int?
 }
 
 model AppSetting {
