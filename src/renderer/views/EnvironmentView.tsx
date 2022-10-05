@@ -22,7 +22,13 @@ export default function EnvironmentView(): JSX.Element {
       // if a environment is selected, get it's data from the database, and display the data (to be implemented)
       environmentData = await getEnvironmentById(Number(environmentId));
       if (environmentData) {
-        setEnvironmentView(<div>{JSON.stringify(environmentData)}</div>); // it should receive a component containing all rendered data later on
+        setEnvironmentView(
+          <div>
+            <div>{/* side menu */}</div>
+            <div>{/* center view */}</div>
+            <div>{/* server info */}</div>
+          </div>
+        );
       }
 
       // shows a default message if no server is selected

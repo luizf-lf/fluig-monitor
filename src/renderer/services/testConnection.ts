@@ -38,7 +38,7 @@ export default async function testConnection(
 ): Promise<any | null> {
   let result = null;
   try {
-    result = await axios.get(`${domainUrl}api/public/2.0/users/getCurrent`, {
+    result = await axios.get(`${domainUrl}/api/public/2.0/users/getCurrent`, {
       headers: {
         Authorization: getOAuthHeaders(auth),
       },
