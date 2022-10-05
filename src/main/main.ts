@@ -250,6 +250,20 @@ ipcMain.handle(
 );
 
 ipcMain.handle(
+  'toggleEnvironmentFavorite',
+  async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+    log.info(
+      'IPC Handler: Toggling environment favorite for environment id',
+      id
+    );
+
+    const favorited = await EnvironmentController.toggleFavorite(id);
+
+    return favorited;
+  }
+);
+
+ipcMain.handle(
   'updateFrontEndTheme',
   async (_event: Electron.IpcMainInvokeEvent, theme: string) => {
     log.info('IPC Handler: Updating front end theme');

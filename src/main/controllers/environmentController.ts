@@ -110,4 +110,43 @@ export default class EnvironmentController {
 
     return this.deleted;
   }
+
+  static async toggleFavorite(
+    id: number
+  ): Promise<{ favorited: boolean; exception: string | null }> {
+    log.info('Togging environment favorite for environment with id', id);
+
+    const totalFavorited = await prismaClient.environment.count({
+      where: {
+        isFavorite: true,
+      },
+    });
+
+    const environment = await prismaClient.environment.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (environment === null) {
+      log.error('Environment ', id, 'doest not exists on the database');
+      return { favorited: false, exception: null };
+    }
+
+    if (totalFavorited >= 3 && !environment.isFavorite) {
+      return { favorited: false, exception: 'MAX_FAVORITES_EXCEEDED' };
+    }
+
+    await prismaClient.environment.update({
+      where: {
+        id,
+      },
+      data: {
+        isFavorite: !environment.isFavorite,
+        favoritedAt: new Date().toISOString(),
+      },
+    });
+
+    return { favorited: !environment.isFavorite, exception: null };
+  }
 }

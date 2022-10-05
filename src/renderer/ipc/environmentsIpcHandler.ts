@@ -88,3 +88,11 @@ export async function deleteEnvironment(id: number): Promise<boolean> {
 
   return deleted;
 }
+
+export async function toggleEnvironmentFavorite(
+  id: number
+): Promise<{ favorited: boolean; exception: string | null }> {
+  const favorited = await ipcRenderer.invoke('toggleEnvironmentFavorite', id);
+
+  return favorited;
+}

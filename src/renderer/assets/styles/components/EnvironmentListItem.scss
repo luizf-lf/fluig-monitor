@@ -11,7 +11,7 @@
   border-radius: 0.75rem;
 
   text-decoration: none;
-  transition: transform 300ms;
+  transition: transform var(--transition);
   background-color: transparent;
   border: 2px solid var(--border-light);
   font-weight: 500;

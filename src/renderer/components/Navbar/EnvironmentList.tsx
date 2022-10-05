@@ -7,11 +7,21 @@ type EnvironmentListProps = {
 };
 
 function EnvironmentList({ environmentList }: EnvironmentListProps) {
-  return environmentList.length === 0 ? (
+  let renderList = [] as Environment[];
+
+  if (environmentList.length > 0) {
+    renderList = environmentList.filter((env) => env.isFavorite);
+  }
+
+  if (renderList.length === 0) {
+    renderList = environmentList;
+  }
+
+  return renderList.length === 0 ? (
     <></>
   ) : (
     <>
-      {environmentList.map((environment: Environment, idx: number) => {
+      {renderList.map((environment: Environment, idx: number) => {
         return (
           <motion.div
             initial={{ opacity: 0, y: '-100px' }}

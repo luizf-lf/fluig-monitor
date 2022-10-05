@@ -3,6 +3,8 @@
 - Persistent dark mode switcher implemented
 - App settings controller implemented
 - Front end IPC handlers separated by controller
+- Favorite environment feature implemented
+- Default server image added
 
 # 0.1.1
 

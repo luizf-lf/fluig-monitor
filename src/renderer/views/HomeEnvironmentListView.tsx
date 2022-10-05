@@ -2,7 +2,8 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FiChevronLeft, FiSettings, FiStar } from 'react-icons/fi';
+import { FiChevronLeft, FiSettings } from 'react-icons/fi';
+import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { useTranslation } from 'react-i18next';
 import SmallTag from '../components/SmallTag';
 
@@ -12,9 +13,10 @@ import { useNotifications } from '../contexts/NotificationsContext';
 
 import globalContainerVariants from '../utils/globalContainerVariants';
 import '../assets/styles/Views/HomeAmbientListView.scss';
-import graphPlaceholder from '../assets/img/graphPlaceholder.png'; // to be removed when the mini graph is implemented
+import defaultServerLogo from '../assets/img/defaultServerLogo.png';
 import colorServer from '../assets/svg/color-server.svg';
 import { Environment } from '../../main/generated/client';
+import { toggleEnvironmentFavorite } from '../ipc/environmentsIpcHandler';
 
 export default function HomeEnvironmentListView() {
   const { environmentList } = useEnvironmentList();
@@ -36,12 +38,34 @@ export default function HomeEnvironmentListView() {
     </div>
   );
 
-  function showTempMessage() {
-    createShortNotification({
-      id: Date.now(),
-      type: 'warning',
-      message: 'Favorites not available right now.',
-    });
+  async function toggleFavoriteEnvironment(id: number) {
+    const { favorited, exception } = await toggleEnvironmentFavorite(id);
+
+    if (exception === 'MAX_FAVORITES_EXCEEDED') {
+      createShortNotification({
+        id: Date.now(),
+        message: 'Você só pode favoritar até 3 ambientes',
+        type: 'warning',
+      });
+
+      return;
+    }
+
+    if (favorited) {
+      createShortNotification({
+        id: Date.now(),
+        message: 'Ambiente adicionado aos favoritos',
+        type: 'success',
+      });
+    } else {
+      createShortNotification({
+        id: Date.now(),
+        message: 'Ambiente removido dos favoritos',
+        type: 'success',
+      });
+    }
+
+    updateEnvironmentList();
   }
 
   return (
@@ -68,8 +92,17 @@ export default function HomeEnvironmentListView() {
                       </Link>
                     </div>
                     <div className="actionButtons">
-                      <button type="button" onClick={showTempMessage}>
-                        <FiStar />
+                      <button
+                        type="button"
+                        onClick={() =>
+                          toggleFavoriteEnvironment(environment.id)
+                        }
+                      >
+                        {environment.isFavorite ? (
+                          <AiFillStar />
+                        ) : (
+                          <AiOutlineStar />
+                        )}
                       </button>
                       <Link to={`/environment/${environment.id}/edit`}>
                         <FiSettings />
@@ -77,7 +110,7 @@ export default function HomeEnvironmentListView() {
                     </div>
                   </div>
                   <div className="graphContainer">
-                    <img src={graphPlaceholder} alt="Graph Preview" />
+                    <img src={defaultServerLogo} alt="Server Logo" />
                   </div>
                   <div className="footer">
                     <SmallTag kind={environment.kind} expanded />
