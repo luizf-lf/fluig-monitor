@@ -1,4 +1,10 @@
-# 0.1.1-rc
+# 0.1.2
+
+- Persistent dark mode switcher implemented
+- App settings controller implemented
+- Front end IPC handlers separated by controller
+
+# 0.1.1
 
 - Translated environment edit view
 - Updated database fields to include monitoring history

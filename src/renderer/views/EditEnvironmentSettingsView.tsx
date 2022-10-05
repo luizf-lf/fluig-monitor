@@ -20,7 +20,7 @@ import {
   deleteEnvironment,
   getEnvironmentById,
   updateEnvironment,
-} from '../ipc/ipcHandler';
+} from '../ipc/environmentsIpcHandler';
 import testConnection from '../services/testConnection';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';

@@ -28,7 +28,7 @@ function Navbar() {
         <section id="environmentList">
           <AnimatePresence>
             <EnvironmentList environmentList={environmentList} />
-            <CreateEnvironmentButton key="ADD_AMBIENT_BUTTON" />
+            <CreateEnvironmentButton key="ADD_ENVIRONMENT_BUTTON" />
           </AnimatePresence>
         </section>
       </div>

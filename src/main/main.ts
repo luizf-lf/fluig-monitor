@@ -20,7 +20,7 @@ import runDbMigrations from './database/migrationHandler';
 import EnvironmentController from './controllers/EnvironmentController';
 import LanguageController from './controllers/languageController';
 import UpdateScheduleController from './controllers/UpdateScheduleController';
-import { CreateEnvironmentProps } from '../renderer/ipc/ipcHandler';
+import { CreateEnvironmentProps } from '../renderer/ipc/environmentsIpcHandler';
 import AuthKeysController from './controllers/AuthKeysController';
 
 import { version } from '../../package.json';
@@ -29,6 +29,7 @@ import { EnvironmentUpdateControllerInterface } from '../common/interfaces/Envir
 import { UpdateScheduleControllerInterface } from '../common/interfaces/UpdateScheduleControllerInterface';
 import { AuthKeysControllerInterface } from '../common/interfaces/AuthKeysControllerInterface';
 import LogController from './controllers/LogController';
+import SettingsController from './controllers/SettingsController';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -247,6 +248,28 @@ ipcMain.handle(
     return deleted;
   }
 );
+
+ipcMain.handle(
+  'updateFrontEndTheme',
+  async (_event: Electron.IpcMainInvokeEvent, theme: string) => {
+    log.info('IPC Handler: Updating front end theme');
+
+    const updated = await new SettingsController().update({
+      settingId: 'FRONT_END_THEME',
+      value: theme,
+    });
+
+    return updated;
+  }
+);
+
+ipcMain.handle('getFrontEndTheme', async () => {
+  log.info('IPC Handler: Getting front end theme');
+
+  const theme = await new SettingsController().find('FRONT_END_THEME');
+
+  return theme;
+});
 
 app.on('window-all-closed', async () => {
   // Respect the OSX convention of having the application in memory even

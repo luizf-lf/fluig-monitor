@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
 import { Environment } from '../../main/generated/client';
-import { getAllEnvironments } from '../ipc/ipcHandler';
+import { getAllEnvironments } from '../ipc/environmentsIpcHandler';
 
 interface EnvironmentListContextProviderProps {
   children: ReactNode;

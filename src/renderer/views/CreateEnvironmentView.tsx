@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import log from 'electron-log';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
-import { createEnvironment } from '../ipc/ipcHandler';
+import { createEnvironment } from '../ipc/environmentsIpcHandler';
 import testConnection from '../services/testConnection';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
