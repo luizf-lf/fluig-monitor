@@ -26,7 +26,7 @@ export default class EnvironmentController {
     this.deleted = null;
   }
 
-  async getAll(includeMonitorHistory = false): Promise<Environment[]> {
+  async getAll(): Promise<Environment[]> {
     log.info('EnvironmentController: Querying all environments from database.');
     this.environments = await prismaClient.environment.findMany({
       where: {
@@ -35,7 +35,6 @@ export default class EnvironmentController {
       include: {
         oAuthKeysId: true,
         updateScheduleId: true,
-        monitorHistory: includeMonitorHistory,
       },
     });
 
@@ -58,7 +57,6 @@ export default class EnvironmentController {
       include: {
         updateScheduleId: includeRelatedData,
         oAuthKeysId: includeRelatedData,
-        monitorHistory: includeRelatedData,
       },
     });
 
@@ -106,6 +104,7 @@ export default class EnvironmentController {
       },
       data: {
         logDeleted: true,
+        logDeletedAt: new Date().toISOString(),
       },
     });
 

@@ -30,9 +30,9 @@ model Environment {
   logCreatedAt     DateTime             @default(now())
   logUpdateAt      DateTime             @default(now())
   logDeleted       Boolean              @default(false)
-  logDeletedAt     DateTime             @default(now())
+  logDeletedAt     DateTime?
   isFavorite       Boolean              @default(false)
-  favoritedAt      DateTime             @default(now())
+  favoritedAt      DateTime?
 }
 
 model EnvironmentAuthKeys {
@@ -111,8 +111,8 @@ model StatisticsHistory {
   connectedUsers         Int?
   memoryHeap             Int?
   nonMemoryHeap          Int?
-  dbTraficRecieved       String?
-  dbTraficSent           String?
+  dbTraficRecieved       Int?
+  dbTraficSent           Int?
   dbSize                 Int?
   artifactsApps          String?
   artifactsCore          String?

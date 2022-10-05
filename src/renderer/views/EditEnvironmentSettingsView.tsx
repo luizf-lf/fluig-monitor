@@ -124,8 +124,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
         const result = await testConnection(domainUrl, auth);
 
         if (typeof result !== 'undefined') {
-          log.info('Test connection failed with status', result.status);
           if (result.status !== 200) {
+            log.info('Test connection failed with status', result.status);
             setTestMessage(
               <span className="info-blip has-warning">
                 <FiAlertCircle />
