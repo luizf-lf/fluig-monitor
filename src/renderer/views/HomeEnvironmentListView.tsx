@@ -3,26 +3,23 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiChevronLeft, FiSettings } from 'react-icons/fi';
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { useTranslation } from 'react-i18next';
 import SmallTag from '../components/SmallTag';
 
 import CreateEnvironmentButton from '../components/CreateEnvironmentButton';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
-import { useNotifications } from '../contexts/NotificationsContext';
 
 import globalContainerVariants from '../utils/globalContainerVariants';
 import offlineImage from '../assets/img/offline.png';
 import '../assets/styles/Views/HomeEnvironmentListView.scss';
 import colorServer from '../assets/svg/color-server.svg';
 import { Environment } from '../../main/generated/client';
-import { toggleEnvironmentFavorite } from '../ipc/environmentsIpcHandler';
 import DynamicImageLoad from '../components/DynamicImageLoad';
+import EnvironmentFavoriteButton from '../components/EnvironmentFavoriteButton';
 
 export default function HomeEnvironmentListView() {
   const { environmentList } = useEnvironmentList();
   const { updateEnvironmentList } = useEnvironmentList();
-  const { createShortNotification } = useNotifications();
   const { t } = useTranslation();
 
   useEffect(() => updateEnvironmentList(), []);
@@ -40,36 +37,6 @@ export default function HomeEnvironmentListView() {
       </div>
     </div>
   );
-
-  async function toggleFavoriteEnvironment(id: number) {
-    const { favorited, exception } = await toggleEnvironmentFavorite(id);
-
-    if (exception === 'MAX_FAVORITES_EXCEEDED') {
-      createShortNotification({
-        id: Date.now(),
-        message: 'Você só pode favoritar até 3 ambientes',
-        type: 'warning',
-      });
-
-      return;
-    }
-
-    if (favorited) {
-      createShortNotification({
-        id: Date.now(),
-        message: 'Ambiente adicionado aos favoritos',
-        type: 'success',
-      });
-    } else {
-      createShortNotification({
-        id: Date.now(),
-        message: 'Ambiente removido dos favoritos',
-        type: 'success',
-      });
-    }
-
-    updateEnvironmentList();
-  }
 
   return (
     <motion.div
@@ -95,19 +62,10 @@ export default function HomeEnvironmentListView() {
                       </Link>
                     </div>
                     <div className="actionButtons">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          toggleFavoriteEnvironment(environment.id)
-                        }
-                      >
-                        {/* TODO: Make it a component so it don't re-render the whole server list */}
-                        {environment.isFavorite ? (
-                          <AiFillStar />
-                        ) : (
-                          <AiOutlineStar />
-                        )}
-                      </button>
+                      <EnvironmentFavoriteButton
+                        environmentId={environment.id}
+                        isFavorite={environment.isFavorite}
+                      />
                       <Link to={`/environment/${environment.id}/edit`}>
                         <FiSettings />
                       </Link>

@@ -20,7 +20,67 @@
   gap: 1rem;
   justify-content: space-between;
 
-  .section {
-    // background-color: #fff;
+  .side-menu {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-direction: column;
+    height: 100%;
+
+    .menu-items,
+    .last-menu-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-direction: column;
+
+      gap: 0.5rem;
+
+      width: 100%;
+    }
+
+    a {
+      color: var(--font-primary);
+      font-size: 0.9rem;
+
+      border-radius: 0.5rem;
+
+      padding: 0.5rem 1rem;
+      width: 100%;
+
+      display: flex;
+      align-items: center;
+
+      transition: all var(--transition);
+
+      svg {
+        margin-right: 0.75rem;
+        font-size: 1.3rem;
+      }
+
+      &::before {
+        width: 0px;
+        height: 100%;
+        border-radius: 4px;
+        content: '';
+
+        transform: translateX(-1rem);
+
+        transition: width var(--transition);
+      }
+
+      &:hover,
+      &.active {
+        padding: 0.75rem 1rem;
+        background-color: var(--card);
+        color: var(--purple);
+        box-shadow: var(--card-shadow);
+
+        &::before {
+          width: 5px;
+          background-color: var(--purple);
+        }
+      }
+    }
   }
 }
