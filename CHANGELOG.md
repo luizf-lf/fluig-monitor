@@ -5,6 +5,8 @@
 - Front end IPC handlers separated by controller
 - Favorite environment feature implemented
 - Default server image added
+- Spinner loading component added
+- Environment view updated with initial data
 
 # 0.1.1
 

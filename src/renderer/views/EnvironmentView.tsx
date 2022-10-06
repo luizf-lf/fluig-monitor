@@ -1,12 +1,21 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useParams } from 'react-router';
+import { useParams, useRouteMatch } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import {
+  FiAirplay,
+  FiDatabase,
+  FiLayers,
+  FiPackage,
+  FiSettings,
+  FiUsers,
+} from 'react-icons/fi';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import { getEnvironmentById } from '../ipc/environmentsIpcHandler';
 import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import serverImg from '../assets/img/server.png';
-import '../assets/styles/components/CenterView.scss';
+import '../assets/styles/views/EnvironmentView.scss';
 
 export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();
@@ -14,19 +23,50 @@ export default function EnvironmentView(): JSX.Element {
   const [environmentView, setEnvironmentView] = useState(<></>);
   // const [environmentById, setEnvironmentById] = useState();
   const [defaultMessage, setDefaultMessage] = useState(<></>);
+  const { path, url } = useRouteMatch();
 
   useEffect(() => {
     let environmentData = null;
 
     async function getEnvironmentData() {
-      // if a environment is selected, get it's data from the database, and display the data (to be implemented)
+      // if a environment is selected, get it's data from the database, and displays it
       environmentData = await getEnvironmentById(Number(environmentId));
       if (environmentData) {
         setEnvironmentView(
-          <div>
-            <div>{/* side menu */}</div>
-            <div>{/* center view */}</div>
-            <div>{/* server info */}</div>
+          <div className="environment-data-container">
+            <div className="section">
+              <h2>Menu</h2>
+              <div className="side-menu">
+                <div className="menu-items">
+                  <Link to={`${url}/`}>
+                    <FiAirplay /> Resumo
+                  </Link>
+                  <Link to={`${url}/database`}>
+                    <FiDatabase /> Banco De Dados
+                  </Link>
+                  <Link to={`${url}/detailedMemory`}>
+                    <FiLayers /> Memória Detalhada
+                  </Link>
+                  <Link to={`${url}/artifacts`}>
+                    <FiPackage /> Artefatos
+                  </Link>
+                  <Link to={`${url}/users`}>
+                    <FiUsers /> Usuários
+                  </Link>
+                </div>
+                <div className="last-menu-item">
+                  <Link to={`${url}/edit`}>
+                    <FiSettings /> Configurações
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="section">
+              <h2>{environmentData.name}</h2>
+            </div>
+            <div className="section">
+              <h2>Servidor</h2>
+            </div>
           </div>
         );
       }
@@ -43,7 +83,7 @@ export default function EnvironmentView(): JSX.Element {
     if (typeof environmentId !== 'undefined') {
       getEnvironmentData();
     }
-  }, [environmentId, t]);
+  }, [environmentId, t, url]);
 
   return (
     <motion.div
@@ -52,6 +92,7 @@ export default function EnvironmentView(): JSX.Element {
       animate="visible"
       exit="exit"
       id="centerViewContainer"
+      className="center-view-container"
     >
       {environmentView === null ? defaultMessage : environmentView}
     </motion.div>

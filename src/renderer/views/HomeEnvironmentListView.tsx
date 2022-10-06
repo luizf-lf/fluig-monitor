@@ -12,11 +12,12 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 
 import globalContainerVariants from '../utils/globalContainerVariants';
-import '../assets/styles/Views/HomeAmbientListView.scss';
 import defaultServerLogo from '../assets/img/defaultServerLogo.png';
+import '../assets/styles/Views/HomeEnvironmentListView.scss';
 import colorServer from '../assets/svg/color-server.svg';
 import { Environment } from '../../main/generated/client';
 import { toggleEnvironmentFavorite } from '../ipc/environmentsIpcHandler';
+import DynamicImageLoad from '../components/DynamicImageLoad';
 
 export default function HomeEnvironmentListView() {
   const { environmentList } = useEnvironmentList();
@@ -26,14 +27,16 @@ export default function HomeEnvironmentListView() {
 
   useEffect(() => updateEnvironmentList(), []);
 
-  const createAmbientHelper = (
-    <div className="createAmbientCard">
+  const createEnvironmentHelper = (
+    <div className="createEnvironmentCard">
       <div className="chevron">
         <FiChevronLeft />
       </div>
       <div className="info">
         <img src={colorServer} alt="Server" />
-        <span>{t('views.HomeAmbientListView.createAmbientHelper')}</span>
+        <span>
+          {t('views.HomeEnvironmentListView.createEnvironmentHelper')}
+        </span>
       </div>
     </div>
   );
@@ -74,18 +77,18 @@ export default function HomeEnvironmentListView() {
       initial="hidden"
       animate="visible"
       exit="exit"
-      id="homeAmbientListContainer"
+      id="homeEnvironmentListContainer"
     >
-      <h2>{t('views.HomeAmbientListView.header')}</h2>
-      <div id="ambientListContent">
+      <h2>{t('views.HomeEnvironmentListView.header')}</h2>
+      <div id="EnvironmentListContent">
         <CreateEnvironmentButton isExpanded />
         {environmentList.length === 0
-          ? createAmbientHelper
+          ? createEnvironmentHelper
           : environmentList.map((environment: Environment) => {
               return (
-                <div className="ambientCard" key={environment.id}>
+                <div className="EnvironmentCard" key={environment.id}>
                   <div className="heading">
-                    <div className="ambientName">
+                    <div className="EnvironmentName">
                       <Link to={`/environment/${environment.id}`}>
                         <h3>{environment.name}</h3>
                         <small>{environment.baseUrl}</small>
@@ -98,6 +101,7 @@ export default function HomeEnvironmentListView() {
                           toggleFavoriteEnvironment(environment.id)
                         }
                       >
+                        {/* TODO: Make it a component so it don't re-render the whole server list */}
                         {environment.isFavorite ? (
                           <AiFillStar />
                         ) : (
@@ -110,7 +114,12 @@ export default function HomeEnvironmentListView() {
                     </div>
                   </div>
                   <div className="graphContainer">
-                    <img src={defaultServerLogo} alt="Server Logo" />
+                    <DynamicImageLoad
+                      imgSrc={`${environment.baseUrl}/portal/api/servlet/image/1/custom/logo_image.png`}
+                      altName={environment.name}
+                      fallback={defaultServerLogo}
+                      key={environment.id}
+                    />
                   </div>
                   <div className="footer">
                     <SmallTag kind={environment.kind} expanded />

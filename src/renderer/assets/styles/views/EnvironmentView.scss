@@ -1,0 +1,26 @@
+.center-view-container {
+  width: 100%;
+}
+
+.empty-server-view {
+  display: flex;
+  height: 80vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  img.icon {
+    height: 5rem;
+    margin: 2rem;
+  }
+}
+
+.environment-data-container {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+
+  .section {
+    // background-color: #fff;
+  }
+}

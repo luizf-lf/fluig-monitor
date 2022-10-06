@@ -167,9 +167,9 @@ const pt = {
         buttonDelete: 'Excluir',
       },
     },
-    HomeAmbientListView: {
+    HomeEnvironmentListView: {
       header: 'Seus Ambientes',
-      createAmbientHelper:
+      createEnvironmentHelper:
         'Cadastre um novo ambiente utilizando o botão ao lado.',
     },
   },

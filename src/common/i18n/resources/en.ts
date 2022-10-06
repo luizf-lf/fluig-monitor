@@ -166,9 +166,9 @@ const en = {
         buttonDelete: 'Delete',
       },
     },
-    HomeAmbientListView: {
+    HomeEnvironmentListView: {
       header: 'Your environments',
-      createAmbientHelper:
+      createEnvironmentHelper:
         'Register a new environment using the button on the side.',
     },
   },

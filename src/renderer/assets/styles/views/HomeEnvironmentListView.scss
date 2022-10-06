@@ -1,14 +1,14 @@
-#homeAmbientListContainer {
+#homeEnvironmentListContainer {
   width: 100%;
 }
 
-#ambientListContent {
+#EnvironmentListContent {
   width: 100%;
   display: flex;
   justify-content: flex-start;
 }
 
-.createAmbientCard {
+.createEnvironmentCard {
   background-color: var(--card);
   border-radius: var(--card-border-radius);
   box-shadow: var(--card-shadow);
@@ -67,7 +67,7 @@
   }
 }
 
-.ambientCard {
+.EnvironmentCard {
   height: inherit;
   min-height: 15rem;
   min-width: 25rem;
@@ -128,6 +128,10 @@
       max-height: 6rem;
       object-fit: contain;
       height: inherit;
+
+      &.server-logo {
+        max-height: 4rem;
+      }
     }
   }
 
