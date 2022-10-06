@@ -12,7 +12,7 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 
 import globalContainerVariants from '../utils/globalContainerVariants';
-import defaultServerLogo from '../assets/img/defaultServerLogo.png';
+import offlineImage from '../assets/img/offline.png';
 import '../assets/styles/Views/HomeEnvironmentListView.scss';
 import colorServer from '../assets/svg/color-server.svg';
 import { Environment } from '../../main/generated/client';
@@ -117,7 +117,7 @@ export default function HomeEnvironmentListView() {
                     <DynamicImageLoad
                       imgSrc={`${environment.baseUrl}/portal/api/servlet/image/1/custom/logo_image.png`}
                       altName={environment.name}
-                      fallback={defaultServerLogo}
+                      fallback={offlineImage}
                       key={environment.id}
                     />
                   </div>

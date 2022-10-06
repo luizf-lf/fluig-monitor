@@ -31,7 +31,7 @@ export default function DynamicImageLoad({ imgSrc, altName, fallback }: Props) {
         src={fallback}
         style={hasError ? {} : { display: 'none' }}
         className="server-logo"
-        alt="Fallback Logo"
+        alt="Fallback"
       />
     </>
   );
