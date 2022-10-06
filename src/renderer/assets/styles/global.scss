@@ -23,6 +23,16 @@
   --card-shadow: 0px 0px 40px rgba(0, 0, 0, 0.05);
   --card-border-radius: 1rem;
   --transition: 300ms;
+
+  --brand-light: #ff884d;
+  --brand-medium: #ff4d4d;
+  --brand-dark: #cc295f;
+  --brand-gradient: linear-gradient(
+    45deg,
+    var(--brand-light) 0%,
+    var(--brand-medium) 50%,
+    var(--brand-dark) 100%
+  );
 }
 
 .dark-theme {
