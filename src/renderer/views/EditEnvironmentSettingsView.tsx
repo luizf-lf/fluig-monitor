@@ -6,13 +6,11 @@ import log from 'electron-log';
 import {
   FiAlertCircle,
   FiAlertTriangle,
-  FiArrowLeft,
   FiCheck,
   FiRefreshCw,
   FiWifi,
   FiX,
 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import globalContainerVariants from '../utils/globalContainerVariants';
@@ -277,12 +275,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
       animate="visible"
       exit="exit"
       id="centerViewContainer"
-      className="environmentFormContainer"
+      className="environment-edit-form-container"
     >
-      <Link to="/" className="top-return-button">
-        <FiArrowLeft />
-        {t('views.EditEnvironmentView.back')}
-      </Link>
       <h1>{t('views.EditEnvironmentView.form.title')}</h1>
 
       <form action="#" onSubmit={handleUpdateData}>

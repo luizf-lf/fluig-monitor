@@ -56,7 +56,7 @@ export default function HomeEnvironmentListView() {
                 <div className="EnvironmentCard" key={environment.id}>
                   <div className="heading">
                     <div className="EnvironmentName">
-                      <Link to={`/environment/${environment.id}`}>
+                      <Link to={`/environment/${environment.id}/summary`}>
                         <h3>{environment.name}</h3>
                         <small>{environment.baseUrl}</small>
                       </Link>

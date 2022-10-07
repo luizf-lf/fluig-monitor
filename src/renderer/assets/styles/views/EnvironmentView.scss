@@ -19,7 +19,7 @@
 .environment-data-container {
   display: flex;
   gap: 1rem;
-  justify-content: space-between;
+  justify-content: flex-start;
   height: 100%;
 
   .side-menu {
@@ -28,6 +28,8 @@
     justify-content: space-between;
     flex-direction: column;
     height: 90%;
+
+    min-width: 13rem;
 
     .menu-items,
     .last-menu-item {
@@ -45,7 +47,7 @@
       color: var(--font-primary);
       font-size: 0.9rem;
       border-radius: 0.5rem;
-      padding: 0.75rem 1.5rem 0.75rem 0rem;
+      padding: 0.5rem 1.5rem 0.5rem 0rem;
       width: 100%;
 
       display: flex;
@@ -76,12 +78,18 @@
         color: var(--purple);
         box-shadow: var(--card-shadow);
 
-        padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+        padding: 0.75rem;
 
         &::before {
           background-color: var(--purple);
         }
       }
     }
+  }
+
+  #menu-content {
+    height: inherit;
+    width: 100%;
+    overflow: auto;
   }
 }

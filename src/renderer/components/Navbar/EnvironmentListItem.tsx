@@ -44,7 +44,7 @@ export default function EnvironmentListItem({
   if (isExpanded) {
     return (
       <Link
-        to={`/environment/${data.id}`}
+        to={`/environment/${data.id}/summary`}
         className="environment-item-container is-expanded"
         title={environmentTitle}
       >

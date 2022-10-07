@@ -171,6 +171,16 @@ const en = {
       createEnvironmentHelper:
         'Register a new environment using the button on the side.',
     },
+    EnvironmentDataContainer: {
+      sideMenu: {
+        summary: 'Summary',
+        database: 'Database',
+        detailedMemory: 'Detailed Memory',
+        artifacts: 'Artifacts',
+        users: 'Users',
+        settings: 'Settings',
+      },
+    },
   },
   global: {
     environmentKinds: {
@@ -182,6 +192,13 @@ const en = {
       HML: 'STG',
       DEV: 'DEV',
       PROD: 'PRD',
+    },
+  },
+  helpMessages: {
+    environments: {
+      maximumExceeded: 'You can only favorite up to 3 environments.',
+      added: 'Environment added to favorites.',
+      removed: 'Environment removed from favorites.',
     },
   },
 };

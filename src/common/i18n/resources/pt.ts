@@ -172,6 +172,16 @@ const pt = {
       createEnvironmentHelper:
         'Cadastre um novo ambiente utilizando o botão ao lado.',
     },
+    EnvironmentDataContainer: {
+      sideMenu: {
+        summary: 'Resumo',
+        database: 'Banco De Dados',
+        detailedMemory: 'Memória Detalhada',
+        artifacts: 'Artefatos',
+        users: 'Usuários',
+        settings: 'Configurações',
+      },
+    },
   },
   global: {
     environmentKinds: {
@@ -183,6 +193,13 @@ const pt = {
       HML: 'HML',
       DEV: 'DEV',
       PROD: 'PRD',
+    },
+  },
+  helpMessages: {
+    environments: {
+      maximumExceeded: 'Você só pode favoritar até 3 ambientes.',
+      added: 'Ambiente adicionado aos favoritos.',
+      removed: 'Ambiente removido dos favoritos.',
     },
   },
 };

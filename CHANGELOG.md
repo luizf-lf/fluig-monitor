@@ -6,7 +6,7 @@
 - Favorite environment feature implemented
 - Default server image added
 - Spinner loading component added
-- Environment view updated with initial data
+- Environment view submenu routing implemented
 
 # 0.1.1
 

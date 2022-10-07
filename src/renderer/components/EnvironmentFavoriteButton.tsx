@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
@@ -19,13 +20,15 @@ export default function EnvironmentFavoriteButton({
     isFavorite ? <AiFillStar /> : <AiOutlineStar />
   );
 
+  const { t } = useTranslation();
+
   async function toggleFavoriteEnvironment(id: number) {
     const { favorited, exception } = await toggleEnvironmentFavorite(id);
 
     if (exception === 'MAX_FAVORITES_EXCEEDED') {
       createShortNotification({
         id: Date.now(),
-        message: 'Você só pode favoritar até 3 ambientes',
+        message: t('helpMessages.environments.maximumExceeded'),
         type: 'warning',
       });
 
@@ -35,14 +38,14 @@ export default function EnvironmentFavoriteButton({
     if (favorited) {
       createShortNotification({
         id: Date.now(),
-        message: 'Ambiente adicionado aos favoritos',
+        message: t('helpMessages.environments.added'),
         type: 'success',
       });
       setFavoriteStar(<AiFillStar />);
     } else {
       createShortNotification({
         id: Date.now(),
-        message: 'Ambiente removido dos favoritos',
+        message: t('helpMessages.environments.removed'),
         type: 'success',
       });
       setFavoriteStar(<AiOutlineStar />);
