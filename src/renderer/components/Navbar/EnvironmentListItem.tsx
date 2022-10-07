@@ -67,7 +67,7 @@ export default function EnvironmentListItem({
 
   return (
     <Link
-      to={`/environment/${data.id}`}
+      to={`/environment/${data.id}/summary`}
       className="environment-item-container"
       title={environmentTitle}
     >

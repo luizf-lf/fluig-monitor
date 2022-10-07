@@ -1,7 +1,7 @@
 const globalContainerVariants = {
   hidden: {
     opacity: 0,
-    scale: '80%',
+    scale: '90%',
   },
   visible: {
     opacity: 1,

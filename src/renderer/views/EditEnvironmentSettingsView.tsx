@@ -274,8 +274,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       initial="hidden"
       animate="visible"
       exit="exit"
-      id="centerViewContainer"
-      className="environment-edit-form-container"
+      id="environment-edit-form-container"
     >
       <h1>{t('views.EditEnvironmentView.form.title')}</h1>
 
