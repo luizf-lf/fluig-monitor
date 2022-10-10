@@ -7,7 +7,7 @@ import {
   updateFrontEndTheme,
 } from '../../ipc/settingsIpcHandler';
 
-function RightButtons() {
+export default function NavActionButtons() {
   const [themeIcon, setThemeIcon] = useState(<FiSun />);
 
   function setTheme(theme: string, cacheToDb = false) {
@@ -60,5 +60,3 @@ function RightButtons() {
     </section>
   );
 }
-
-export default RightButtons;

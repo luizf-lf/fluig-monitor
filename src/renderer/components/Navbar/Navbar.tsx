@@ -6,7 +6,7 @@ import EnvironmentList from './EnvironmentList';
 
 import '../../assets/styles/components/Navbar.scss';
 import Logo from './Logo';
-import RightButtons from './RightButtons';
+import NavActionButtons from './NavActionButtons';
 
 function Navbar() {
   const { environmentList } = useEnvironmentList();
@@ -32,7 +32,7 @@ function Navbar() {
           </AnimatePresence>
         </section>
       </div>
-      <RightButtons />
+      <NavActionButtons />
     </motion.nav>
   );
 }
