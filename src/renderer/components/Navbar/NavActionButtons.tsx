@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import log from 'electron-log';
-import { FiMoon, FiSettings, FiSun } from 'react-icons/fi';
+import { FiAirplay, FiBell, FiMoon, FiSettings, FiSun } from 'react-icons/fi';
 import '../../assets/styles/components/Navbar/RightButtons.scss';
+import { useTranslation } from 'react-i18next';
 import {
   getFrontEndTheme,
   updateFrontEndTheme,
@@ -9,6 +10,7 @@ import {
 
 export default function NavActionButtons() {
   const [themeIcon, setThemeIcon] = useState(<FiSun />);
+  const { t } = useTranslation();
 
   function setTheme(theme: string, cacheToDb = false) {
     log.info('Updating app front end theme to', theme);
@@ -50,11 +52,34 @@ export default function NavActionButtons() {
 
   return (
     <section id="rightButtons">
-      <button type="button" className="optionButton" onClick={toggleAppTheme}>
+      <button
+        type="button"
+        className="optionButton"
+        title={t('navbar.actionButtons.kioskMode')}
+      >
+        <FiAirplay />
+      </button>
+      <button
+        type="button"
+        className="optionButton"
+        title={t('navbar.actionButtons.notifications')}
+      >
+        <FiBell />
+      </button>
+      <button
+        type="button"
+        className="optionButton"
+        onClick={toggleAppTheme}
+        title={t('navbar.actionButtons.theme')}
+      >
         {themeIcon}
       </button>
       {/* TODO: Create options modal */}
-      <button type="button" className="optionButton">
+      <button
+        type="button"
+        className="optionButton"
+        title={t('navbar.actionButtons.settings')}
+      >
         <FiSettings />
       </button>
     </section>

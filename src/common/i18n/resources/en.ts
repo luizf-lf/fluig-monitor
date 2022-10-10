@@ -19,6 +19,14 @@ const en = {
       quit: 'Quit',
     },
   },
+  navbar: {
+    actionButtons: {
+      kioskMode: 'Enable Kiosk Mode',
+      notifications: 'Open Notifications',
+      theme: 'Toggle Color Theme',
+      settings: 'Open Settings',
+    },
+  },
   views: {
     EnvironmentView: {
       empty:

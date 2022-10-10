@@ -21,5 +21,9 @@
     justify-content: center;
 
     border-radius: 100%;
+
+    &:hover {
+      background-color: var(--border-light);
+    }
   }
 }

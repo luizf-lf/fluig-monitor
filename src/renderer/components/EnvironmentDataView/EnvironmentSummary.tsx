@@ -15,12 +15,25 @@ export default function EnvironmentSummary({ environment }: Props) {
       exit="exit"
       id="environment-summary-container"
     >
-      <div className="section">
+      <section id="server-data-widgets">
         <h2>{environment.name}</h2>
-      </div>
-      <div className="section">
-        <h2>Servidor</h2>
-      </div>
+        <div>
+          <div>status</div>
+          <div>disk</div>
+          <div>memory</div>
+          <div>database</div>
+        </div>
+        <h2>Performance</h2>
+        <div>
+          <div>performance graph</div>
+        </div>
+      </section>
+
+      <section id="server-info-widgets">
+        <div>server info</div>
+        <div>licenses</div>
+        <div>services</div>
+      </section>
     </motion.div>
   );
 }

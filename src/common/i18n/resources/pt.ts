@@ -19,6 +19,14 @@ const pt = {
       quit: 'Sair',
     },
   },
+  navbar: {
+    actionButtons: {
+      kioskMode: 'Habilitar Modo Quiosque',
+      notifications: 'Abrir Notificações',
+      theme: 'Alterar Tema',
+      settings: 'Abrir Configurações',
+    },
+  },
   views: {
     EnvironmentView: {
       empty:
