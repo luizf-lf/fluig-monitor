@@ -5,12 +5,27 @@ import {
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
-import { Environment } from '../generated/client';
+import {
+  Environment,
+  licenseHistory,
+  MonitorHistory,
+  StatisticsHistory,
+} from '../generated/client';
+
+interface EnvironmentWithHistory extends Environment {
+  licenseHistory: licenseHistory[];
+  statisticHistory: StatisticsHistory[];
+  monitorHistory: MonitorHistory[];
+}
 
 export default class EnvironmentController {
-  environments: Environment[];
+  environments: EnvironmentWithRelatedData[];
 
-  found: Environment | null;
+  found:
+    | Environment
+    | EnvironmentWithHistory
+    | EnvironmentWithRelatedData
+    | null;
 
   created: Environment | null;
 
@@ -26,7 +41,7 @@ export default class EnvironmentController {
     this.deleted = null;
   }
 
-  async getAll(): Promise<Environment[]> {
+  async getAll(): Promise<EnvironmentWithRelatedData[]> {
     log.info('EnvironmentController: Querying all environments from database.');
     this.environments = await prismaClient.environment.findMany({
       where: {
@@ -60,7 +75,39 @@ export default class EnvironmentController {
       },
     });
 
-    return this.found;
+    return includeRelatedData
+      ? (this.found as EnvironmentWithRelatedData)
+      : this.found;
+  }
+
+  async getHistoryById(id: number): Promise<EnvironmentWithHistory | null> {
+    this.found = await prismaClient.environment.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        licenseHistory: {
+          take: 100,
+          include: {
+            httpResponse: true,
+          },
+        },
+        statisticHistory: {
+          take: 100,
+          include: {
+            httpResponse: true,
+          },
+        },
+        monitorHistory: {
+          take: 100,
+          include: {
+            httpResponse: true,
+          },
+        },
+      },
+    });
+
+    return this.found as EnvironmentWithHistory;
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {

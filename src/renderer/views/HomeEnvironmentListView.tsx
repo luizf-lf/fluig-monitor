@@ -10,7 +10,7 @@ import CreateEnvironmentButton from '../components/CreateEnvironmentButton';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 
 import globalContainerVariants from '../utils/globalContainerVariants';
-import offlineImage from '../assets/img/offline.png';
+import defaultServerLogo from '../assets/img/defaultServerLogo.png';
 import '../assets/styles/Views/HomeEnvironmentListView.scss';
 import colorServer from '../assets/svg/color-server.svg';
 import { Environment } from '../../main/generated/client';
@@ -75,7 +75,7 @@ export default function HomeEnvironmentListView() {
                     <DynamicImageLoad
                       imgSrc={`${environment.baseUrl}/portal/api/servlet/image/1/custom/logo_image.png`}
                       altName={environment.name}
-                      fallback={offlineImage}
+                      fallback={defaultServerLogo}
                       key={environment.id}
                     />
                   </div>

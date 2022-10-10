@@ -1,8 +1,12 @@
+import { getEnvironmentById } from '../../ipc/environmentsIpcHandler';
+
 interface Props {
   environmentId: number;
 }
 
 export default function EnvironmentStatusSummary({ environmentId }: Props) {
+  const environment = getEnvironmentById(environmentId);
+
   return (
     <div>
       <h3>Environment Name</h3>

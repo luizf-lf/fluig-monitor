@@ -5,10 +5,10 @@ generator client {
   output   = "../src/main/generated/client"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  output   = "./ERD.svg"
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "./ERD.svg"
+// }
 
 datasource db {
   provider = "sqlite"
@@ -24,7 +24,7 @@ model Environment {
   oAuthKeysId      EnvironmentAuthKeys?
   updateScheduleId UpdateSchedule?
   httpResponses    HTTPResponse[]
-  licenceHistory   LicenceHistory[]
+  licenseHistory   licenseHistory[]
   monitorHistory   MonitorHistory[]
   statisticHistory StatisticsHistory[]
   logCreatedAt     DateTime             @default(now())
@@ -60,12 +60,12 @@ model HTTPResponse {
   timestamp        DateTime           @default(now())
   statusCode       Int
   responseTimeMs   Int
-  licenseHistory   LicenceHistory?
+  licenseHistory   licenseHistory?
   monitorHistory   MonitorHistory?
   statisticHistory StatisticsHistory?
 }
 
-model LicenceHistory {
+model licenseHistory {
   id             Int          @id @default(autoincrement())
   environmentId  Int
   environment    Environment  @relation(fields: [environmentId], references: [id])

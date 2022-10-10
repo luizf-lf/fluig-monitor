@@ -30,6 +30,7 @@ import { UpdateScheduleControllerInterface } from '../common/interfaces/UpdateSc
 import { AuthKeysControllerInterface } from '../common/interfaces/AuthKeysControllerInterface';
 import LogController from './controllers/LogController';
 import SettingsController from './controllers/SettingsController';
+import syncEnvironmentsJob from './jobs/syncEnvironmentsJob';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -64,6 +65,12 @@ const installExtensions = async () => {
 
 const createWindow = async () => {
   log.info('Creating a new window');
+
+  await syncEnvironmentsJob();
+
+  // setInterval(async () => {
+  //   await syncEnvironmentsJob();
+  // }, 30000);
 
   await runDbMigrations();
 

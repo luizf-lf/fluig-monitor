@@ -8,10 +8,10 @@ import EnvironmentServices from './EnvironmentServices';
 import EnvironmentStatusSummary from './EnvironmentStatusSummary';
 
 interface Props {
-  environment: Environment;
+  environmentId: number;
 }
 
-export default function EnvironmentSummary({ environment }: Props) {
+export default function EnvironmentSummary({ environmentId }: Props) {
   return (
     <motion.div
       variants={globalContainerVariants}
@@ -21,7 +21,7 @@ export default function EnvironmentSummary({ environment }: Props) {
       id="environment-summary-container"
     >
       <section id="server-data">
-        <EnvironmentStatusSummary environmentId={environment.id} />
+        <EnvironmentStatusSummary environmentId={environmentId} />
         <EnvironmentPerformanceGraph />
       </section>
 
