@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion';
 import { Environment } from '../../../main/generated/client';
 import globalContainerVariants from '../../utils/globalContainerVariants';
+import EnvironmentLicenses from './EnvironmentLicenses';
+import EnvironmentPerformanceGraph from './EnvironmentPerformanceGraph';
+import EnvironmentServerInfo from './EnvironmentServerInfo';
+import EnvironmentServices from './EnvironmentServices';
+import EnvironmentStatusSummary from './EnvironmentStatusSummary';
 
 interface Props {
   environment: Environment;
@@ -15,24 +20,15 @@ export default function EnvironmentSummary({ environment }: Props) {
       exit="exit"
       id="environment-summary-container"
     >
-      <section id="server-data-widgets">
-        <h2>{environment.name}</h2>
-        <div>
-          <div>status</div>
-          <div>disk</div>
-          <div>memory</div>
-          <div>database</div>
-        </div>
-        <h2>Performance</h2>
-        <div>
-          <div>performance graph</div>
-        </div>
+      <section id="server-data">
+        <EnvironmentStatusSummary environmentId={environment.id} />
+        <EnvironmentPerformanceGraph />
       </section>
 
-      <section id="server-info-widgets">
-        <div>server info</div>
-        <div>licenses</div>
-        <div>services</div>
+      <section id="server-info">
+        <EnvironmentServerInfo />
+        <EnvironmentLicenses />
+        <EnvironmentServices />
       </section>
     </motion.div>
   );
