@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Environment } from '../../../main/generated/client';
 import globalContainerVariants from '../../utils/globalContainerVariants';
 import EnvironmentLicenses from './EnvironmentLicenses';
 import EnvironmentPerformanceGraph from './EnvironmentPerformanceGraph';

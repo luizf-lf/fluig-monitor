@@ -24,7 +24,7 @@ import { useNotifications } from '../contexts/NotificationsContext';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
-import AuthKeysDecoder from '../classes/AuthKeysDecoder';
+import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId }: EnvironmentViewParams = useParams();
