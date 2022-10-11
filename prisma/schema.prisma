@@ -109,34 +109,34 @@ model StatisticsHistory {
   dbVersion              String?
   dbDriverName           String?
   dbDriverVersion        String?
-  connectedUsers         Int?
-  memoryHeap             Int?
-  nonMemoryHeap          Int?
-  dbTraficRecieved       Int?
-  dbTraficSent           Int?
-  dbSize                 Int?
+  connectedUsers         BigInt?
+  memoryHeap             BigInt?
+  nonMemoryHeap          BigInt?
+  dbTraficRecieved       BigInt?
+  dbTraficSent           BigInt?
+  dbSize                 BigInt?
   artifactsApps          String?
   artifactsCore          String?
   artifactsSystem        String?
   externalConverter      Boolean?
   runtimeStart           DateTime?
-  runtimeUptime          Int?
-  threadingCount         Int?
-  threadingPeakCount     Int?
-  threadingDaemonCount   Int?
-  threadingTotalStarted  Int?
+  runtimeUptime          BigInt?
+  threadingCount         BigInt?
+  threadingPeakCount     BigInt?
+  threadingDaemonCount   BigInt?
+  threadingTotalStarted  BigInt?
   detailedMemory         String?
-  systemServerMemorySize Int?
-  systemServerMemoryFree Int?
+  systemServerMemorySize BigInt?
+  systemServerMemoryFree BigInt?
   systemServerHDSize     String?
   systemServerHDFree     String?
   systemServerCoreCount  Int?
   systemServerArch       String?
-  systemTmpFolderSize    Int?
-  systemLogFolderSize    Int?
-  systemHeapMaxSize      Int?
-  systemHeapSize         Int?
-  systemUptime           Int?
+  systemTmpFolderSize    BigInt?
+  systemLogFolderSize    BigInt?
+  systemHeapMaxSize      BigInt?
+  systemHeapSize         BigInt?
+  systemUptime           BigInt?
 }
 
 model AppSetting {

@@ -22,7 +22,10 @@ export default function rotateLogFile(): void {
       isDevelopment ? 'app.dev.log' : 'app.log'
     );
 
-    if (!fs.existsSync(filePath.replace('.log', `_${todayDateFormat}.log`))) {
+    if (
+      fs.statSync(filePath).mtime.getDate() !== new Date().getDate() &&
+      !fs.existsSync(filePath.replace('.log', `_${todayDateFormat}.log`))
+    ) {
       log.info('This log file needs rotation and will be archived');
 
       fs.renameSync(

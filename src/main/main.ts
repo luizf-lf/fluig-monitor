@@ -70,10 +70,15 @@ const createWindow = async () => {
 
   await syncEnvironmentsJob();
 
+  // this function shall be transformed into an nodejs worker,
+  //  but that's a problem for the future me
   setInterval(async () => {
     await syncEnvironmentsJob();
-    log.info('Next environment monitoring sync will be executed in 60s');
-  }, 60000);
+    log.info(
+      'Next environment monitoring sync will be executed at',
+      new Date(Date.now() + 1200000).toTimeString()
+    );
+  }, 120000);
 
   if (isDevelopment) {
     log.info('Installing additional dev extensions');

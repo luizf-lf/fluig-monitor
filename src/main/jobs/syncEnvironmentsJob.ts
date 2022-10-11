@@ -9,6 +9,7 @@ import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentC
 import HttpResponseController from '../controllers/HttpResponseController';
 import MonitorHistoryController from '../controllers/MonitorHistoryController';
 import frequencyToMs from '../utils/frequencyToMs';
+import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 
 async function syncLicenseData(
   item: EnvironmentWithRelatedData
@@ -169,6 +170,133 @@ async function syncMonitorData(
   }
 }
 
+async function syncStatisticsData(
+  item: EnvironmentWithRelatedData
+): Promise<void> {
+  log.info('syncEnvironmentsJob: Fetching statistics data');
+
+  if (item.oAuthKeysId) {
+    const decodedKeys = new AuthKeysDecoder({
+      hash: item.oAuthKeysId.hash,
+      payload: item.oAuthKeysId.payload,
+    }).decode();
+
+    const requestData = {
+      url: `${item.baseUrl}/monitoring/api/v1/statistics/report`,
+      method: 'GET',
+    };
+
+    const fluigClient = new FluigAPIClient({
+      oAuthKeys: decodedKeys,
+      requestData,
+    });
+
+    const initialTiming = Date.now();
+
+    await fluigClient.get();
+
+    const responseTimeMs = Date.now() - initialTiming;
+
+    if (!fluigClient.hasError) {
+      if (fluigClient.httpStatus === 200) {
+        const statisticsData = fluigClient.httpResponse;
+
+        const logged = await new StatisticsHistoryController().new({
+          environmentId: item.id,
+          statusCode: fluigClient.httpStatus,
+          timestamp: new Date().toISOString(),
+          responseTimeMs,
+          endpoint: requestData.url,
+
+          dataSourceFluigDs: JSON.stringify(statisticsData.DATA_SOURCE_FLUIGDS),
+          dataSourceFluigDsRo: JSON.stringify(
+            statisticsData.DATA_SOURCE_FLUIGDSRO
+          ),
+          dbName: statisticsData.DATABASE_INFO.databaseName,
+          dbVersion: statisticsData.DATABASE_INFO.databaseVersion,
+          dbDriverName: statisticsData.DATABASE_INFO.driverName,
+          dbDriverVersion: statisticsData.DATABASE_INFO.driverVersion,
+          connectedUsers: statisticsData.CONNECTED_USERS.connectedUsers,
+          memoryHeap: statisticsData.MEMORY['heap-memory-usage'],
+          nonMemoryHeap: statisticsData.MEMORY['non-heap-memory-usage'],
+          dbTraficRecieved: statisticsData.DATABASE_TRAFFIC.received
+            ? statisticsData.DATABASE_TRAFFIC.received
+            : -1,
+          dbTraficSent: statisticsData.DATABASE_TRAFFIC.sent
+            ? statisticsData.DATABASE_TRAFFIC.sent
+            : -1,
+          dbSize: statisticsData.DATABASE_SIZE.size,
+          artifactsApps: JSON.stringify(statisticsData.ARTIFACTS_APPS_DIR),
+          artifactsCore: JSON.stringify(statisticsData.ARTIFACTS_CORE_DIR),
+          artifactsSystem: JSON.stringify(statisticsData.ARTIFACTS_SYSTEM_DIR),
+          externalConverter: statisticsData.EXTERNAL_CONVERTER.exists,
+          runtimeStart: statisticsData.RUNTIME.startTime,
+          runtimeUptime: statisticsData.RUNTIME.uptime,
+          threadingCount: statisticsData.THREADING.count,
+          threadingPeakCount: statisticsData.THREADING.peakCount,
+          threadingDaemonCount: statisticsData.THREADING.deamonCount,
+          threadingTotalStarted: statisticsData.THREADING.totalStartedCount,
+          detailedMemory: JSON.stringify(statisticsData.DETAILED_MEMORY),
+          systemServerMemorySize:
+            statisticsData.OPERATION_SYSTEM['server-memory-size'],
+          systemServerMemoryFree:
+            statisticsData.OPERATION_SYSTEM['server-memory-free'],
+          systemServerHDSize:
+            statisticsData.OPERATION_SYSTEM['server-hd-space'],
+          systemServerHDFree:
+            statisticsData.OPERATION_SYSTEM['server-hd-space-free'],
+          systemServerCoreCount:
+            statisticsData.OPERATION_SYSTEM['server-core-system'],
+          systemServerArch:
+            statisticsData.OPERATION_SYSTEM['server-arch-system'],
+          systemTmpFolderSize:
+            statisticsData.OPERATION_SYSTEM['server-temp-size'],
+          systemLogFolderSize:
+            statisticsData.OPERATION_SYSTEM['server-log-size'],
+          systemHeapMaxSize: statisticsData.OPERATION_SYSTEM['heap-max-size'],
+          systemHeapSize: statisticsData.OPERATION_SYSTEM['heap-size'],
+          systemUptime: statisticsData.OPERATION_SYSTEM['system-uptime'],
+        });
+
+        await new LogController().writeLog({
+          message: 'Statistics history saved',
+          type: 'INFO',
+        });
+
+        if (logged !== null) {
+          log.info(
+            'syncEnvironmentsJob: Statistics history logged successfully'
+          );
+        }
+      } else {
+        log.warn(
+          'syncEnvironmentsJob: Server error while fetching statistics data from environment',
+          item.id,
+          `(${fluigClient.httpStatus})`
+        );
+
+        if (fluigClient.httpStatus) {
+          await new HttpResponseController().new({
+            environmentId: item.id,
+            responseTimeMs,
+            endpoint: requestData.url,
+            statusCode: fluigClient.httpStatus,
+            timestamp: new Date().toISOString(),
+          });
+        }
+      }
+    } else {
+      log.error(
+        'syncEnvironmentsJob: Error while syncing environment',
+        item.id,
+        ':',
+        fluigClient.errorStack,
+        '(statistics api)'
+      );
+    }
+  }
+}
+
 export default async function syncEnvironmentsJob() {
   log.info('Executing environment sync job');
 
@@ -180,6 +308,8 @@ export default async function syncEnvironmentsJob() {
         'syncEnvironmentsJob: Checking related data for environment',
         item.id
       );
+
+      // TODO: Double check the "needsSync" logic
       let needsSync = false;
 
       const date = new Date();
@@ -222,7 +352,7 @@ export default async function syncEnvironmentsJob() {
           );
           await syncLicenseData(item);
           await syncMonitorData(item);
-          // await syncStatisticsData(item); // TODO: Implement statistics sync
+          await syncStatisticsData(item); // TODO: Implement statistics sync
 
           log.info('syncEnvironmentsJob: Environment sync job finished');
         } else {
