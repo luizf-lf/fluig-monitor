@@ -19,12 +19,12 @@ import {
   getEnvironmentById,
   updateEnvironment,
 } from '../ipc/environmentsIpcHandler';
-import testConnection from '../services/testConnection';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
+import FluigAPIClient from '../../common/classes/FluigAPIClient';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId }: EnvironmentViewParams = useParams();
@@ -73,7 +73,11 @@ function EditEnvironmentSettingsView(): JSX.Element {
   }, [environmentId]);
 
   useEffect(() => {
-    if (environmentData.id) {
+    if (
+      environmentData.id &&
+      environmentData.oAuthKeysId &&
+      environmentData.updateScheduleId
+    ) {
       const oAuthKeys = new AuthKeysDecoder(
         environmentData.oAuthKeysId
       ).decode();
@@ -119,20 +123,35 @@ function EditEnvironmentSettingsView(): JSX.Element {
       );
 
       setTimeout(async () => {
-        const result = await testConnection(domainUrl, auth);
+        const fluigClient = new FluigAPIClient({
+          oAuthKeys: auth,
+          requestData: {
+            method: 'GET',
+            url: `${domainUrl}/api/public/2.0/users/getCurrent`,
+          },
+        });
 
-        if (typeof result !== 'undefined') {
-          if (result.status !== 200) {
-            log.info('Test connection failed with status', result.status);
+        await fluigClient.get();
+
+        if (fluigClient.httpStatus) {
+          if (fluigClient.httpStatus !== 200) {
+            log.info(
+              'Test connection failed with status',
+              fluigClient.httpStatus
+            );
             setTestMessage(
               <span className="info-blip has-warning">
                 <FiAlertCircle />
-                {t('views.EditEnvironmentView.connectionError')} {result.status}
-                : {result.statusText}
+                {t('views.EditEnvironmentView.connectionError')} (
+                {fluigClient.httpStatus})
               </span>
             );
           } else {
-            log.info('Test connection done successfully (', result.status, ')');
+            log.info(
+              'Test connection done successfully (',
+              fluigClient.httpStatus,
+              ')'
+            );
             setTestMessage(
               <span className="info-blip has-success">
                 <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}

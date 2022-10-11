@@ -16,9 +16,9 @@ import log from 'electron-log';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import { createEnvironment } from '../ipc/environmentsIpcHandler';
-import testConnection from '../services/testConnection';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
+import FluigAPIClient from '../../common/classes/FluigAPIClient';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -129,20 +129,35 @@ export default function CreateEnvironmentView(): JSX.Element {
       );
 
       setTimeout(async () => {
-        const result = await testConnection(domainUrl, auth);
+        const fluigClient = new FluigAPIClient({
+          oAuthKeys: auth,
+          requestData: {
+            method: 'GET',
+            url: `${domainUrl}/api/public/2.0/users/getCurrent`,
+          },
+        });
 
-        if (typeof result !== 'undefined') {
-          if (result.status !== 200) {
-            log.info('Test connection failed with status', result.status);
+        await fluigClient.get();
+
+        if (fluigClient.httpStatus) {
+          if (fluigClient.httpStatus !== 200) {
+            log.info(
+              'Test connection failed with status',
+              fluigClient.httpStatus
+            );
             setTestMessage(
               <span className="info-blip has-warning">
                 <FiAlertCircle />{' '}
-                {t('views.CreateEnvironmentView.connectionError')}{' '}
-                {result.status}: {result.statusText}
+                {t('views.CreateEnvironmentView.connectionError')} (
+                {fluigClient.httpStatus})
               </span>
             );
           } else {
-            log.info('Test connection done successfully (', result.status, ')');
+            log.info(
+              'Test connection done successfully (',
+              fluigClient.httpStatusText,
+              ')'
+            );
             setTestMessage(
               <span className="info-blip has-success">
                 <FiCheck /> {t('views.CreateEnvironmentView.connectionOk')}
