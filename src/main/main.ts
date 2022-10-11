@@ -72,7 +72,8 @@ const createWindow = async () => {
 
   // setInterval(async () => {
   //   await syncEnvironmentsJob();
-  // }, 30000);
+  //   log.info('Next environment monitoring sync will be executed in 60s');
+  // }, 60000);
 
   if (isDevelopment) {
     log.info('Installing additional dev extensions');

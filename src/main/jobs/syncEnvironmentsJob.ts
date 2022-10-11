@@ -7,9 +7,12 @@ import LicenseHistoryController from '../controllers/LicenseHistoryController';
 import LogController from '../controllers/LogController';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import HttpResponseController from '../controllers/HttpResponseController';
+import MonitorHistoryController from '../controllers/MonitorHistoryController';
 
-async function syncLicenseData(item: EnvironmentWithRelatedData) {
-  log.info('Fetching license data');
+async function syncLicenseData(
+  item: EnvironmentWithRelatedData
+): Promise<void> {
+  log.info('syncEnvironmentsJob: Fetching license data');
   if (item.oAuthKeysId) {
     const decodedKeys = new AuthKeysDecoder({
       hash: item.oAuthKeysId.hash,
@@ -61,7 +64,7 @@ async function syncLicenseData(item: EnvironmentWithRelatedData) {
         }
       } else {
         log.warn(
-          'syncEnvironmentsJob: Server error while fetching data from environment',
+          'syncEnvironmentsJob: Server error while fetching license data from environment',
           item.id,
           `(${fluigClient.httpStatus})`
         );
@@ -81,7 +84,85 @@ async function syncLicenseData(item: EnvironmentWithRelatedData) {
         'syncEnvironmentsJob: Error while syncing environment',
         item.id,
         ':',
-        fluigClient.errorStack
+        fluigClient.errorStack,
+        '(licenses api)'
+      );
+    }
+  }
+}
+
+async function syncMonitorData(
+  item: EnvironmentWithRelatedData
+): Promise<void> {
+  log.info('syncEnvironmentsJob: Fetching monitor data');
+
+  if (item.oAuthKeysId) {
+    const decodedKeys = new AuthKeysDecoder({
+      hash: item.oAuthKeysId.hash,
+      payload: item.oAuthKeysId.payload,
+    }).decode();
+
+    const requestData = {
+      url: `${item.baseUrl}/monitoring/api/v1/monitors/report`,
+      method: 'GET',
+    };
+
+    const fluigClient = new FluigAPIClient({
+      oAuthKeys: decodedKeys,
+      requestData,
+    });
+
+    const initialTiming = Date.now();
+
+    await fluigClient.get();
+
+    const responseTimeMs = Date.now() - initialTiming;
+
+    if (!fluigClient.hasError) {
+      if (fluigClient.httpStatus === 200) {
+        const monitorData = fluigClient.httpResponse.items;
+
+        const logged = await new MonitorHistoryController().new({
+          environmentId: item.id,
+          statusCode: fluigClient.httpStatus,
+          timestamp: new Date().toISOString(),
+          responseTimeMs,
+          endpoint: requestData.url,
+          monitorData,
+        });
+
+        await new LogController().writeLog({
+          message: 'Monitor history saved',
+          type: 'INFO',
+        });
+
+        if (logged !== null) {
+          log.info('syncEnvironmentsJob: Monitor history logged successfully');
+        }
+      } else {
+        log.warn(
+          'syncEnvironmentsJob: Server error while fetching monitor data from environment',
+          item.id,
+          `(${fluigClient.httpStatus})`
+        );
+
+        if (fluigClient.httpStatus) {
+          await new HttpResponseController().new({
+            environmentId: item.id,
+            responseTimeMs,
+            endpoint: requestData.url,
+            statusCode: fluigClient.httpStatus,
+            timestamp: new Date().toISOString(),
+          });
+        }
+      }
+    } else {
+      log.error(
+        'syncEnvironmentsJob: Error while syncing environment',
+        item.id,
+        ':',
+        fluigClient.errorStack,
+        '(monitor api)'
       );
     }
   }
@@ -134,9 +215,12 @@ export default async function syncEnvironmentsJob() {
           log.info(
             'syncEnvironmentsJob: Environment',
             item.id,
-            'needs synchronization. Fetching monitor api data'
+            'needs synchronization. Fetching api data.'
           );
           await syncLicenseData(item);
+          await syncMonitorData(item);
+
+          log.info('syncEnvironmentsJob: Environment sync job finished');
         } else {
           log.info(
             'syncEnvironmentsJob: Environment',
@@ -153,6 +237,4 @@ export default async function syncEnvironmentsJob() {
   } else {
     log.info('syncEnvironmentsJob: No environment found, skipping sync.');
   }
-
-  log.info('Environment sync job finished');
 }

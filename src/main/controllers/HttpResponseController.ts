@@ -1,3 +1,4 @@
+import log from 'electron-log';
 import prismaClient from '../database/prismaContext';
 import { HTTPResponse } from '../generated/client';
 
@@ -17,6 +18,9 @@ export default class HttpResponseController {
   }
 
   async new(data: CreateHttpResponseProps): Promise<HTTPResponse> {
+    log.info(
+      'HttpResponseController: Creating a new http response on the database'
+    );
     this.created = await prismaClient.hTTPResponse.create({
       data,
     });

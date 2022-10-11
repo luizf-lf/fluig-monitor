@@ -1,3 +1,4 @@
+import log from 'electron-log';
 import { LicenseHistory } from '../generated/client';
 import prismaClient from '../database/prismaContext';
 import HttpResponseController from './HttpResponseController';
@@ -41,7 +42,10 @@ export default class LicenseHistoryController {
       responseTimeMs,
     });
 
-    const createdLicenseHistory = await prismaClient.licenseHistory.create({
+    log.info(
+      'LicenseHistoryController: Creating a new license history on the database'
+    );
+    this.created = await prismaClient.licenseHistory.create({
       data: {
         activeUsers,
         remainingLicenses,
@@ -51,8 +55,6 @@ export default class LicenseHistoryController {
         httpResponseId: httpResponse.id,
       },
     });
-
-    this.created = createdLicenseHistory;
 
     return this.created;
   }
