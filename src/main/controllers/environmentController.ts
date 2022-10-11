@@ -7,13 +7,13 @@ import {
 import prismaClient from '../database/prismaContext';
 import {
   Environment,
-  licenseHistory,
+  LicenseHistory,
   MonitorHistory,
   StatisticsHistory,
 } from '../generated/client';
 
 interface EnvironmentWithHistory extends Environment {
-  licenseHistory: licenseHistory[];
+  licenseHistory: LicenseHistory[];
   statisticHistory: StatisticsHistory[];
   monitorHistory: MonitorHistory[];
 }

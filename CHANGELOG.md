@@ -7,6 +7,8 @@
 - Default server image added
 - Spinner loading component added
 - Environment view submenu routing implemented
+- Fluig API Client class implemented
+- Clear dev logs script updated
 
 # 0.1.1
 

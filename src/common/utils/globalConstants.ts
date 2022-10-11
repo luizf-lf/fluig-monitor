@@ -20,7 +20,7 @@ export const dbUrl =
   (isDevelopment ? process.env.DATABASE_URL : `file:${dbPath}`) || '';
 
 // Must be updated every time a migration is created
-export const latestMigration = '20221010173325_rename_license_table';
+export const latestMigration = '20221011175118_update_http_response_model';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const platformToExecutables: any = {

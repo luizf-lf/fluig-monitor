@@ -24,7 +24,7 @@ model Environment {
   oAuthKeysId      EnvironmentAuthKeys?
   updateScheduleId UpdateSchedule?
   httpResponses    HTTPResponse[]
-  licenseHistory   licenseHistory[]
+  licenseHistory   LicenseHistory[]
   monitorHistory   MonitorHistory[]
   statisticHistory StatisticsHistory[]
   logCreatedAt     DateTime             @default(now())
@@ -55,17 +55,18 @@ model UpdateSchedule {
 
 model HTTPResponse {
   id               Int                @id @default(autoincrement())
-  environmentId    Int                @unique
+  environmentId    Int
   environment      Environment        @relation(fields: [environmentId], references: [id])
   timestamp        DateTime           @default(now())
+  endpoint         String?
   statusCode       Int
   responseTimeMs   Int
-  licenseHistory   licenseHistory?
+  licenseHistory   LicenseHistory?
   monitorHistory   MonitorHistory?
   statisticHistory StatisticsHistory?
 }
 
-model licenseHistory {
+model LicenseHistory {
   id             Int          @id @default(autoincrement())
   environmentId  Int
   environment    Environment  @relation(fields: [environmentId], references: [id])

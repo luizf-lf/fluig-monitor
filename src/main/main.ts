@@ -66,13 +66,13 @@ const installExtensions = async () => {
 const createWindow = async () => {
   log.info('Creating a new window');
 
+  await runDbMigrations();
+
   await syncEnvironmentsJob();
 
   // setInterval(async () => {
   //   await syncEnvironmentsJob();
   // }, 30000);
-
-  await runDbMigrations();
 
   if (isDevelopment) {
     log.info('Installing additional dev extensions');
