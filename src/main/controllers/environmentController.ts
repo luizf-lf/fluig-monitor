@@ -7,6 +7,7 @@ import {
 import prismaClient from '../database/prismaContext';
 import {
   Environment,
+  HTTPResponse,
   LicenseHistory,
   MonitorHistory,
   StatisticsHistory,
@@ -27,6 +28,8 @@ export default class EnvironmentController {
     | EnvironmentWithRelatedData
     | null;
 
+  lastHttpResponse: HTTPResponse | null;
+
   created: Environment | null;
 
   updated: Environment | null;
@@ -39,6 +42,8 @@ export default class EnvironmentController {
     this.created = null;
     this.updated = null;
     this.deleted = null;
+
+    this.lastHttpResponse = null;
   }
 
   async getAll(): Promise<EnvironmentWithRelatedData[]> {
@@ -108,6 +113,19 @@ export default class EnvironmentController {
     });
 
     return this.found as EnvironmentWithHistory;
+  }
+
+  async getLastHttpResponseById(id: number): Promise<HTTPResponse | null> {
+    this.lastHttpResponse = await prismaClient.hTTPResponse.findFirst({
+      where: {
+        environmentId: id,
+      },
+      orderBy: {
+        timestamp: 'desc',
+      },
+    });
+
+    return this.lastHttpResponse;
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {

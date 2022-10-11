@@ -8,6 +8,7 @@ import LogController from '../controllers/LogController';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import HttpResponseController from '../controllers/HttpResponseController';
 import MonitorHistoryController from '../controllers/MonitorHistoryController';
+import frequencyToMs from '../utils/frequencyToMs';
 
 async function syncLicenseData(
   item: EnvironmentWithRelatedData
@@ -201,15 +202,17 @@ export default async function syncEnvironmentsJob() {
           }
         }
 
-        // const environmentHistory =
-        //   await new EnvironmentController().getHistoryById(item.id);
+        const lastHttpResponse =
+          await new EnvironmentController().getLastHttpResponseById(item.id);
 
-        // if (environmentHistory) {
-
-        //   if (environmentHistory.statisticHistory.length === 0) {
-        //     needsSync = true;
-        //   }
-        // }
+        if (lastHttpResponse === null) {
+          needsSync = true;
+        } else if (
+          Date.now() - lastHttpResponse.timestamp.getTime() >
+          frequencyToMs(item.updateScheduleId.frequency)
+        ) {
+          needsSync = true;
+        }
 
         if (needsSync) {
           log.info(
@@ -219,6 +222,7 @@ export default async function syncEnvironmentsJob() {
           );
           await syncLicenseData(item);
           await syncMonitorData(item);
+          // await syncStatisticsData(item); // TODO: Implement statistics sync
 
           log.info('syncEnvironmentsJob: Environment sync job finished');
         } else {
