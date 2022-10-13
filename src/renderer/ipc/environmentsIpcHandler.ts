@@ -7,6 +7,7 @@ import {
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentUpdateControllerInterface,
+  EnvironmentWithHistory,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import {
@@ -45,6 +46,19 @@ export async function getEnvironmentById(
     id,
     includeRelatedData
   );
+
+  return environment;
+}
+
+export async function getEnvironmentHistoryById(
+  id: number
+): Promise<EnvironmentWithHistory> {
+  if (!id) {
+    throw new Error('Id is required');
+  }
+
+  log.info('IPC Invoker: Requesting environment with id', id, 'with history.');
+  const environment = ipcRenderer.invoke('getEnvironmentHistoryById', id);
 
   return environment;
 }

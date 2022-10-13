@@ -2,22 +2,11 @@ import log from 'electron-log';
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentUpdateControllerInterface,
+  EnvironmentWithHistory,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
-import {
-  Environment,
-  HTTPResponse,
-  LicenseHistory,
-  MonitorHistory,
-  StatisticsHistory,
-} from '../generated/client';
-
-interface EnvironmentWithHistory extends Environment {
-  licenseHistory: LicenseHistory[];
-  statisticHistory: StatisticsHistory[];
-  monitorHistory: MonitorHistory[];
-}
+import { Environment, HTTPResponse } from '../generated/client';
 
 export default class EnvironmentController {
   environments: EnvironmentWithRelatedData[];
@@ -96,17 +85,26 @@ export default class EnvironmentController {
           include: {
             httpResponse: true,
           },
+          orderBy: {
+            id: 'desc',
+          },
         },
         statisticHistory: {
           take: 100,
           include: {
             httpResponse: true,
           },
+          orderBy: {
+            id: 'desc',
+          },
         },
         monitorHistory: {
           take: 100,
           include: {
             httpResponse: true,
+          },
+          orderBy: {
+            id: 'desc',
           },
         },
       },

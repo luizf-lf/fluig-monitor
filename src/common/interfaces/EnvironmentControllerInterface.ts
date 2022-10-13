@@ -1,6 +1,9 @@
 import {
   Environment,
   EnvironmentAuthKeys,
+  LicenseHistory,
+  MonitorHistory,
+  StatisticsHistory,
   UpdateSchedule,
 } from '../../main/generated/client';
 
@@ -20,4 +23,10 @@ export interface EnvironmentUpdateControllerInterface
 export interface EnvironmentWithRelatedData extends Environment {
   updateScheduleId: UpdateSchedule | null;
   oAuthKeysId: EnvironmentAuthKeys | null;
+}
+
+export interface EnvironmentWithHistory extends Environment {
+  licenseHistory: LicenseHistory[];
+  statisticHistory: StatisticsHistory[];
+  monitorHistory: MonitorHistory[];
 }

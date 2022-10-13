@@ -9,6 +9,7 @@
 - Environment view submenu routing implemented
 - Fluig API Client class implemented
 - Clear dev logs script updated
+- Environment sync job added
 
 # 0.1.1
 

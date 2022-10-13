@@ -183,6 +183,16 @@ ipcMain.handle(
 );
 
 ipcMain.handle(
+  'getEnvironmentHistoryById',
+  async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+    log.info('IPC Handler: Recovering environment history by id');
+    const environment = await new EnvironmentController().getHistoryById(id);
+
+    return environment;
+  }
+);
+
+ipcMain.handle(
   'createEnvironment',
   async (
     _event: Electron.IpcMainInvokeEvent,

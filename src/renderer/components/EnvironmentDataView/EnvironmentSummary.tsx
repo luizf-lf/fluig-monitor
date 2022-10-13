@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { getEnvironmentHistoryById } from '../../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../../utils/globalContainerVariants';
 import EnvironmentLicenses from './EnvironmentLicenses';
 import EnvironmentPerformanceGraph from './EnvironmentPerformanceGraph';
@@ -11,6 +13,25 @@ interface Props {
 }
 
 export default function EnvironmentSummary({ environmentId }: Props) {
+  const [environment, setEnvironment] = useState({});
+
+  useEffect(() => {
+    async function getEnvironmentData() {
+      const environmentDataById = await getEnvironmentHistoryById(
+        Number(environmentId)
+      );
+
+      if (environmentDataById) {
+        setEnvironment(environmentDataById);
+        console.log({ environmentDataById });
+      }
+    }
+
+    if (typeof environmentId !== 'undefined') {
+      getEnvironmentData();
+    }
+  }, [environmentId]);
+
   return (
     <motion.div
       variants={globalContainerVariants}
@@ -20,7 +41,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
       id="environment-summary-container"
     >
       <section id="server-data">
-        <EnvironmentStatusSummary environmentId={environmentId} />
+        <EnvironmentStatusSummary />
         <EnvironmentPerformanceGraph />
       </section>
 

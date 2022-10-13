@@ -374,7 +374,7 @@ export default async function syncEnvironmentsJob() {
   }
 
   log.info(
-    ' Next sync will occur at',
+    'syncEnvironmentsJob: Next sync will occur at',
     new Date(Date.now() + environmentSyncInterval).toLocaleString()
   );
 }
