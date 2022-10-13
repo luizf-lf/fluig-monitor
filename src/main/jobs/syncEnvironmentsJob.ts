@@ -312,6 +312,7 @@ export default async function syncEnvironmentsJob() {
       );
 
       let needsSync = false;
+      let isInUpdateSchedule = false;
 
       const date = new Date();
       const hoursNow = `${date.getHours()}:${date.getMinutes()}`;
@@ -327,22 +328,35 @@ export default async function syncEnvironmentsJob() {
             dayOfWeek >= 1 &&
             dayOfWeek <= 5
           ) {
-            needsSync = true;
+            isInUpdateSchedule = true;
           } else if (!item.updateScheduleId.onlyOnWorkDays) {
-            needsSync = true;
+            isInUpdateSchedule = true;
           }
         }
 
-        const lastHttpResponse =
-          await new EnvironmentController().getLastHttpResponseById(item.id);
+        if (isInUpdateSchedule) {
+          log.info(
+            'syncEnvironmentsJob: Environment',
+            item.id,
+            'is inside the update schedule.'
+          );
 
-        if (lastHttpResponse === null) {
-          needsSync = true;
-        } else if (
-          Date.now() - lastHttpResponse.timestamp.getTime() >
-          frequencyToMs(item.updateScheduleId.frequency)
-        ) {
-          needsSync = true;
+          const lastHttpResponse =
+            await new EnvironmentController().getLastHttpResponseById(item.id);
+
+          if (lastHttpResponse === null) {
+            log.info(
+              'syncEnvironmentsJob: Environment',
+              item.id,
+              'has no successful http requests. Sync is needed.'
+            );
+            needsSync = true;
+          } else if (
+            Date.now() - lastHttpResponse.timestamp.getTime() >
+            frequencyToMs(item.updateScheduleId.frequency)
+          ) {
+            needsSync = true;
+          }
         }
 
         if (needsSync) {
