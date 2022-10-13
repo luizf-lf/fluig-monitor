@@ -171,3 +171,17 @@
 .rotating {
   animation: rotating 1s linear infinite;
 }
+
+.widget-container {
+  margin-bottom: 1.5rem;
+
+  .title {
+    margin-bottom: 0.5rem;
+  }
+  .widget-card {
+    background-color: var(--card);
+    padding: 1rem;
+    box-shadow: var(--card-shadow);
+    border-radius: 1rem;
+  }
+}

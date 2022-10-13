@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
 import { getEnvironmentHistoryById } from '../../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../../utils/globalContainerVariants';
 import EnvironmentLicenses from './EnvironmentLicenses';
@@ -13,7 +14,7 @@ interface Props {
 }
 
 export default function EnvironmentSummary({ environmentId }: Props) {
-  const [environment, setEnvironment] = useState({});
+  const [environment, setEnvironment] = useState({} as EnvironmentWithHistory);
 
   useEffect(() => {
     async function getEnvironmentData() {
@@ -23,7 +24,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       if (environmentDataById) {
         setEnvironment(environmentDataById);
-        console.log({ environmentDataById });
+        // console.log({ environmentDataById });
       }
     }
 
@@ -47,7 +48,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       <section id="server-info">
         <EnvironmentServerInfo />
-        <EnvironmentLicenses />
+        <EnvironmentLicenses licenses={environment.licenseHistory} />
         <EnvironmentServices />
       </section>
     </motion.div>

@@ -1,0 +1,30 @@
+.pb-container {
+  width: 100%;
+
+  .values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 0.7rem;
+
+    border-radius: 0.5rem;
+
+    background-color: var(--background);
+
+    .progress {
+      height: 100%;
+      border-radius: 0.5rem;
+
+      background: linear-gradient(
+        90deg,
+        #34d399 0%,
+        #fcd34d 139.54%,
+        #ef4444 267.92%
+      );
+    }
+  }
+}
