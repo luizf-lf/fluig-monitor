@@ -4,13 +4,17 @@ import EnvironmentController from '../controllers/EnvironmentController';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
 import LicenseHistoryController from '../controllers/LicenseHistoryController';
-import LogController from '../controllers/LogController';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import HttpResponseController from '../controllers/HttpResponseController';
 import MonitorHistoryController from '../controllers/MonitorHistoryController';
 import frequencyToMs from '../utils/frequencyToMs';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
+import { environmentSyncInterval } from '../../common/utils/globalConstants';
 
+/**
+ * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
+ *  and saves the result to the database
+ */
 async function syncLicenseData(
   item: EnvironmentWithRelatedData
 ): Promise<void> {
@@ -56,11 +60,6 @@ async function syncLicenseData(
           },
         });
 
-        await new LogController().writeLog({
-          message: 'License history saved',
-          type: 'INFO',
-        });
-
         if (logged !== null) {
           log.info('syncEnvironmentsJob: License history logged successfully');
         }
@@ -93,6 +92,10 @@ async function syncLicenseData(
   }
 }
 
+/**
+ * Fetch the monitor data from the Fluig server using the API /monitoring/api/v1/monitors/report
+ *  and saves the result to the database.
+ */
 async function syncMonitorData(
   item: EnvironmentWithRelatedData
 ): Promise<void> {
@@ -133,11 +136,6 @@ async function syncMonitorData(
           monitorData,
         });
 
-        await new LogController().writeLog({
-          message: 'Monitor history saved',
-          type: 'INFO',
-        });
-
         if (logged !== null) {
           log.info('syncEnvironmentsJob: Monitor history logged successfully');
         }
@@ -170,6 +168,10 @@ async function syncMonitorData(
   }
 }
 
+/**
+ * Fetch the statistics report data from the Fluig server using the api /monitoring/api/v1/statistics/report
+ *  and saves the result to the database
+ */
 async function syncStatisticsData(
   item: EnvironmentWithRelatedData
 ): Promise<void> {
@@ -258,11 +260,6 @@ async function syncStatisticsData(
           systemUptime: statisticsData.OPERATION_SYSTEM['system-uptime'],
         });
 
-        await new LogController().writeLog({
-          message: 'Statistics history saved',
-          type: 'INFO',
-        });
-
         if (logged !== null) {
           log.info(
             'syncEnvironmentsJob: Statistics history logged successfully'
@@ -297,8 +294,13 @@ async function syncStatisticsData(
   }
 }
 
+/**
+ * Handle the environment sync job.
+ * It will check if the environment needs a synchronization according to the update schedule and
+ *  http responses history.
+ */
 export default async function syncEnvironmentsJob() {
-  log.info('Executing environment sync job');
+  log.info('syncEnvironmentsJob: Executing environment sync job');
 
   const environmentList = await new EnvironmentController().getAll();
 
@@ -309,7 +311,6 @@ export default async function syncEnvironmentsJob() {
         item.id
       );
 
-      // TODO: Double check the "needsSync" logic
       let needsSync = false;
 
       const date = new Date();
@@ -352,9 +353,9 @@ export default async function syncEnvironmentsJob() {
           );
           await syncLicenseData(item);
           await syncMonitorData(item);
-          await syncStatisticsData(item); // TODO: Implement statistics sync
+          await syncStatisticsData(item);
 
-          log.info('syncEnvironmentsJob: Environment sync job finished');
+          log.info('syncEnvironmentsJob: Environment sync job finished.');
         } else {
           log.info(
             'syncEnvironmentsJob: Environment',
@@ -371,4 +372,9 @@ export default async function syncEnvironmentsJob() {
   } else {
     log.info('syncEnvironmentsJob: No environment found, skipping sync.');
   }
+
+  log.info(
+    ' Next sync will occur at',
+    new Date(Date.now() + environmentSyncInterval).toLocaleString()
+  );
 }

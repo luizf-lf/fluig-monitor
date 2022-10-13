@@ -1,3 +1,9 @@
+/**
+ * Converts a frequency value to a number in milliseconds
+ *
+ * @example
+ *  frequencyToMs('15m') => 900000
+ */
 export default function frequencyToMs(dbFrequency: string): number {
   const modifierIndex = dbFrequency.search(/[\D]/);
 

@@ -11,6 +11,7 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import i18n from '../common/i18n/i18n';
 import {
+  environmentSyncInterval,
   isDevelopment,
   logStringFormat,
 } from '../common/utils/globalConstants';
@@ -69,16 +70,11 @@ const createWindow = async () => {
   await runDbMigrations();
 
   await syncEnvironmentsJob();
-
   // this function shall be transformed into an nodejs worker,
   //  but that's a problem for the future me
   setInterval(async () => {
     await syncEnvironmentsJob();
-    log.info(
-      'Next environment monitoring sync will be executed at',
-      new Date(Date.now() + 1200000).toTimeString()
-    );
-  }, 120000);
+  }, environmentSyncInterval);
 
   if (isDevelopment) {
     log.info('Installing additional dev extensions');
