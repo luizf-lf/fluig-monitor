@@ -209,6 +209,13 @@ const en = {
       removed: 'Environment removed from favorites.',
     },
   },
+  components: {
+    EnvironmentLicenses: {
+      title: 'Licenses',
+      usedLicenses: '%active% of %total% licenses used.',
+      remainingLicenses: '%remaining% remaining.',
+    },
+  },
 };
 
 export default en;

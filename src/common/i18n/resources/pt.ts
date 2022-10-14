@@ -210,6 +210,13 @@ const pt = {
       removed: 'Ambiente removido dos favoritos.',
     },
   },
+  components: {
+    EnvironmentLicenses: {
+      title: 'Licenças',
+      usedLicenses: '%active% de %total% licenças usadas.',
+      remainingLicenses: '%remaining% restantes.',
+    },
+  },
 };
 
 export default pt;
