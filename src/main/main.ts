@@ -70,7 +70,7 @@ const createWindow = async () => {
   await runDbMigrations();
 
   await syncEnvironmentsJob();
-  // this function shall be transformed into an nodejs worker,
+  // this function shall be transformed into a nodejs worker,
   //  but that's a problem for the future me
   setInterval(async () => {
     await syncEnvironmentsJob();

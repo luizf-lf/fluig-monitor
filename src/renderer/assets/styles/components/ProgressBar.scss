@@ -1,10 +1,15 @@
 .pb-container {
   width: 100%;
+  margin-top: 1rem;
 
   .values {
     display: flex;
     justify-content: space-between;
-    margin-top: 1rem;
+    font-size: 0.75rem;
+  }
+
+  .indicator {
+    text-align: end;
   }
 
   .progress-bar {
@@ -13,18 +18,31 @@
 
     border-radius: 0.5rem;
 
-    background-color: var(--background);
+    background: var(--background);
+    position: relative;
 
     .progress {
+      -webkit-mask: linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0);
+
       height: 100%;
       border-radius: 0.5rem;
 
-      background: linear-gradient(
-        90deg,
-        #34d399 0%,
-        #fcd34d 139.54%,
-        #ef4444 267.92%
-      );
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+
+        background: linear-gradient(
+          90deg,
+          #34d399 0%,
+          #fcd34d 50%,
+          #ef4444 100%
+        );
+      }
     }
   }
 }

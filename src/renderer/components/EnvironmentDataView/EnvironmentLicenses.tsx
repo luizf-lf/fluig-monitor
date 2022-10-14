@@ -17,11 +17,18 @@ export default function EnvironmentLicenses({
     <div className="widget-container">
       <h3 className="title">Licenças</h3>
       <div className="widget-card">
-        <span style={{ fontSize: '0.75rem' }}>
-          {activeUsers} usadas, {totalLicenses} disponíveis, {remainingLicenses}{' '}
-          restantes.
+        <span>
+          {activeUsers} de {totalLicenses} licenças usadas.
         </span>
-        <ProgressBar total={totalLicenses} current={activeUsers} />
+        <br />
+        <span style={{ fontSize: '0.75rem' }}>
+          {remainingLicenses} restantes.
+        </span>
+        <ProgressBar
+          total={totalLicenses}
+          current={activeUsers}
+          showValues={false}
+        />
       </div>
     </div>
   );
