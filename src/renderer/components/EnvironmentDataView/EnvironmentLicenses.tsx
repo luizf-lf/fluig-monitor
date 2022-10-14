@@ -13,6 +13,7 @@ export default function EnvironmentLicenses({
 
   const { activeUsers, remainingLicenses, totalLicenses } = licenses[0];
 
+  // TODO: Add i18n
   return (
     <div className="widget-container">
       <h3 className="title">Licenças</h3>
