@@ -1,14 +1,19 @@
+/* eslint-disable react/require-default-props */
 import '../assets/styles/components/ProgressBar.scss';
+
+interface Props {
+  total: number;
+  current: number;
+  showValues?: boolean;
+  showPercentage?: boolean;
+}
 
 export default function ProgressBar({
   total,
   current,
-  showValues,
-}: {
-  total: number;
-  current: number;
-  showValues: boolean;
-}) {
+  showValues = false,
+  showPercentage = false,
+}: Props) {
   const percentage = (current / total) * 100;
 
   return (
@@ -22,7 +27,7 @@ export default function ProgressBar({
         <></>
       )}
       <div className="indicator" style={{ width: `${percentage}%` }}>
-        {current}
+        {showPercentage ? `${percentage}%` : current}
       </div>
       <div className="progress-bar">
         <div className="progress" style={{ width: `${percentage}%` }} />

@@ -3,11 +3,11 @@ import { LicenseHistory } from '../../../main/generated/client';
 import SpinnerLoader from '../Loaders/Spinner';
 import ProgressBar from '../ProgressBar';
 
-export default function EnvironmentLicenses({
-  licenses,
-}: {
+interface Props {
   licenses: LicenseHistory[];
-}) {
+}
+
+export default function EnvironmentLicenses({ licenses }: Props) {
   const { t } = useTranslation();
 
   if (typeof licenses === 'undefined') {
@@ -33,9 +33,9 @@ export default function EnvironmentLicenses({
           )}
         </span>
         <ProgressBar
-          total={totalLicenses}
+          total={totalLicenses === 0 ? activeUsers : totalLicenses}
           current={activeUsers}
-          showValues={false}
+          showPercentage
         />
       </div>
     </div>
