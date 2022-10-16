@@ -214,6 +214,7 @@ const en = {
       title: 'Licenses',
       usedLicenses: '%active% of %total% licenses used.',
       remainingLicenses: '%remaining% remaining.',
+      noData: 'No data to display.',
     },
   },
 };

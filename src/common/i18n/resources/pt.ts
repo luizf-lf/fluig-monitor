@@ -215,6 +215,7 @@ const pt = {
       title: 'Licenças',
       usedLicenses: '%active% de %total% licenças usadas.',
       remainingLicenses: '%remaining% restantes.',
+      noData: 'Sem dados disponíveis.',
     },
   },
 };
