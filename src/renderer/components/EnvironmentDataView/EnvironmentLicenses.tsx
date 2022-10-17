@@ -43,7 +43,7 @@ export default function EnvironmentLicenses({ licenses }: Props) {
             />
           </>
         ) : (
-          <span>{t('components.EnvironmentLicenses.noData')}</span>
+          <span>{t('components.global.noData')}</span>
         )}
       </div>
     </div>

@@ -211,11 +211,20 @@ const pt = {
     },
   },
   components: {
+    global: {
+      noData: 'Sem dados disponíveis',
+    },
     EnvironmentLicenses: {
       title: 'Licenças',
-      usedLicenses: '%active% de %total% licenças usadas.',
-      remainingLicenses: '%remaining% restantes.',
-      noData: 'Sem dados disponíveis.',
+      usedLicenses: '%active% de %total% licenças usadas',
+      remainingLicenses: '%remaining% restantes',
+    },
+    EnvironmentServerInfo: {
+      title: 'Servidor',
+      processor: 'Processador',
+      memory: 'Memória',
+      disk: 'Disco',
+      activityTime: 'Tempo De Atividade',
     },
   },
 };

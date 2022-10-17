@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { FiClock, FiCpu, FiDatabase, FiServer } from 'react-icons/fi';
 import { StatisticsHistory } from '../../../main/generated/client';
 import DynamicImageLoad from '../DynamicImageLoad';
@@ -13,14 +14,15 @@ interface Props {
 }
 
 export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
+  const { t } = useTranslation();
+
   if (typeof statistics === 'undefined' || typeof endpoint === 'undefined') {
     return <SpinnerLoader />;
   }
 
-  // TODO: Finish implementation
   return (
     <div className="widget-container" id="environment-server-info">
-      <h3 className="title">Servidor</h3>
+      <h3 className="title">{t('components.EnvironmentServerInfo.title')}</h3>
       <div className="widget-card">
         {statistics.length > 0 ? (
           <>
@@ -31,13 +33,13 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
                 fallback={defaultServerLogo}
               />
             </div>
-            <div className="server-specs">
+            <div id="server-specs">
               <div className="specs-item">
                 <FiCpu />
                 <div className="spec-description">
-                  <span>Processador</span>
+                  <span>{t('components.EnvironmentServerInfo.processor')}</span>
                   <span>
-                    {statistics[0].systemServerCoreCount}-core{' '}
+                    {statistics[0].systemServerCoreCount} core{' '}
                     {statistics[0].systemServerArch}
                   </span>
                 </div>
@@ -45,16 +47,16 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
               <div className="specs-item">
                 <FiServer />
                 <div className="spec-description">
-                  <span>Memória</span>
+                  <span>{t('components.EnvironmentServerInfo.memory')}</span>
                   <span>
-                    {formatBytes(statistics[0].systemServerMemorySize)}
+                    {formatBytes(Number(statistics[0].systemServerMemorySize))}
                   </span>
                 </div>
               </div>
               <div className="specs-item">
                 <FiDatabase />
                 <div className="spec-description">
-                  <span>Disco</span>
+                  <span>{t('components.EnvironmentServerInfo.disk')}</span>
                   <span>
                     {formatBytes(Number(statistics[0].systemServerHDSize))}
                   </span>
@@ -65,14 +67,16 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
               <div className="specs-item">
                 <FiClock />
                 <div className="spec-description">
-                  <span>Tempo de atividade</span>
-                  <span>{statistics[0].systemUptime}</span>
+                  <span>
+                    {t('components.EnvironmentServerInfo.activityTime')}
+                  </span>
+                  <span>{Number(statistics[0].systemUptime)}</span>
                 </div>
               </div>
             </div>
           </>
         ) : (
-          <span>Sem Dados</span>
+          <span>{t('components.global.noData')}</span>
         )}
       </div>
     </div>

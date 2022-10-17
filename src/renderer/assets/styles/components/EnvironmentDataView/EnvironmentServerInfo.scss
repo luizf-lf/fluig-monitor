@@ -9,5 +9,33 @@
         max-width: 14rem;
       }
     }
+
+    #server-specs {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .specs-item {
+      display: flex;
+      gap: 0.25rem;
+
+      svg {
+        font-size: 1.3rem;
+      }
+
+      .spec-description {
+        display: flex;
+        flex-direction: column;
+
+        span {
+          font-size: 0.6rem;
+
+          &:nth-child(1) {
+            color: var(--font-soft);
+          }
+        }
+      }
+    }
   }
 }
