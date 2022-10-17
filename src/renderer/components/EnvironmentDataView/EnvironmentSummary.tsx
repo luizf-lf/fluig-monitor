@@ -47,7 +47,10 @@ export default function EnvironmentSummary({ environmentId }: Props) {
       </section>
 
       <section id="server-info">
-        <EnvironmentServerInfo />
+        <EnvironmentServerInfo
+          endpoint={environment.baseUrl}
+          monitors={environment.monitorHistory}
+        />
         <EnvironmentLicenses licenses={environment.licenseHistory} />
         <EnvironmentServices />
       </section>
