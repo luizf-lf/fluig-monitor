@@ -1,6 +1,6 @@
 import os from 'node:os';
 import log from 'electron-log';
-import formatBytes from './formatBytes';
+import formatBytes from '../../common/utils/formatBytes';
 
 export default function logSystemConfigs() {
   const cpus = os.cpus();

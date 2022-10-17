@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 import path from 'path';
 import * as fs from 'fs';
-import formatBytes from '../src/main/utils/formatBytes';
+import formatBytes from '../src/common/utils/formatBytes';
 
 const appData = process.env.APPDATA;
 

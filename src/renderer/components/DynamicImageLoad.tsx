@@ -15,7 +15,9 @@ export default function DynamicImageLoad({ imgSrc, altName, fallback }: Props) {
     <>
       <img
         src={imgSrc}
-        style={imageIsLoaded && !hasError ? {} : { display: 'none' }}
+        style={
+          imageIsLoaded && !hasError ? { width: '100%' } : { display: 'none' }
+        }
         className="server-logo"
         onLoad={() => setImageIsLoaded(true)}
         onError={() => {

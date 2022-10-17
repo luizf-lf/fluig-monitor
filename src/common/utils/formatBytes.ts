@@ -1,6 +1,9 @@
 /* eslint-disable no-restricted-properties */
-export default function formatBytes(bytes: number, decimals = 2): string {
-  if (!+bytes) return '0 Bytes';
+export default function formatBytes(
+  bytes: number | null,
+  decimals = 2
+): string {
+  if (!bytes || !+bytes) return '0 Bytes';
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
