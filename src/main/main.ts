@@ -19,7 +19,7 @@ import {
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
 import EnvironmentController from './controllers/EnvironmentController';
-import LanguageController from './controllers/languageController';
+import LanguageController from './controllers/LanguageController';
 import UpdateScheduleController from './controllers/UpdateScheduleController';
 import { CreateEnvironmentProps } from '../renderer/ipc/environmentsIpcHandler';
 import AuthKeysController from './controllers/AuthKeysController';

@@ -11,7 +11,7 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 
 import globalContainerVariants from '../utils/globalContainerVariants';
 import defaultServerLogo from '../assets/img/defaultServerLogo.png';
-import '../assets/styles/Views/HomeEnvironmentListView.scss';
+import '../assets/styles/views/HomeEnvironmentListView.scss';
 import colorServer from '../assets/svg/color-server.svg';
 import { Environment } from '../../main/generated/client';
 import DynamicImageLoad from '../components/DynamicImageLoad';
