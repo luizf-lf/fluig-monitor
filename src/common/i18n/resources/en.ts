@@ -223,7 +223,9 @@ const en = {
       processor: 'Processor',
       memory: 'Memory',
       disk: 'Disk',
-      activityTime: 'Activity Time',
+      activityTime: 'System Uptime',
+      activityTimeDescription:
+        '%days% days, %minutes% minutes, %seconds% seconds',
     },
   },
 };

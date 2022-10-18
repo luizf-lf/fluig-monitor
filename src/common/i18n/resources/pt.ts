@@ -225,6 +225,8 @@ const pt = {
       memory: 'Memória',
       disk: 'Disco',
       activityTime: 'Tempo De Atividade',
+      activityTimeDescription:
+        '%days% dias, %minutes% minutos, %seconds% segundos',
     },
   },
 };

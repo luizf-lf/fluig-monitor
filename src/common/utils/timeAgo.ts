@@ -4,62 +4,43 @@
  *  timeAgo(1036800) => "12 days ago"
  * @since 0.1.2
  */
-export default function timeAgo(seconds: number): string {
-  if (!seconds) {
-    throw new Error('seconds is required');
+export default function timeAgo(totalSeconds: number): {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+} {
+  if (!totalSeconds) {
+    throw new Error('totalSeconds is required');
   }
 
-  const fullMinutes = Math.floor(seconds / 60);
-  const fullHours = Math.floor(seconds / 60 / 60);
-  const fullDays = Math.floor(seconds / 60 / 60 / 24);
-  const fullMonths = Math.floor(seconds / 60 / 60 / 24 / 30);
-  const fullYears = Math.floor(seconds / 60 / 60 / 24 / 30 / 12);
+  /**
+   * minutes to seconds = 60
+   * hours to seconds = 3600
+   * days to seconds = 86400
+   */
 
-  let remainingMonths = 0;
-  let remainingDays = 0;
-  let remainingHours = 0;
-  let remainingMinutes = 0;
-  let remainingSeconds = 0;
+  let days = 0;
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
 
-  if (fullYears > 0) {
-    remainingMonths = fullMonths - fullYears * 12;
+  if (totalSeconds >= 60) {
+    minutes = Math.floor(totalSeconds / 60);
+    seconds = totalSeconds - minutes * 60;
+
+    if (minutes >= 60) {
+      hours = Math.floor(minutes / 60);
+      minutes -= hours * 60;
+
+      if (hours >= 24) {
+        days = Math.floor(hours / 24);
+        hours -= days * 24;
+      }
+    }
+  } else {
+    seconds = totalSeconds;
   }
 
-  if (fullDays > 30) {
-    remainingDays = fullDays - fullMonths * 30;
-  }
-
-  if (fullHours > 24) {
-    remainingHours = fullHours - fullDays * 24;
-  }
-
-  if (fullMinutes > 60) {
-    remainingMinutes = fullMinutes - fullHours * 60;
-  }
-  if (seconds > 60) {
-    remainingSeconds = seconds - fullMinutes * 60;
-  }
-
-  console.log({
-    seconds,
-    fullMinutes,
-    fullHours,
-    fullDays,
-    fullMonths,
-    fullYears,
-  });
-
-  console.log({
-    remainingSeconds,
-    remainingMinutes,
-    remainingHours,
-    remainingDays,
-    remainingMonths,
-    fullYears,
-  });
-
-  return `${remainingMinutes}`;
+  return { days, hours, minutes, seconds };
 }
-
-// timeAgo(14852768);
-timeAgo(61);

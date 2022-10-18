@@ -5,6 +5,7 @@ import DynamicImageLoad from '../DynamicImageLoad';
 import defaultServerLogo from '../../assets/img/defaultServerLogo.png';
 import SpinnerLoader from '../Loaders/Spinner';
 import formatBytes from '../../../common/utils/formatBytes';
+import timeAgo from '../../../common/utils/timeAgo';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentServerInfo.scss';
 
@@ -19,6 +20,8 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
   if (typeof statistics === 'undefined' || typeof endpoint === 'undefined') {
     return <SpinnerLoader />;
   }
+  const uptime =
+    statistics.length > 0 ? timeAgo(Number(statistics[0].systemUptime)) : null;
 
   return (
     <div className="widget-container" id="environment-server-info">
@@ -38,10 +41,7 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
                 <FiCpu />
                 <div className="spec-description">
                   <span>{t('components.EnvironmentServerInfo.processor')}</span>
-                  <span>
-                    {statistics[0].systemServerCoreCount} core{' '}
-                    {statistics[0].systemServerArch}
-                  </span>
+                  <span>{statistics[0].systemServerCoreCount} core</span>
                 </div>
               </div>
               <div className="specs-item">
@@ -70,7 +70,16 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
                   <span>
                     {t('components.EnvironmentServerInfo.activityTime')}
                   </span>
-                  <span>{Number(statistics[0].systemUptime)}</span>
+                  <span>
+                    {uptime !== null
+                      ? t(
+                          'components.EnvironmentServerInfo.activityTimeDescription'
+                        )
+                          .replace('%days%', String(uptime.days))
+                          .replace('%minutes%', String(uptime.minutes))
+                          .replace('%seconds%', String(uptime.seconds))
+                      : ''}
+                  </span>
                 </div>
               </div>
             </div>
