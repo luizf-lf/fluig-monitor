@@ -224,8 +224,13 @@ const en = {
       memory: 'Memory',
       disk: 'Disk',
       activityTime: 'System Uptime',
-      activityTimeDescription:
-        '%days% days, %minutes% minutes, %seconds% seconds',
+      activityTimeDescription: '%days% days, %hours% hours, %minutes% minutes',
+    },
+    EnvironmentServices: {
+      title: 'Services',
+      operational: 'Operational',
+      unused: 'Unused',
+      failed: 'Fail',
     },
   },
 };

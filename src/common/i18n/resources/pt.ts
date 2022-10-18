@@ -225,8 +225,13 @@ const pt = {
       memory: 'Memória',
       disk: 'Disco',
       activityTime: 'Tempo De Atividade',
-      activityTimeDescription:
-        '%days% dias, %minutes% minutos, %seconds% segundos',
+      activityTimeDescription: '%days% dias, %hours% horas, %minutes% minutos',
+    },
+    EnvironmentServices: {
+      title: 'Serviços',
+      operational: 'Operacional',
+      unused: 'Não Utilizado',
+      failed: 'Com Falha',
     },
   },
 };

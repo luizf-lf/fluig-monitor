@@ -52,7 +52,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
           statistics={environment.statisticHistory}
         />
         <EnvironmentLicenses licenses={environment.licenseHistory} />
-        <EnvironmentServices />
+        <EnvironmentServices monitors={environment.monitorHistory} />
       </section>
     </motion.div>
   );
