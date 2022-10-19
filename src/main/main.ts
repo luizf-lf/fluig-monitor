@@ -14,7 +14,7 @@ import {
   environmentSyncInterval,
   isDevelopment,
   logStringFormat,
-} from '../common/utils/globalConstants';
+} from './utils/globalConstants';
 // import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
@@ -163,6 +163,13 @@ ipcMain.on('getAllEnvironments', async (event) => {
 ipcMain.on('getLanguage', async (event) => {
   log.info('IPC Listener: Recovering user language');
   event.returnValue = await new LanguageController().get();
+});
+
+ipcMain.on('getIsDevelopment', (event) => {
+  event.returnValue = isDevelopment;
+});
+ipcMain.on('getLogStringFormat', (event) => {
+  event.returnValue = logStringFormat;
 });
 
 ipcMain.handle(

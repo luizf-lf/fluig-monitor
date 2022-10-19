@@ -11,7 +11,6 @@ import log from 'electron-log';
  * @since 0.1.0
  */
 export default function getAppDataFolder(): string {
-  // TODO: Fix app not being loaded on production due to the "app.getPath()"
   const folderPath = path.resolve(app.getPath('appData'), 'fluig-monitor');
 
   // checks if the app folder exists, and if not, creates it.

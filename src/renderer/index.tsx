@@ -6,10 +6,6 @@ import { I18nextProvider } from 'react-i18next';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
 import i18n from '../common/i18n/i18n';
-import {
-  isDevelopment,
-  logStringFormat,
-} from '../common/utils/globalConstants';
 
 // listens for the custom 'languageChanged' event from main, triggering the language change on the renderer
 ipcRenderer.on(
@@ -26,8 +22,10 @@ ipcRenderer.on(
 // ensures that the initial rendered language is the one saved locally
 i18n.language = ipcRenderer.sendSync('getLanguage');
 
-log.transports.file.fileName = isDevelopment ? 'app.dev.log' : 'app.log';
-log.transports.file.format = logStringFormat;
+log.transports.file.fileName = ipcRenderer.sendSync('getIsDevelopment')
+  ? 'app.dev.log'
+  : 'app.log';
+log.transports.file.format = ipcRenderer.sendSync('getLogStringFormat');
 
 render(
   <Suspense fallback="Loading">

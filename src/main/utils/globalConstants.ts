@@ -1,7 +1,12 @@
+/**
+ * This constants file should be used only on the main process, since it creates an error on the renderer
+ *  where the "app" gets undefined on the renderer
+ */
+
 /* eslint-disable global-require */
 import path from 'path';
 import { app } from 'electron';
-import getAppDataFolder from '../../main/utils/fsUtils';
+import getAppDataFolder from './fsUtils';
 
 export const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -49,6 +54,7 @@ export const platformToExecutables: any = {
       'node_modules/@prisma/engines/libquery_engine-darwin-arm64.dylib.node',
   },
 };
+
 export const extraResourcesPath = isDevelopment
   ? path.resolve(__dirname, '../../../')
   : app.getAppPath().replace('app.asar', '');

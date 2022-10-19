@@ -1,3 +1,10 @@
+# 0.1.3
+
+- Production build error fixed due to global constants not being properly loaded
+- Licenses component added
+- Server info component added
+- Services status component added
+
 # 0.1.2
 
 - Persistent dark mode switcher implemented

@@ -1,5 +1,5 @@
 import { PrismaClient } from '../generated/client';
-import { qePath, dbUrl } from '../../common/utils/globalConstants';
+import { qePath, dbUrl } from '../utils/globalConstants';
 
 const prismaClient = new PrismaClient({
   log: ['info', 'warn', 'error'],

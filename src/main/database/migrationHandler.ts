@@ -9,7 +9,7 @@ import {
   extraResourcesPath,
   isDevelopment,
   latestMigration,
-} from '../../common/utils/globalConstants';
+} from '../utils/globalConstants';
 import prismaClient from './prismaContext';
 import seedDb from './seedDb';
 import { Migration } from '../interfaces/MigrationInterface';

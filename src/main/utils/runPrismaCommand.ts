@@ -2,7 +2,7 @@
 import path from 'path';
 import log from 'electron-log';
 import { fork } from 'child_process';
-import { mePath, qePath } from '../../common/utils/globalConstants';
+import { mePath, qePath } from './globalConstants';
 
 export default async function runPrismaCommand({
   command,

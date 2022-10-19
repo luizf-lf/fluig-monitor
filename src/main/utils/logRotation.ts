@@ -2,7 +2,7 @@
 import path from 'path';
 import * as fs from 'fs';
 import log from 'electron-log';
-import { isDevelopment } from '../../common/utils/globalConstants';
+import { isDevelopment } from './globalConstants';
 import getAppDataFolder from './fsUtils';
 
 /**
