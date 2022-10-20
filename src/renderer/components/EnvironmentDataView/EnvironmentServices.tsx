@@ -45,11 +45,11 @@ export default function EnvironmentServices({ monitors }: Props) {
         {monitors.length > 0 ? (
           <div className="service-list">
             {Object.entries(monitors[0]).map((item) => {
-              let status = t('components.EnvironmentServices.operational');
+              let status = t('components.EnvironmentServices.failed');
               let className = 'is-failed';
 
               if (item[1] === 'OK') {
-                status = t('components.EnvironmentServices.failed');
+                status = t('components.EnvironmentServices.operational');
                 className = 'is-operational';
               } else if (item[1] === 'NONE') {
                 status = t('components.EnvironmentServices.unused');
