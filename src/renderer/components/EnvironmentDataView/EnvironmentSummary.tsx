@@ -42,7 +42,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
       id="environment-summary-container"
     >
       <section id="server-data">
-        <EnvironmentStatusSummary />
+        <EnvironmentStatusSummary environmentName={environment.name} />
         <EnvironmentPerformanceGraph />
       </section>
 

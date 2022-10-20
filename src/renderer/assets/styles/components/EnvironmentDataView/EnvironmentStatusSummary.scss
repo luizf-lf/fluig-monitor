@@ -1,0 +1,25 @@
+.environment-status-summary-container {
+  display: flex;
+  flex-direction: column;
+
+  margin-bottom: 2rem;
+
+  .title {
+    margin-bottom: 0.5rem;
+  }
+  .components-container {
+    display: grid;
+
+    grid-template-columns: 6fr 2fr 2fr 2fr;
+
+    gap: 1rem;
+
+    .card {
+      background: var(--card);
+      box-shadow: var(--card-shadow);
+      border-radius: var(--card-border-radius-md);
+
+      padding: 1rem;
+    }
+  }
+}

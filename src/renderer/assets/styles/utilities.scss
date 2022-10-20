@@ -191,6 +191,6 @@
     background-color: var(--card);
     padding: 1rem;
     box-shadow: var(--card-shadow);
-    border-radius: 1rem;
+    border-radius: var(--card-border-radius-md);
   }
 }
