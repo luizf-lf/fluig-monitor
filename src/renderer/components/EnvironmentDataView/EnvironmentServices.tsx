@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { MonitorHistory } from '../../../main/generated/client';
+import { FiClock } from 'react-icons/fi';
 import SpinnerLoader from '../Loaders/Spinner';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentServices.scss';
+import { MonitorHistoryWithHttpResponse } from '../../../common/interfaces/EnvironmentControllerInterface';
 
 interface Props {
-  monitors: MonitorHistory[];
+  monitors: MonitorHistoryWithHttpResponse[];
 }
 
 export default function EnvironmentServices({ monitors }: Props) {
@@ -40,7 +41,7 @@ export default function EnvironmentServices({ monitors }: Props) {
 
   return (
     <div className="widget-container" id="environment-services">
-      <h3 className="title">Serviços</h3>
+      <h3 className="title">{t('components.EnvironmentServices.title')}</h3>
       <div className="widget-card">
         {monitors.length > 0 ? (
           <div className="service-list">

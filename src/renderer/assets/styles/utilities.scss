@@ -154,6 +154,15 @@
   }
 }
 
+.font-soft {
+  color: var(--font-soft);
+  font-weight: 300;
+}
+
+.font-sm {
+  font-size: 0.75rem;
+}
+
 .button-action-row {
   display: flex;
   align-items: center;

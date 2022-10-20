@@ -1,6 +1,7 @@
 import {
   Environment,
   EnvironmentAuthKeys,
+  HTTPResponse,
   LicenseHistory,
   MonitorHistory,
   StatisticsHistory,
@@ -26,7 +27,19 @@ export interface EnvironmentWithRelatedData extends Environment {
 }
 
 export interface EnvironmentWithHistory extends Environment {
-  licenseHistory: LicenseHistory[];
-  statisticHistory: StatisticsHistory[];
-  monitorHistory: MonitorHistory[];
+  licenseHistory: LicenseHistoryWithHttpResponse[];
+  statisticHistory: StatisticsHistoryWithHttpResponse[];
+  monitorHistory: MonitorHistoryWithHttpResponse[];
+}
+
+export interface LicenseHistoryWithHttpResponse extends LicenseHistory {
+  httpResponse: HTTPResponse;
+}
+
+export interface StatisticsHistoryWithHttpResponse extends StatisticsHistory {
+  httpResponse: HTTPResponse;
+}
+
+export interface MonitorHistoryWithHttpResponse extends MonitorHistory {
+  httpResponse: HTTPResponse;
 }
