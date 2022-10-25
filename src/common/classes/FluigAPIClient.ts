@@ -25,7 +25,7 @@ interface ConstructorProps {
 export default class FluigAPIClient {
   httpStatus: number | null;
 
-  httpStatusText: string | null;
+  httpStatusText: string;
 
   httpResponse: any;
 
@@ -41,7 +41,7 @@ export default class FluigAPIClient {
 
   constructor({ oAuthKeys, requestData }: ConstructorProps) {
     this.httpStatus = null;
-    this.httpStatusText = null;
+    this.httpStatusText = '';
     this.httpResponse = null;
 
     this.decodedKeys = oAuthKeys;

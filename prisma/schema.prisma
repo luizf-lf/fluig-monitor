@@ -60,6 +60,7 @@ model HTTPResponse {
   timestamp        DateTime           @default(now())
   endpoint         String?
   statusCode       Int
+  statusMessage    String?
   responseTimeMs   Int
   licenseHistory   LicenseHistory?
   monitorHistory   MonitorHistory?

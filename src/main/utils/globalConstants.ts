@@ -27,7 +27,7 @@ export const dbUrl =
 export const environmentSyncInterval = 150000;
 
 // Must be updated every time a migration is created
-export const latestMigration = '20221011221625_update_statistics_fields';
+export const latestMigration = '20221025191045_create_status_message_field';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const platformToExecutables: any = {
