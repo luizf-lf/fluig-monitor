@@ -113,10 +113,14 @@ export default class EnvironmentController {
     return this.found as EnvironmentWithHistory;
   }
 
-  async getLastHttpResponseById(id: number): Promise<HTTPResponse | null> {
+  async getLastHttpResponseById(
+    id: number,
+    onlySuccessful = false
+  ): Promise<HTTPResponse | null> {
     this.lastHttpResponse = await prismaClient.hTTPResponse.findFirst({
       where: {
         environmentId: id,
+        statusCode: onlySuccessful ? 200 : undefined,
       },
       orderBy: {
         timestamp: 'desc',

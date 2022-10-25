@@ -5,6 +5,7 @@ import { HTTPResponse } from '../generated/client';
 interface CreateHttpResponseProps {
   environmentId: number;
   statusCode: number;
+  statusMessage?: string;
   endpoint?: string;
   timestamp: string;
   responseTimeMs: number;

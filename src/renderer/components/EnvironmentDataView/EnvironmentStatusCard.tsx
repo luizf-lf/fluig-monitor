@@ -57,7 +57,7 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
     statusBody = (
       <>
         <div className="status-message">
-          <h3 className="text-red">Erro</h3>
+          <h3 className="text-red">Indisponível</h3>
           <span className="text-secondary">
             É possível que o ambiente esteja offline. Veja detalhes abaixo:
           </span>
@@ -79,7 +79,11 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
       </div>
       <div className="body">{statusBody}</div>
       <div className="footer">
-        Tempo De Resposta: {lastHttpResponse.responseTimeMs}ms
+        {lastHttpResponse.statusCode !== 0 ? (
+          <span>Tempo De Resposta: {lastHttpResponse.responseTimeMs}ms</span>
+        ) : (
+          <span className="text-red">{lastHttpResponse.statusMessage}</span>
+        )}
       </div>
     </div>
   );

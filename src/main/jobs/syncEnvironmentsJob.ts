@@ -76,6 +76,7 @@ async function syncLicenseData(
             responseTimeMs,
             endpoint: requestData.url,
             statusCode: fluigClient.httpStatus,
+            statusMessage: fluigClient.httpStatusText,
             timestamp: new Date().toISOString(),
           });
         }
@@ -88,6 +89,15 @@ async function syncLicenseData(
         fluigClient.errorStack,
         '(licenses api)'
       );
+
+      await new HttpResponseController().new({
+        environmentId: item.id,
+        responseTimeMs: 0,
+        endpoint: requestData.url,
+        statusCode: 0,
+        statusMessage: fluigClient.errorStack.split('\n')[0],
+        timestamp: new Date().toISOString(),
+      });
     }
   }
 }
@@ -164,6 +174,15 @@ async function syncMonitorData(
         fluigClient.errorStack,
         '(monitor api)'
       );
+
+      await new HttpResponseController().new({
+        environmentId: item.id,
+        responseTimeMs: 0,
+        endpoint: requestData.url,
+        statusCode: 0,
+        statusMessage: fluigClient.errorStack.split('\n')[0],
+        timestamp: new Date().toISOString(),
+      });
     }
   }
 }
@@ -290,6 +309,15 @@ async function syncStatisticsData(
         fluigClient.errorStack,
         '(statistics api)'
       );
+
+      await new HttpResponseController().new({
+        environmentId: item.id,
+        responseTimeMs: 0,
+        endpoint: requestData.url,
+        statusCode: 0,
+        statusMessage: fluigClient.errorStack.split('\n')[0],
+        timestamp: new Date().toISOString(),
+      });
     }
   }
 }
@@ -342,7 +370,10 @@ export default async function syncEnvironmentsJob() {
           );
 
           const lastHttpResponse =
-            await new EnvironmentController().getLastHttpResponseById(item.id);
+            await new EnvironmentController().getLastHttpResponseById(
+              item.id,
+              true
+            );
 
           if (lastHttpResponse === null) {
             log.info(
@@ -355,6 +386,11 @@ export default async function syncEnvironmentsJob() {
             Date.now() - lastHttpResponse.timestamp.getTime() >
             frequencyToMs(item.updateScheduleId.frequency)
           ) {
+            log.info(
+              'syncEnvironmentsJob: Environment',
+              item.id,
+              'has an old successful http response. Sync is needed.'
+            );
             needsSync = true;
           }
         }

@@ -60,8 +60,10 @@
     }
 
     .footer {
-      color: var(--font-soft);
-      font-size: 0.8rem;
+      span {
+        color: var(--font-soft);
+        font-size: 0.8rem;
+      }
     }
   }
 }
