@@ -76,7 +76,7 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
                           'components.EnvironmentServerInfo.activityTimeDescription'
                         )
                           .replace('%days%', String(uptime.days))
-                          .replace('%hours%', String(uptime.minutes))
+                          .replace('%hours%', String(uptime.hours))
                           .replace('%minutes%', String(uptime.minutes))
                           .replace('%seconds%', String(uptime.seconds))
                       : ''}
