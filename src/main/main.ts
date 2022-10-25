@@ -84,7 +84,7 @@ const createWindow = async () => {
     icon: getAssetPath('icon.png'),
   });
 
-  splash.loadFile('assets/splash.html');
+  splash.loadFile('splash.html');
 
   await runDbMigrations();
 
