@@ -22,6 +22,7 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
 
   let statusBody = <></>;
 
+  // TODO: Add i18n
   if (lastHttpResponse.statusCode !== 0) {
     if (lastHttpResponse.responseTimeMs > 1000) {
       statusBody = (

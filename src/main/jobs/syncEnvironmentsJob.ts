@@ -69,18 +69,23 @@ async function syncLicenseData(
           item.id,
           `(${fluigClient.httpStatus})`
         );
-
-        if (fluigClient.httpStatus) {
-          await new HttpResponseController().new({
-            environmentId: item.id,
-            responseTimeMs,
-            endpoint: requestData.url,
-            statusCode: fluigClient.httpStatus,
-            statusMessage: fluigClient.httpStatusText,
-            timestamp: new Date().toISOString(),
-          });
-        }
       }
+    } else if (fluigClient.httpStatus) {
+      log.warn(
+        'syncEnvironmentsJob: Warning while syncing environment',
+        item.id,
+        ':',
+        fluigClient.httpStatus,
+        '(licenses api)'
+      );
+      await new HttpResponseController().new({
+        environmentId: item.id,
+        responseTimeMs,
+        endpoint: requestData.url,
+        statusCode: fluigClient.httpStatus,
+        statusMessage: fluigClient.httpStatusText,
+        timestamp: new Date().toISOString(),
+      });
     } else {
       log.error(
         'syncEnvironmentsJob: Error while syncing environment',
@@ -155,17 +160,23 @@ async function syncMonitorData(
           item.id,
           `(${fluigClient.httpStatus})`
         );
-
-        if (fluigClient.httpStatus) {
-          await new HttpResponseController().new({
-            environmentId: item.id,
-            responseTimeMs,
-            endpoint: requestData.url,
-            statusCode: fluigClient.httpStatus,
-            timestamp: new Date().toISOString(),
-          });
-        }
       }
+    } else if (fluigClient.httpStatus) {
+      log.warn(
+        'syncEnvironmentsJob: Warning while syncing environment',
+        item.id,
+        ':',
+        fluigClient.httpStatus,
+        '(monitor api)'
+      );
+      await new HttpResponseController().new({
+        environmentId: item.id,
+        responseTimeMs,
+        endpoint: requestData.url,
+        statusCode: fluigClient.httpStatus,
+        statusMessage: fluigClient.httpStatusText,
+        timestamp: new Date().toISOString(),
+      });
     } else {
       log.error(
         'syncEnvironmentsJob: Error while syncing environment',
@@ -290,17 +301,23 @@ async function syncStatisticsData(
           item.id,
           `(${fluigClient.httpStatus})`
         );
-
-        if (fluigClient.httpStatus) {
-          await new HttpResponseController().new({
-            environmentId: item.id,
-            responseTimeMs,
-            endpoint: requestData.url,
-            statusCode: fluigClient.httpStatus,
-            timestamp: new Date().toISOString(),
-          });
-        }
       }
+    } else if (fluigClient.httpStatus) {
+      log.warn(
+        'syncEnvironmentsJob: Warning while syncing environment',
+        item.id,
+        ':',
+        fluigClient.httpStatus,
+        '(statistics api)'
+      );
+      await new HttpResponseController().new({
+        environmentId: item.id,
+        responseTimeMs,
+        endpoint: requestData.url,
+        statusCode: fluigClient.httpStatus,
+        statusMessage: fluigClient.httpStatusText,
+        timestamp: new Date().toISOString(),
+      });
     } else {
       log.error(
         'syncEnvironmentsJob: Error while syncing environment',
