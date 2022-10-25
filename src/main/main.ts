@@ -303,6 +303,21 @@ ipcMain.handle(
   }
 );
 
+ipcMain.handle(
+  'getLastHttpResponseFromEnvironment',
+  async (_event: Electron.IpcMainInvokeEvent, environmentId: number) => {
+    log.info(
+      'IPC Handler: Recovering last HTTP Response from environment',
+      environmentId
+    );
+
+    const lastResponse =
+      await new EnvironmentController().getLastHttpResponseById(environmentId);
+
+    return lastResponse;
+  }
+);
+
 ipcMain.handle('getFrontEndTheme', async () => {
   log.info('IPC Handler: Getting front end theme');
 

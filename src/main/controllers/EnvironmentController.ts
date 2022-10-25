@@ -117,7 +117,6 @@ export default class EnvironmentController {
     this.lastHttpResponse = await prismaClient.hTTPResponse.findFirst({
       where: {
         environmentId: id,
-        statusCode: 200,
       },
       orderBy: {
         timestamp: 'desc',

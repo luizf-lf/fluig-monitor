@@ -194,3 +194,44 @@
     border-radius: var(--card-border-radius-md);
   }
 }
+
+.icon-dot {
+  padding: 0.5rem;
+  background-color: var(--green);
+  color: var(--card);
+  border-radius: 100%;
+  width: 2rem;
+  height: 2rem;
+
+  &.red-variant {
+    background-color: var(--red);
+  }
+
+  &.yellow-variant {
+    background-color: var(--yellow);
+  }
+
+  &.purple-variant {
+    background-color: var(--purple);
+  }
+}
+
+.text-green {
+  color: var(--green);
+}
+
+.text-yellow {
+  color: var(--yellow);
+}
+
+.text-red {
+  color: var(--red);
+}
+
+.text-purple {
+  color: var(--purple);
+}
+
+.text-secondary {
+  color: var(--font-secondary);
+}

@@ -14,7 +14,7 @@ import {
   AuthKeysControllerInterface,
   AuthKeysFormControllerInterface,
 } from '../../common/interfaces/AuthKeysControllerInterface';
-import { Environment } from '../../main/generated/client';
+import { Environment, HTTPResponse } from '../../main/generated/client';
 
 export interface CreateEnvironmentProps {
   environment: EnvironmentCreateControllerInterface;
@@ -109,4 +109,15 @@ export async function toggleEnvironmentFavorite(
   const favorited = await ipcRenderer.invoke('toggleEnvironmentFavorite', id);
 
   return favorited;
+}
+
+export async function getLastHttpResponseById(
+  environmentId: number
+): Promise<HTTPResponse> {
+  const lastResponse = await ipcRenderer.invoke(
+    'getLastHttpResponseFromEnvironment',
+    environmentId
+  );
+
+  return lastResponse;
 }
