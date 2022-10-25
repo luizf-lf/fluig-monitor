@@ -206,7 +206,7 @@
     "mini-css-extract-plugin": "^2.4.3",
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^2.4.1",
-    "prisma": "^4.4.0",
+    "prisma": "^4.5.0",
     "prisma-erd-generator": "^1.2.1",
     "react-refresh": "^0.10.0",
     "react-refresh-typescript": "^2.0.2",
