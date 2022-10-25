@@ -67,6 +67,25 @@ const installExtensions = async () => {
 const createWindow = async () => {
   log.info('Creating a new window');
 
+  const RESOURCES_PATH = app.isPackaged
+    ? path.join(process.resourcesPath, 'assets')
+    : path.join(__dirname, '../../assets');
+
+  const getAssetPath = (...paths: string[]): string => {
+    return path.join(RESOURCES_PATH, ...paths);
+  };
+
+  const splash = new BrowserWindow({
+    width: 720,
+    height: 230,
+    frame: false,
+    alwaysOnTop: true,
+    transparent: true,
+    icon: getAssetPath('icon.png'),
+  });
+
+  splash.loadFile('assets/splash.html');
+
   await runDbMigrations();
 
   await syncEnvironmentsJob();
@@ -80,14 +99,6 @@ const createWindow = async () => {
     log.info('Installing additional dev extensions');
     await installExtensions();
   }
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
 
   // get the window size from the user's main display
   const { width, height } = screen.getPrimaryDisplay().size;
@@ -137,6 +148,7 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+    splash.destroy();
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
