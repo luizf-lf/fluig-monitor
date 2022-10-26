@@ -15,9 +15,11 @@ export default function EnvironmentStatusSummary({
       <h3 className="title">{environmentName}</h3>
       <div className="components-container">
         <EnvironmentStatusCard environmentId={environmentId} />
-        <div className="card">disk</div>
-        <div className="card">memory</div>
-        <div className="card">database</div>
+        <div className="system-resources">
+          <div className="card">disk</div>
+          <div className="card">memory</div>
+          <div className="card">database</div>
+        </div>
       </div>
     </div>
   );

@@ -233,6 +233,20 @@ const pt = {
       unused: 'Não Utilizado',
       failed: 'Com Falha',
     },
+    EnvironmentStatusCard: {
+      title: 'Status',
+      responseTime: 'Tempo de resposta: %responseTime%ms',
+      attention: 'Atenção',
+      operational: 'Operacional',
+      unavailable: 'Indisponível',
+      operatingCorrectly: 'O servidor está online e operando corretamente.',
+      highResponseTime:
+        'O servidor está online, porém apresenta um tempo de resposta incomum.',
+      noSatisfactoryResponse:
+        'O servidor está online, porém não apresenta uma resposta satisfatória (HTTP %http%).',
+      mayBeOffline:
+        'É possível que o servidor esteja offline, veja detalhes abaixo: ',
+    },
   },
 };
 

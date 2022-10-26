@@ -24,7 +24,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       if (environmentDataById) {
         setEnvironment(environmentDataById);
-        console.log({ environmentDataById });
+        // console.log({ environmentDataById });
       }
     }
 

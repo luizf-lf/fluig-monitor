@@ -8,11 +8,19 @@
     margin-bottom: 0.5rem;
   }
   .components-container {
-    display: grid;
+    display: flex;
 
-    grid-template-columns: 6fr 2fr 2fr 2fr;
-
+    justify-content: space-between;
     gap: 1rem;
+
+    .system-resources {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+
+      height: 100%;
+    }
 
     .card {
       background: var(--card);

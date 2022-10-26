@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FiActivity, FiWifi, FiWifiOff } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
 import { HTTPResponse } from '../../../main/generated/client';
 import { getLastHttpResponseById } from '../../ipc/environmentsIpcHandler';
 
@@ -11,6 +12,8 @@ interface Props {
 
 export default function EnvironmentStatusCard({ environmentId }: Props) {
   const [lastHttpResponse, setLastHttpResponse] = useState({} as HTTPResponse);
+  const { t } = useTranslation();
+  let statusBody = <></>;
 
   useEffect(() => {
     async function getData() {
@@ -20,21 +23,35 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
     getData();
   }, [environmentId]);
 
-  let statusBody = <></>;
-
-  // TODO: Add i18n
   if (lastHttpResponse.statusCode !== 0) {
     if (lastHttpResponse.responseTimeMs > 1000) {
       statusBody = (
         <>
           <div className="status-message">
-            <h3 className="text-yellow">Atenção</h3>
+            <h3 className="text-yellow">
+              {t('components.EnvironmentStatusCard.attention')}
+            </h3>
             <span className="text-secondary">
-              O servidor está online, porém apresenta um tempo de resposta
-              incomum.
+              {t('components.EnvironmentStatusCard.highResponseTime')}
             </span>
           </div>
           <div className="status-icon has-warning">
+            <FiWifi />
+          </div>
+        </>
+      );
+    } else if (lastHttpResponse.statusCode === 200) {
+      statusBody = (
+        <>
+          <div className="status-message">
+            <h3 className="text-green">
+              {t('components.EnvironmentStatusCard.operational')}
+            </h3>
+            <span className="text-secondary ">
+              {t('components.EnvironmentStatusCard.operatingCorrectly')}
+            </span>
+          </div>
+          <div className="status-icon breathe">
             <FiWifi />
           </div>
         </>
@@ -43,12 +60,14 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
       statusBody = (
         <>
           <div className="status-message">
-            <h3 className="text-green">Operacional</h3>
-            <span className="text-secondary ">
-              O servidor está online, e operando corretamente.
+            <h3 className="text-yellow">Atenção</h3>
+            <span className="text-secondary">
+              {t(
+                'components.EnvironmentStatusCard.noSatisfactoryResponse'
+              ).replace('%http%', String(lastHttpResponse.statusCode))}
             </span>
           </div>
-          <div className="status-icon breathe">
+          <div className="status-icon has-warning">
             <FiWifi />
           </div>
         </>
@@ -58,9 +77,11 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
     statusBody = (
       <>
         <div className="status-message">
-          <h3 className="text-red">Indisponível</h3>
+          <h3 className="text-red">
+            {t('components.EnvironmentStatusCard.unavailable')}
+          </h3>
           <span className="text-secondary">
-            É possível que o ambiente esteja offline. Veja detalhes abaixo:
+            {t('components.EnvironmentStatusCard.mayBeOffline')}
           </span>
         </div>
         <div className="status-icon has-danger">
@@ -76,12 +97,19 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
         <div className="icon-dot red-variant">
           <FiActivity />
         </div>
-        <span className="text-red">Status</span>
+        <span className="text-red">
+          {t('components.EnvironmentStatusCard.title')}
+        </span>
       </div>
       <div className="body">{statusBody}</div>
       <div className="footer">
         {lastHttpResponse.statusCode !== 0 ? (
-          <span>Tempo De Resposta: {lastHttpResponse.responseTimeMs}ms</span>
+          <span>
+            {t('components.EnvironmentStatusCard.responseTime').replace(
+              '%responseTime%',
+              String(lastHttpResponse.responseTimeMs)
+            )}
+          </span>
         ) : (
           <span className="text-red">{lastHttpResponse.statusMessage}</span>
         )}

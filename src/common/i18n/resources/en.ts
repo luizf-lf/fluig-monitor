@@ -232,6 +232,20 @@ const en = {
       unused: 'Unused',
       failed: 'Fail',
     },
+    EnvironmentStatusCard: {
+      title: 'Status',
+      responseTime: 'Response time: %responseTime%ms',
+      attention: 'Attention',
+      operational: 'Operational',
+      unavailable: 'Unavailable',
+      operatingCorrectly: 'The server is online and operating correctly.',
+      highResponseTime:
+        'The server is online, but has an uncommon response time.',
+      noSatisfactoryResponse:
+        'The server is online, but returned a non satisfactory response (HTTP %http%).',
+      mayBeOffline:
+        'It is possible that the server is offline. See details bellow: ',
+    },
   },
 };
 
