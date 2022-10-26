@@ -52,6 +52,7 @@ async function syncLicenseData(
           timestamp: new Date().toISOString(),
           responseTimeMs,
           endpoint: requestData.url,
+          statusMessage: fluigClient.httpStatusText,
           licenseData: {
             activeUsers,
             remainingLicenses,
@@ -145,6 +146,7 @@ async function syncMonitorData(
         const logged = await new MonitorHistoryController().new({
           environmentId: item.id,
           statusCode: fluigClient.httpStatus,
+          statusMessage: fluigClient.httpStatusText,
           timestamp: new Date().toISOString(),
           responseTimeMs,
           endpoint: requestData.url,
@@ -236,6 +238,7 @@ async function syncStatisticsData(
         const logged = await new StatisticsHistoryController().new({
           environmentId: item.id,
           statusCode: fluigClient.httpStatus,
+          statusMessage: fluigClient.httpStatusText,
           timestamp: new Date().toISOString(),
           responseTimeMs,
           endpoint: requestData.url,
@@ -360,13 +363,15 @@ export default async function syncEnvironmentsJob() {
       let isInUpdateSchedule = false;
 
       const date = new Date();
-      const hoursNow = `${date.getHours()}:${date.getMinutes()}`;
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const timeNow = `${hours}:${minutes}`;
       const dayOfWeek = date.getDay();
 
       if (item.updateScheduleId) {
         if (
-          hoursNow > item.updateScheduleId.from &&
-          hoursNow < item.updateScheduleId.to
+          timeNow > item.updateScheduleId.from &&
+          timeNow < item.updateScheduleId.to
         ) {
           if (
             item.updateScheduleId.onlyOnWorkDays &&
@@ -392,7 +397,11 @@ export default async function syncEnvironmentsJob() {
               true
             );
 
-          if (lastHttpResponse === null) {
+          if (
+            lastHttpResponse === null ||
+            lastHttpResponse.statusCode < 200 ||
+            lastHttpResponse.statusCode > 300
+          ) {
             log.info(
               'syncEnvironmentsJob: Environment',
               item.id,
