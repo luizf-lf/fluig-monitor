@@ -6,6 +6,7 @@ import HttpResponseController from './HttpResponseController';
 interface LogLicenseProps {
   environmentId: number;
   statusCode: number;
+  statusMessage: string;
   timestamp: string;
   endpoint?: string;
   responseTimeMs: number;

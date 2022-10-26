@@ -11,6 +11,7 @@ interface MonitorItem {
 interface MonitorHistoryCreateProps {
   environmentId: number;
   statusCode: number;
+  statusMessage: string;
   timestamp: string;
   responseTimeMs: number;
   endpoint?: string;

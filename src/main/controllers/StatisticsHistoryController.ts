@@ -6,6 +6,7 @@ interface CreateStatisticHistoryProps {
   environmentId: number;
 
   statusCode: number;
+  statusMessage: string;
   endpoint: string;
   timestamp: string;
   responseTimeMs: number;
