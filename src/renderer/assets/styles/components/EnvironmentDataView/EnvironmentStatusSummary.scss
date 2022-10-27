@@ -6,6 +6,12 @@
 
   .title {
     margin-bottom: 0.5rem;
+
+    span {
+      font-size: 0.8rem;
+      color: var(--font-soft);
+      margin-left: 0.5rem;
+    }
   }
   .components-container {
     display: flex;

@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { LicenseHistory } from '../../../main/generated/client';
+import { FiClock } from 'react-icons/fi';
+import { LicenseHistoryWithHttpResponse } from '../../../common/interfaces/EnvironmentControllerInterface';
 import SpinnerLoader from '../Loaders/Spinner';
 import ProgressBar from '../ProgressBar';
 
 interface Props {
-  licenses: LicenseHistory[];
+  licenses: LicenseHistoryWithHttpResponse[];
 }
 
 export default function EnvironmentLicenses({ licenses }: Props) {

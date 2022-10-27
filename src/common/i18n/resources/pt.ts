@@ -247,6 +247,10 @@ const pt = {
       mayBeOffline:
         'É possível que o servidor esteja offline, veja detalhes abaixo: ',
     },
+    EnvironmentStatusSummary: {
+      updatedAt: 'Atualizado às',
+      updatedAtAlt: 'Atualizado em',
+    },
   },
 };
 

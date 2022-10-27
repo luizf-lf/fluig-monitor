@@ -19,6 +19,8 @@ ipcRenderer.on(
   }
 );
 
+// TODO: Add environment context listener to change environment data on environment sync
+
 // ensures that the initial rendered language is the one saved locally
 i18n.language = ipcRenderer.sendSync('getLanguage');
 
