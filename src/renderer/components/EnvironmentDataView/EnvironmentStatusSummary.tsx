@@ -6,6 +6,7 @@ import EnvironmentStatusCard from './EnvironmentStatusCard';
 import SpinnerLoader from '../Loaders/Spinner';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentStatusSummary.scss';
+import Disk from './SystemResources/Disk';
 
 interface Props {
   environmentName: string;
@@ -51,7 +52,7 @@ export default function EnvironmentStatusSummary({
       <div className="components-container">
         <EnvironmentStatusCard environmentId={environmentId} />
         <div className="system-resources">
-          <div className="card">disk</div>
+          <Disk environmentId={environmentId} />
           <div className="card">memory</div>
           <div className="card">database</div>
         </div>

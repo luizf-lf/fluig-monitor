@@ -47,6 +47,11 @@ interface CreateStatisticHistoryProps {
   systemUptime: number;
 }
 
+export interface HDStats {
+  systemServerHDFree: string | null;
+  systemServerHDSize: string | null;
+}
+
 export default class StatisticsHistoryController {
   created: StatisticsHistory | null;
 
@@ -106,5 +111,23 @@ export default class StatisticsHistoryController {
     });
 
     return this.created;
+  }
+
+  static async getHistoricalDiskInfo(id: number): Promise<HDStats[] | []> {
+    const stats = await prismaClient.statisticsHistory.findMany({
+      select: {
+        systemServerHDFree: true,
+        systemServerHDSize: true,
+      },
+      take: 100,
+      orderBy: {
+        id: 'desc',
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return stats;
   }
 }

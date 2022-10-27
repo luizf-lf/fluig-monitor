@@ -32,6 +32,7 @@ import { AuthKeysControllerInterface } from '../common/interfaces/AuthKeysContro
 import LogController from './controllers/LogController';
 import SettingsController from './controllers/SettingsController';
 import syncEnvironmentsJob from './jobs/syncEnvironmentsJob';
+import StatisticsHistoryController from './controllers/StatisticsHistoryController';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -336,6 +337,14 @@ ipcMain.handle('getFrontEndTheme', async () => {
   const theme = await new SettingsController().find('FRONT_END_THEME');
 
   return theme;
+});
+
+ipcMain.handle('getHistoricalDiskInfo', async (_event, id) => {
+  log.info('IPC Handler: Getting historical disk info');
+
+  const diskInfo = await StatisticsHistoryController.getHistoricalDiskInfo(id);
+
+  return diskInfo;
 });
 
 app.on('window-all-closed', async () => {

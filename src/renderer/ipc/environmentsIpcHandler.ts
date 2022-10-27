@@ -15,6 +15,7 @@ import {
   AuthKeysFormControllerInterface,
 } from '../../common/interfaces/AuthKeysControllerInterface';
 import { Environment, HTTPResponse } from '../../main/generated/client';
+import { HDStats } from '../../main/controllers/StatisticsHistoryController';
 
 export interface CreateEnvironmentProps {
   environment: EnvironmentCreateControllerInterface;
@@ -120,4 +121,10 @@ export async function getLastHttpResponseById(
   );
 
   return lastResponse;
+}
+
+export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
+  const diskInfo = await ipcRenderer.invoke('getHistoricalDiskInfo', id);
+
+  return diskInfo;
 }
