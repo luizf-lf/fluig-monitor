@@ -256,6 +256,11 @@ const en = {
         used: 'Used',
         outOf: 'out of',
       },
+      Memory: {
+        title: 'Memory',
+        used: 'Used',
+        outOf: 'out of',
+      },
     },
   },
 };

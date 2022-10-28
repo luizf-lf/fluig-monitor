@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FiServer } from 'react-icons/fi';
+import { FiHardDrive } from 'react-icons/fi';
 import SpinnerLoader from '../../Loaders/Spinner';
 import { getHistoricalDiskInfo } from '../../../ipc/environmentsIpcHandler';
 import { HDStats } from '../../../../main/controllers/StatisticsHistoryController';
@@ -35,7 +35,7 @@ export default function Disk({ environmentId }: Props) {
     <div className="card system-resource-card">
       <div className="header">
         <div className="icon-dot purple-variant">
-          <FiServer />
+          <FiHardDrive />
         </div>
         <span className="text-purple">
           {t('components.SystemResources.Disk.title')}

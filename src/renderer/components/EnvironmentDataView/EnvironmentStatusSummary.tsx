@@ -6,7 +6,10 @@ import EnvironmentStatusCard from './EnvironmentStatusCard';
 import SpinnerLoader from '../Loaders/Spinner';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentStatusSummary.scss';
+
 import Disk from './SystemResources/Disk';
+import Database from './SystemResources/Database';
+import Memory from './SystemResources/Memory';
 
 interface Props {
   environmentName: string;
@@ -45,7 +48,7 @@ export default function EnvironmentStatusSummary({
         ) : (
           <span>
             {t('components.EnvironmentStatusSummary.updatedAtAlt')}{' '}
-            {lastHttpResponse.timestamp.toLocaleDateString()}
+            {lastHttpResponse.timestamp.toLocaleString()}
           </span>
         )}
       </h2>
@@ -53,8 +56,8 @@ export default function EnvironmentStatusSummary({
         <EnvironmentStatusCard environmentId={environmentId} />
         <div className="system-resources">
           <Disk environmentId={environmentId} />
-          <div className="card">memory</div>
-          <div className="card">database</div>
+          <Memory environmentId={environmentId} />
+          <Database />
         </div>
       </div>
     </div>

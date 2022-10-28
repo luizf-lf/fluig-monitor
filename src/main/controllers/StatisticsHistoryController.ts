@@ -1,5 +1,5 @@
 import prismaClient from '../database/prismaContext';
-import { StatisticsHistory } from '../generated/client';
+import { HTTPResponse, StatisticsHistory } from '../generated/client';
 import HttpResponseController from './HttpResponseController';
 
 interface CreateStatisticHistoryProps {
@@ -50,6 +50,20 @@ interface CreateStatisticHistoryProps {
 export interface HDStats {
   systemServerHDFree: string | null;
   systemServerHDSize: string | null;
+  httpResponse: HTTPResponse;
+}
+
+export interface MemoryStats {
+  systemServerMemorySize: bigint | null;
+  systemServerMemoryFree: bigint | null;
+  httpResponse: HTTPResponse;
+}
+
+export interface DBStats {
+  dbTraficRecieved: bigint | null;
+  dbTraficSent: bigint | null;
+  dbSize: bigint | null;
+  httpResponse: HTTPResponse;
 }
 
 export default class StatisticsHistoryController {
@@ -118,10 +132,56 @@ export default class StatisticsHistoryController {
       select: {
         systemServerHDFree: true,
         systemServerHDSize: true,
+        httpResponse: true,
       },
       take: 100,
       orderBy: {
-        id: 'desc',
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return stats;
+  }
+
+  static async getHistoricalMemoryInfo(id: number): Promise<MemoryStats[]> {
+    const stats = await prismaClient.statisticsHistory.findMany({
+      select: {
+        systemServerMemorySize: true,
+        systemServerMemoryFree: true,
+        httpResponse: true,
+      },
+      take: 100,
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return stats;
+  }
+
+  static async getHistoricalDatabaseInfo(id: number): Promise<DBStats[]> {
+    const stats = await prismaClient.statisticsHistory.findMany({
+      select: {
+        dbTraficRecieved: true,
+        dbTraficSent: true,
+        dbSize: true,
+        httpResponse: true,
+      },
+      take: 100,
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
       },
       where: {
         environmentId: id,

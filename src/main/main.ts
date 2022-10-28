@@ -339,13 +339,43 @@ ipcMain.handle('getFrontEndTheme', async () => {
   return theme;
 });
 
-ipcMain.handle('getHistoricalDiskInfo', async (_event, id) => {
-  log.info('IPC Handler: Getting historical disk info');
+ipcMain.handle(
+  'getHistoricalDiskInfo',
+  async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+    log.info('IPC Handler: Getting historical disk info');
 
-  const diskInfo = await StatisticsHistoryController.getHistoricalDiskInfo(id);
+    const diskInfo = await StatisticsHistoryController.getHistoricalDiskInfo(
+      id
+    );
 
-  return diskInfo;
-});
+    return diskInfo;
+  }
+);
+
+ipcMain.handle(
+  'getHistoricalMemoryInfo',
+  async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+    log.info('IPC Handler: Getting historical memory info');
+
+    const memoryInfo =
+      await StatisticsHistoryController.getHistoricalMemoryInfo(id);
+
+    return memoryInfo;
+  }
+);
+
+ipcMain.handle(
+  'getHistoricalDatabaseInfo',
+  async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+    log.info('IPC Handler: Getting historical database info');
+
+    const dbInfo = await StatisticsHistoryController.getHistoricalDatabaseInfo(
+      id
+    );
+
+    return dbInfo;
+  }
+);
 
 app.on('window-all-closed', async () => {
   // Respect the OSX convention of having the application in memory even

@@ -1,3 +1,13 @@
+# 0.1.4
+
+- System resources components added:
+  - Disk Info
+  - Memory Info
+  - Databse Info
+- Progress bar component updated
+- Splash Screen added
+- Environment status component added
+
 # 0.1.3
 
 - Production build error fixed due to global constants not being properly loaded

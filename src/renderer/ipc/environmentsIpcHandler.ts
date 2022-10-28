@@ -15,7 +15,11 @@ import {
   AuthKeysFormControllerInterface,
 } from '../../common/interfaces/AuthKeysControllerInterface';
 import { Environment, HTTPResponse } from '../../main/generated/client';
-import { HDStats } from '../../main/controllers/StatisticsHistoryController';
+import {
+  DBStats,
+  HDStats,
+  MemoryStats,
+} from '../../main/controllers/StatisticsHistoryController';
 
 export interface CreateEnvironmentProps {
   environment: EnvironmentCreateControllerInterface;
@@ -127,4 +131,23 @@ export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
   const diskInfo = await ipcRenderer.invoke('getHistoricalDiskInfo', id);
 
   return diskInfo;
+}
+
+export async function getHistoricalMemoryInfo(
+  id: number
+): Promise<MemoryStats[]> {
+  const memoryInfo = await ipcRenderer.invoke('getHistoricalMemoryInfo', id);
+
+  return memoryInfo;
+}
+
+export async function getHistoricalDatabaseInfo(
+  id: number
+): Promise<DBStats[]> {
+  const databaseInfo = await ipcRenderer.invoke(
+    'getHistoricalDatabaseInfo',
+    id
+  );
+
+  return databaseInfo;
 }

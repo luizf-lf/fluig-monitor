@@ -257,6 +257,11 @@ const pt = {
         used: 'Usado',
         outOf: 'de',
       },
+      Memory: {
+        title: 'Memória',
+        used: 'Usado',
+        outOf: 'de',
+      },
     },
   },
 };
