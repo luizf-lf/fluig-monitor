@@ -262,6 +262,12 @@ const en = {
         used: 'Used',
         outOf: 'out of',
       },
+      Database: {
+        title: 'Database',
+        size: 'Size',
+        traffic: 'Traffic',
+        trafficNotAllowed: 'Traffic not allowed',
+      },
     },
   },
 };

@@ -1,6 +1,35 @@
-import { FiDatabase } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FiArrowDownRight, FiArrowUpRight, FiDatabase } from 'react-icons/fi';
+import SpinnerLoader from '../../Loaders/Spinner';
+import { getHistoricalDatabaseInfo } from '../../../ipc/environmentsIpcHandler';
+import { DBStats } from '../../../../main/controllers/StatisticsHistoryController';
+import formatBytes from '../../../../common/utils/formatBytes';
 
-export default function Database() {
+interface Props {
+  environmentId: number;
+}
+
+export default function Database({ environmentId }: Props) {
+  const [dbInfo, setDbInfo] = useState([{}] as DBStats[]);
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    async function getData() {
+      setDbInfo(await getHistoricalDatabaseInfo(environmentId));
+    }
+
+    getData();
+  }, [environmentId]);
+
+  if (dbInfo.length === 0) {
+    return <div className="card">{t('components.global.noData')}</div>;
+  }
+
+  if (typeof dbInfo[0].dbSize === 'undefined') {
+    return <SpinnerLoader />;
+  }
+
   return (
     <div className="card system-resource-card">
       <div className="header">
@@ -8,28 +37,37 @@ export default function Database() {
           <FiDatabase />
         </div>
         <span className="text-yellow">
-          {/* {t('components.SystemResources.Disk.title')} */}
-          Banco De Dados
+          {t('components.SystemResources.Database.title')}
         </span>
       </div>
       <div className="body">
         <p className="font-soft">
-          {/* {t('components.SystemResources.Disk.used')} */}
-          Tamanho
+          {t('components.SystemResources.Database.size')}
         </p>
-        <h3>
-          {/* {formatBytes(
-        Number(diskInfo[0].systemServerHDSize) -
-          Number(diskInfo[0].systemServerHDFree)
-      )} */}
-          62,1 GB
-        </h3>
+        <h3>{formatBytes(Number(dbInfo[0].dbSize))}</h3>
       </div>
       <div className="footer">
-        <p className="font-soft font-sm">
-          {/* {t('components.SystemResources.Disk.used')} */}
-          Tráfego não permitido.
-        </p>
+        {Number(dbInfo[0].dbTraficRecieved) === -1 ? (
+          <p className="font-soft font-sm">
+            {t('components.SystemResources.Database.trafficNotAllowed')}
+          </p>
+        ) : (
+          <>
+            <p className="font-soft">
+              {t('components.SystemResources.Database.traffic')}
+            </p>
+            <div className="database-traffic-container">
+              <div className="received text-green">
+                <FiArrowDownRight />
+                {formatBytes(Number(dbInfo[0].dbTraficRecieved))}
+              </div>
+              <div className="sent text-purple">
+                <FiArrowUpRight />
+                {formatBytes(Number(dbInfo[0].dbTraficSent))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

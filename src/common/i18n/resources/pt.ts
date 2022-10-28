@@ -263,6 +263,12 @@ const pt = {
         used: 'Usado',
         outOf: 'de',
       },
+      Database: {
+        title: 'Banco De Dados',
+        size: 'Tamanho',
+        traffic: 'Tráfego',
+        trafficNotAllowed: 'Tráfego não permitido',
+      },
     },
   },
 };

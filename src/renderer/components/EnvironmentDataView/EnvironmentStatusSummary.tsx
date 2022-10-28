@@ -57,7 +57,7 @@ export default function EnvironmentStatusSummary({
         <div className="system-resources">
           <Disk environmentId={environmentId} />
           <Memory environmentId={environmentId} />
-          <Database />
+          <Database environmentId={environmentId} />
         </div>
       </div>
     </div>
