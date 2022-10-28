@@ -251,6 +251,13 @@ const pt = {
       updatedAt: 'Atualizado às',
       updatedAtAlt: 'Atualizado em',
     },
+    SystemResources: {
+      Disk: {
+        title: 'Disco',
+        used: 'Usado',
+        outOf: 'de',
+      },
+    },
   },
 };
 

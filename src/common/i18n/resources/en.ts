@@ -250,6 +250,13 @@ const en = {
       updatedAt: 'Updated at',
       updatedAtAlt: 'Updated at',
     },
+    SystemResources: {
+      Disk: {
+        title: 'Disk',
+        used: 'Used',
+        outOf: 'out of',
+      },
+    },
   },
 };
 

@@ -69,4 +69,35 @@
       }
     }
   }
+
+  &.system-resource-card {
+    height: 100%;
+    min-width: 12rem;
+
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      gap: 0.5rem;
+    }
+
+    .body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      margin-top: 0.5rem;
+
+      h3 {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: bold;
+      }
+    }
+  }
 }
