@@ -187,6 +187,7 @@ const en = {
         artifacts: 'Artifacts',
         users: 'Users',
         settings: 'Settings',
+        minimize: 'Minimize',
       },
     },
   },

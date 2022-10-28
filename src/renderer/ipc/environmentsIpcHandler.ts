@@ -111,6 +111,7 @@ export async function deleteEnvironment(id: number): Promise<boolean> {
 export async function toggleEnvironmentFavorite(
   id: number
 ): Promise<{ favorited: boolean; exception: string | null }> {
+  log.info('IPC Invoker: Toggling environment favorite for id', id);
   const favorited = await ipcRenderer.invoke('toggleEnvironmentFavorite', id);
 
   return favorited;
@@ -119,6 +120,10 @@ export async function toggleEnvironmentFavorite(
 export async function getLastHttpResponseById(
   environmentId: number
 ): Promise<HTTPResponse> {
+  log.info(
+    'IPC Invoker: Requesting last http response from environment',
+    environmentId
+  );
   const lastResponse = await ipcRenderer.invoke(
     'getLastHttpResponseFromEnvironment',
     environmentId
@@ -128,6 +133,7 @@ export async function getLastHttpResponseById(
 }
 
 export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
+  log.info('IPC Invoker: Requesting historical disk info for environment', id);
   const diskInfo = await ipcRenderer.invoke('getHistoricalDiskInfo', id);
 
   return diskInfo;
@@ -136,6 +142,10 @@ export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
 export async function getHistoricalMemoryInfo(
   id: number
 ): Promise<MemoryStats[]> {
+  log.info(
+    'IPC Invoker: Requesting historical memory info for environment',
+    id
+  );
   const memoryInfo = await ipcRenderer.invoke('getHistoricalMemoryInfo', id);
 
   return memoryInfo;
@@ -144,6 +154,10 @@ export async function getHistoricalMemoryInfo(
 export async function getHistoricalDatabaseInfo(
   id: number
 ): Promise<DBStats[]> {
+  log.info(
+    'IPC Invoker: Requesting historical database info for environment',
+    id
+  );
   const databaseInfo = await ipcRenderer.invoke(
     'getHistoricalDatabaseInfo',
     id

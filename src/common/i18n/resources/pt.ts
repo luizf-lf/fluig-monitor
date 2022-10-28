@@ -188,6 +188,7 @@ const pt = {
         artifacts: 'Artefatos',
         users: 'Usuários',
         settings: 'Configurações',
+        minimize: 'Minimizar',
       },
     },
   },

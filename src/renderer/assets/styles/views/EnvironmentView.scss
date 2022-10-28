@@ -30,9 +30,21 @@
     height: 90%;
 
     min-width: 13rem;
+    transition: all var(--transition);
+
+    &.closed {
+      min-width: 0rem;
+
+      .menu-items,
+      .last-menu-items {
+        .item-text {
+          font-size: 0rem;
+        }
+      }
+    }
 
     .menu-items,
-    .last-menu-item {
+    .last-menu-items {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
@@ -43,7 +55,12 @@
       width: 100%;
     }
 
-    a {
+    a,
+    button {
+      .item-text {
+        transition: all var(--transition);
+        color: var(--font-primary);
+      }
       color: var(--font-primary);
       font-size: 0.9rem;
       border-radius: 0.5rem;
@@ -74,6 +91,10 @@
 
       &:hover,
       &.active {
+        .item-text {
+          color: var(--purple);
+        }
+
         background-color: var(--card);
         color: var(--purple);
         box-shadow: var(--card-shadow);
