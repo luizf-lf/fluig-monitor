@@ -8,6 +8,7 @@
 - Splash Screen added
 - Environment status component added
 - Environment Sync after environment creation implemented
+- Environment api response performance graph added with Rechart.js
 
 # 0.1.3
 

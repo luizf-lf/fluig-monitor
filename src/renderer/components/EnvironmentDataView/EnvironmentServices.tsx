@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { FiClock } from 'react-icons/fi';
 import SpinnerLoader from '../Loaders/Spinner';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentServices.scss';

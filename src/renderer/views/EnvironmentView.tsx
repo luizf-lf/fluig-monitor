@@ -10,8 +10,6 @@ import {
   FiPackage,
   FiUsers,
   FiSettings,
-  FiMaximize2,
-  FiMinimize2,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import globalContainerVariants from '../utils/globalContainerVariants';

@@ -24,7 +24,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       if (environmentDataById) {
         setEnvironment(environmentDataById);
-        console.log({ environmentDataById });
+        // console.log({ environmentDataById });
       }
     }
 
@@ -32,6 +32,10 @@ export default function EnvironmentSummary({ environmentId }: Props) {
       getEnvironmentData();
     }
   }, [environmentId]);
+
+  // setTimeout(async () => {
+  //   setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
+  // }, 10000);
 
   return (
     <motion.div
@@ -46,7 +50,11 @@ export default function EnvironmentSummary({ environmentId }: Props) {
           environmentName={environment.name}
           environmentId={environment.id}
         />
-        <EnvironmentPerformanceGraph />
+        <EnvironmentPerformanceGraph
+          licenses={environment.licenseHistory}
+          monitor={environment.monitorHistory}
+          statistics={environment.statisticHistory}
+        />
       </section>
 
       <section id="server-info">
