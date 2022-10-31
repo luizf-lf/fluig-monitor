@@ -7,6 +7,7 @@
 - Progress bar component updated
 - Splash Screen added
 - Environment status component added
+- Environment Sync after environment creation implemented
 
 # 0.1.3
 

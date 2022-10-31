@@ -31,6 +31,17 @@ export default function EnvironmentStatusSummary({
     getData();
   }, [environmentId]);
 
+  if (lastHttpResponse === null) {
+    return (
+      <div className="environment-status-summary-container">
+        <h2 className="title">{environmentName}</h2>
+        <div className="components-container">
+          <div className="card">{t('components.global.noData')}</div>
+        </div>
+      </div>
+    );
+  }
+
   if (typeof lastHttpResponse.timestamp === 'undefined') {
     return <SpinnerLoader />;
   }

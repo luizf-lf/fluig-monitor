@@ -165,3 +165,9 @@ export async function getHistoricalDatabaseInfo(
 
   return databaseInfo;
 }
+
+export async function forceEnvironmentSync(): Promise<void> {
+  log.info('IPC Invoker: Requesting all environments sync.');
+
+  await ipcRenderer.invoke('forceEnvironmentSync');
+}

@@ -377,6 +377,11 @@ ipcMain.handle(
   }
 );
 
+ipcMain.handle('forceEnvironmentSync', async () => {
+  log.info('IPC Handler: Forcing all environments Sync');
+  await syncEnvironmentsJob();
+});
+
 app.on('window-all-closed', async () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed

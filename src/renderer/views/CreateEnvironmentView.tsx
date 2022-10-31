@@ -15,7 +15,10 @@ import { useTranslation } from 'react-i18next';
 import log from 'electron-log';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
-import { createEnvironment } from '../ipc/environmentsIpcHandler';
+import {
+  createEnvironment,
+  forceEnvironmentSync,
+} from '../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
@@ -37,6 +40,7 @@ export default function CreateEnvironmentView(): JSX.Element {
   const [validationMessage, setValidationMessage] = useState(<></>);
 
   const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
+  const [buttonIsLoading, setButtonIsLoading] = useState(false);
 
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
@@ -70,6 +74,9 @@ export default function CreateEnvironmentView(): JSX.Element {
 
     if (isValid) {
       log.info('CreateEnvironmentView: Form is valid, creating environment.');
+      setActionButtonsDisabled(true);
+      setButtonIsLoading(true);
+
       await createEnvironment({
         environment: {
           baseUrl: formData.baseUrl,
@@ -85,9 +92,11 @@ export default function CreateEnvironmentView(): JSX.Element {
       });
 
       log.info(
-        'CreateEnvironmentView: Environment created, redirecting to home view'
+        'CreateEnvironmentView: Environment created, syncing environments and redirecting to home view'
       );
-      setActionButtonsDisabled(true);
+
+      await forceEnvironmentSync();
+
       createShortNotification({
         id: Date.now(),
         type: 'success',
@@ -468,7 +477,15 @@ export default function CreateEnvironmentView(): JSX.Element {
             type="submit"
             disabled={actionButtonsDisabled}
           >
-            <FiCheck /> {t('views.CreateEnvironmentView.form.buttonSubmit')}
+            {buttonIsLoading ? (
+              <>
+                <FiRefreshCw className="rotating" />
+              </>
+            ) : (
+              <>
+                <FiCheck /> {t('views.CreateEnvironmentView.form.buttonSubmit')}
+              </>
+            )}
           </button>
 
           {validationMessage}
