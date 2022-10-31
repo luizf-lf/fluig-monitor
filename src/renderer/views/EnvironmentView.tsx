@@ -27,7 +27,7 @@ export default function EnvironmentView(): JSX.Element {
   const { environmentId }: EnvironmentViewParams = useParams();
   // path is used to create paths relative to the parent, while url is used to create links
   const { path, url } = useRouteMatch();
-  const [menuIsClosed, setMenuIsClosed] = useState(false);
+  const [menuIsClosed, setMenuIsClosed] = useState(true);
 
   const submenuItems = [
     {
@@ -71,7 +71,13 @@ export default function EnvironmentView(): JSX.Element {
       <div className="environment-data-container">
         <section>
           <h2>Menu</h2>
-          <aside className={`side-menu ${menuIsClosed ? 'closed' : ''}`}>
+          <aside
+            className={`side-menu ${menuIsClosed ? 'closed' : ''}`}
+            onMouseOver={() => setMenuIsClosed(false)}
+            onFocus={() => setMenuIsClosed(false)}
+            onMouseLeave={() => setMenuIsClosed(true)}
+            onBlur={() => setMenuIsClosed(true)}
+          >
             <div className="menu-items">
               {submenuItems.map((item) => {
                 return (
@@ -99,16 +105,6 @@ export default function EnvironmentView(): JSX.Element {
                   {t('views.EnvironmentDataContainer.sideMenu.settings')}
                 </span>
               </Link>
-
-              <button
-                type="button"
-                onClick={() => setMenuIsClosed(!menuIsClosed)}
-              >
-                {menuIsClosed ? <FiMaximize2 /> : <FiMinimize2 />}
-                <span className="item-text">
-                  {t('views.EnvironmentDataContainer.sideMenu.minimize')}
-                </span>
-              </button>
             </div>
           </aside>
         </section>

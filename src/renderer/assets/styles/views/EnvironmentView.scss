@@ -32,6 +32,9 @@
     min-width: 13rem;
     transition: all var(--transition);
 
+    margin-left: -1rem;
+    padding-left: 1rem;
+
     &.closed {
       min-width: 0rem;
 
