@@ -17,7 +17,9 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
 
   useEffect(() => {
     async function getData() {
-      setLastHttpResponse(await getLastHttpResponseById(environmentId));
+      if (environmentId) {
+        setLastHttpResponse(await getLastHttpResponseById(environmentId));
+      }
     }
 
     getData();

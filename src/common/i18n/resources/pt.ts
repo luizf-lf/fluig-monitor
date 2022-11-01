@@ -270,6 +270,14 @@ const pt = {
         trafficNotAllowed: 'Tráfego não permitido',
       },
     },
+    EnvironmentPerformanceGraph: {
+      title: 'Performance',
+      insufficientOrNoData: 'Sem dados ou dados insuficientes.',
+      licenseApi: 'API Licenças',
+      monitorApi: 'API Monitor',
+      statisticsApi: 'API Estatísticas',
+      responseTime: 'Tempo De Resposta (ms)',
+    },
   },
 };
 

@@ -269,6 +269,14 @@ const en = {
         trafficNotAllowed: 'Traffic not allowed',
       },
     },
+    EnvironmentPerformanceGraph: {
+      title: 'Performance',
+      insufficientOrNoData: 'Insufficient or no data available.',
+      licenseApi: 'Licenses API',
+      monitorApi: 'Monitor API',
+      statisticsApi: 'Statistics API',
+      responseTime: 'Response Time (ms)',
+    },
   },
 };
 

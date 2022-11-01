@@ -1,0 +1,21 @@
+.custom-graph-tooltip {
+  padding: 0.5rem;
+  border-radius: 1rem;
+  background-color: var(--background);
+  box-shadow: var(--card-shadow);
+
+  p {
+    color: var(--font-primary);
+  }
+
+  .items-container {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+
+    span {
+      font-size: 0.8rem;
+      color: var(--font-secondary);
+    }
+  }
+}

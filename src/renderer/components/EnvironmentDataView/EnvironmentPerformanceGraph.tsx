@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  // Legend,
-  Line,
-  LineChart,
+  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -16,6 +16,7 @@ import {
   StatisticsHistoryWithHttpResponse,
 } from '../../../common/interfaces/EnvironmentControllerInterface';
 import SpinnerLoader from '../Loaders/Spinner';
+import EnvironmentGraphTooltip from './EnvironmentGraphTooltip';
 
 interface Props {
   licenses: LicenseHistoryWithHttpResponse[];
@@ -29,12 +30,13 @@ interface GraphData {
   monitor: number;
   statistics: number;
 }
-
 export default function EnvironmentPerformanceGraph({
   licenses,
   statistics,
   monitor,
 }: Props) {
+  // TODO: Perhaps receive the last 100 http responses alone and calculate and average, instead of receiving each of the api data responses
+
   const graphData = [] as GraphData[];
 
   const { t } = useTranslation();
@@ -66,43 +68,83 @@ export default function EnvironmentPerformanceGraph({
 
   return (
     <div className="widget-container">
-      <h3 className="title">Performance</h3>
+      <h3 className="title">
+        {t('components.EnvironmentPerformanceGraph.title')}
+      </h3>
       {graphData.length < 3 ? (
-        <div className="widget-card">Sem dados ou dados insuficientes</div>
+        <div className="widget-card">
+          {t('components.EnvironmentPerformanceGraph.insufficientOrNoData')}
+        </div>
       ) : (
         <div className="widget-card" style={{ height: '55vh' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={graphData}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <AreaChart data={graphData}>
+              <CartesianGrid strokeDasharray="3" vertical={false} />
               <XAxis dataKey="timestamp" display="none" />
               <YAxis
                 allowDecimals={false}
-                // label="Tempo De Resposta (ms)"
+                type="number"
+                domain={[0, (dataMax: number) => Math.ceil(dataMax * 1.25)]}
+                tickCount={9}
               />
-              <Tooltip />
-              {/* <Legend /> */}
-              <Line
+              <Tooltip
+                content={(content) => {
+                  return <EnvironmentGraphTooltip content={content} />;
+                }}
+              />
+              <Legend
+                payload={[
+                  {
+                    value: t(
+                      'components.EnvironmentPerformanceGraph.licenseApi'
+                    ),
+                    color: 'var(--purple)',
+                    id: 'license',
+                    type: 'line',
+                  },
+                  {
+                    value: t(
+                      'components.EnvironmentPerformanceGraph.monitorApi'
+                    ),
+                    color: 'var(--red)',
+                    id: 'monitor',
+                    type: 'line',
+                  },
+                  {
+                    value: t(
+                      'components.EnvironmentPerformanceGraph.statisticsApi'
+                    ),
+                    color: 'var(--green)',
+                    id: 'statistics',
+                    type: 'line',
+                  },
+                ]}
+              />
+              <Area
                 type="linear"
                 dataKey="license"
                 dot={false}
                 stroke="var(--purple)"
                 strokeWidth={2}
+                fill="var(--light-purple)"
               />
-              <Line
+              <Area
                 type="linear"
                 dataKey="monitor"
                 dot={false}
                 stroke="var(--red)"
                 strokeWidth={2}
+                fill="var(--light-red)"
               />
-              <Line
+              <Area
                 type="linear"
                 dataKey="statistics"
                 dot={false}
                 stroke="var(--green)"
                 strokeWidth={2}
+                fill="var(--light-green)"
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       )}

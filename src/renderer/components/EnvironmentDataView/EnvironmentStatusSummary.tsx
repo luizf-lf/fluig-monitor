@@ -25,7 +25,9 @@ export default function EnvironmentStatusSummary({
 
   useEffect(() => {
     async function getData() {
-      setLastHttpResponse(await getLastHttpResponseById(environmentId));
+      if (environmentId) {
+        setLastHttpResponse(await getLastHttpResponseById(environmentId));
+      }
     }
 
     getData();
