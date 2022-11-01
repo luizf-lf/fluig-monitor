@@ -84,7 +84,7 @@ export default function EnvironmentPerformanceGraph({
               <YAxis
                 allowDecimals={false}
                 type="number"
-                domain={[0, (dataMax: number) => Math.ceil(dataMax * 1.25)]}
+                domain={[0, (dataMax: number) => Math.ceil(dataMax * 1.25)]} // TODO: Round the maximum value to a multiple of 500
                 tickCount={9}
               />
               <Tooltip
