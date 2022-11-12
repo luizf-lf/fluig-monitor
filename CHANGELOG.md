@@ -1,3 +1,9 @@
+# 0.2
+
+- Updated test connection endpoint to /api/servlet/ping
+- Changed environment availability check strategy
+  - Now the app uses the ping api to check the server availability on a shorter interval (10s to 1min)
+
 # 0.1.4
 
 - System resources components added:
