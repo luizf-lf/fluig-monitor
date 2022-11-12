@@ -96,7 +96,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     }
   }, [environmentData]);
 
-  function sendTestConnection() {
+  async function sendTestConnection() {
     const auth = {
       consumerKey,
       consumerSecret,
@@ -122,52 +122,50 @@ function EditEnvironmentSettingsView(): JSX.Element {
         </span>
       );
 
-      setTimeout(async () => {
-        const fluigClient = new FluigAPIClient({
-          oAuthKeys: auth,
-          requestData: {
-            method: 'GET',
-            url: `${domainUrl}/api/public/2.0/users/getCurrent`,
-          },
-        });
+      const fluigClient = new FluigAPIClient({
+        oAuthKeys: auth,
+        requestData: {
+          method: 'GET',
+          url: `${domainUrl}/api/servlet/ping`,
+        },
+      });
 
-        await fluigClient.get();
+      await fluigClient.get();
 
-        if (fluigClient.httpStatus) {
-          if (fluigClient.httpStatus !== 200) {
-            log.info(
-              'Test connection failed with status',
-              fluigClient.httpStatus
-            );
-            setTestMessage(
-              <span className="info-blip has-warning">
-                <FiAlertCircle />
-                {t('views.EditEnvironmentView.connectionError')} (
-                {fluigClient.httpStatus})
-              </span>
-            );
-          } else {
-            log.info(
-              'Test connection done successfully (',
-              fluigClient.httpStatus,
-              ')'
-            );
-            setTestMessage(
-              <span className="info-blip has-success">
-                <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}
-              </span>
-            );
-          }
-        } else {
-          log.info('Test connection failed (server may be unavailable)');
+      if (fluigClient.httpStatus) {
+        if (fluigClient.httpStatus !== 200) {
+          log.info(
+            'Test connection failed with status',
+            fluigClient.httpStatus
+          );
           setTestMessage(
-            <span className="info-blip has-error">
-              <FiAlertTriangle />
-              {t('views.EditEnvironmentView.connectionUnavailable')}
+            <span className="info-blip has-warning">
+              <FiAlertCircle />
+              {t('views.EditEnvironmentView.connectionError')} (
+              {fluigClient.httpStatus})
+            </span>
+          );
+        } else {
+          log.info(
+            'Test connection done successfully (',
+            fluigClient.httpStatus,
+            ')'
+          );
+          setTestMessage(
+            <span className="info-blip has-success">
+              <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}
             </span>
           );
         }
-      }, 100);
+      } else {
+        log.info('Test connection failed (server may be unavailable)');
+        setTestMessage(
+          <span className="info-blip has-error">
+            <FiAlertTriangle />
+            {t('views.EditEnvironmentView.connectionUnavailable')}
+          </span>
+        );
+      }
     } else {
       setTestMessage(
         <span className="info-blip has-warning">
