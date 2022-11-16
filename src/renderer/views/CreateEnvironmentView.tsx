@@ -198,7 +198,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       animate="visible"
       exit="exit"
       id="createEnvironmentContainer"
-      className="environmentFormContainer"
+      className="environment-form-container"
     >
       <Link to="/" className="top-return-button">
         <FiArrowLeft />
