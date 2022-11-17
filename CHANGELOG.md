@@ -3,6 +3,7 @@
 - Updated test connection endpoint to /api/servlet/ping
 - Changed environment availability check strategy
   - Now the app uses the ping api to check the server availability on a shorter interval (10s to 1min)
+- Update only on work days option removed
 
 # 0.1.4
 
