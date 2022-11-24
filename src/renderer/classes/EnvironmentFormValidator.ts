@@ -11,11 +11,9 @@ interface EnvironmentFormData {
     accessToken: string;
     tokenSecret: string;
   };
-  update: {
-    frequency: string;
-    from: string;
-    to: string;
-    onlyOnWorkDays: boolean;
+  updateSchedule: {
+    scrapeFrequency: string;
+    pingFrequency: string;
   };
 }
 
@@ -37,8 +35,10 @@ export default class EnvironmentFormValidator extends FormValidator {
         this.lastMessage = 'Access Token é obrigatório.';
       } else if (formData.auth.tokenSecret === '') {
         this.lastMessage = 'Token Secret é obrigatório.';
-      } else if (formData.update.from === '' || formData.update.to === '') {
-        this.lastMessage = 'Horário de atualização é obrigatório.';
+      } else if (formData.updateSchedule.scrapeFrequency === '') {
+        this.lastMessage = 'Frequência de coleta é obrigatório.';
+      } else if (formData.updateSchedule.pingFrequency === '') {
+        this.lastMessage = 'Frequência de verificação é obrigatório.';
       } else {
         this.isValid = true;
       }

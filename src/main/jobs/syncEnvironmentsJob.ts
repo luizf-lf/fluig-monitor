@@ -348,6 +348,9 @@ async function syncStatisticsData(
  *  http responses history.
  */
 export default async function syncEnvironmentsJob() {
+  // TODO: Alter sync strategy, since time periods and only on workdays have been removed
+
+  return;
   log.info('syncEnvironmentsJob: Executing environment sync job');
 
   const environmentList = await new EnvironmentController().getAll();

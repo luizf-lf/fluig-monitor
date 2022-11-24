@@ -73,7 +73,7 @@ export async function createEnvironment({
   updateSchedule,
   environmentAuthKeys,
 }: CreateEnvironmentProps): Promise<Environment> {
-  log.info('IPC Invoker: Requesting a new environment');
+  log.info('IPC Invoker: Requesting a new environment creation');
   const createdEnvironment = await ipcRenderer.invoke('createEnvironment', {
     environment,
     updateSchedule,

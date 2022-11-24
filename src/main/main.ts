@@ -225,10 +225,8 @@ ipcMain.handle(
     );
     const createdUpdateSchedule = await new UpdateScheduleController().new({
       environmentId: createdEnvironment.id,
-      from: updateSchedule.from,
-      to: updateSchedule.to,
-      onlyOnWorkDays: updateSchedule.onlyOnWorkDays,
-      frequency: updateSchedule.frequency,
+      pingFrequency: updateSchedule.pingFrequency,
+      scrapeFrequency: updateSchedule.scrapeFrequency,
     });
     const createdAuthKeys = await new AuthKeysController().new({
       environmentId: createdEnvironment.id,

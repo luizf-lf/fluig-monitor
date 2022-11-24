@@ -23,6 +23,8 @@ import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
 
+// TODO: Add i18n to update schedules
+
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
   const [domainUrl, setDomainUrl] = useState('');
@@ -31,11 +33,9 @@ export default function CreateEnvironmentView(): JSX.Element {
   const [consumerSecret, setConsumerSecret] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [tokenSecret, setTokenSecret] = useState('');
-  const [updateFrequency, setUpdateFrequency] = useState('15m');
-  const [scrapeUpdateFrequencyFrom, setScrapeUpdateFrequencyFrom] =
-    useState('');
-  const [scrapeUpdateFrequencyTo, setScrapeUpdateFrequencyTo] = useState('');
-  const [pingUpdateFrequencyFrom, setPingUpdateFrequencyFrom] = useState('');
+
+  const [scrapeFrequency, setScrapeFrequency] = useState('1h');
+  const [pingFrequency, setPingFrequency] = useState('15s');
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
@@ -61,11 +61,9 @@ export default function CreateEnvironmentView(): JSX.Element {
         accessToken,
         tokenSecret,
       },
-      update: {
-        frequency: updateFrequency,
-        from: scrapeUpdateFrequencyFrom,
-        to: scrapeUpdateFrequencyTo,
-        onlyOnWorkDays: updateOnWorkDays,
+      updateSchedule: {
+        scrapeFrequency,
+        pingFrequency,
       },
     };
 
@@ -85,7 +83,7 @@ export default function CreateEnvironmentView(): JSX.Element {
           name: formData.name,
           release: 'unknown',
         },
-        updateSchedule: formData.update,
+        updateSchedule: formData.updateSchedule,
         environmentAuthKeys: {
           payload: JSON.stringify(formData.auth),
           hash: 'json',
@@ -374,58 +372,31 @@ export default function CreateEnvironmentView(): JSX.Element {
           <select
             name="pingUpdateFrequency"
             id="pingUpdateFrequency"
-            value={updateFrequency}
+            value={pingFrequency}
             onChange={(event) => {
-              setUpdateFrequency(event.target.value);
+              setPingFrequency(event.target.value);
             }}
           >
             <option value="15s">15 segundos</option>
             <option value="30s">30 segundos</option>
-            <option value="1m">1 Hora</option>
-            <option value="2m">2 Horas</option>
+            <option value="1m">1 Minuto</option>
+            <option value="2m">2 Minutos</option>
           </select>
+          <small className="help-block">
+            Tempo utilizado para a verificação da disponibilidade do servidor.
+          </small>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="pingUpdateFrequencyFrom">
-              Atualizar Entre Este Horário
-            </label>
-            <input
-              type="time"
-              name="pingUpdateFrequencyFrom"
-              id="pingUpdateFrequencyFrom"
-              value={pingUpdateFrequencyFrom}
-              onChange={(event) => {
-                setPingUpdateFrequencyFrom(event.target.value);
-              }}
-            />
-            <small>De</small>
-          </div>
-          <div className="form-group">
-            <input
-              type="time"
-              name="pingUpdateFrequencyTo"
-              id="pingUpdateFrequencyTo"
-              value={pingUpdateFrequencyTo}
-              onChange={(event) => {
-                setPingUpdateFrequencyTo(event.target.value);
-              }}
-            />
-            <small>Até</small>
-          </div>
-        </div>
-
-        <h3>Coleta De Dados</h3>
+        <h3 className="mt-1">Coleta De Dados</h3>
 
         <div className="form-group">
           <label htmlFor="scrapeUpdateFrequency">Frequência</label>
           <select
             name="scrapeUpdateFrequency"
             id="scrapeUpdateFrequency"
-            value={updateFrequency}
+            value={scrapeFrequency}
             onChange={(event) => {
-              setUpdateFrequency(event.target.value);
+              setScrapeFrequency(event.target.value);
             }}
           >
             <option value="15m">15 minutos</option>
@@ -437,36 +408,10 @@ export default function CreateEnvironmentView(): JSX.Element {
             <option value="12h">12 Horas</option>
             <option value="24h">24 Horas</option>
           </select>
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="scrapeUpdateFrequencyFrom">
-              Atualizar Entre Este Horário
-            </label>
-            <input
-              type="time"
-              name="scrapeUpdateFrequencyFrom"
-              id="scrapeUpdateFrequencyFrom"
-              value={scrapeUpdateFrequencyFrom}
-              onChange={(event) => {
-                setScrapeUpdateFrequencyFrom(event.target.value);
-              }}
-            />
-            <small>De</small>
-          </div>
-          <div className="form-group">
-            <input
-              type="time"
-              name="scrapeUpdateFrequencyTo"
-              id="scrapeUpdateFrequencyTo"
-              value={scrapeUpdateFrequencyTo}
-              onChange={(event) => {
-                setScrapeUpdateFrequencyTo(event.target.value);
-              }}
-            />
-            <small>Até</small>
-          </div>
+          <small className="help-block">
+            Tempo utilizado para a coleta de informações do monitor, licenças e
+            estatísticas.
+          </small>
         </div>
 
         <div className="button-action-row mt-1 mb-2">
