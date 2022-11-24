@@ -44,13 +44,11 @@ model EnvironmentAuthKeys {
 }
 
 model UpdateSchedule {
-  id             Int          @id @default(autoincrement())
-  frequency      String
-  from           String
-  to             String
-  onlyOnWorkDays Boolean      @default(false)
-  environmentId  Int          @unique
-  environment    Environment? @relation(fields: [environmentId], references: [id])
+  id              Int          @id @default(autoincrement())
+  scrapeFrequency String
+  pingFrequency   String
+  environmentId   Int          @unique
+  environment     Environment? @relation(fields: [environmentId], references: [id])
 }
 
 model HTTPResponse {

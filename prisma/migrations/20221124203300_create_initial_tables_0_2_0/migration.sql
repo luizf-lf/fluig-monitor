@@ -25,10 +25,8 @@ CREATE TABLE "EnvironmentAuthKeys" (
 -- CreateTable
 CREATE TABLE "UpdateSchedule" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "frequency" TEXT NOT NULL,
-    "from" TEXT NOT NULL,
-    "to" TEXT NOT NULL,
-    "onlyOnWorkDays" BOOLEAN NOT NULL DEFAULT false,
+    "scrapeFrequency" TEXT NOT NULL,
+    "pingFrequency" TEXT NOT NULL,
     "environmentId" INTEGER NOT NULL,
     CONSTRAINT "UpdateSchedule_environmentId_fkey" FOREIGN KEY ("environmentId") REFERENCES "Environment" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -40,6 +38,7 @@ CREATE TABLE "HTTPResponse" (
     "timestamp" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "endpoint" TEXT,
     "statusCode" INTEGER NOT NULL,
+    "statusMessage" TEXT,
     "responseTimeMs" INTEGER NOT NULL,
     CONSTRAINT "HTTPResponse_environmentId_fkey" FOREIGN KEY ("environmentId") REFERENCES "Environment" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -85,34 +84,34 @@ CREATE TABLE "StatisticsHistory" (
     "dbVersion" TEXT,
     "dbDriverName" TEXT,
     "dbDriverVersion" TEXT,
-    "connectedUsers" INTEGER,
-    "memoryHeap" INTEGER,
-    "nonMemoryHeap" INTEGER,
-    "dbTraficRecieved" INTEGER,
-    "dbTraficSent" INTEGER,
-    "dbSize" INTEGER,
+    "connectedUsers" BIGINT,
+    "memoryHeap" BIGINT,
+    "nonMemoryHeap" BIGINT,
+    "dbTraficRecieved" BIGINT,
+    "dbTraficSent" BIGINT,
+    "dbSize" BIGINT,
     "artifactsApps" TEXT,
     "artifactsCore" TEXT,
     "artifactsSystem" TEXT,
     "externalConverter" BOOLEAN,
     "runtimeStart" DATETIME,
-    "runtimeUptime" INTEGER,
-    "threadingCount" INTEGER,
-    "threadingPeakCount" INTEGER,
-    "threadingDaemonCount" INTEGER,
-    "threadingTotalStarted" INTEGER,
+    "runtimeUptime" BIGINT,
+    "threadingCount" BIGINT,
+    "threadingPeakCount" BIGINT,
+    "threadingDaemonCount" BIGINT,
+    "threadingTotalStarted" BIGINT,
     "detailedMemory" TEXT,
-    "systemServerMemorySize" INTEGER,
-    "systemServerMemoryFree" INTEGER,
+    "systemServerMemorySize" BIGINT,
+    "systemServerMemoryFree" BIGINT,
     "systemServerHDSize" TEXT,
     "systemServerHDFree" TEXT,
     "systemServerCoreCount" INTEGER,
     "systemServerArch" TEXT,
-    "systemTmpFolderSize" INTEGER,
-    "systemLogFolderSize" INTEGER,
-    "systemHeapMaxSize" INTEGER,
-    "systemHeapSize" INTEGER,
-    "systemUptime" INTEGER,
+    "systemTmpFolderSize" BIGINT,
+    "systemLogFolderSize" BIGINT,
+    "systemHeapMaxSize" BIGINT,
+    "systemHeapSize" BIGINT,
+    "systemUptime" BIGINT,
     CONSTRAINT "StatisticsHistory_environmentId_fkey" FOREIGN KEY ("environmentId") REFERENCES "Environment" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "StatisticsHistory_httpResponseId_fkey" FOREIGN KEY ("httpResponseId") REFERENCES "HTTPResponse" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -148,9 +147,6 @@ CREATE UNIQUE INDEX "EnvironmentAuthKeys_environmentId_key" ON "EnvironmentAuthK
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UpdateSchedule_environmentId_key" ON "UpdateSchedule"("environmentId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "HTTPResponse_environmentId_key" ON "HTTPResponse"("environmentId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "LicenseHistory_httpResponseId_key" ON "LicenseHistory"("httpResponseId");
