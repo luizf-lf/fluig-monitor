@@ -365,10 +365,14 @@ export default function CreateEnvironmentView(): JSX.Element {
           <span>{testMessage}</span>
         </div>
 
-        <h3>Verificação Do Servidor</h3>
+        <h3>
+          {t('views.CreateEnvironmentView.form.serverVerification.title')}
+        </h3>
 
         <div className="form-group">
-          <label htmlFor="pingUpdateFrequency">Frequência</label>
+          <label htmlFor="pingUpdateFrequency">
+            {t('views.CreateEnvironmentView.form.serverVerification.label')}
+          </label>
           <select
             name="pingUpdateFrequency"
             id="pingUpdateFrequency"
@@ -377,20 +381,40 @@ export default function CreateEnvironmentView(): JSX.Element {
               setPingFrequency(event.target.value);
             }}
           >
-            <option value="15s">15 segundos</option>
-            <option value="30s">30 segundos</option>
-            <option value="1m">1 Minuto</option>
-            <option value="2m">2 Minutos</option>
+            <option value="15s">
+              {t(
+                'views.CreateEnvironmentView.form.serverVerification.options.15s'
+              )}
+            </option>
+            <option value="30s">
+              {t(
+                'views.CreateEnvironmentView.form.serverVerification.options.30s'
+              )}
+            </option>
+            <option value="1m">
+              {t(
+                'views.CreateEnvironmentView.form.serverVerification.options.1m'
+              )}
+            </option>
+            <option value="2m">
+              {t(
+                'views.CreateEnvironmentView.form.serverVerification.options.2m'
+              )}
+            </option>
           </select>
           <small className="help-block">
-            Tempo utilizado para a verificação da disponibilidade do servidor.
+            {t('views.CreateEnvironmentView.form.serverVerification.helper')}
           </small>
         </div>
 
-        <h3 className="mt-1">Coleta De Dados</h3>
+        <h3 className="mt-1">
+          {t('views.CreateEnvironmentView.form.dataCollection.title')}
+        </h3>
 
         <div className="form-group">
-          <label htmlFor="scrapeUpdateFrequency">Frequência</label>
+          <label htmlFor="scrapeUpdateFrequency">
+            {t('views.CreateEnvironmentView.form.dataCollection.label')}
+          </label>
           <select
             name="scrapeUpdateFrequency"
             id="scrapeUpdateFrequency"
@@ -399,18 +423,33 @@ export default function CreateEnvironmentView(): JSX.Element {
               setScrapeFrequency(event.target.value);
             }}
           >
-            <option value="15m">15 minutos</option>
-            <option value="30m">30 minutos</option>
-            <option value="1h">1 Hora</option>
-            <option value="2h">2 Horas</option>
-            <option value="3h">3 Horas</option>
-            <option value="6h">6 Horas</option>
-            <option value="12h">12 Horas</option>
-            <option value="24h">24 Horas</option>
+            <option value="15m">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.15m')}
+            </option>
+            <option value="30m">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.30m')}
+            </option>
+            <option value="1h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.1h')}
+            </option>
+            <option value="2h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.2h')}
+            </option>
+            <option value="3h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.3h')}
+            </option>
+            <option value="6h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.6h')}
+            </option>
+            <option value="12h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.12h')}
+            </option>
+            <option value="24h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.24h')}
+            </option>
           </select>
           <small className="help-block">
-            Tempo utilizado para a coleta de informações do monitor, licenças e
-            estatísticas.
+            {t('views.CreateEnvironmentView.form.dataCollection.helper')}
           </small>
         </div>
 
