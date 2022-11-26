@@ -40,10 +40,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const [consumerSecret, setConsumerSecret] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [tokenSecret, setTokenSecret] = useState('');
-  const [updateFrequency, setUpdateFrequency] = useState('');
-  const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState('');
-  const [updateFrequencyTo, setUpdateFrequencyTo] = useState('');
-  const [updateOnWorkDays, setUpdateOnWorkDays] = useState(false);
+  const [scrapeFrequency, setScrapeFrequency] = useState('');
+  const [pingFrequency, setPingFrequency] = useState('');
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
@@ -89,10 +87,9 @@ function EditEnvironmentSettingsView(): JSX.Element {
       setConsumerSecret(oAuthKeys.consumerSecret);
       setAccessToken(oAuthKeys.accessToken);
       setTokenSecret(oAuthKeys.tokenSecret);
-      setUpdateFrequency(environmentData.updateScheduleId.frequency);
-      setUpdateFrequencyFrom(environmentData.updateScheduleId.from);
-      setUpdateFrequencyTo(environmentData.updateScheduleId.to);
-      setUpdateOnWorkDays(environmentData.updateScheduleId.onlyOnWorkDays);
+
+      setScrapeFrequency(environmentData.updateScheduleId.scrapeFrequency);
+      setPingFrequency(environmentData.updateScheduleId.pingFrequency);
     }
   }, [environmentData]);
 
@@ -191,11 +188,9 @@ function EditEnvironmentSettingsView(): JSX.Element {
         accessToken,
         tokenSecret,
       },
-      update: {
-        frequency: updateFrequency ?? '',
-        from: updateFrequencyFrom,
-        to: updateFrequencyTo,
-        onlyOnWorkDays: updateOnWorkDays,
+      updateSchedule: {
+        scrapeFrequency,
+        pingFrequency,
       },
     };
 
@@ -227,10 +222,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
       },
       {
         environmentId: formData.id,
-        frequency: formData.update.frequency,
-        from: formData.update.from,
-        to: formData.update.to,
-        onlyOnWorkDays: formData.update.onlyOnWorkDays,
+        pingFrequency: formData.updateSchedule.pingFrequency,
+        scrapeFrequency: formData.updateSchedule.scrapeFrequency,
       },
       {
         environmentId: formData.id,
@@ -455,99 +448,53 @@ function EditEnvironmentSettingsView(): JSX.Element {
           <span>{testMessage}</span>
         </div>
 
-        <h3>{t('views.EditEnvironmentView.form.settingsSection')}</h3>
+        <h3>Verificação Do Servidor</h3>
+
         <div className="form-group">
-          <label htmlFor="updateFrequency">
-            {t('views.EditEnvironmentView.form.updateFrequency.label')}
-          </label>
+          <label htmlFor="pingUpdateFrequency">Frequência</label>
           <select
-            name="updateFrequency"
-            id="updateFrequency"
-            value={updateFrequency}
+            name="pingUpdateFrequency"
+            id="pingUpdateFrequency"
+            value={pingFrequency}
             onChange={(event) => {
-              setUpdateFrequency(event.target.value);
+              setPingFrequency(event.target.value);
             }}
           >
-            <option value="5m">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.5m')}
-            </option>
-            <option value="10m">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.10m')}
-            </option>
-            <option value="15m">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.15m')}
-            </option>
-            <option value="30m">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.30m')}
-            </option>
-            <option value="1h">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.1h')}
-            </option>
-            <option value="2h">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.2h')}
-            </option>
-            <option value="3h">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.3h')}
-            </option>
-            <option value="6h">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.6h')}
-            </option>
-            <option value="12h">
-              {t('views.EditEnvironmentView.form.updateFrequency.options.12h')}
-            </option>
+            <option value="15s">15 segundos</option>
+            <option value="30s">30 segundos</option>
+            <option value="1m">1 Minuto</option>
+            <option value="2m">2 Minutos</option>
           </select>
+          <small className="help-block">
+            Tempo utilizado para a verificação da disponibilidade do servidor.
+          </small>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="updateFrequencyFrom">
-              {t('views.EditEnvironmentView.form.updateFrequencyFrom')}
-            </label>
-            <input
-              type="time"
-              name="updateFrequencyFrom"
-              id="updateFrequencyFrom"
-              value={updateFrequencyFrom}
-              onChange={(event) => {
-                setUpdateFrequencyFrom(event.target.value);
-              }}
-            />
-            <small>
-              {t('views.EditEnvironmentView.form.updateFrequencyFromHelper')}
-            </small>
-          </div>
-          <div className="form-group">
-            <input
-              type="time"
-              name="updateFrequencyTo"
-              id="updateFrequencyTo"
-              value={updateFrequencyTo}
-              onChange={(event) => {
-                setUpdateFrequencyTo(event.target.value);
-              }}
-            />
-            <small>
-              {t('views.EditEnvironmentView.form.updateFrequencyToHelper')}
-            </small>
-          </div>
-        </div>
+        <h3 className="mt-1">Coleta De Dados</h3>
+
         <div className="form-group">
-          <span>
-            <input
-              type="checkbox"
-              name="updateInWorkDays"
-              id="updateInWorkDays"
-              value={updateOnWorkDays === true ? 'on' : ''}
-              checked={updateOnWorkDays === true}
-              onChange={(event) => {
-                setUpdateOnWorkDays(event.target.checked);
-              }}
-            />
-            <label htmlFor="updateInWorkDays">
-              {' '}
-              {t('views.EditEnvironmentView.form.updateInWorkDays')}
-            </label>
-          </span>
+          <label htmlFor="scrapeUpdateFrequency">Frequência</label>
+          <select
+            name="scrapeUpdateFrequency"
+            id="scrapeUpdateFrequency"
+            value={scrapeFrequency}
+            onChange={(event) => {
+              setScrapeFrequency(event.target.value);
+            }}
+          >
+            <option value="15m">15 minutos</option>
+            <option value="30m">30 minutos</option>
+            <option value="1h">1 Hora</option>
+            <option value="2h">2 Horas</option>
+            <option value="3h">3 Horas</option>
+            <option value="6h">6 Horas</option>
+            <option value="12h">12 Horas</option>
+            <option value="24h">24 Horas</option>
+          </select>
+          <small className="help-block">
+            Tempo utilizado para a coleta de informações do monitor, licenças e
+            estatísticas.
+          </small>
         </div>
 
         <div className="button-action-row mt-1 mb-2">
