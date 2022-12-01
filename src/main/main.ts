@@ -33,6 +33,7 @@ import LogController from './controllers/LogController';
 import SettingsController from './controllers/SettingsController';
 import syncEnvironmentsJob from './jobs/syncEnvironmentsJob';
 import StatisticsHistoryController from './controllers/StatisticsHistoryController';
+import dispatchEnvironmentPingJobs from './jobs/dispatchEnvironmentPingJobs';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -89,12 +90,14 @@ const createWindow = async () => {
 
   await runDbMigrations();
 
-  await syncEnvironmentsJob();
   // this function shall be transformed into a nodejs worker,
   //  but that's a problem for the future me
-  setInterval(async () => {
-    await syncEnvironmentsJob();
-  }, environmentSyncInterval);
+  await dispatchEnvironmentPingJobs();
+
+  // await syncEnvironmentsJob();
+  // setInterval(async () => {
+  //   await syncEnvironmentsJob();
+  // }, environmentSyncInterval);
 
   if (isDevelopment) {
     log.info('Installing additional dev extensions');
