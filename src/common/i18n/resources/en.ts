@@ -176,8 +176,8 @@ const en = {
           helper:
             'Time used between data collection of the Monitor, Licenses and Statistics',
           options: {
-            '15m': '15 seconds',
-            '30m': '30 seconds',
+            '15m': '15 minutes',
+            '30m': '30 minutes',
             '1h': '1 hour',
             '2h': '2 hours',
             '3h': '3 hours',
