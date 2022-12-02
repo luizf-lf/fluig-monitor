@@ -24,8 +24,6 @@ export const dbPath = isDevelopment
 export const dbUrl =
   (isDevelopment ? process.env.DATABASE_URL : `file:${dbPath}`) || '';
 
-export const environmentSyncInterval = 150000;
-
 // Must be updated every time a migration is created
 export const latestMigration = '20221025191045_create_status_message_field';
 

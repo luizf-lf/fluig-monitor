@@ -10,11 +10,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import i18n from '../common/i18n/i18n';
-import {
-  environmentSyncInterval,
-  isDevelopment,
-  logStringFormat,
-} from './utils/globalConstants';
+import { isDevelopment, logStringFormat } from './utils/globalConstants';
 // import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';

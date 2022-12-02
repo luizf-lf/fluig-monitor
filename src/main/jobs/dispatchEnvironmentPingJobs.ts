@@ -6,13 +6,12 @@ import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
 import HttpResponseController from '../controllers/HttpResponseController';
 
+/**
+ * Executes a ping on the environment to check server availability
+ */
 async function executePing(
   environment: EnvironmentWithRelatedData
 ): Promise<void> {
-  log.info(
-    `executePing: checking availability for environment ${environment.id}`
-  );
-
   if (environment.oAuthKeysId) {
     const decodedKeys = new AuthKeysDecoder({
       hash: environment.oAuthKeysId.hash,
@@ -31,26 +30,35 @@ async function executePing(
 
     const initialTiming = Date.now();
 
-    await fluigClient.get();
+    await fluigClient.get(true);
 
     const responseTimeMs = Date.now() - initialTiming;
 
     if (!fluigClient.hasError) {
-      await new HttpResponseController().new({
-        environmentId: environment.id,
-        responseTimeMs,
-        endpoint: requestData.url,
-        statusCode: fluigClient.httpStatus || 0,
-        statusMessage: fluigClient.httpStatusText,
-        timestamp: new Date().toISOString(),
-      });
+      if (
+        fluigClient.httpStatus &&
+        fluigClient.httpStatus < 200 &&
+        fluigClient.httpStatus >= 300
+      ) {
+        log.info(
+          `executePing: Environment ${environment.id} returned a status code of ${fluigClient.httpStatus}`
+        );
+      }
+
+      await new HttpResponseController().new(
+        {
+          environmentId: environment.id,
+          responseTimeMs,
+          endpoint: requestData.url,
+          statusCode: fluigClient.httpStatus || 0,
+          statusMessage: fluigClient.httpStatusText,
+          timestamp: new Date().toISOString(),
+        },
+        true
+      );
     } else {
       log.error(
-        'executePing: Error on environment',
-        environment.id,
-        ':',
-        fluigClient.errorStack,
-        '(monitor api)'
+        `executePing: Error on environment ${environment.id} : ${fluigClient.errorStack}`
       );
 
       await new HttpResponseController().new({
@@ -65,6 +73,9 @@ async function executePing(
   }
 }
 
+/**
+ * Dispatches all of the environment ping "jobs" according to the respective environment ping schedule
+ */
 export default async function dispatchEnvironmentPingJobs() {
   log.info('dispatchEnvironmentPingJobs: Executing environment ping job');
 
