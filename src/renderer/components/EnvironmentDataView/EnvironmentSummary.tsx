@@ -33,9 +33,9 @@ export default function EnvironmentSummary({ environmentId }: Props) {
     }
   }, [environmentId]);
 
-  // setTimeout(async () => {
-  //   setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
-  // }, 15000);
+  setTimeout(async () => {
+    setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
+  }, 15000);
 
   return (
     <motion.div
