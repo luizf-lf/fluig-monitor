@@ -20,14 +20,8 @@ export default function EnvironmentGraphTooltip({ content }: Props) {
             if (item.dataKey) {
               let dataKeyTitle = '';
               switch (item.dataKey) {
-                case 'license':
-                  dataKeyTitle = 'Licenças';
-                  break;
-                case 'monitor':
-                  dataKeyTitle = 'Monitor';
-                  break;
-                case 'statistics':
-                  dataKeyTitle = 'Estatísticas';
+                case 'responseTimeMs':
+                  dataKeyTitle = 'Ping';
                   break;
                 default:
                   break;

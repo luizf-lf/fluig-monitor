@@ -35,7 +35,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
   // setTimeout(async () => {
   //   setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
-  // }, 10000);
+  // }, 15000);
 
   return (
     <motion.div
@@ -50,11 +50,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
           environmentName={environment.name}
           environmentId={environment.id}
         />
-        <EnvironmentPerformanceGraph
-          licenses={environment.licenseHistory}
-          monitor={environment.monitorHistory}
-          statistics={environment.statisticHistory}
-        />
+        <EnvironmentPerformanceGraph pings={environment.httpResponses} />
       </section>
 
       <section id="server-info">

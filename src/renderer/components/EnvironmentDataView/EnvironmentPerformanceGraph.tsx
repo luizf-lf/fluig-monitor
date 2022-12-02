@@ -9,82 +9,50 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-
-import {
-  LicenseHistoryWithHttpResponse,
-  MonitorHistoryWithHttpResponse,
-  StatisticsHistoryWithHttpResponse,
-} from '../../../common/interfaces/EnvironmentControllerInterface';
 import SpinnerLoader from '../Loaders/Spinner';
 import EnvironmentGraphTooltip from './EnvironmentGraphTooltip';
+import { HTTPResponse } from '../../../main/generated/client';
 
 interface Props {
-  licenses: LicenseHistoryWithHttpResponse[];
-  statistics: StatisticsHistoryWithHttpResponse[];
-  monitor: MonitorHistoryWithHttpResponse[];
+  pings: HTTPResponse[];
 }
 
-interface GraphData {
-  timestamp: Date;
-  license: number;
-  monitor: number;
-  statistics: number;
-}
-export default function EnvironmentPerformanceGraph({
-  licenses,
-  statistics,
-  monitor,
-}: Props) {
-  // TODO: Perhaps receive the last 100 http responses alone and calculate and average, instead of receiving each of the api data responses
-
-  const graphData = [] as GraphData[];
-
+export default function EnvironmentPerformanceGraph({ pings }: Props) {
   const { t } = useTranslation();
 
-  if (
-    typeof licenses === 'undefined' ||
-    typeof statistics === 'undefined' ||
-    typeof monitor === 'undefined'
-  ) {
+  if (typeof pings === 'undefined') {
     return <SpinnerLoader />;
   }
 
-  for (let i = 0; i < licenses.length; i += 1) {
-    const timestampAverage =
-      (licenses[i].httpResponse.timestamp.getTime() +
-        statistics[i].httpResponse.timestamp.getTime() +
-        monitor[i].httpResponse.timestamp.getTime()) /
-      3;
-
-    graphData.push({
-      timestamp: new Date(timestampAverage),
-      license: licenses[i].httpResponse.responseTimeMs,
-      statistics: statistics[i].httpResponse.responseTimeMs,
-      monitor: monitor[i].httpResponse.responseTimeMs,
-    });
-  }
-
-  graphData.reverse();
+  pings.reverse();
 
   return (
     <div className="widget-container">
       <h3 className="title">
         {t('components.EnvironmentPerformanceGraph.title')}
       </h3>
-      {graphData.length < 3 ? (
+      {pings.length === 0 ? (
         <div className="widget-card">
           {t('components.EnvironmentPerformanceGraph.insufficientOrNoData')}
         </div>
       ) : (
         <div className="widget-card" style={{ height: '55vh' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={graphData}>
+          <div id="graph-title-container">
+            <h3>{t('components.EnvironmentPerformanceGraph.graphTitle')}</h3>
+          </div>
+          <ResponsiveContainer width="100%" height="92%">
+            <AreaChart data={pings}>
               <CartesianGrid strokeDasharray="3" vertical={false} />
-              <XAxis dataKey="timestamp" display="none" />
+              <XAxis
+                dataKey="timestamp"
+                tickCount={15}
+                tickFormatter={(el: Date) => el.toLocaleTimeString()}
+              />
               <YAxis
                 allowDecimals={false}
+                dataKey="responseTimeMs"
                 type="number"
-                domain={[0, (dataMax: number) => Math.ceil(dataMax * 1.25)]} // TODO: Round the maximum value to a multiple of 500
+                domain={[0, (dataMax: number) => Math.ceil(dataMax * 1.1)]} // TODO: Round the maximum value to a multiple of 250?
                 tickCount={9}
               />
               <Tooltip
@@ -96,53 +64,21 @@ export default function EnvironmentPerformanceGraph({
                 payload={[
                   {
                     value: t(
-                      'components.EnvironmentPerformanceGraph.licenseApi'
+                      'components.EnvironmentPerformanceGraph.responseTime'
                     ),
                     color: 'var(--purple)',
-                    id: 'license',
-                    type: 'line',
-                  },
-                  {
-                    value: t(
-                      'components.EnvironmentPerformanceGraph.monitorApi'
-                    ),
-                    color: 'var(--red)',
-                    id: 'monitor',
-                    type: 'line',
-                  },
-                  {
-                    value: t(
-                      'components.EnvironmentPerformanceGraph.statisticsApi'
-                    ),
-                    color: 'var(--green)',
-                    id: 'statistics',
+                    id: 'timestamp',
                     type: 'line',
                   },
                 ]}
               />
               <Area
-                type="linear"
-                dataKey="license"
+                type="monotone"
+                dataKey="responseTimeMs"
                 dot={false}
                 stroke="var(--purple)"
                 strokeWidth={2}
                 fill="var(--light-purple)"
-              />
-              <Area
-                type="linear"
-                dataKey="monitor"
-                dot={false}
-                stroke="var(--red)"
-                strokeWidth={2}
-                fill="var(--light-red)"
-              />
-              <Area
-                type="linear"
-                dataKey="statistics"
-                dot={false}
-                stroke="var(--green)"
-                strokeWidth={2}
-                fill="var(--light-green)"
               />
             </AreaChart>
           </ResponsiveContainer>

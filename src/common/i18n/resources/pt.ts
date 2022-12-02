@@ -290,10 +290,8 @@ const pt = {
     },
     EnvironmentPerformanceGraph: {
       title: 'Performance',
+      graphTitle: 'Tempo de resposta do servidor',
       insufficientOrNoData: 'Sem dados ou dados insuficientes.',
-      licenseApi: 'API Licenças',
-      monitorApi: 'API Monitor',
-      statisticsApi: 'API Estatísticas',
       responseTime: 'Tempo De Resposta (ms)',
     },
   },

@@ -81,7 +81,7 @@ export default class EnvironmentController {
       },
       include: {
         licenseHistory: {
-          take: 100,
+          take: 1,
           include: {
             httpResponse: true,
           },
@@ -90,7 +90,7 @@ export default class EnvironmentController {
           },
         },
         statisticHistory: {
-          take: 100,
+          take: 1,
           include: {
             httpResponse: true,
           },
@@ -99,12 +99,27 @@ export default class EnvironmentController {
           },
         },
         monitorHistory: {
-          take: 100,
+          take: 1,
           include: {
             httpResponse: true,
           },
           orderBy: {
             id: 'desc',
+          },
+        },
+        httpResponses: {
+          where: {
+            timestamp: {
+              gte: new Date(Date.now() - 86400000),
+            },
+            AND: {
+              licenseHistory: null,
+              monitorHistory: null,
+              statisticHistory: null,
+            },
+          },
+          orderBy: {
+            timestamp: 'desc',
           },
         },
       },

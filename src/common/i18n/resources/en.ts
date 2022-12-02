@@ -287,10 +287,8 @@ const en = {
     },
     EnvironmentPerformanceGraph: {
       title: 'Performance',
+      graphTitle: 'Server response time',
       insufficientOrNoData: 'Insufficient or no data available.',
-      licenseApi: 'Licenses API',
-      monitorApi: 'Monitor API',
-      statisticsApi: 'Statistics API',
       responseTime: 'Response Time (ms)',
     },
   },
