@@ -58,7 +58,9 @@ async function executePing(
       );
     } else {
       log.error(
-        `executePing: Error on environment ${environment.id} : ${fluigClient.errorStack}`
+        `executePing: Error on environment ${environment.id}: ${
+          fluigClient.errorStack.split('\n')[0]
+        }`
       );
 
       await new HttpResponseController().new({
