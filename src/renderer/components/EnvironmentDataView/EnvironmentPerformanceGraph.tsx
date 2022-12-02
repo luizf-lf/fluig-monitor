@@ -3,7 +3,6 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -45,8 +44,10 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
               <CartesianGrid strokeDasharray="3" vertical={false} />
               <XAxis
                 dataKey="timestamp"
-                tickCount={15}
-                tickFormatter={(el: Date) => el.toLocaleTimeString()}
+                tickFormatter={(el: Date) =>
+                  `    ${el.toLocaleTimeString()}      `
+                }
+                interval="preserveEnd"
               />
               <YAxis
                 allowDecimals={false}
@@ -59,18 +60,6 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
                 content={(content) => {
                   return <EnvironmentGraphTooltip content={content} />;
                 }}
-              />
-              <Legend
-                payload={[
-                  {
-                    value: t(
-                      'components.EnvironmentPerformanceGraph.responseTime'
-                    ),
-                    color: 'var(--purple)',
-                    id: 'timestamp',
-                    type: 'line',
-                  },
-                ]}
               />
               <Area
                 type="monotone"
