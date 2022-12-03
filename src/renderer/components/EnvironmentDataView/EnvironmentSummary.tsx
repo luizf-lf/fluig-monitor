@@ -33,6 +33,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
     }
   }, [environmentId]);
 
+  // BUG: Not everything updates
   setTimeout(async () => {
     setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
   }, 15000);
