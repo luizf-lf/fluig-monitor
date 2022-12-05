@@ -80,20 +80,20 @@ async function executePing(
  * Checks if the environments need a ping check
  */
 export default async function pingEnvironmentsJob() {
-  log.info('pingEnvironmentsJob: Executing environment ping job');
-  log.info(
-    `pingEnvironmentsJob: Next sync will occur at ${new Date(
-      Date.now() + environmentPingInterval
-    ).toLocaleString()}`
-  );
+  // log.info('pingEnvironmentsJob: Executing environment ping job');
+  // log.info(
+  //   `pingEnvironmentsJob: Next sync will occur at ${new Date(
+  //     Date.now() + environmentPingInterval
+  //   ).toLocaleString()}`
+  // );
 
   const environmentList = await new EnvironmentController().getAll();
 
   if (environmentList.length > 0) {
     environmentList.forEach(async (environment) => {
-      log.info(
-        `pingEnvironmentsJob: Checking related data for environment ${environment.id}`
-      );
+      // log.info(
+      //   `pingEnvironmentsJob: Checking related data for environment ${environment.id}`
+      // );
 
       let needsPing = false;
 
@@ -108,39 +108,39 @@ export default async function pingEnvironmentsJob() {
           lastHttpResponse.statusCode < 200 ||
           lastHttpResponse.statusCode > 300
         ) {
-          log.info(
-            `pingEnvironmentsJob: Environment ${environment.id} has no successful http requests. Ping is needed.`
-          );
+          // log.info(
+          //   `pingEnvironmentsJob: Environment ${environment.id} has no successful http requests. Ping is needed.`
+          // );
           needsPing = true;
         } else if (
           Date.now() - lastHttpResponse.timestamp.getTime() >
           frequencyToMs(environment.updateScheduleId.pingFrequency)
         ) {
-          log.info(
-            `pingEnvironmentsJob: Environment ${environment.id} has an old successful http response. Ping is needed.`
-          );
+          // log.info(
+          //   `pingEnvironmentsJob: Environment ${environment.id} has an old successful http response. Ping is needed.`
+          // );
           needsPing = true;
         }
 
         if (needsPing) {
-          log.info(
-            `pingEnvironmentsJob: Environment ${environment.id} needs pinging.`
-          );
+          // log.info(
+          //   `pingEnvironmentsJob: Environment ${environment.id} needs pinging.`
+          // );
           await executePing(environment);
 
-          log.info('pingEnvironmentsJob: Environment ping job finished.');
+          // log.info('pingEnvironmentsJob: Environment ping job finished.');
         } else {
-          log.info(
-            `pingEnvironmentsJob: Environment ${environment.id} does not need pinging.`
-          );
+          // log.info(
+          //   `pingEnvironmentsJob: Environment ${environment.id} does not need pinging.`
+          // );
         }
       } else {
-        log.warn(
-          'pingEnvironmentsJob: No environment update schedule found, skipping pings.'
-        );
+        // log.warn(
+        //   'pingEnvironmentsJob: No environment update schedule found, skipping pings.'
+        // );
       }
     });
   } else {
-    log.info('pingEnvironmentsJob: No environment found, skipping pings.');
+    // log.info('pingEnvironmentsJob: No environment found, skipping pings.');
   }
 }
