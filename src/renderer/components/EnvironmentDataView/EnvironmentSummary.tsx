@@ -32,6 +32,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
     }
   }, [environmentId]);
 
+  // BUG: Use a useEffect cancel subscription to prevent sync on unmounted component
   setTimeout(async () => {
     setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
   }, 15000);

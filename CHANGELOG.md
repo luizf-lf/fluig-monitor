@@ -5,6 +5,7 @@
   - Now the app uses the ping api to check the server availability on a shorter interval (10s to 1min)
 - Update only on work days option removed
 - Update time span option removed
+- Statistics/Monitor data scrape strategy updated
 
 # 0.1.4
 

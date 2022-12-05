@@ -97,8 +97,8 @@ const pt = {
           helper:
             'Tempo utilizado para a coleta de informações do monitor, licenças e estatísticas.',
           options: {
-            '15m': '15 segundos',
-            '30m': '30 segundos',
+            '15m': '15 minutos',
+            '30m': '30 minutos',
             '1h': '1 hora',
             '2h': '2 horas',
             '3h': '3 horas',

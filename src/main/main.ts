@@ -10,7 +10,11 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import i18n from '../common/i18n/i18n';
-import { isDevelopment, logStringFormat } from './utils/globalConstants';
+import {
+  environmentScrapeSyncInterval,
+  isDevelopment,
+  logStringFormat,
+} from './utils/globalConstants';
 // import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
@@ -90,10 +94,10 @@ const createWindow = async () => {
   //  but that's a problem for the future me
   await dispatchEnvironmentPingJobs();
 
-  // await syncEnvironmentsJob();
-  // setInterval(async () => {
-  //   await syncEnvironmentsJob();
-  // }, environmentSyncInterval);
+  await syncEnvironmentsJob();
+  setInterval(async () => {
+    await syncEnvironmentsJob();
+  }, environmentScrapeSyncInterval);
 
   if (isDevelopment) {
     log.info('Installing additional dev extensions');

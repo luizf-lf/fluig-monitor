@@ -9,7 +9,7 @@ import HttpResponseController from '../controllers/HttpResponseController';
 import MonitorHistoryController from '../controllers/MonitorHistoryController';
 import frequencyToMs from '../utils/frequencyToMs';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
-import { environmentSyncInterval } from '../utils/globalConstants';
+import { environmentScrapeSyncInterval } from '../utils/globalConstants';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
@@ -348,9 +348,6 @@ async function syncStatisticsData(
  *  http responses history.
  */
 export default async function syncEnvironmentsJob() {
-  // TODO: Alter sync strategy, since time periods and only on workdays have been removed
-
-  return;
   log.info('syncEnvironmentsJob: Executing environment sync job');
 
   const environmentList = await new EnvironmentController().getAll();
@@ -363,65 +360,32 @@ export default async function syncEnvironmentsJob() {
       );
 
       let needsSync = false;
-      let isInUpdateSchedule = false;
-
-      const date = new Date();
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const timeNow = `${hours}:${minutes}`;
-      const dayOfWeek = date.getDay();
 
       if (item.updateScheduleId) {
-        if (
-          timeNow > item.updateScheduleId.from &&
-          timeNow < item.updateScheduleId.to
-        ) {
-          if (
-            item.updateScheduleId.onlyOnWorkDays &&
-            dayOfWeek >= 1 &&
-            dayOfWeek <= 5
-          ) {
-            isInUpdateSchedule = true;
-          } else if (!item.updateScheduleId.onlyOnWorkDays) {
-            isInUpdateSchedule = true;
-          }
-        }
+        const lastHttpResponse =
+          await new EnvironmentController().getLastScrapeResponseById(item.id);
 
-        if (isInUpdateSchedule) {
+        if (
+          lastHttpResponse === null ||
+          lastHttpResponse.statusCode < 200 ||
+          lastHttpResponse.statusCode > 300
+        ) {
           log.info(
             'syncEnvironmentsJob: Environment',
             item.id,
-            'is inside the update schedule.'
+            'has no successful http requests. Sync is needed.'
           );
-
-          const lastHttpResponse =
-            await new EnvironmentController().getLastHttpResponseById(
-              item.id,
-              true
-            );
-
-          if (
-            lastHttpResponse === null ||
-            lastHttpResponse.statusCode < 200 ||
-            lastHttpResponse.statusCode > 300
-          ) {
-            log.info(
-              'syncEnvironmentsJob: Environment',
-              item.id,
-              'has no successful http requests. Sync is needed.'
-            );
-            needsSync = true;
-          } else if (
-            Date.now() - lastHttpResponse.timestamp.getTime() >
-            frequencyToMs(item.updateScheduleId.frequency)
-          ) {
-            log.info(
-              'syncEnvironmentsJob: Environment',
-              item.id,
-              'has an old successful http response. Sync is needed.'
-            );
-            needsSync = true;
-          }
+          needsSync = true;
+        } else if (
+          Date.now() - lastHttpResponse.timestamp.getTime() >
+          frequencyToMs(item.updateScheduleId.scrapeFrequency)
+        ) {
+          log.info(
+            'syncEnvironmentsJob: Environment',
+            item.id,
+            'has an old successful http response. Sync is needed.'
+          );
+          needsSync = true;
         }
 
         if (needsSync) {
@@ -454,6 +418,6 @@ export default async function syncEnvironmentsJob() {
 
   log.info(
     'syncEnvironmentsJob: Next sync will occur at',
-    new Date(Date.now() + environmentSyncInterval).toLocaleString()
+    new Date(Date.now() + environmentScrapeSyncInterval).toLocaleString()
   );
 }

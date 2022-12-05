@@ -18,6 +18,8 @@ if (isDevelopment) {
 export const logStringFormat =
   '[{y}-{m}-{d} {h}:{i}:{s}.{ms} {z}] [{level}] [{processType}] {text}';
 
+export const environmentScrapeSyncInterval = 900000;
+
 export const dbPath = isDevelopment
   ? path.resolve(__dirname, '../../../', 'prisma', 'app.db')
   : path.resolve(getAppDataFolder(), 'app.db');
@@ -25,7 +27,7 @@ export const dbUrl =
   (isDevelopment ? process.env.DATABASE_URL : `file:${dbPath}`) || '';
 
 // Must be updated every time a migration is created
-export const latestMigration = '20221025191045_create_status_message_field';
+export const latestMigration = '20221124203300_create_initial_tables_0_2_0';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const platformToExecutables: any = {
