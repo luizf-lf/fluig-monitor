@@ -30,7 +30,7 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
       <h3 className="title">
         {t('components.EnvironmentPerformanceGraph.title')}
       </h3>
-      {pings.length === 0 ? (
+      {pings.length <= 3 ? (
         <div className="widget-card">
           {t('components.EnvironmentPerformanceGraph.insufficientOrNoData')}
         </div>
