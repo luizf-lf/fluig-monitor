@@ -92,6 +92,10 @@ const createWindow = async () => {
 
   // this function shall be transformed into a nodejs worker,
   //  but that's a problem for the future me
+  /**
+   * // TODO: transform in a sync interval method like the scrape environments job
+   * This way the pings can respond to schedule updates
+   */
   await dispatchEnvironmentPingJobs();
 
   await syncEnvironmentsJob();
