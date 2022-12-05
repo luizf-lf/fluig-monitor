@@ -1,32 +1,20 @@
-import { useEffect, useState } from 'react';
 import { FiActivity, FiWifi, FiWifiOff } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
-import { HTTPResponse } from '../../../main/generated/client';
-import { getLastHttpResponseById } from '../../ipc/environmentsIpcHandler';
+import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentStatusCard.scss';
 
 interface Props {
-  environmentId: number;
+  environment: EnvironmentWithHistory;
 }
 
-export default function EnvironmentStatusCard({ environmentId }: Props) {
-  const [lastHttpResponse, setLastHttpResponse] = useState({} as HTTPResponse);
+export default function EnvironmentStatusCard({ environment }: Props) {
   const { t } = useTranslation();
+  const lastResponse = environment.httpResponses[0];
   let statusBody = <></>;
 
-  useEffect(() => {
-    async function getData() {
-      if (environmentId) {
-        setLastHttpResponse(await getLastHttpResponseById(environmentId));
-      }
-    }
-
-    getData();
-  }, [environmentId]);
-
-  if (lastHttpResponse.statusCode !== 0) {
-    if (lastHttpResponse.responseTimeMs > 1000) {
+  if (lastResponse.statusCode !== 0) {
+    if (lastResponse.responseTimeMs > 1000) {
       statusBody = (
         <>
           <div className="status-message">
@@ -42,7 +30,7 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
           </div>
         </>
       );
-    } else if (lastHttpResponse.statusCode === 200) {
+    } else if (lastResponse.statusCode === 200) {
       statusBody = (
         <>
           <div className="status-message">
@@ -62,11 +50,13 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
       statusBody = (
         <>
           <div className="status-message">
-            <h3 className="text-yellow">Atenção</h3>
+            <h3 className="text-yellow">
+              {t('components.EnvironmentStatusCard.attention')}
+            </h3>
             <span className="text-secondary">
               {t(
                 'components.EnvironmentStatusCard.noSatisfactoryResponse'
-              ).replace('%http%', String(lastHttpResponse.statusCode))}
+              ).replace('%http%', String(lastResponse.statusCode))}
             </span>
           </div>
           <div className="status-icon has-warning">
@@ -105,15 +95,15 @@ export default function EnvironmentStatusCard({ environmentId }: Props) {
       </div>
       <div className="body">{statusBody}</div>
       <div className="footer">
-        {lastHttpResponse.statusCode !== 0 ? (
+        {lastResponse.statusCode !== 0 ? (
           <span>
             {t('components.EnvironmentStatusCard.responseTime').replace(
               '%responseTime%',
-              String(lastHttpResponse.responseTimeMs)
+              String(lastResponse.responseTimeMs)
             )}
           </span>
         ) : (
-          <span className="text-red">{lastHttpResponse.statusMessage}</span>
+          <span className="text-red">{lastResponse.statusMessage}</span>
         )}
       </div>
     </div>

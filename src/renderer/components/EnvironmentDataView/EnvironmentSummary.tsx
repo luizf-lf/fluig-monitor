@@ -24,7 +24,6 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       if (environmentDataById) {
         setEnvironment(environmentDataById);
-        // console.log({ environmentDataById });
       }
     }
 
@@ -33,7 +32,6 @@ export default function EnvironmentSummary({ environmentId }: Props) {
     }
   }, [environmentId]);
 
-  // BUG: Not everything updates
   setTimeout(async () => {
     setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
   }, 15000);
@@ -47,10 +45,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
       id="environment-summary-container"
     >
       <section id="server-data">
-        <EnvironmentStatusSummary
-          environmentName={environment.name}
-          environmentId={environment.id}
-        />
+        <EnvironmentStatusSummary environment={environment} />
         <EnvironmentPerformanceGraph pings={environment.httpResponses} />
       </section>
 
