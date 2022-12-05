@@ -1,10 +1,11 @@
 import log from 'electron-log';
-import frequencyToMs from '../utils/frequencyToMs';
 import EnvironmentController from '../controllers/EnvironmentController';
-import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
+import { environmentPingInterval } from '../utils/globalConstants';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
+import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import HttpResponseController from '../controllers/HttpResponseController';
+import frequencyToMs from '../utils/frequencyToMs';
 
 /**
  * Executes a ping on the environment to check server availability
@@ -76,25 +77,70 @@ async function executePing(
 }
 
 /**
- * Dispatches all of the environment ping "jobs" according to the respective environment ping schedule
+ * Checks if the environments need a ping check
  */
-export default async function dispatchEnvironmentPingJobs() {
-  log.info('dispatchEnvironmentPingJobs: Executing environment ping job');
+export default async function pingEnvironmentsJob() {
+  log.info('pingEnvironmentsJob: Executing environment ping job');
+  log.info(
+    `pingEnvironmentsJob: Next sync will occur at ${new Date(
+      Date.now() + environmentPingInterval
+    ).toLocaleString()}`
+  );
 
   const environmentList = await new EnvironmentController().getAll();
 
   if (environmentList.length > 0) {
-    for (let i = 0; i < environmentList.length; i += 1) {
-      const environmentItem = environmentList[i];
+    environmentList.forEach(async (environment) => {
+      log.info(
+        `pingEnvironmentsJob: Checking related data for environment ${environment.id}`
+      );
 
-      if (environmentItem.updateScheduleId) {
-        log.info(
-          `dispatchEnvironmentPingJobs: Dispatching ping job for environment "${environmentItem.name}" every ${environmentItem.updateScheduleId.pingFrequency}`
+      let needsPing = false;
+
+      if (environment.updateScheduleId) {
+        const lastHttpResponse =
+          await new EnvironmentController().getLastHttpResponseById(
+            environment.id
+          );
+
+        if (
+          lastHttpResponse === null ||
+          lastHttpResponse.statusCode < 200 ||
+          lastHttpResponse.statusCode > 300
+        ) {
+          log.info(
+            `pingEnvironmentsJob: Environment ${environment.id} has no successful http requests. Ping is needed.`
+          );
+          needsPing = true;
+        } else if (
+          Date.now() - lastHttpResponse.timestamp.getTime() >
+          frequencyToMs(environment.updateScheduleId.pingFrequency)
+        ) {
+          log.info(
+            `pingEnvironmentsJob: Environment ${environment.id} has an old successful http response. Ping is needed.`
+          );
+          needsPing = true;
+        }
+
+        if (needsPing) {
+          log.info(
+            `pingEnvironmentsJob: Environment ${environment.id} needs pinging.`
+          );
+          await executePing(environment);
+
+          log.info('pingEnvironmentsJob: Environment ping job finished.');
+        } else {
+          log.info(
+            `pingEnvironmentsJob: Environment ${environment.id} does not need pinging.`
+          );
+        }
+      } else {
+        log.warn(
+          'pingEnvironmentsJob: No environment update schedule found, skipping pings.'
         );
-        setInterval(async () => {
-          await executePing(environmentItem);
-        }, frequencyToMs(environmentItem.updateScheduleId.pingFrequency));
       }
-    }
+    });
+  } else {
+    log.info('pingEnvironmentsJob: No environment found, skipping pings.');
   }
 }

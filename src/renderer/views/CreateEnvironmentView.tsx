@@ -17,6 +17,7 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import {
   createEnvironment,
+  forceEnvironmentPing,
   forceEnvironmentSync,
 } from '../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../utils/globalContainerVariants';
@@ -95,6 +96,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       );
 
       await forceEnvironmentSync();
+      await forceEnvironmentPing();
 
       createShortNotification({
         id: Date.now(),

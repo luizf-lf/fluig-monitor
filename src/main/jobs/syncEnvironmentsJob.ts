@@ -350,20 +350,27 @@ async function syncStatisticsData(
 export default async function syncEnvironmentsJob() {
   log.info('syncEnvironmentsJob: Executing environment sync job');
 
+  log.info(
+    `syncEnvironmentsJob: Next sync will occur at ${new Date(
+      Date.now() + environmentScrapeSyncInterval
+    ).toLocaleString()}`
+  );
+
   const environmentList = await new EnvironmentController().getAll();
 
   if (environmentList.length > 0) {
-    environmentList.forEach(async (item) => {
+    environmentList.forEach(async (environment) => {
       log.info(
-        'syncEnvironmentsJob: Checking related data for environment',
-        item.id
+        `syncEnvironmentsJob: Checking related data for environment ${environment.id}`
       );
 
       let needsSync = false;
 
-      if (item.updateScheduleId) {
+      if (environment.updateScheduleId) {
         const lastHttpResponse =
-          await new EnvironmentController().getLastScrapeResponseById(item.id);
+          await new EnvironmentController().getLastScrapeResponseById(
+            environment.id
+          );
 
         if (
           lastHttpResponse === null ||
@@ -371,39 +378,31 @@ export default async function syncEnvironmentsJob() {
           lastHttpResponse.statusCode > 300
         ) {
           log.info(
-            'syncEnvironmentsJob: Environment',
-            item.id,
-            'has no successful http requests. Sync is needed.'
+            `syncEnvironmentsJob: Environment ${environment.id} has no successful http requests. Sync is needed.`
           );
           needsSync = true;
         } else if (
           Date.now() - lastHttpResponse.timestamp.getTime() >
-          frequencyToMs(item.updateScheduleId.scrapeFrequency)
+          frequencyToMs(environment.updateScheduleId.scrapeFrequency)
         ) {
           log.info(
-            'syncEnvironmentsJob: Environment',
-            item.id,
-            'has an old successful http response. Sync is needed.'
+            `syncEnvironmentsJob: Environment ${environment.id} has an old successful http response. Sync is needed.`
           );
           needsSync = true;
         }
 
         if (needsSync) {
           log.info(
-            'syncEnvironmentsJob: Environment',
-            item.id,
-            'needs synchronization. Fetching api data.'
+            `syncEnvironmentsJob: Environment ${environment.id} needs synchronization. Fetching api data.`
           );
-          await syncLicenseData(item);
-          await syncMonitorData(item);
-          await syncStatisticsData(item);
+          await syncLicenseData(environment);
+          await syncMonitorData(environment);
+          await syncStatisticsData(environment);
 
           log.info('syncEnvironmentsJob: Environment sync job finished.');
         } else {
           log.info(
-            'syncEnvironmentsJob: Environment',
-            item.id,
-            'does not need synchronization.'
+            `syncEnvironmentsJob: Environment ${environment.id} does not need synchronization.`
           );
         }
       } else {
@@ -415,9 +414,4 @@ export default async function syncEnvironmentsJob() {
   } else {
     log.info('syncEnvironmentsJob: No environment found, skipping sync.');
   }
-
-  log.info(
-    'syncEnvironmentsJob: Next sync will occur at',
-    new Date(Date.now() + environmentScrapeSyncInterval).toLocaleString()
-  );
 }

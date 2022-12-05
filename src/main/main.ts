@@ -11,11 +11,11 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import i18n from '../common/i18n/i18n';
 import {
+  environmentPingInterval,
   environmentScrapeSyncInterval,
   isDevelopment,
   logStringFormat,
 } from './utils/globalConstants';
-// import getAppDataFolder from './utils/fsUtils';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
 import EnvironmentController from './controllers/EnvironmentController';
@@ -33,14 +33,14 @@ import LogController from './controllers/LogController';
 import SettingsController from './controllers/SettingsController';
 import syncEnvironmentsJob from './jobs/syncEnvironmentsJob';
 import StatisticsHistoryController from './controllers/StatisticsHistoryController';
-import dispatchEnvironmentPingJobs from './jobs/dispatchEnvironmentPingJobs';
+import pingEnvironmentsJob from './jobs/pingEnvironmentsJob';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
 log.transports.file.fileName = isDevelopment ? 'app.dev.log' : 'app.log';
-log.transports.file.maxSize = 0; // disable default electron log rotation
+log.transports.file.maxSize = 0; // disable default electron-log file rotation
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -92,12 +92,13 @@ const createWindow = async () => {
 
   // this function shall be transformed into a nodejs worker,
   //  but that's a problem for the future me
-  /**
-   * // TODO: transform in a sync interval method like the scrape environments job
-   * This way the pings can respond to schedule updates
-   */
-  await dispatchEnvironmentPingJobs();
+  log.info('Dispatching environment ping jobs');
+  await pingEnvironmentsJob();
+  setInterval(async () => {
+    await pingEnvironmentsJob();
+  }, environmentPingInterval);
 
+  log.info('Dispatching environment sync jobs');
   await syncEnvironmentsJob();
   setInterval(async () => {
     await syncEnvironmentsJob();
@@ -385,6 +386,11 @@ ipcMain.handle(
 ipcMain.handle('forceEnvironmentSync', async () => {
   log.info('IPC Handler: Forcing all environments Sync');
   await syncEnvironmentsJob();
+});
+
+ipcMain.handle('forceEnvironmentPing', async () => {
+  log.info('IPC Handler: Forcing all environments ping');
+  await pingEnvironmentsJob();
 });
 
 app.on('window-all-closed', async () => {

@@ -171,3 +171,9 @@ export async function forceEnvironmentSync(): Promise<void> {
 
   await ipcRenderer.invoke('forceEnvironmentSync');
 }
+
+export async function forceEnvironmentPing(): Promise<void> {
+  log.info('IPC Invoker: Requesting all environments ping.');
+
+  await ipcRenderer.invoke('forceEnvironmentPing');
+}

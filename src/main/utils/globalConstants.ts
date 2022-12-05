@@ -19,6 +19,7 @@ export const logStringFormat =
   '[{y}-{m}-{d} {h}:{i}:{s}.{ms} {z}] [{level}] [{processType}] {text}';
 
 export const environmentScrapeSyncInterval = 900000;
+export const environmentPingInterval = 15000;
 
 export const dbPath = isDevelopment
   ? path.resolve(__dirname, '../../../', 'prisma', 'app.db')
