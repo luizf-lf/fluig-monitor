@@ -23,8 +23,6 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
     return <SpinnerLoader />;
   }
 
-  pings.reverse();
-
   return (
     <div className="widget-container">
       <h3 className="title">
@@ -62,7 +60,7 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
                 }}
               />
               <Area
-                type="monotone"
+                type={pings.length <= 100 ? 'monotone' : 'linear'}
                 dataKey="responseTimeMs"
                 dot={false}
                 stroke="var(--purple)"

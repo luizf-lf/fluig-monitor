@@ -119,7 +119,7 @@ export default class EnvironmentController {
             },
           },
           orderBy: {
-            timestamp: 'desc',
+            timestamp: 'asc',
           },
         },
       },

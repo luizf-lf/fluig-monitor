@@ -31,20 +31,22 @@ export default function EnvironmentStatusSummary({ environment }: Props) {
     );
   }
 
+  const lastResponse =
+    environment.httpResponses[environment.httpResponses.length - 1];
+
   return (
     <div className="environment-status-summary-container">
       <h2 className="title">
         {environment.name}
-        {environment.httpResponses[0].timestamp.toDateString() ===
-        new Date().toDateString() ? (
+        {lastResponse.timestamp.toDateString() === new Date().toDateString() ? (
           <span>
             {t('components.EnvironmentStatusSummary.updatedAt')}{' '}
-            {environment.httpResponses[0].timestamp.toLocaleTimeString()}
+            {lastResponse.timestamp.toLocaleTimeString()}
           </span>
         ) : (
           <span>
             {t('components.EnvironmentStatusSummary.updatedAtAlt')}{' '}
-            {environment.httpResponses[0].timestamp.toLocaleString()}
+            {lastResponse.timestamp.toLocaleString()}
           </span>
         )}
       </h2>

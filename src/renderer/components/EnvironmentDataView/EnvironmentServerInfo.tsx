@@ -17,17 +17,17 @@ interface Props {
 
 export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
   const { t } = useTranslation();
-  // const [serverLogo, setServerLogo] = useState(<></>);
+  const [serverLogo, setServerLogo] = useState(<></>);
 
-  // useEffect(() => {
-  //   setServerLogo(
-  //     <DynamicImageLoad
-  //       imgSrc={`${endpoint}/portal/api/servlet/image/1/custom/logo_image.png`}
-  //       altName="Logo"
-  //       fallback={defaultServerLogo}
-  //     />
-  //   );
-  // }, [endpoint]);
+  useEffect(() => {
+    setServerLogo(
+      <DynamicImageLoad
+        imgSrc={`${endpoint}/portal/api/servlet/image/1/custom/logo_image.png`}
+        altName="Logo"
+        fallback={defaultServerLogo}
+      />
+    );
+  }, [endpoint]);
 
   if (typeof statistics === 'undefined' || typeof endpoint === 'undefined') {
     return <SpinnerLoader />;
@@ -41,14 +41,7 @@ export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
       <div className="widget-card">
         {statistics.length > 0 ? (
           <>
-            {/* <div className="image-container">{serverLogo}</div> */}
-            <div className="image-container">
-              <DynamicImageLoad
-                imgSrc={`${endpoint}/portal/api/servlet/image/1/custom/logo_image.png`}
-                altName="Logo"
-                fallback={defaultServerLogo}
-              />
-            </div>
+            <div className="image-container">{serverLogo}</div>
             <div id="server-specs">
               <div className="specs-item">
                 <FiCpu />

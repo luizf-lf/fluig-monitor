@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
@@ -15,6 +16,7 @@ interface Props {
 
 export default function EnvironmentSummary({ environmentId }: Props) {
   const [environment, setEnvironment] = useState({} as EnvironmentWithHistory);
+  let interval: NodeJS.Timeout | null = null;
 
   useEffect(() => {
     async function getEnvironmentData() {
@@ -24,18 +26,26 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       if (environmentDataById) {
         setEnvironment(environmentDataById);
+        // sets an 15 seconds interval for auto-refresh
+        interval = setInterval(async () => {
+          setEnvironment(
+            await getEnvironmentHistoryById(Number(environmentId))
+          );
+        }, 15000);
       }
     }
 
     if (typeof environmentId !== 'undefined') {
       getEnvironmentData();
     }
-  }, [environmentId]);
 
-  // BUG: Use a useEffect cancel subscription to prevent sync on unmounted component
-  setTimeout(async () => {
-    setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
-  }, 15000);
+    // must use a cleanup function to prevent update on an unmounted component
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [environmentId]);
 
   return (
     <motion.div

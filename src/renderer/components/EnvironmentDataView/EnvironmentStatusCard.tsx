@@ -10,7 +10,8 @@ interface Props {
 
 export default function EnvironmentStatusCard({ environment }: Props) {
   const { t } = useTranslation();
-  const lastResponse = environment.httpResponses[0];
+  const lastResponse =
+    environment.httpResponses[environment.httpResponses.length - 1];
   let statusBody = <></>;
 
   if (lastResponse.statusCode !== 0) {
