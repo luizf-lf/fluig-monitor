@@ -292,6 +292,18 @@ const en = {
       responseTime: 'Response Time (ms)',
     },
   },
+  classes: {
+    EnvironmentFormValidator: {
+      nameIsRequired: 'Environment name is required.',
+      baseUrlIsRequired: 'Base url is required.',
+      consumerKeyIsRequired: 'Consumer key is required.',
+      consumerSecretIsRequired: 'Consumer secret is required.',
+      accessTokenIsRequired: 'Access token is required.',
+      tokenSecretIsRequired: 'Token secret is required.',
+      scrapeFrequencyIsRequired: 'Scrape frequency is required.',
+      pingFrequencyIsRequired: 'Ping frequency is required.',
+    },
+  },
 };
 
 export default en;

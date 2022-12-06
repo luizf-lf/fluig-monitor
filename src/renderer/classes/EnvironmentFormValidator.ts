@@ -21,24 +21,23 @@ export default class EnvironmentFormValidator extends FormValidator {
   validate(formData: EnvironmentFormData) {
     log.info('EnvironmentFormValidator: Validating form data');
 
-    // TODO: Implement message id's for i18n instead of fixed messages
     if (formData) {
       if (formData.name === '') {
-        this.lastMessage = 'Nome do ambiente é obrigatório.';
+        this.lastMessage = 'nameIsRequired';
       } else if (formData.baseUrl === '') {
-        this.lastMessage = 'Endereço do ambiente é obrigatório.';
+        this.lastMessage = 'baseUrlIsRequired';
       } else if (formData.auth.consumerKey === '') {
-        this.lastMessage = 'Consumer Key é obrigatório.';
+        this.lastMessage = 'consumerKeyIsRequired';
       } else if (formData.auth.consumerSecret === '') {
-        this.lastMessage = 'Consumer Secret ambiente é obrigatório.';
+        this.lastMessage = 'consumerSecretIsRequired';
       } else if (formData.auth.accessToken === '') {
-        this.lastMessage = 'Access Token é obrigatório.';
+        this.lastMessage = 'accessTokenIsRequired';
       } else if (formData.auth.tokenSecret === '') {
-        this.lastMessage = 'Token Secret é obrigatório.';
+        this.lastMessage = 'tokenSecretIsRequired';
       } else if (formData.updateSchedule.scrapeFrequency === '') {
-        this.lastMessage = 'Frequência de coleta é obrigatório.';
+        this.lastMessage = 'scrapeFrequencyIsRequired';
       } else if (formData.updateSchedule.pingFrequency === '') {
-        this.lastMessage = 'Frequência de verificação é obrigatório.';
+        this.lastMessage = 'pingFrequencyIsRequired';
       } else {
         this.isValid = true;
       }

@@ -295,6 +295,18 @@ const pt = {
       responseTime: 'Tempo De Resposta (ms)',
     },
   },
+  classes: {
+    EnvironmentFormValidator: {
+      nameIsRequired: 'Nome do ambiente é obrigatório.',
+      baseUrlIsRequired: 'Endereço do ambiente é obrigatório.',
+      consumerKeyIsRequired: 'Consumer Key é obrigatório.',
+      consumerSecretIsRequired: 'Consumer Secret ambiente é obrigatório.',
+      accessTokenIsRequired: 'Access Token é obrigatório.',
+      tokenSecretIsRequired: 'Token Secret é obrigatório.',
+      scrapeFrequencyIsRequired: 'Frequência de coleta é obrigatório.',
+      pingFrequencyIsRequired: 'Frequência de verificação é obrigatório.',
+    },
+  },
 };
 
 export default pt;

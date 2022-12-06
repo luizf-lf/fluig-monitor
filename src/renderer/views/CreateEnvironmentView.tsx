@@ -108,7 +108,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message: lastMessage,
+        message: t(`classes.EnvironmentFormValidator.${lastMessage}`),
       });
     }
   }
