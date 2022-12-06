@@ -24,8 +24,6 @@ import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
 
-// TODO: Add i18n to update schedules
-
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
   const [domainUrl, setDomainUrl] = useState('');
