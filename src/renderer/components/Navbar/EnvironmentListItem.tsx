@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { ipcRenderer } from 'electron';
 import { Link } from 'react-router-dom';
 import { Environment } from '../../../main/generated/client';
 import SmallTag from '../SmallTag';
@@ -13,7 +15,11 @@ export default function EnvironmentListItem({
   isExpanded,
 }: EnvironmentListItemInterface) {
   let environmentKindTitle = '';
-  const isOnline = true; // TODO: Update via props
+  const [isOnline, setIsOnline] = useState(true);
+
+  ipcRenderer.on('serverPinged', (_event, { serverIsOnline }) => {
+    setIsOnline(serverIsOnline);
+  });
 
   switch (data.kind) {
     case 'PROD':
