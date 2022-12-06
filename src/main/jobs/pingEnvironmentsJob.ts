@@ -1,11 +1,12 @@
 import log from 'electron-log';
 import EnvironmentController from '../controllers/EnvironmentController';
-import { environmentPingInterval } from '../utils/globalConstants';
+// import { environmentPingInterval } from '../utils/globalConstants';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import HttpResponseController from '../controllers/HttpResponseController';
 import frequencyToMs from '../utils/frequencyToMs';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 
 /**
  * Executes a ping on the environment to check server availability
@@ -51,6 +52,7 @@ async function executePing(
           environmentId: environment.id,
           responseTimeMs,
           endpoint: requestData.url,
+          resourceType: HttpResponseResourceType.PING,
           statusCode: fluigClient.httpStatus || 0,
           statusMessage: fluigClient.httpStatusText,
           timestamp: new Date().toISOString(),
@@ -68,6 +70,7 @@ async function executePing(
         environmentId: environment.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.PING,
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),

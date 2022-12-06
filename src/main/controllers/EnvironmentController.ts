@@ -112,10 +112,8 @@ export default class EnvironmentController {
             timestamp: {
               gte: new Date(Date.now() - 86400000),
             },
-            AND: {
-              licenseHistory: null,
-              monitorHistory: null,
-              statisticHistory: null,
+            resourceType: {
+              equals: 'PING',
             },
           },
           orderBy: {

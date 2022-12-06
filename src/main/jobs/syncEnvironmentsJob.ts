@@ -10,6 +10,7 @@ import MonitorHistoryController from '../controllers/MonitorHistoryController';
 import frequencyToMs from '../utils/frequencyToMs';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import { environmentScrapeSyncInterval } from '../utils/globalConstants';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
@@ -83,6 +84,7 @@ async function syncLicenseData(
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.LICENSES,
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
@@ -100,6 +102,7 @@ async function syncLicenseData(
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.LICENSES,
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
@@ -175,6 +178,7 @@ async function syncMonitorData(
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.MONITOR,
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
@@ -192,6 +196,7 @@ async function syncMonitorData(
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.MONITOR,
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
@@ -317,6 +322,7 @@ async function syncStatisticsData(
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.STATISTICS,
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
@@ -334,6 +340,7 @@ async function syncStatisticsData(
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.STATISTICS,
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),

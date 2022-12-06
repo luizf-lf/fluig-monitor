@@ -7,6 +7,7 @@ interface CreateHttpResponseProps {
   statusCode: number;
   statusMessage?: string;
   endpoint?: string;
+  resourceType?: string;
   timestamp: string;
   responseTimeMs: number;
 }

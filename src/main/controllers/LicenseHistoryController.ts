@@ -2,6 +2,7 @@ import log from 'electron-log';
 import { LicenseHistory } from '../generated/client';
 import prismaClient from '../database/prismaContext';
 import HttpResponseController from './HttpResponseController';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 
 interface LogLicenseProps {
   environmentId: number;
@@ -28,6 +29,7 @@ export default class LicenseHistoryController {
   async new({
     environmentId,
     statusCode,
+    statusMessage,
     timestamp,
     endpoint,
     responseTimeMs,
@@ -38,7 +40,9 @@ export default class LicenseHistoryController {
     const httpResponse = await new HttpResponseController().new({
       environmentId,
       statusCode,
+      statusMessage,
       endpoint,
+      resourceType: HttpResponseResourceType.LICENSES,
       timestamp,
       responseTimeMs,
     });
