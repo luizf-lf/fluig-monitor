@@ -3,9 +3,12 @@
 - Updated test connection endpoint to /api/servlet/ping
 - Changed environment availability check strategy
   - Now the app uses the ping api to check the server availability on a shorter interval (10s to 1min)
+  - Statistics/Monitor/Licenses data scrape strategy updated. Data fetch occurs on larger time intervals (15min to 24hours)
 - Update only on work days option removed
 - Update time span option removed
-- Statistics/Monitor data scrape strategy updated
+- Environment ping job implemented
+- Menu environments indicator auto update implemented
+- Environment view auto refresh implemented
 
 # 0.1.4
 
