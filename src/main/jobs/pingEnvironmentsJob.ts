@@ -1,4 +1,6 @@
+/* eslint-disable prefer-destructuring */
 import log from 'electron-log';
+import { BrowserWindow, Notification } from 'electron';
 import EnvironmentController from '../controllers/EnvironmentController';
 // import { environmentPingInterval } from '../utils/globalConstants';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
@@ -7,6 +9,64 @@ import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentC
 import HttpResponseController from '../controllers/HttpResponseController';
 import frequencyToMs from '../utils/frequencyToMs';
 import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
+
+async function notifyAbout(
+  environment: EnvironmentWithRelatedData
+): Promise<void> {
+  if (environment) {
+    const responses = await new EnvironmentController().getHttpResponsesById(
+      environment.id,
+      10
+    );
+
+    let notification = null;
+    const lastResponse = responses[0];
+    let previousResponse = null;
+
+    if (lastResponse.responseTimeMs > 1000) {
+      notification = new Notification({
+        title: `${environment.name} com ping alto`,
+        body: 'O servidor está com um tempo de resposta muito alto.',
+      });
+    }
+
+    if (responses.length >= 2) {
+      previousResponse = responses[1];
+
+      if (
+        lastResponse.responseTimeMs < 1000 &&
+        previousResponse.responseTimeMs >= 1000
+      ) {
+        notification = new Notification({
+          title: `${environment.name} operando normalmente`,
+          body: 'O servidor voltou a operar dentro do tempo de resposta correto.',
+        });
+      }
+
+      if (
+        previousResponse.responseTimeMs === 0 &&
+        lastResponse.responseTimeMs > 0
+      ) {
+        notification = new Notification({
+          title: `${environment.name} disponível`,
+          body: 'O servidor voltou a operar novamente.',
+        });
+      } else if (
+        previousResponse.responseTimeMs > 0 &&
+        lastResponse.responseTimeMs === 0
+      ) {
+        notification = new Notification({
+          title: `${environment.name} está offline`,
+          body: 'O servidor está offline.',
+        });
+      }
+    }
+
+    if (notification) {
+      notification.show();
+    }
+  }
+}
 
 /**
  * Executes a ping on the environment to check server availability
@@ -76,6 +136,15 @@ async function executePing(
         timestamp: new Date().toISOString(),
       });
     }
+
+    await notifyAbout(environment);
+
+    // sends a signal to the renderer telling if the server is online
+    BrowserWindow.getAllWindows().forEach((windowElement) => {
+      windowElement.webContents.send('serverPinged', {
+        serverIsOnline: !fluigClient.hasError && responseTimeMs > 0,
+      });
+    });
   }
 }
 

@@ -65,7 +65,7 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
                 }}
               />
               <Area
-                type={pings.length <= 100 ? 'monotone' : 'linear'}
+                type={pings.length <= 200 ? 'monotone' : 'linear'}
                 dataKey="responseTimeMs"
                 dot={false}
                 stroke={

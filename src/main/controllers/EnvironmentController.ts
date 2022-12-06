@@ -1,4 +1,5 @@
 import log from 'electron-log';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentUpdateControllerInterface,
@@ -19,6 +20,8 @@ export default class EnvironmentController {
 
   lastHttpResponse: HTTPResponse | null;
 
+  httpResponses: HTTPResponse[];
+
   created: Environment | null;
 
   updated: Environment | null;
@@ -33,6 +36,7 @@ export default class EnvironmentController {
     this.deleted = null;
 
     this.lastHttpResponse = null;
+    this.httpResponses = [];
   }
 
   async getAll(): Promise<EnvironmentWithRelatedData[]> {
@@ -157,6 +161,24 @@ export default class EnvironmentController {
     });
 
     return this.lastHttpResponse;
+  }
+
+  async getHttpResponsesById(
+    id: number,
+    limit?: number
+  ): Promise<HTTPResponse[]> {
+    this.httpResponses = await prismaClient.hTTPResponse.findMany({
+      take: limit || 1000,
+      where: {
+        environmentId: id,
+        resourceType: HttpResponseResourceType.PING,
+      },
+      orderBy: {
+        timestamp: 'desc',
+      },
+    });
+
+    return this.httpResponses;
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {

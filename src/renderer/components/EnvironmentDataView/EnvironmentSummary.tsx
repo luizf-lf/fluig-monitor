@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { ipcRenderer } from 'electron';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
@@ -16,7 +17,6 @@ interface Props {
 
 export default function EnvironmentSummary({ environmentId }: Props) {
   const [environment, setEnvironment] = useState({} as EnvironmentWithHistory);
-  let interval: NodeJS.Timeout | null = null;
 
   useEffect(() => {
     async function getEnvironmentData() {
@@ -26,25 +26,19 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       if (environmentDataById) {
         setEnvironment(environmentDataById);
-        // sets an 15 seconds interval for auto-refresh
-        interval = setInterval(async () => {
+
+        // adds an event listener to auto-refresh the view when the environment is pinged
+        ipcRenderer.on('serverPinged', async () => {
           setEnvironment(
             await getEnvironmentHistoryById(Number(environmentId))
           );
-        }, 15000);
+        });
       }
     }
 
     if (typeof environmentId !== 'undefined') {
       getEnvironmentData();
     }
-
-    // must use a cleanup function to prevent update on an unmounted component
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
   }, [environmentId]);
 
   return (

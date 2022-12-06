@@ -1,3 +1,4 @@
+/* eslint-disable no-new */
 import { useTranslation } from 'react-i18next';
 import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentStatusCard from './EnvironmentStatusCard';
