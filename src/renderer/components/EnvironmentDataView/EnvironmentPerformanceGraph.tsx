@@ -23,6 +23,8 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
     return <SpinnerLoader />;
   }
 
+  const lastPing = pings[pings.length - 1];
+
   return (
     <div className="widget-container">
       <h3 className="title">
@@ -66,9 +68,15 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
                 type={pings.length <= 100 ? 'monotone' : 'linear'}
                 dataKey="responseTimeMs"
                 dot={false}
-                stroke="var(--purple)"
+                stroke={
+                  lastPing.responseTimeMs === 0 ? 'var(--red)' : 'var(--purple)'
+                }
                 strokeWidth={2}
-                fill="var(--light-purple)"
+                fill={
+                  lastPing.responseTimeMs === 0
+                    ? 'var(--light-red)'
+                    : 'var(--light-purple)'
+                }
               />
             </AreaChart>
           </ResponsiveContainer>
