@@ -51,7 +51,10 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
                 allowDecimals={false}
                 dataKey="responseTimeMs"
                 type="number"
-                domain={[0, (dataMax: number) => Math.ceil(dataMax * 1.1)]} // TODO: Round the maximum value to a multiple of 250?
+                domain={[
+                  0,
+                  (dataMax: number) => Math.ceil(dataMax / 250) * 250,
+                ]}
                 tickCount={9}
               />
               <Tooltip
