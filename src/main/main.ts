@@ -69,6 +69,8 @@ const installExtensions = async () => {
 const createWindow = async () => {
   log.info('Creating a new window');
 
+  app.name = 'Fluig Monitor';
+
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
@@ -76,6 +78,10 @@ const createWindow = async () => {
   const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
   };
+
+  if (process.platform === 'win32') {
+    app.setAppUserModelId(app.name);
+  }
 
   const splash = new BrowserWindow({
     width: 720,
