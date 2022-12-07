@@ -14,14 +14,15 @@ async function notifyAbout(
   environment: EnvironmentWithRelatedData
 ): Promise<void> {
   if (environment) {
-    const responses = await new EnvironmentController().getHttpResponsesById(
-      environment.id,
-      10
-    );
+    const responses = await new EnvironmentController({
+      noLog: true,
+    }).getHttpResponsesById(environment.id, 10);
 
     let notification = null;
     const lastResponse = responses[0];
     let previousResponse = null;
+
+    // TODO: Add translation to notifications
 
     if (lastResponse.responseTimeMs > 1000) {
       notification = new Notification({
@@ -56,8 +57,8 @@ async function notifyAbout(
         lastResponse.responseTimeMs === 0
       ) {
         notification = new Notification({
-          title: `${environment.name} está offline`,
-          body: 'O servidor está offline.',
+          title: `${environment.name} está indisponível`,
+          body: 'O servidor aparenta estar offline.',
         });
       }
     }

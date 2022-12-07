@@ -21,6 +21,7 @@ export default function EnvironmentListItem({
     setIsOnline(serverIsOnline);
   });
 
+  // TODO: Add i18n to environment kinds
   switch (data.kind) {
     case 'PROD':
       environmentKindTitle = 'Produção';
