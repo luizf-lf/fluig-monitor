@@ -6,33 +6,48 @@
 
 ## About
 
-A desktop application, developed with **Electron**, used as a monitoring dashboards for **Fluig** environments.
+A desktop application, developed in **Electron**, used to monitor **Fluig** environments.
 
-The monitoring is done trough the monitoring and statistics **API**, as shown on the [documentation](https://tdn.totvs.com/display/fluigeng/Platform+%7C+Platform+Services+Monitor).
+Monitoring is performed through the platform's **Rest API**, also used to collect **monitor** data, **statistics** and platform **license**, as per the [documentation](https://tdn.totvs.com/display/fluigeng/Platform+%7C+Platform+Services+Monitor).
 
-This application is being developed for **educational** purposes, with the intention of learning a bit more about UI/UX, development with `React`, `Electron`, `Typescript`, and the use of Fluig `APIs`.
+This application was initially developed for **educational** purposes, with the intention of learning about UI/UX, development of desktop applications with `React`, `Electron`, `Typescript`, and the use of Fluig `API's`, but little by little it has become an application that allows better management of observability on the Fluig platform itself.
+
+## Features
+
+Algumas das principais funcionalidades já implementadas:
+
+- Fully customized interface with light and dark theme.
+- Internationalization (i18n) in Portuguese and English.
+- Desktop notifications.
+- Server availability check.
+- Collection of monitor information, statistics and platform licensing.
+- Local database in SQLite.
+- Automatic database migrations.
+- Dashboard with platform response time display graph.
 
 ## Images
 
 ### White Theme
 
-![Desktop](./img/desktop_LT2022-04_EnvironmentView.png)
+![Environment View (White Theme)](./docs/img/EnvironmentView_01-White.png)
 
-### Dark Theme
+> Environment View (White Theme)
 
-![Desktop Dark](./img/desktop_LT2022-04_EnvironmentView_Dark.png)
+![Environment View (Dark Theme)](./docs/img/EnvironmentView_02-Dark.png)
 
-> The above images are **prototypes**, and are subject to changes.
+> Environment View (Dark Theme)
 
-## Features
+![Environment View (I18N)](./docs/img/EnvironmentView_03-EN.png)
 
-Some features that will be (or already are) implemented:
+> Environment View (I18N) in english.
 
-- Dark mode
-- Internationalization (i18n)
-- Environment history analysis
-- Predictive environment health analysis
-- Desktop notifications
+![Environment View (Unavailability)](./docs/img/EnvironmentView04-Unavailable.png)
+
+> Environment View (Unavailability)
+
+![Environment List](./docs/img/HomeView.png)
+
+> Environment List, with a mini availability graph.
 
 ## Running this project
 
@@ -62,9 +77,10 @@ To run this project:
    $ npm run start
    ```
 
-## Additional information
+## Additional Information
 
-As mentioned, this application is being developed for educational purposes, and _still_ does not have a release available for public use. Version 1.0 of the application will be released soon. ~~Before Half Life 3~~
+Although the application already has its main functionalities developed (monitoring, collection and display of statistics), there are still many functionalities that will be developed over time until the application has an initial version release.
+Currently the application is in a `preview` release, available for those who want to test the application.
 
 ### Any development suggestions?
 
