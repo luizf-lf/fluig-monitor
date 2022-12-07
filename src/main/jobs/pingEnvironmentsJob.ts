@@ -139,6 +139,10 @@ async function executePing(
 
     await notifyAbout(environment);
 
+    // TODO: Prevent sync "conflict" on the view. Every time the ping job is done, the view updates for all environment,
+    //  not only the selected environment view.
+    // Maybe create a channel/listener to each environment?
+
     // sends a signal to the renderer telling if the server is online
     BrowserWindow.getAllWindows().forEach((windowElement) => {
       windowElement.webContents.send('serverPinged', {
