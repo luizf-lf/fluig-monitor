@@ -14,9 +14,10 @@ async function notifyAbout(
   environment: EnvironmentWithRelatedData
 ): Promise<void> {
   if (environment) {
-    const responses = await new EnvironmentController({
-      noLog: true,
-    }).getHttpResponsesById(environment.id, 10);
+    const responses = await new EnvironmentController().getHttpResponsesById(
+      environment.id,
+      10
+    );
 
     let notification = null;
     const lastResponse = responses[0];
@@ -153,7 +154,9 @@ async function executePing(
  * Checks if the environments need a ping check
  */
 export default async function pingEnvironmentsJob() {
-  const environmentList = await new EnvironmentController().getAll();
+  const environmentList = await new EnvironmentController({
+    noLog: true,
+  }).getAll();
 
   if (environmentList.length > 0) {
     // for each environment, checks if there's a need for a ping

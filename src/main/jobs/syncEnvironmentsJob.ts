@@ -363,7 +363,9 @@ export default async function syncEnvironmentsJob() {
     ).toLocaleString()}`
   );
 
-  const environmentList = await new EnvironmentController().getAll();
+  const environmentList = await new EnvironmentController({
+    noLog: true,
+  }).getAll();
 
   if (environmentList.length > 0) {
     environmentList.forEach(async (environment) => {
