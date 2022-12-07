@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState } from 'react';
-import { Environment } from '../../main/generated/client';
+import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import { getAllEnvironments } from '../ipc/environmentsIpcHandler';
 
 interface EnvironmentListContextProviderProps {
@@ -7,7 +7,7 @@ interface EnvironmentListContextProviderProps {
 }
 
 interface EnvironmentListContextData {
-  environmentList: Environment[];
+  environmentList: EnvironmentWithRelatedData[];
   updateEnvironmentList: () => void;
 }
 
@@ -18,7 +18,9 @@ export const EnvironmentListContext = createContext(
 export function EnvironmentListContextProvider({
   children,
 }: EnvironmentListContextProviderProps) {
-  const [environmentList, setEnvironmentList] = useState([] as Environment[]);
+  const [environmentList, setEnvironmentList] = useState(
+    [] as EnvironmentWithRelatedData[]
+  );
 
   async function updateEnvironmentList() {
     setEnvironmentList(await getAllEnvironments());

@@ -24,6 +24,7 @@ export interface EnvironmentUpdateControllerInterface
 export interface EnvironmentWithRelatedData extends Environment {
   updateScheduleId: UpdateSchedule | null;
   oAuthKeysId: EnvironmentAuthKeys | null;
+  httpResponses: HTTPResponse[];
 }
 
 export interface EnvironmentWithHistory extends Environment {

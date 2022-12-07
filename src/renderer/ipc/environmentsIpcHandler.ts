@@ -27,7 +27,9 @@ export interface CreateEnvironmentProps {
   environmentAuthKeys: AuthKeysFormControllerInterface;
 }
 
-export async function getAllEnvironments(): Promise<Environment[]> {
+export async function getAllEnvironments(): Promise<
+  EnvironmentWithRelatedData[]
+> {
   log.info('IPC Handler: Requesting all environments');
   const environments = ipcRenderer.sendSync('getAllEnvironments');
 

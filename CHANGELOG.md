@@ -1,4 +1,8 @@
-# 0.2
+# 0.2.1-rc
+
+- Implemented a mini line graph on the server list view from the last 20 ping responses
+
+# 0.2.0
 
 - Updated test connection endpoint to /api/servlet/ping
 - Changed environment availability check strategy

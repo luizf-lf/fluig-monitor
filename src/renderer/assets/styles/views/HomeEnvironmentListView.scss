@@ -124,15 +124,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    img {
-      max-height: 6rem;
-      object-fit: contain;
-      height: inherit;
-
-      &.server-logo {
-        max-height: 4rem;
-      }
-    }
+    height: 100%;
+    padding: 0.5rem;
   }
 
   .footer {

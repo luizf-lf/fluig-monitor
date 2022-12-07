@@ -60,6 +60,15 @@ export default class EnvironmentController {
       include: {
         oAuthKeysId: true,
         updateScheduleId: true,
+        httpResponses: {
+          take: 20,
+          where: {
+            resourceType: HttpResponseResourceType.PING,
+          },
+          orderBy: {
+            timestamp: 'desc',
+          },
+        },
       },
     });
 
