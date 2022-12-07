@@ -46,6 +46,16 @@ export default function CreateEnvironmentView(): JSX.Element {
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
 
+  /**
+   * Parse the domain url value.
+   *  Checks if the domain url string has a "/" on the end.
+   */
+  function parseDomainUrl() {
+    if (domainUrl.lastIndexOf('/') === domainUrl.length - 1) {
+      setDomainUrl(domainUrl.substring(0, domainUrl.length - 1));
+    }
+  }
+
   async function handleSubmit(event: FormEvent) {
     log.info('CreateEnvironmentView: handling form submit.');
     event.preventDefault();
@@ -242,6 +252,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               onChange={(event) => {
                 setDomainUrl(event.target.value);
               }}
+              onBlur={() => parseDomainUrl()}
             />
           </div>
 
