@@ -2,6 +2,7 @@ import log from 'electron-log';
 import prismaClient from '../database/prismaContext';
 import { MonitorHistory } from '../generated/client';
 import HttpResponseController from './HttpResponseController';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 
 interface MonitorItem {
   name: string;
@@ -54,7 +55,9 @@ export default class MonitorHistoryController {
     const httpResponse = await new HttpResponseController().new({
       environmentId: data.environmentId,
       statusCode: data.statusCode,
+      statusMessage: data.statusMessage,
       endpoint: data.endpoint,
+      resourceType: HttpResponseResourceType.MONITOR,
       timestamp: data.timestamp,
       responseTimeMs: data.responseTimeMs,
     });

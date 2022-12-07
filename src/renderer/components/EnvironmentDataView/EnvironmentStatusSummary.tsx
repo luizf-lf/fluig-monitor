@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable no-new */
 import { useTranslation } from 'react-i18next';
-import { getLastHttpResponseById } from '../../ipc/environmentsIpcHandler';
-import { HTTPResponse } from '../../../main/generated/client';
+import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentStatusCard from './EnvironmentStatusCard';
 import SpinnerLoader from '../Loaders/Spinner';
 
@@ -12,31 +11,20 @@ import Database from './SystemResources/Database';
 import Memory from './SystemResources/Memory';
 
 interface Props {
-  environmentName: string;
-  environmentId: number;
+  environment: EnvironmentWithHistory;
 }
 
-export default function EnvironmentStatusSummary({
-  environmentName,
-  environmentId,
-}: Props) {
-  const [lastHttpResponse, setLastHttpResponse] = useState({} as HTTPResponse);
+export default function EnvironmentStatusSummary({ environment }: Props) {
   const { t } = useTranslation();
 
-  useEffect(() => {
-    async function getData() {
-      if (environmentId) {
-        setLastHttpResponse(await getLastHttpResponseById(environmentId));
-      }
-    }
+  if (typeof environment.httpResponses === 'undefined') {
+    return <SpinnerLoader />;
+  }
 
-    getData();
-  }, [environmentId]);
-
-  if (lastHttpResponse === null) {
+  if (environment.httpResponses.length === 0) {
     return (
       <div className="environment-status-summary-container">
-        <h2 className="title">{environmentName}</h2>
+        <h2 className="title">{environment.name}</h2>
         <div className="components-container">
           <div className="card">{t('components.global.noData')}</div>
         </div>
@@ -44,33 +32,31 @@ export default function EnvironmentStatusSummary({
     );
   }
 
-  if (typeof lastHttpResponse.timestamp === 'undefined') {
-    return <SpinnerLoader />;
-  }
+  const lastResponse =
+    environment.httpResponses[environment.httpResponses.length - 1];
 
   return (
     <div className="environment-status-summary-container">
       <h2 className="title">
-        {environmentName}
-        {lastHttpResponse.timestamp.toDateString() ===
-        new Date().toDateString() ? (
+        {environment.name}
+        {lastResponse.timestamp.toDateString() === new Date().toDateString() ? (
           <span>
             {t('components.EnvironmentStatusSummary.updatedAt')}{' '}
-            {lastHttpResponse.timestamp.toLocaleTimeString()}
+            {lastResponse.timestamp.toLocaleTimeString()}
           </span>
         ) : (
           <span>
             {t('components.EnvironmentStatusSummary.updatedAtAlt')}{' '}
-            {lastHttpResponse.timestamp.toLocaleString()}
+            {lastResponse.timestamp.toLocaleString()}
           </span>
         )}
       </h2>
       <div className="components-container">
-        <EnvironmentStatusCard environmentId={environmentId} />
+        <EnvironmentStatusCard environment={environment} />
         <div className="system-resources">
-          <Disk environmentId={environmentId} />
-          <Memory environmentId={environmentId} />
-          <Database environmentId={environmentId} />
+          <Disk environmentId={environment.id} />
+          <Memory environmentId={environment.id} />
+          <Database environmentId={environment.id} />
         </div>
       </div>
     </div>

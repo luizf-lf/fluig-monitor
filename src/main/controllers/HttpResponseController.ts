@@ -7,6 +7,7 @@ interface CreateHttpResponseProps {
   statusCode: number;
   statusMessage?: string;
   endpoint?: string;
+  resourceType?: string;
   timestamp: string;
   responseTimeMs: number;
 }
@@ -18,10 +19,15 @@ export default class HttpResponseController {
     this.created = null;
   }
 
-  async new(data: CreateHttpResponseProps): Promise<HTTPResponse> {
-    log.info(
-      'HttpResponseController: Creating a new http response on the database'
-    );
+  async new(
+    data: CreateHttpResponseProps,
+    silent?: boolean
+  ): Promise<HTTPResponse> {
+    if (!silent) {
+      log.info(
+        'HttpResponseController: Creating a new http response on the database'
+      );
+    }
     this.created = await prismaClient.hTTPResponse.create({
       data,
     });

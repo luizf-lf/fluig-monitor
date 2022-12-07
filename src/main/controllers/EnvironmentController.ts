@@ -1,4 +1,5 @@
 import log from 'electron-log';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentUpdateControllerInterface,
@@ -7,6 +8,10 @@ import {
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
 import { Environment, HTTPResponse } from '../generated/client';
+
+interface ConstructorOptions {
+  noLog: boolean;
+}
 
 export default class EnvironmentController {
   environments: EnvironmentWithRelatedData[];
@@ -19,13 +24,17 @@ export default class EnvironmentController {
 
   lastHttpResponse: HTTPResponse | null;
 
+  httpResponses: HTTPResponse[];
+
   created: Environment | null;
 
   updated: Environment | null;
 
   deleted: Environment | null;
 
-  constructor() {
+  noLog: boolean;
+
+  constructor(options?: ConstructorOptions) {
     this.environments = [];
     this.found = null;
     this.created = null;
@@ -33,10 +42,17 @@ export default class EnvironmentController {
     this.deleted = null;
 
     this.lastHttpResponse = null;
+    this.httpResponses = [];
+
+    this.noLog = (options && options.noLog) || false;
   }
 
   async getAll(): Promise<EnvironmentWithRelatedData[]> {
-    log.info('EnvironmentController: Querying all environments from database.');
+    if (!this.noLog) {
+      log.info(
+        'EnvironmentController: Querying all environments from database.'
+      );
+    }
     this.environments = await prismaClient.environment.findMany({
       where: {
         logDeleted: false,
@@ -54,11 +70,13 @@ export default class EnvironmentController {
     id: number,
     includeRelatedData = false
   ): Promise<Environment | EnvironmentWithRelatedData | null> {
-    log.info(
-      'EnvironmentController: Querying environment from database with the id',
-      id,
-      includeRelatedData === true ? 'with related data.' : ''
-    );
+    if (!this.noLog) {
+      log.info(
+        'EnvironmentController: Querying environment from database with the id',
+        id,
+        includeRelatedData === true ? 'with related data.' : ''
+      );
+    }
     this.found = await prismaClient.environment.findUnique({
       where: {
         id,
@@ -81,7 +99,7 @@ export default class EnvironmentController {
       },
       include: {
         licenseHistory: {
-          take: 100,
+          take: 1,
           include: {
             httpResponse: true,
           },
@@ -90,7 +108,7 @@ export default class EnvironmentController {
           },
         },
         statisticHistory: {
-          take: 100,
+          take: 1,
           include: {
             httpResponse: true,
           },
@@ -99,7 +117,7 @@ export default class EnvironmentController {
           },
         },
         monitorHistory: {
-          take: 100,
+          take: 1,
           include: {
             httpResponse: true,
           },
@@ -107,10 +125,39 @@ export default class EnvironmentController {
             id: 'desc',
           },
         },
+        httpResponses: {
+          where: {
+            timestamp: {
+              gte: new Date(Date.now() - 86400000),
+            },
+            resourceType: {
+              equals: 'PING',
+            },
+          },
+          orderBy: {
+            timestamp: 'asc',
+          },
+        },
       },
     });
 
     return this.found as EnvironmentWithHistory;
+  }
+
+  async getLastScrapeResponseById(id: number): Promise<HTTPResponse | null> {
+    this.lastHttpResponse = await prismaClient.hTTPResponse.findFirst({
+      where: {
+        environmentId: id,
+        statisticHistory: {
+          isNot: null,
+        },
+      },
+      orderBy: {
+        timestamp: 'desc',
+      },
+    });
+
+    return this.lastHttpResponse;
   }
 
   async getLastHttpResponseById(
@@ -130,8 +177,30 @@ export default class EnvironmentController {
     return this.lastHttpResponse;
   }
 
+  async getHttpResponsesById(
+    id: number,
+    limit?: number
+  ): Promise<HTTPResponse[]> {
+    this.httpResponses = await prismaClient.hTTPResponse.findMany({
+      take: limit || 1000,
+      where: {
+        environmentId: id,
+        resourceType: HttpResponseResourceType.PING,
+      },
+      orderBy: {
+        timestamp: 'desc',
+      },
+    });
+
+    return this.httpResponses;
+  }
+
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {
-    log.info('EnvironmentController: Saving a new environment on the database');
+    if (!this.noLog) {
+      log.info(
+        'EnvironmentController: Saving a new environment on the database'
+      );
+    }
     this.created = await prismaClient.environment.create({
       data,
     });
@@ -142,7 +211,9 @@ export default class EnvironmentController {
   async update(
     data: EnvironmentUpdateControllerInterface
   ): Promise<Environment> {
-    log.info('EnvironmentController: Updating environment with id', data.id);
+    if (!this.noLog) {
+      log.info('EnvironmentController: Updating environment with id', data.id);
+    }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const updatedData: any = {};
 
@@ -164,7 +235,9 @@ export default class EnvironmentController {
   }
 
   async delete(id: number): Promise<Environment> {
-    log.info('Deleting environment with id', id, 'and related fields');
+    if (!this.noLog) {
+      log.info('Deleting environment with id', id, 'and related fields');
+    }
     this.deleted = await prismaClient.environment.update({
       where: {
         id,

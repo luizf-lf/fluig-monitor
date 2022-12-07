@@ -9,7 +9,8 @@ import HttpResponseController from '../controllers/HttpResponseController';
 import MonitorHistoryController from '../controllers/MonitorHistoryController';
 import frequencyToMs from '../utils/frequencyToMs';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
-import { environmentSyncInterval } from '../utils/globalConstants';
+import { environmentScrapeSyncInterval } from '../utils/globalConstants';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
@@ -83,6 +84,7 @@ async function syncLicenseData(
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.LICENSES,
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
@@ -100,6 +102,7 @@ async function syncLicenseData(
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.LICENSES,
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
@@ -175,6 +178,7 @@ async function syncMonitorData(
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.MONITOR,
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
@@ -192,6 +196,7 @@ async function syncMonitorData(
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.MONITOR,
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
@@ -317,6 +322,7 @@ async function syncStatisticsData(
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.STATISTICS,
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
@@ -334,6 +340,7 @@ async function syncStatisticsData(
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
+        resourceType: HttpResponseResourceType.STATISTICS,
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
@@ -350,93 +357,61 @@ async function syncStatisticsData(
 export default async function syncEnvironmentsJob() {
   log.info('syncEnvironmentsJob: Executing environment sync job');
 
-  const environmentList = await new EnvironmentController().getAll();
+  log.info(
+    `syncEnvironmentsJob: Next sync will occur at ${new Date(
+      Date.now() + environmentScrapeSyncInterval
+    ).toLocaleString()}`
+  );
+
+  const environmentList = await new EnvironmentController({
+    noLog: true,
+  }).getAll();
 
   if (environmentList.length > 0) {
-    environmentList.forEach(async (item) => {
+    environmentList.forEach(async (environment) => {
       log.info(
-        'syncEnvironmentsJob: Checking related data for environment',
-        item.id
+        `syncEnvironmentsJob: Checking related data for environment ${environment.id}`
       );
 
       let needsSync = false;
-      let isInUpdateSchedule = false;
 
-      const date = new Date();
-      const hours = String(date.getHours()).padStart(2, '0');
-      const minutes = String(date.getMinutes()).padStart(2, '0');
-      const timeNow = `${hours}:${minutes}`;
-      const dayOfWeek = date.getDay();
-
-      if (item.updateScheduleId) {
-        if (
-          timeNow > item.updateScheduleId.from &&
-          timeNow < item.updateScheduleId.to
-        ) {
-          if (
-            item.updateScheduleId.onlyOnWorkDays &&
-            dayOfWeek >= 1 &&
-            dayOfWeek <= 5
-          ) {
-            isInUpdateSchedule = true;
-          } else if (!item.updateScheduleId.onlyOnWorkDays) {
-            isInUpdateSchedule = true;
-          }
-        }
-
-        if (isInUpdateSchedule) {
-          log.info(
-            'syncEnvironmentsJob: Environment',
-            item.id,
-            'is inside the update schedule.'
+      if (environment.updateScheduleId) {
+        const lastHttpResponse =
+          await new EnvironmentController().getLastScrapeResponseById(
+            environment.id
           );
 
-          const lastHttpResponse =
-            await new EnvironmentController().getLastHttpResponseById(
-              item.id,
-              true
-            );
-
-          if (
-            lastHttpResponse === null ||
-            lastHttpResponse.statusCode < 200 ||
-            lastHttpResponse.statusCode > 300
-          ) {
-            log.info(
-              'syncEnvironmentsJob: Environment',
-              item.id,
-              'has no successful http requests. Sync is needed.'
-            );
-            needsSync = true;
-          } else if (
-            Date.now() - lastHttpResponse.timestamp.getTime() >
-            frequencyToMs(item.updateScheduleId.frequency)
-          ) {
-            log.info(
-              'syncEnvironmentsJob: Environment',
-              item.id,
-              'has an old successful http response. Sync is needed.'
-            );
-            needsSync = true;
-          }
+        if (
+          lastHttpResponse === null ||
+          lastHttpResponse.statusCode < 200 ||
+          lastHttpResponse.statusCode > 300
+        ) {
+          log.info(
+            `syncEnvironmentsJob: Environment ${environment.id} has no successful http requests. Sync is needed.`
+          );
+          needsSync = true;
+        } else if (
+          Date.now() - lastHttpResponse.timestamp.getTime() >
+          frequencyToMs(environment.updateScheduleId.scrapeFrequency)
+        ) {
+          log.info(
+            `syncEnvironmentsJob: Environment ${environment.id} has an old successful http response. Sync is needed.`
+          );
+          needsSync = true;
         }
 
         if (needsSync) {
           log.info(
-            'syncEnvironmentsJob: Environment',
-            item.id,
-            'needs synchronization. Fetching api data.'
+            `syncEnvironmentsJob: Environment ${environment.id} needs synchronization. Fetching api data.`
           );
-          await syncLicenseData(item);
-          await syncMonitorData(item);
-          await syncStatisticsData(item);
+          await syncLicenseData(environment);
+          await syncMonitorData(environment);
+          await syncStatisticsData(environment);
 
           log.info('syncEnvironmentsJob: Environment sync job finished.');
         } else {
           log.info(
-            'syncEnvironmentsJob: Environment',
-            item.id,
-            'does not need synchronization.'
+            `syncEnvironmentsJob: Environment ${environment.id} does not need synchronization.`
           );
         }
       } else {
@@ -448,9 +423,4 @@ export default async function syncEnvironmentsJob() {
   } else {
     log.info('syncEnvironmentsJob: No environment found, skipping sync.');
   }
-
-  log.info(
-    'syncEnvironmentsJob: Next sync will occur at',
-    new Date(Date.now() + environmentSyncInterval).toLocaleString()
-  );
 }

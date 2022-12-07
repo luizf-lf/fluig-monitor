@@ -56,6 +56,7 @@ export default function NavActionButtons() {
         type="button"
         className="optionButton"
         title={t('navbar.actionButtons.kioskMode')}
+        disabled
       >
         <FiAirplay />
       </button>
@@ -63,6 +64,7 @@ export default function NavActionButtons() {
         type="button"
         className="optionButton"
         title={t('navbar.actionButtons.notifications')}
+        disabled
       >
         <FiBell />
       </button>
@@ -79,6 +81,7 @@ export default function NavActionButtons() {
         type="button"
         className="optionButton"
         title={t('navbar.actionButtons.settings')}
+        disabled
       >
         <FiSettings />
       </button>

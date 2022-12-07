@@ -11,6 +11,9 @@ export default function frequencyToMs(dbFrequency: string): number {
 
   const frequency = Number(dbFrequency.substring(0, modifierIndex));
 
+  if (modifier === 's') {
+    return frequency * 1000;
+  }
   if (modifier === 'm') {
     return frequency * 60 * 1000;
   }

@@ -18,7 +18,6 @@ import EnvironmentSummary from '../components/EnvironmentDataView/EnvironmentSum
 import EditEnvironmentSettingsView from './EditEnvironmentSettingsView';
 
 import '../assets/styles/views/EnvironmentView.scss';
-// import EnvironmentDataContainer from '../components/EnvironmentDataView/EnvironmentDat aContainer';
 
 export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();

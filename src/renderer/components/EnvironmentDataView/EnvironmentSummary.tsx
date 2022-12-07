@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { ipcRenderer } from 'electron';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
@@ -24,18 +26,25 @@ export default function EnvironmentSummary({ environmentId }: Props) {
 
       if (environmentDataById) {
         setEnvironment(environmentDataById);
-        // console.log({ environmentDataById });
+
+        // adds an event listener to auto-refresh the view when the environment is pinged
+        ipcRenderer.on(`serverPinged_${environmentId}`, async () => {
+          setEnvironment(
+            await getEnvironmentHistoryById(Number(environmentId))
+          );
+        });
       }
     }
 
     if (typeof environmentId !== 'undefined') {
       getEnvironmentData();
     }
-  }, [environmentId]);
 
-  // setTimeout(async () => {
-  //   setEnvironment(await getEnvironmentHistoryById(Number(environmentId)));
-  // }, 10000);
+    // removes the channel listener on component unmount
+    return () => {
+      ipcRenderer.removeAllListeners(`serverPinged_${environmentId}`);
+    };
+  }, [environmentId]);
 
   return (
     <motion.div
@@ -46,15 +55,8 @@ export default function EnvironmentSummary({ environmentId }: Props) {
       id="environment-summary-container"
     >
       <section id="server-data">
-        <EnvironmentStatusSummary
-          environmentName={environment.name}
-          environmentId={environment.id}
-        />
-        <EnvironmentPerformanceGraph
-          licenses={environment.licenseHistory}
-          monitor={environment.monitorHistory}
-          statistics={environment.statisticHistory}
-        />
+        <EnvironmentStatusSummary environment={environment} />
+        <EnvironmentPerformanceGraph pings={environment.httpResponses} />
       </section>
 
       <section id="server-info">

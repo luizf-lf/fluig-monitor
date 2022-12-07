@@ -17,6 +17,7 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import {
   createEnvironment,
+  forceEnvironmentPing,
   forceEnvironmentSync,
 } from '../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../utils/globalContainerVariants';
@@ -31,10 +32,9 @@ export default function CreateEnvironmentView(): JSX.Element {
   const [consumerSecret, setConsumerSecret] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [tokenSecret, setTokenSecret] = useState('');
-  const [updateFrequency, setUpdateFrequency] = useState('15m');
-  const [updateFrequencyFrom, setUpdateFrequencyFrom] = useState('');
-  const [updateFrequencyTo, setUpdateFrequencyTo] = useState('');
-  const [updateOnWorkDays, setUpdateOnWorkDays] = useState(false);
+
+  const [scrapeFrequency, setScrapeFrequency] = useState('1h');
+  const [pingFrequency, setPingFrequency] = useState('15s');
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
@@ -45,6 +45,16 @@ export default function CreateEnvironmentView(): JSX.Element {
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
+
+  /**
+   * Parse the domain url value.
+   *  Checks if the domain url string has a "/" on the end.
+   */
+  function parseDomainUrl() {
+    if (domainUrl.lastIndexOf('/') === domainUrl.length - 1) {
+      setDomainUrl(domainUrl.substring(0, domainUrl.length - 1));
+    }
+  }
 
   async function handleSubmit(event: FormEvent) {
     log.info('CreateEnvironmentView: handling form submit.');
@@ -60,11 +70,9 @@ export default function CreateEnvironmentView(): JSX.Element {
         accessToken,
         tokenSecret,
       },
-      update: {
-        frequency: updateFrequency,
-        from: updateFrequencyFrom,
-        to: updateFrequencyTo,
-        onlyOnWorkDays: updateOnWorkDays,
+      updateSchedule: {
+        scrapeFrequency,
+        pingFrequency,
       },
     };
 
@@ -84,7 +92,7 @@ export default function CreateEnvironmentView(): JSX.Element {
           name: formData.name,
           release: 'unknown',
         },
-        updateSchedule: formData.update,
+        updateSchedule: formData.updateSchedule,
         environmentAuthKeys: {
           payload: JSON.stringify(formData.auth),
           hash: 'json',
@@ -96,6 +104,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       );
 
       await forceEnvironmentSync();
+      await forceEnvironmentPing();
 
       createShortNotification({
         id: Date.now(),
@@ -109,7 +118,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message: lastMessage,
+        message: t(`classes.EnvironmentFormValidator.${lastMessage}`),
       });
     }
   }
@@ -198,7 +207,7 @@ export default function CreateEnvironmentView(): JSX.Element {
       animate="visible"
       exit="exit"
       id="createEnvironmentContainer"
-      className="environmentFormContainer"
+      className="environment-form-container"
     >
       <Link to="/" className="top-return-button">
         <FiArrowLeft />
@@ -243,6 +252,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               onChange={(event) => {
                 setDomainUrl(event.target.value);
               }}
+              onBlur={() => parseDomainUrl()}
             />
           </div>
 
@@ -366,107 +376,92 @@ export default function CreateEnvironmentView(): JSX.Element {
           <span>{testMessage}</span>
         </div>
 
-        <h3>{t('views.CreateEnvironmentView.form.settingsSection')}</h3>
+        <h3>
+          {t('views.CreateEnvironmentView.form.serverVerification.title')}
+        </h3>
 
         <div className="form-group">
-          <label htmlFor="updateFrequency">
-            {t('views.CreateEnvironmentView.form.updateFrequency.label')}
+          <label htmlFor="pingUpdateFrequency">
+            {t('views.CreateEnvironmentView.form.serverVerification.label')}
           </label>
           <select
-            name="updateFrequency"
-            id="updateFrequency"
-            value={updateFrequency}
+            name="pingUpdateFrequency"
+            id="pingUpdateFrequency"
+            value={pingFrequency}
             onChange={(event) => {
-              setUpdateFrequency(event.target.value);
+              setPingFrequency(event.target.value);
             }}
           >
-            <option value="5m">
-              {t('views.CreateEnvironmentView.form.updateFrequency.options.5m')}
-            </option>
-            <option value="10m">
+            <option value="15s">
               {t(
-                'views.CreateEnvironmentView.form.updateFrequency.options.10m'
+                'views.CreateEnvironmentView.form.serverVerification.options.15s'
               )}
             </option>
-            <option value="15m">
+            <option value="30s">
               {t(
-                'views.CreateEnvironmentView.form.updateFrequency.options.15m'
+                'views.CreateEnvironmentView.form.serverVerification.options.30s'
               )}
             </option>
-            <option value="30m">
+            <option value="1m">
               {t(
-                'views.CreateEnvironmentView.form.updateFrequency.options.30m'
+                'views.CreateEnvironmentView.form.serverVerification.options.1m'
               )}
             </option>
-            <option value="1h">
-              {t('views.CreateEnvironmentView.form.updateFrequency.options.1h')}
-            </option>
-            <option value="2h">
-              {t('views.CreateEnvironmentView.form.updateFrequency.options.2h')}
-            </option>
-            <option value="3h">
-              {t('views.CreateEnvironmentView.form.updateFrequency.options.3h')}
-            </option>
-            <option value="6h">
-              {t('views.CreateEnvironmentView.form.updateFrequency.options.6h')}
-            </option>
-            <option value="12h">
+            <option value="2m">
               {t(
-                'views.CreateEnvironmentView.form.updateFrequency.options.12h'
+                'views.CreateEnvironmentView.form.serverVerification.options.2m'
               )}
             </option>
           </select>
+          <small className="help-block">
+            {t('views.CreateEnvironmentView.form.serverVerification.helper')}
+          </small>
         </div>
 
-        <div className="form-row">
-          <div className="form-group">
-            <label htmlFor="updateFrequencyFrom">
-              {t('views.CreateEnvironmentView.form.updateFrequencyFrom')}
-            </label>
-            <input
-              type="time"
-              name="updateFrequencyFrom"
-              id="updateFrequencyFrom"
-              value={updateFrequencyFrom}
-              onChange={(event) => {
-                setUpdateFrequencyFrom(event.target.value);
-              }}
-            />
-            <small>
-              {t('views.CreateEnvironmentView.form.updateFrequencyFromHelper')}
-            </small>
-          </div>
-          <div className="form-group">
-            <input
-              type="time"
-              name="updateFrequencyTo"
-              id="updateFrequencyTo"
-              value={updateFrequencyTo}
-              onChange={(event) => {
-                setUpdateFrequencyTo(event.target.value);
-              }}
-            />
-            <small>
-              {t('views.CreateEnvironmentView.form.updateFrequencyToHelper')}
-            </small>
-          </div>
-        </div>
+        <h3 className="mt-1">
+          {t('views.CreateEnvironmentView.form.dataCollection.title')}
+        </h3>
+
         <div className="form-group">
-          <span>
-            <input
-              type="checkbox"
-              name="updateInWorkDays"
-              id="updateInWorkDays"
-              value={updateOnWorkDays === true ? 'on' : ''}
-              onChange={(event) => {
-                setUpdateOnWorkDays(event.target.checked);
-              }}
-            />
-            <label htmlFor="updateInWorkDays">
-              {' '}
-              {t('views.CreateEnvironmentView.form.updateInWorkDays')}
-            </label>
-          </span>
+          <label htmlFor="scrapeUpdateFrequency">
+            {t('views.CreateEnvironmentView.form.dataCollection.label')}
+          </label>
+          <select
+            name="scrapeUpdateFrequency"
+            id="scrapeUpdateFrequency"
+            value={scrapeFrequency}
+            onChange={(event) => {
+              setScrapeFrequency(event.target.value);
+            }}
+          >
+            <option value="15m">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.15m')}
+            </option>
+            <option value="30m">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.30m')}
+            </option>
+            <option value="1h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.1h')}
+            </option>
+            <option value="2h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.2h')}
+            </option>
+            <option value="3h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.3h')}
+            </option>
+            <option value="6h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.6h')}
+            </option>
+            <option value="12h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.12h')}
+            </option>
+            <option value="24h">
+              {t('views.CreateEnvironmentView.form.dataCollection.options.24h')}
+            </option>
+          </select>
+          <small className="help-block">
+            {t('views.CreateEnvironmentView.form.dataCollection.helper')}
+          </small>
         </div>
 
         <div className="button-action-row mt-1 mb-2">

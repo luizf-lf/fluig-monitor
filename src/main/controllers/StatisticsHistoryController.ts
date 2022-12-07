@@ -1,6 +1,7 @@
 import prismaClient from '../database/prismaContext';
 import { HTTPResponse, StatisticsHistory } from '../generated/client';
 import HttpResponseController from './HttpResponseController';
+import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
 
 interface CreateStatisticHistoryProps {
   environmentId: number;
@@ -77,7 +78,9 @@ export default class StatisticsHistoryController {
     const httpResponse = await new HttpResponseController().new({
       environmentId: data.environmentId,
       statusCode: data.statusCode,
+      statusMessage: data.statusMessage,
       endpoint: data.endpoint,
+      resourceType: HttpResponseResourceType.STATISTICS,
       timestamp: data.timestamp,
       responseTimeMs: data.responseTimeMs,
     });

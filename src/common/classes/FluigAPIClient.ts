@@ -19,7 +19,6 @@ interface RequestData {
 interface ConstructorProps {
   oAuthKeys: AuthKeys;
   requestData: RequestData;
-  data?: any;
 }
 
 export default class FluigAPIClient {
@@ -65,14 +64,16 @@ export default class FluigAPIClient {
     this.errorStack = '';
   }
 
-  async get() {
+  async get(silent?: boolean) {
     try {
       const token = {
         key: this.decodedKeys.accessToken,
         secret: this.decodedKeys.tokenSecret,
       };
 
-      log.info('FluigAPIClient: GET endpoint', this.requestData.url);
+      if (!silent) {
+        log.info('FluigAPIClient: GET endpoint', this.requestData.url);
+      }
 
       const response = await axios.get(this.requestData.url, {
         headers: {

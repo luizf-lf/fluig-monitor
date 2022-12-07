@@ -1,8 +1,6 @@
 export interface UpdateScheduleFormControllerInterface {
-  frequency: string;
-  from: string;
-  to: string;
-  onlyOnWorkDays: boolean;
+  scrapeFrequency: string;
+  pingFrequency: string;
 }
 export interface UpdateScheduleControllerInterface
   extends UpdateScheduleFormControllerInterface {

@@ -30,6 +30,7 @@ export interface EnvironmentWithHistory extends Environment {
   licenseHistory: LicenseHistoryWithHttpResponse[];
   statisticHistory: StatisticsHistoryWithHttpResponse[];
   monitorHistory: MonitorHistoryWithHttpResponse[];
+  httpResponses: HTTPResponse[];
 }
 
 export interface LicenseHistoryWithHttpResponse extends LicenseHistory {
