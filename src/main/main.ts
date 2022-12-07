@@ -93,7 +93,6 @@ const createWindow = async () => {
   // this function shall be transformed into a nodejs worker,
   //  but that's a problem for the future me
   log.info('Dispatching environment ping jobs');
-  await pingEnvironmentsJob();
   setInterval(async () => {
     await pingEnvironmentsJob();
   }, environmentPingInterval);
