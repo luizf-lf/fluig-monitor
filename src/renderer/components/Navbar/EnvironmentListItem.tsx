@@ -17,7 +17,7 @@ export default function EnvironmentListItem({
   let environmentKindTitle = '';
   const [isOnline, setIsOnline] = useState(true);
 
-  ipcRenderer.on('serverPinged', (_event, { serverIsOnline }) => {
+  ipcRenderer.on(`serverPinged_${data.id}`, (_event, { serverIsOnline }) => {
     setIsOnline(serverIsOnline);
   });
 

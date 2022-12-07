@@ -28,7 +28,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
         setEnvironment(environmentDataById);
 
         // adds an event listener to auto-refresh the view when the environment is pinged
-        ipcRenderer.on('serverPinged', async () => {
+        ipcRenderer.on(`serverPinged_${environmentId}`, async () => {
           setEnvironment(
             await getEnvironmentHistoryById(Number(environmentId))
           );
@@ -39,6 +39,11 @@ export default function EnvironmentSummary({ environmentId }: Props) {
     if (typeof environmentId !== 'undefined') {
       getEnvironmentData();
     }
+
+    // removes the channel listener on component unmount
+    return () => {
+      ipcRenderer.removeAllListeners(`serverPinged_${environmentId}`);
+    };
   }, [environmentId]);
 
   return (
