@@ -29,23 +29,23 @@ Algumas das principais funcionalidades já implementadas:
 
 ### White Theme
 
-![Environment View (White Theme)](./docs/img/EnvironmentView_01-White.png)
+![Environment View (White Theme)](./img/EnvironmentView_01-White.png)
 
 > Environment View (White Theme)
 
-![Environment View (Dark Theme)](./docs/img/EnvironmentView_02-Dark.png)
+![Environment View (Dark Theme)](./img/EnvironmentView_02-Dark.png)
 
 > Environment View (Dark Theme)
 
-![Environment View (I18N)](./docs/img/EnvironmentView_03-EN.png)
+![Environment View (I18N)](./img/EnvironmentView_03-EN.png)
 
 > Environment View (I18N) in english.
 
-![Environment View (Unavailability)](./docs/img/EnvironmentView04-Unavailable.png)
+![Environment View (Unavailability)](./img/EnvironmentView04-Unavailable.png)
 
 > Environment View (Unavailability)
 
-![Environment List](./docs/img/HomeView.png)
+![Environment List](./img/HomeView.png)
 
 > Environment List, with a mini availability graph.
 
