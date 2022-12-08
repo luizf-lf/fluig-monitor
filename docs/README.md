@@ -12,6 +12,10 @@ Monitoring is performed through the platform's **Rest API**, also used to collec
 
 This application was initially developed for **educational** purposes, with the intention of learning about UI/UX, development of desktop applications with `React`, `Electron`, `Typescript`, and the use of Fluig `API's`, but little by little it has become an application that allows better management of observability on the Fluig platform itself.
 
+The application has an SQLite database that is automatically created on the first application run. In the production build, it will be available in the `%appdata%/fluig-monitor/app.db` folder, in the case of the development version, it will be created in the `.prisma` folder, in the root of the project. More information is available in the project execution instructions below.
+
+Migrations between database versions are performed automatically, thanks to the Prisma ORM client built into the application.
+
 ## Features
 
 Algumas das principais funcionalidades já implementadas:
@@ -49,11 +53,13 @@ Algumas das principais funcionalidades já implementadas:
 
 > Environment List, with a mini availability graph.
 
-## Running this project
+## Running the project in development mode
 
-To run this project:
+1. Configure the .env file:
 
-1. Install the necessary dependencies:
+   The repository contains an `.env.example` file with the database (SQLite) path settings used. Copy the file and rename it to `.env`, keeping the same settings as the example file.
+
+2. Install the necessary dependencies:
 
    ```shell
    $ yarn
@@ -65,7 +71,7 @@ To run this project:
    $ npm install
    ```
 
-2. Run the app in development mode:
+3. Run the app in development mode:
 
    ```shell
    $ yarn start
@@ -75,6 +81,22 @@ To run this project:
 
    ```shell
    $ npm run start
+   ```
+
+   > It is not necessary to run any Prisma command to migrate the database, as the migrations are performed automatically by the application.
+
+4. Running the production build of the application (optional).
+
+   If you want to create a production build of the application, run the following command:
+
+   ```shell
+   $ yarn package
+   ```
+
+   or
+
+   ```shell
+   $ npm run package
    ```
 
 ## Additional Information

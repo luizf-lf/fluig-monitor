@@ -12,6 +12,10 @@ O monitoramento é realizado através da **API Rest** da plataforma, também uti
 
 Esta aplicação veio sendo desenvolvida inicialmente para fins **didáticos**, com a intenção de aprender sobre UI/UX, desenvolvimento de aplicações desktop com `React`, `Electron`, `Typescript`, e o uso das `APIs` do Fluig, mas aos poucos vem se tornando uma aplicação que possibilite gerir uma melhor observabilidade sobre a plataforma Fluig em si.
 
+A aplicação possui um banco de dados SQLite que é criado automaticamente na primeira execução do aplicativo. Na build de produção, o mesmo ficará disponível na pasta `%appdata%/fluig-monitor/app.db`, no caso da versão de desenvolvimento, o mesmo será criado dentro da pasta `.prisma`, na raiz do projeto. Mais informações estão disponíveis nas instruções de execução do projeto abaixo.
+
+As migrações entre as versões do banco de dados são executadas automaticamente, graças ao cliente do Prisma ORM embutido juntamente na aplicação.
+
 ## Funcionalidades
 
 Algumas das principais funcionalidades já implementadas:
@@ -47,11 +51,13 @@ Algumas das principais funcionalidades já implementadas:
 
 > Lista De Ambientes, com mini gráfico de disponibilidade.
 
-## Execute o projeto
+## Executando o projeto em modo de desenvolvimento
 
-Para executar este projeto:
+1. Configure o arquivo .env:
 
-1. Instale as dependências necessárias:
+   O repositório contem um arquivo `.env.example` com as configurações do caminho do banco de dados utilizado (SQLite). Copie o arquivo e o renomeie para `.env`, mantendo as mesmas configurações conforme arquivo de exemplo.
+
+2. Instale as dependências necessárias:
 
    ```shell
    $ yarn
@@ -63,7 +69,7 @@ Para executar este projeto:
    $ npm install
    ```
 
-2. Execute o projeto em modo de desenvolvimento:
+3. Execute o projeto em modo de desenvolvimento:
 
    ```shell
    $ yarn start
@@ -73,6 +79,22 @@ Para executar este projeto:
 
    ```shell
    $ npm run start
+   ```
+
+   > Não é necessário executar nenhum comando do Prisma para migrar o banco de dados, pois as migrações são executadas automaticamente pela aplicação.
+
+4. Executando a build de produção da aplicação (opcional).
+
+   Caso desejar criar uma build de produção da aplicação, execute o comando a seguir:
+
+   ```shell
+   $ yarn package
+   ```
+
+   ou
+
+   ```shell
+   $ npm run package
    ```
 
 ## Informações adicionais
