@@ -27,6 +27,11 @@ export default function EnvironmentStatusSummary({ environment }: Props) {
         <h2 className="title">{environment.name}</h2>
         <div className="components-container">
           <div className="card">{t('components.global.noData')}</div>
+          <div className="system-resources">
+            <Disk environmentId={environment.id} />
+            <Memory environmentId={environment.id} />
+            <Database environmentId={environment.id} />
+          </div>
         </div>
       </div>
     );
