@@ -2,6 +2,7 @@
 
 - Implemented a mini line graph on the server list view from the last 20 ping responses (when there are responses)
 - Fixed license component percentage precision
+- Better organized app startup function (moved out from create main window function)
 
 # 0.2.0
 

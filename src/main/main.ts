@@ -53,6 +53,14 @@ if (isDevelopment) {
   require('electron-debug')();
 }
 
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'assets')
+  : path.join(__dirname, '../../assets');
+
+const getAssetPath = (...paths: string[]): string => {
+  return path.join(RESOURCES_PATH, ...paths);
+};
+
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -66,48 +74,11 @@ const installExtensions = async () => {
     .catch(console.log);
 };
 
+/**
+ * Creates the main window
+ */
 const createWindow = async () => {
   log.info('Creating a new window');
-
-  app.name = 'Fluig Monitor';
-
-  const RESOURCES_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../../assets');
-
-  const getAssetPath = (...paths: string[]): string => {
-    return path.join(RESOURCES_PATH, ...paths);
-  };
-
-  if (process.platform === 'win32') {
-    app.setAppUserModelId(app.name);
-  }
-
-  const splash = new BrowserWindow({
-    width: 720,
-    height: 230,
-    frame: false,
-    alwaysOnTop: true,
-    transparent: true,
-    icon: getAssetPath('icon.png'),
-  });
-
-  splash.loadFile('splash.html');
-
-  await runDbMigrations();
-
-  // this function shall be transformed into a nodejs worker,
-  //  but that's a problem for the future me
-  log.info('Dispatching environment ping jobs');
-  setInterval(async () => {
-    await pingEnvironmentsJob();
-  }, environmentPingInterval);
-
-  log.info('Dispatching environment sync jobs');
-  await syncEnvironmentsJob();
-  setInterval(async () => {
-    await syncEnvironmentsJob();
-  }, environmentScrapeSyncInterval);
 
   if (isDevelopment) {
     log.info('Installing additional dev extensions');
@@ -162,7 +133,6 @@ const createWindow = async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    splash.destroy();
     if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
@@ -409,18 +379,56 @@ app.on('window-all-closed', async () => {
 
 app
   .whenReady()
-  .then(() => {
+  .then(async () => {
     rotateLogFile();
 
     log.info(' ');
     log.info(`Fluig Monitor - v${version}`);
     log.info(
-      'Starting app',
-      isDevelopment ? 'in development mode' : 'in production mode'
+      `Starting app ${
+        isDevelopment ? 'in development mode' : 'in production mode'
+      }`
     );
     logSystemConfigs();
 
-    createWindow();
+    app.name = 'Fluig Monitor';
+
+    if (process.platform === 'win32') {
+      app.setAppUserModelId(app.name);
+    }
+
+    const splash = new BrowserWindow({
+      width: 720,
+      height: 230,
+      frame: false,
+      alwaysOnTop: true,
+      transparent: true,
+      icon: getAssetPath('icon.png'),
+    });
+
+    splash.loadFile(path.resolve(__dirname, 'splash.html'));
+
+    await runDbMigrations();
+
+    // this function shall be transformed into a nodejs worker,
+    //  but that's a problem for the future me
+    log.info('Dispatching environment ping jobs');
+    setInterval(async () => {
+      await pingEnvironmentsJob();
+    }, environmentPingInterval);
+
+    log.info('Dispatching environment sync jobs');
+    await syncEnvironmentsJob();
+    setInterval(async () => {
+      await syncEnvironmentsJob();
+    }, environmentScrapeSyncInterval);
+
+    await createWindow();
+
+    setTimeout(() => {
+      splash.destroy();
+    }, 2000);
+
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
