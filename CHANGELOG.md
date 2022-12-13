@@ -3,6 +3,8 @@
 - Implemented a mini line graph on the server list view from the last 20 ping responses (when there are responses)
 - Fixed license component percentage precision
 - Better organized app startup function (moved out from create main window function)
+- Reduced log levels for the environment controller and IPC handler.
+- Moved the Inter Process Communication handlers to a separated function.
 
 # 0.2.0
 
