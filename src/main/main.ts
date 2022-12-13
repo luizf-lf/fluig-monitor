@@ -188,9 +188,7 @@ ipcMain.handle(
 ipcMain.handle(
   'getEnvironmentHistoryById',
   async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-    log.info('IPC Handler: Recovering environment history by id');
     const environment = await new EnvironmentController().getHistoryById(id);
-
     return environment;
   }
 );
@@ -406,6 +404,7 @@ app
       icon: getAssetPath('icon.png'),
     });
 
+    // BUG: Splash file does not load from production build
     splash.loadFile(path.resolve(__dirname, 'splash.html'));
 
     await runDbMigrations();

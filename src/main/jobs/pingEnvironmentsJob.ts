@@ -154,9 +154,7 @@ async function executePing(
  * Checks if the environments need a ping check
  */
 export default async function pingEnvironmentsJob() {
-  const environmentList = await new EnvironmentController({
-    noLog: true,
-  }).getAll();
+  const environmentList = await new EnvironmentController().getAll();
 
   if (environmentList.length > 0) {
     // for each environment, checks if there's a need for a ping
@@ -190,7 +188,7 @@ export default async function pingEnvironmentsJob() {
         }
       } else {
         log.warn(
-          `pingEnvironmentsJob: No environment update schedule found for environment${environment.id}, skipping pings.`
+          `pingEnvironmentsJob: No environment update schedule found for environment${environment.id}, skipping ping.`
         );
       }
     });

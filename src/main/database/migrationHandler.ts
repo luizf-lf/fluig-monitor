@@ -30,6 +30,7 @@ export default async function runDbMigrations() {
     fs.closeSync(fs.openSync(dbPath, 'w'));
   } else {
     log.info('Database exists. Verifying the latest migration');
+    log.info(`Latest generated migration is: ${latestMigration}`);
     try {
       const latest: Migration[] =
         await prismaClient.$queryRaw`select * from _prisma_migrations order by finished_at`;

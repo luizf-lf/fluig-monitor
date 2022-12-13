@@ -10,7 +10,7 @@ import prismaClient from '../database/prismaContext';
 import { Environment, HTTPResponse } from '../generated/client';
 
 interface ConstructorOptions {
-  noLog: boolean;
+  writeLogs: boolean;
 }
 
 export default class EnvironmentController {
@@ -32,7 +32,7 @@ export default class EnvironmentController {
 
   deleted: Environment | null;
 
-  noLog: boolean;
+  writeLogs: boolean;
 
   constructor(options?: ConstructorOptions) {
     this.environments = [];
@@ -44,11 +44,11 @@ export default class EnvironmentController {
     this.lastHttpResponse = null;
     this.httpResponses = [];
 
-    this.noLog = (options && options.noLog) || false;
+    this.writeLogs = (options && options.writeLogs) || false;
   }
 
   async getAll(): Promise<EnvironmentWithRelatedData[]> {
-    if (!this.noLog) {
+    if (this.writeLogs) {
       log.info(
         'EnvironmentController: Querying all environments from database.'
       );
@@ -79,7 +79,7 @@ export default class EnvironmentController {
     id: number,
     includeRelatedData = false
   ): Promise<Environment | EnvironmentWithRelatedData | null> {
-    if (!this.noLog) {
+    if (this.writeLogs) {
       log.info(
         'EnvironmentController: Querying environment from database with the id',
         id,
@@ -205,7 +205,7 @@ export default class EnvironmentController {
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {
-    if (!this.noLog) {
+    if (this.writeLogs) {
       log.info(
         'EnvironmentController: Saving a new environment on the database'
       );
@@ -220,7 +220,7 @@ export default class EnvironmentController {
   async update(
     data: EnvironmentUpdateControllerInterface
   ): Promise<Environment> {
-    if (!this.noLog) {
+    if (this.writeLogs) {
       log.info('EnvironmentController: Updating environment with id', data.id);
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -244,7 +244,7 @@ export default class EnvironmentController {
   }
 
   async delete(id: number): Promise<Environment> {
-    if (!this.noLog) {
+    if (this.writeLogs) {
       log.info('Deleting environment with id', id, 'and related fields');
     }
     this.deleted = await prismaClient.environment.update({
