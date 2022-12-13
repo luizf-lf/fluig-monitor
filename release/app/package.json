@@ -1,7 +1,7 @@
 {
   "name": "fluig-monitor",
-  "version": "0.2.1-rc",
-  "description": "Aplicação para monitoramento de ambientes Fluig com métricas disponibilizadas via API",
+  "description": "Application for monitoring Fluig environments with the metrics available via API.",
+  "version": "0.2.1",
   "main": "./dist/main/main.js",
   "author": {
     "name": "Luiz Ferreira",

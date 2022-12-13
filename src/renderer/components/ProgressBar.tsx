@@ -43,7 +43,7 @@ export default function ProgressBar({
       )}
       {showIndicator ? (
         <div className="indicator" style={{ width: `${percentage}%` }}>
-          {showPercentage ? `${percentage}%` : current}
+          {showPercentage ? `${percentage.toPrecision(3)}%` : current}
         </div>
       ) : (
         <></>
@@ -51,7 +51,10 @@ export default function ProgressBar({
       <div className="progress-bar">
         <div
           className={`progress ${gradient ? 'progress-gradient' : ''}`}
-          style={{ width: `${percentage}%`, backgroundColor: bgStyle }}
+          style={{
+            width: `${percentage.toPrecision(3)}%`,
+            backgroundColor: bgStyle,
+          }}
         />
       </div>
     </div>

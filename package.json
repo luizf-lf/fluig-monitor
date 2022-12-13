@@ -1,7 +1,7 @@
 {
   "name": "fluig-monitor",
-  "description": "Aplicação para monitoramento de ambientes Fluig com métricas disponibilizadas via API",
-  "version": "0.2.1-rc",
+  "description": "Application for monitoring Fluig environments with the metrics available via API.",
+  "version": "0.2.1",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts && ts-node ./scripts/copySchema.ts",
@@ -206,7 +206,7 @@
     "mini-css-extract-plugin": "^2.4.3",
     "opencollective-postinstall": "^2.0.3",
     "prettier": "^2.4.1",
-    "prisma": "^4.6.1",
+    "prisma": "^4.7.1",
     "prisma-erd-generator": "^1.2.1",
     "react-refresh": "^0.10.0",
     "react-refresh-typescript": "^2.0.2",

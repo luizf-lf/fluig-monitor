@@ -63,10 +63,7 @@ export async function getEnvironmentHistoryById(
   if (!id) {
     throw new Error('Id is required');
   }
-
-  log.info('IPC Invoker: Requesting environment with id', id, 'with history.');
   const environment = ipcRenderer.invoke('getEnvironmentHistoryById', id);
-
   return environment;
 }
 

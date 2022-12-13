@@ -90,10 +90,12 @@ export default function CreateEnvironmentView(): JSX.Element {
           baseUrl: formData.baseUrl,
           kind: formData.kind,
           name: formData.name,
+          // TODO: Get Fluig version (release) from /api/public/wcm/version/v2 before creating
           release: 'unknown',
         },
         updateSchedule: formData.updateSchedule,
         environmentAuthKeys: {
+          // TODO: Implement auth keys encoding with node forge
           payload: JSON.stringify(formData.auth),
           hash: 'json',
         },

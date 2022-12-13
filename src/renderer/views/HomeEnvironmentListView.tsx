@@ -72,23 +72,27 @@ export default function HomeEnvironmentListView() {
                     </div>
                   </div>
                   <div className="graphContainer">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={environment.httpResponses.reverse()}>
-                        <Line
-                          type="monotone"
-                          dot={false}
-                          dataKey="responseTimeMs"
-                          stroke={
-                            environment.httpResponses[
-                              environment.httpResponses.length - 1
-                            ].responseTimeMs > 0
-                              ? 'var(--blue)'
-                              : 'var(--red)'
-                          }
-                          strokeWidth={2}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+                    {environment.httpResponses.length >= 2 ? (
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={environment.httpResponses.reverse()}>
+                          <Line
+                            type="monotone"
+                            dot={false}
+                            dataKey="responseTimeMs"
+                            stroke={
+                              environment.httpResponses[
+                                environment.httpResponses.length - 1
+                              ].responseTimeMs > 0
+                                ? 'var(--blue)'
+                                : 'var(--red)'
+                            }
+                            strokeWidth={2}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                   <div className="footer">
                     <SmallTag kind={environment.kind} expanded />
