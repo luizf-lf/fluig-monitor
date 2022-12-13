@@ -137,5 +137,10 @@ export default merge(baseConfig, {
       isBrowser: false,
       isDevelopment: process.env.NODE_ENV !== 'production',
     }),
+
+    new HtmlWebpackPlugin({
+      filename: 'splash.html',
+      template: path.join(webpackPaths.srcRendererPath, 'splash.html'),
+    }),
   ],
 });

@@ -182,8 +182,7 @@ app
       icon: getAssetPath('icon.png'),
     });
 
-    // BUG: Splash file does not load from production build
-    splash.loadFile(path.resolve(__dirname, 'splash.html'));
+    splash.loadFile(path.resolve(__dirname, '..', 'renderer', 'splash.html'));
 
     await runDbMigrations();
 
@@ -200,11 +199,10 @@ app
       await syncEnvironmentsJob();
     }, environmentScrapeSyncInterval);
 
-    await createWindow();
-
-    setTimeout(() => {
+    setTimeout(async () => {
+      await createWindow();
       splash.destroy();
-    }, 2000);
+    }, 1000);
 
     app.on('activate', () => {
       // On macOS it's common to re-create a window in the app when the

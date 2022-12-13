@@ -5,6 +5,7 @@
 - Better organized app startup function (moved out from create main window function)
 - Reduced log levels for the environment controller and IPC handler.
 - Moved the Inter Process Communication handlers to a separated function.
+- Fixed splash screen not being rendered on production build due to a file not being bundled.
 
 # 0.2.0
 
