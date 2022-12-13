@@ -1,4 +1,4 @@
-# 0.2.1-rc
+# 0.2.1
 
 - Implemented a mini line graph on the server list view from the last 20 ping responses (when there are responses)
 - Fixed license component percentage precision
