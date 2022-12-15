@@ -19,6 +19,7 @@ import syncEnvironmentsJob from '../jobs/syncEnvironmentsJob';
 import { CreateEnvironmentProps } from '../../renderer/ipc/environmentsIpcHandler';
 
 import { isDevelopment, logStringFormat } from './globalConstants';
+import validateOAuthPermission, { AuthObject } from './validateOAuthPermission';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -244,4 +245,17 @@ export default function addIpcHandlers(): void {
     log.info('IPC Handler: Forcing all environments ping');
     await pingEnvironmentsJob();
   });
+
+  ipcMain.handle(
+    'validateOauthPermission',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      auth: AuthObject,
+      domainUrl: string
+    ) => {
+      const result = await validateOAuthPermission(auth, domainUrl);
+
+      return result;
+    }
+  );
 }

@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { motion } from 'framer-motion';
+import { ipcRenderer } from 'electron';
 import { FormEvent, useState } from 'react';
 import {
   FiAlertCircle,
@@ -22,7 +23,6 @@ import {
 } from '../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
-import FluigAPIClient from '../../common/classes/FluigAPIClient';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -85,6 +85,8 @@ export default function CreateEnvironmentView(): JSX.Element {
       setActionButtonsDisabled(true);
       setButtonIsLoading(true);
 
+      // TODO: Check oAuth permissions again before creating the environment
+
       await createEnvironment({
         environment: {
           baseUrl: formData.baseUrl,
@@ -125,14 +127,10 @@ export default function CreateEnvironmentView(): JSX.Element {
     }
   }
 
-  async function sendTestConnection() {
-    const auth = {
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      tokenSecret,
-    };
-
+  /**
+   * Dispatches the oAuth validator function caller
+   */
+  async function validateOauthPermission() {
     if (
       domainUrl !== '' &&
       (consumerKey !== '' ||
@@ -140,51 +138,43 @@ export default function CreateEnvironmentView(): JSX.Element {
         accessToken !== '' ||
         tokenSecret !== '')
     ) {
-      log.info('CreateEnvironmentView: Sending test connection to', domainUrl);
       setTestMessage(
         <span className="info-blip">
-          <FiRefreshCw className="rotating" />{' '}
+          <FiRefreshCw className="rotating" />
           {t('views.CreateEnvironmentView.connecting')}
         </span>
       );
 
-      const fluigClient = new FluigAPIClient({
-        oAuthKeys: auth,
-        requestData: {
-          method: 'GET',
-          url: `${domainUrl}/api/servlet/ping`,
+      const results = await ipcRenderer.invoke(
+        'validateOauthPermission',
+        {
+          consumerKey,
+          consumerSecret,
+          accessToken,
+          tokenSecret,
         },
-      });
+        domainUrl
+      );
 
-      await fluigClient.get();
-
-      if (fluigClient.httpStatus) {
-        if (fluigClient.httpStatus !== 200) {
-          log.info(
-            'Test connection failed with status',
-            fluigClient.httpStatus
-          );
-          setTestMessage(
-            <span className="info-blip has-warning">
-              <FiAlertCircle />{' '}
-              {t('views.CreateEnvironmentView.connectionError')} (
-              {fluigClient.httpStatus})
-            </span>
-          );
-        } else {
-          log.info(
-            'Test connection done successfully (',
-            fluigClient.httpStatusText,
-            ')'
-          );
-          setTestMessage(
-            <span className="info-blip has-success">
-              <FiCheck /> {t('views.CreateEnvironmentView.connectionOk')}
-            </span>
-          );
-        }
+      if (results.every((i: { httpStatus: number }) => i.httpStatus === 200)) {
+        setTestMessage(
+          <span className="info-blip has-success">
+            <FiCheck /> {t('views.CreateEnvironmentView.connectionOk')}
+          </span>
+        );
+      } else if (
+        results.some(
+          (i: { httpStatus: number }) =>
+            i.httpStatus === 403 || i.httpStatus === 401
+        )
+      ) {
+        setTestMessage(
+          <span className="info-blip has-warning">
+            <FiAlertCircle />
+            Usuário aplicativo sem permissões necessárias.
+          </span>
+        );
       } else {
-        log.info('Test connection failed (server may be unavailable)');
         setTestMessage(
           <span className="info-blip has-error">
             <FiAlertTriangle />{' '}
@@ -370,7 +360,7 @@ export default function CreateEnvironmentView(): JSX.Element {
           <button
             type="button"
             className="button is-secondary"
-            onClick={sendTestConnection}
+            onClick={validateOauthPermission}
           >
             <FiWifi /> {t('views.CreateEnvironmentView.form.testConnection')}
           </button>

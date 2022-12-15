@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Redirect, useParams } from 'react-router';
 import log from 'electron-log';
+import { ipcRenderer } from 'electron';
 import {
   FiAlertCircle,
   FiAlertTriangle,
@@ -24,7 +25,6 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
-import FluigAPIClient from '../../common/classes/FluigAPIClient';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId }: EnvironmentViewParams = useParams();
@@ -93,14 +93,10 @@ function EditEnvironmentSettingsView(): JSX.Element {
     }
   }, [environmentData]);
 
-  async function sendTestConnection() {
-    const auth = {
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      tokenSecret,
-    };
-
+  /**
+   * Dispatches the oAuth validator function caller
+   */
+  async function validateOauthPermission() {
     if (
       domainUrl !== '' &&
       (consumerKey !== '' ||
@@ -108,10 +104,6 @@ function EditEnvironmentSettingsView(): JSX.Element {
         accessToken !== '' ||
         tokenSecret !== '')
     ) {
-      log.info(
-        'EditEnvironmentSettingsView: Sending test connection to',
-        domainUrl
-      );
       setTestMessage(
         <span className="info-blip">
           <FiRefreshCw className="rotating" />
@@ -119,47 +111,40 @@ function EditEnvironmentSettingsView(): JSX.Element {
         </span>
       );
 
-      const fluigClient = new FluigAPIClient({
-        oAuthKeys: auth,
-        requestData: {
-          method: 'GET',
-          url: `${domainUrl}/api/servlet/ping`,
+      const results = await ipcRenderer.invoke(
+        'validateOauthPermission',
+        {
+          consumerKey,
+          consumerSecret,
+          accessToken,
+          tokenSecret,
         },
-      });
+        domainUrl
+      );
 
-      await fluigClient.get();
-
-      if (fluigClient.httpStatus) {
-        if (fluigClient.httpStatus !== 200) {
-          log.info(
-            'Test connection failed with status',
-            fluigClient.httpStatus
-          );
-          setTestMessage(
-            <span className="info-blip has-warning">
-              <FiAlertCircle />
-              {t('views.EditEnvironmentView.connectionError')} (
-              {fluigClient.httpStatus})
-            </span>
-          );
-        } else {
-          log.info(
-            'Test connection done successfully (',
-            fluigClient.httpStatus,
-            ')'
-          );
-          setTestMessage(
-            <span className="info-blip has-success">
-              <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}
-            </span>
-          );
-        }
+      if (results.every((i: { httpStatus: number }) => i.httpStatus === 200)) {
+        setTestMessage(
+          <span className="info-blip has-success">
+            <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}
+          </span>
+        );
+      } else if (
+        results.some(
+          (i: { httpStatus: number }) =>
+            i.httpStatus === 403 || i.httpStatus === 401
+        )
+      ) {
+        setTestMessage(
+          <span className="info-blip has-warning">
+            <FiAlertCircle />
+            Usuário aplicativo sem permissões necessárias.
+          </span>
+        );
       } else {
-        log.info('Test connection failed (server may be unavailable)');
         setTestMessage(
           <span className="info-blip has-error">
-            <FiAlertTriangle />
-            {t('views.EditEnvironmentView.connectionUnavailable')}
+            <FiAlertTriangle />{' '}
+            {t('views.CreateEnvironmentView.connectionUnavailable')}
           </span>
         );
       }
@@ -440,7 +425,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
           <button
             type="button"
             className="button is-secondary"
-            onClick={sendTestConnection}
+            onClick={validateOauthPermission}
           >
             <FiWifi /> {t('views.EditEnvironmentView.form.testConnection')}
           </button>
