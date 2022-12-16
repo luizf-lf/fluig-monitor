@@ -13,13 +13,15 @@ import SettingsController from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import UpdateScheduleController from '../controllers/UpdateScheduleController';
 
-import pingEnvironmentsJob from '../jobs/pingEnvironmentsJob';
-import syncEnvironmentsJob from '../jobs/syncEnvironmentsJob';
+import pingEnvironmentsJob from '../services/pingEnvironmentsJob';
+import syncEnvironmentsJob from '../services/syncEnvironmentsJob';
 
 import { CreateEnvironmentProps } from '../../renderer/ipc/environmentsIpcHandler';
 
 import { isDevelopment, logStringFormat } from './globalConstants';
-import validateOAuthPermission, { AuthObject } from './validateOAuthPermission';
+import validateOAuthPermission, {
+  AuthObject,
+} from '../services/validateOAuthPermission';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process

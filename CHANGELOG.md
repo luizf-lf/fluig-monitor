@@ -3,6 +3,7 @@
 - The app now validates if the oAuth user has sufficient permissions for data collection
   - The validation occurs on the test connection button
   - The validation occurs on the create / edit environment save button
+- Moved main process services to dedicated folder.
 
 # 0.2.1
 

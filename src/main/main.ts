@@ -22,8 +22,8 @@ import LanguageController from './controllers/LanguageController';
 
 import { version } from '../../package.json';
 import rotateLogFile from './utils/logRotation';
-import syncEnvironmentsJob from './jobs/syncEnvironmentsJob';
-import pingEnvironmentsJob from './jobs/pingEnvironmentsJob';
+import syncEnvironmentsJob from './services/syncEnvironmentsJob';
+import pingEnvironmentsJob from './services/pingEnvironmentsJob';
 import addIpcHandlers from './utils/addIpcHandlers';
 
 // log.transports.file.resolvePath = () =>
