@@ -30,6 +30,7 @@ export default async function validateOAuthPermission(
       '/monitoring/api/v1/statistics/report',
       '/monitoring/api/v1/monitors/report',
       '/license/api/v1/licenses',
+      '/api/public/wcm/version/v2',
     ];
 
     let fluigClient = null;
