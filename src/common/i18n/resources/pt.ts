@@ -3,6 +3,7 @@ const pt = {
     about: {
       label: '&Sobre',
       aboutApp: 'Sobre o Fluig Monitor',
+      bugReport: 'Reportar um bug',
     },
     languages: {
       label: '&Idioma',

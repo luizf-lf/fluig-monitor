@@ -4,6 +4,7 @@
   - The validation occurs on the test connection button
   - The validation occurs on the create / edit environment save button
 - Moved main process services to dedicated folder.
+- Added a "report a bug" button on the "About" menu
 
 # 0.2.1
 

@@ -3,6 +3,7 @@ const en = {
     about: {
       label: '&About',
       aboutApp: 'About Fluig Monitor',
+      bugReport: 'Report a bug',
     },
     languages: {
       label: '&Language',
