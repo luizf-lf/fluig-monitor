@@ -47,6 +47,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const [validationMessage, setValidationMessage] = useState(<></>);
   const [confirmBtnClicked, setConfirmBtnClicked] = useState(false);
   const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
+  const [buttonIsLoading, setButtonIsLoading] = useState(false);
 
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
@@ -137,7 +138,12 @@ function EditEnvironmentSettingsView(): JSX.Element {
         setTestMessage(
           <span className="info-blip has-warning">
             <FiAlertCircle />
-            Usuário aplicativo sem permissões necessárias.
+            {t('views.EditEnvironmentView.insufficientPermissions')}
+            {` (${
+              results.filter(
+                (i: { httpStatus: number }) => i.httpStatus === 200
+              ).length
+            }/${results.length})`}
           </span>
         );
       } else {
@@ -161,6 +167,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
   async function handleUpdateData(event: FormEvent) {
     log.info('EditEnvironmentSettingsView: Handling form submit');
     event.preventDefault();
+    setActionButtonsDisabled(true);
+    setButtonIsLoading(true);
 
     const formData = {
       id: environmentData.id,
@@ -193,49 +201,86 @@ function EditEnvironmentSettingsView(): JSX.Element {
       return;
     }
 
-    log.info(
-      'EditEnvironmentSettingsView: Form data is valid, updating environment'
+    const permissionsResults = await ipcRenderer.invoke(
+      'validateOauthPermission',
+      {
+        consumerKey,
+        consumerSecret,
+        accessToken,
+        tokenSecret,
+      },
+      domainUrl
     );
 
-    const result = await updateEnvironment(
-      {
-        id: formData.id,
-        baseUrl: formData.baseUrl,
-        kind: formData.kind,
-        name: formData.name,
-        release: 'unknown',
-      },
-      {
-        environmentId: formData.id,
-        pingFrequency: formData.updateSchedule.pingFrequency,
-        scrapeFrequency: formData.updateSchedule.scrapeFrequency,
-      },
-      {
-        environmentId: formData.id,
-        payload: JSON.stringify(formData.auth),
-        hash: 'json',
+    if (
+      permissionsResults.every(
+        (i: { httpStatus: number }) => i.httpStatus === 200
+      )
+    ) {
+      log.info(
+        'EditEnvironmentSettingsView: Form data is valid, updating environment'
+      );
+
+      const result = await updateEnvironment(
+        {
+          id: formData.id,
+          baseUrl: formData.baseUrl,
+          kind: formData.kind,
+          name: formData.name,
+          release: 'unknown',
+        },
+        {
+          environmentId: formData.id,
+          pingFrequency: formData.updateSchedule.pingFrequency,
+          scrapeFrequency: formData.updateSchedule.scrapeFrequency,
+        },
+        {
+          environmentId: formData.id,
+          payload: JSON.stringify(formData.auth),
+          hash: 'json',
+        }
+      );
+
+      if (!result) {
+        createShortNotification({
+          id: Date.now(),
+          type: 'error',
+          message: t('views.EditEnvironmentView.updateError'),
+        });
+
+        return;
       }
-    );
 
-    if (!result) {
+      createShortNotification({
+        id: Date.now(),
+        type: 'success',
+        message: t('views.EditEnvironmentView.updatedSuccessfully'),
+      });
+
+      updateEnvironmentList();
+      setValidationMessage(<Redirect to="/" />);
+    } else if (
+      permissionsResults.some(
+        (i: { httpStatus: number }) =>
+          i.httpStatus === 403 || i.httpStatus === 401
+      )
+    ) {
+      createShortNotification({
+        id: Date.now(),
+        type: 'warning',
+        message: t('views.EditEnvironmentView.insufficientPermissions'),
+      });
+      setActionButtonsDisabled(false);
+      setButtonIsLoading(false);
+    } else {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message: t('views.EditEnvironmentView.updateError'),
+        message: 'Erro ao validar permissões.',
       });
-
-      return;
+      setActionButtonsDisabled(false);
+      setButtonIsLoading(false);
     }
-
-    setActionButtonsDisabled(true);
-    createShortNotification({
-      id: Date.now(),
-      type: 'success',
-      message: t('views.EditEnvironmentView.updatedSuccessfully'),
-    });
-
-    updateEnvironmentList();
-    setValidationMessage(<Redirect to="/" />);
   }
 
   async function confirmDelete() {
@@ -527,7 +572,15 @@ function EditEnvironmentSettingsView(): JSX.Element {
             type="submit"
             disabled={actionButtonsDisabled}
           >
-            <FiCheck /> {t('views.EditEnvironmentView.form.buttonSave')}
+            {buttonIsLoading ? (
+              <>
+                <FiRefreshCw className="rotating" />
+              </>
+            ) : (
+              <>
+                <FiCheck /> {t('views.EditEnvironmentView.form.buttonSave')}
+              </>
+            )}
           </button>
           <button
             className="button is-danger"

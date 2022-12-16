@@ -114,6 +114,7 @@ const pt = {
       connecting: 'Conectando...',
       connectionError: 'Erro na conexão',
       connectionOk: 'Conexão Ok',
+      insufficientPermissions: 'Usuário aplicativo sem permissões suficientes.',
       connectionUnavailable:
         'Erro de conexão. Verifique a URL de domínio e a disponibilidade do servidor.',
       authFieldsValidation:

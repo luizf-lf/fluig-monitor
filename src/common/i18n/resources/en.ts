@@ -113,6 +113,7 @@ const en = {
       connecting: 'Connecting...',
       connectionError: 'Connection error',
       connectionOk: 'Connection Ok',
+      insufficientPermissions: 'User without sufficient permissions.',
       connectionUnavailable:
         'Connection Error. Check the domain url and the server availability',
       authFieldsValidation:

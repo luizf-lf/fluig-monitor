@@ -1,3 +1,9 @@
+# 0.3-rc
+
+- The app now validates if the oAuth user has sufficient permissions for data collection
+  - The validation occurs on the test connection button
+  - The validation occurs on the create / edit environment save button
+
 # 0.2.1
 
 - Implemented a mini line graph on the server list view from the last 20 ping responses (when there are responses)

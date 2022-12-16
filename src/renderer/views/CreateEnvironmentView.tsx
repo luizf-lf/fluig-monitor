@@ -56,77 +56,6 @@ export default function CreateEnvironmentView(): JSX.Element {
     }
   }
 
-  async function handleSubmit(event: FormEvent) {
-    log.info('CreateEnvironmentView: handling form submit.');
-    event.preventDefault();
-
-    const formData = {
-      name,
-      baseUrl: domainUrl,
-      kind,
-      auth: {
-        consumerKey,
-        consumerSecret,
-        accessToken,
-        tokenSecret,
-      },
-      updateSchedule: {
-        scrapeFrequency,
-        pingFrequency,
-      },
-    };
-
-    const envFormValidator = new EnvironmentFormValidator().validate(formData);
-
-    const { isValid, lastMessage } = envFormValidator;
-
-    if (isValid) {
-      log.info('CreateEnvironmentView: Form is valid, creating environment.');
-      setActionButtonsDisabled(true);
-      setButtonIsLoading(true);
-
-      // TODO: Check oAuth permissions again before creating the environment
-
-      await createEnvironment({
-        environment: {
-          baseUrl: formData.baseUrl,
-          kind: formData.kind,
-          name: formData.name,
-          // TODO: Get Fluig version (release) from /api/public/wcm/version/v2 before creating
-          release: 'unknown',
-        },
-        updateSchedule: formData.updateSchedule,
-        environmentAuthKeys: {
-          // TODO: Implement auth keys encoding with node forge
-          payload: JSON.stringify(formData.auth),
-          hash: 'json',
-        },
-      });
-
-      log.info(
-        'CreateEnvironmentView: Environment created, syncing environments and redirecting to home view'
-      );
-
-      await forceEnvironmentSync();
-      await forceEnvironmentPing();
-
-      createShortNotification({
-        id: Date.now(),
-        type: 'success',
-        message: t('views.CreateEnvironmentView.createdSuccessfully'),
-      });
-
-      updateEnvironmentList();
-      setValidationMessage(<Redirect to="/" />);
-    } else {
-      createShortNotification({
-        id: Date.now(),
-        type: 'error',
-        message: t(`classes.EnvironmentFormValidator.${lastMessage}`),
-      });
-    }
-  }
-
   /**
    * Dispatches the oAuth validator function caller
    */
@@ -171,7 +100,12 @@ export default function CreateEnvironmentView(): JSX.Element {
         setTestMessage(
           <span className="info-blip has-warning">
             <FiAlertCircle />
-            Usuário aplicativo sem permissões necessárias.
+            {t('views.EditEnvironmentView.insufficientPermissions')}
+            {` (${
+              results.filter(
+                (i: { httpStatus: number }) => i.httpStatus === 200
+              ).length
+            }/${results.length})`}
           </span>
         );
       } else {
@@ -189,6 +123,113 @@ export default function CreateEnvironmentView(): JSX.Element {
           {t('views.CreateEnvironmentView.authFieldsValidation')}
         </span>
       );
+    }
+  }
+
+  async function handleSubmit(event: FormEvent) {
+    log.info('CreateEnvironmentView: handling form submit.');
+    event.preventDefault();
+
+    const formData = {
+      name,
+      baseUrl: domainUrl,
+      kind,
+      auth: {
+        consumerKey,
+        consumerSecret,
+        accessToken,
+        tokenSecret,
+      },
+      updateSchedule: {
+        scrapeFrequency,
+        pingFrequency,
+      },
+    };
+
+    const envFormValidator = new EnvironmentFormValidator().validate(formData);
+
+    const { isValid, lastMessage } = envFormValidator;
+
+    if (isValid) {
+      log.info('CreateEnvironmentView: Form is valid, creating environment.');
+      setActionButtonsDisabled(true);
+      setButtonIsLoading(true);
+
+      const permissionsResults = await ipcRenderer.invoke(
+        'validateOauthPermission',
+        {
+          consumerKey,
+          consumerSecret,
+          accessToken,
+          tokenSecret,
+        },
+        domainUrl
+      );
+
+      if (
+        permissionsResults.every(
+          (i: { httpStatus: number }) => i.httpStatus === 200
+        )
+      ) {
+        await createEnvironment({
+          environment: {
+            baseUrl: formData.baseUrl,
+            kind: formData.kind,
+            name: formData.name,
+            // TODO: Get Fluig version (release) from /api/public/wcm/version/v2 before creating
+            release: 'unknown',
+          },
+          updateSchedule: formData.updateSchedule,
+          environmentAuthKeys: {
+            // TODO: Implement auth keys encoding with node forge
+            payload: JSON.stringify(formData.auth),
+            hash: 'json',
+          },
+        });
+
+        log.info(
+          'CreateEnvironmentView: Environment created, syncing environments and redirecting to home view'
+        );
+
+        await forceEnvironmentSync();
+        await forceEnvironmentPing();
+
+        createShortNotification({
+          id: Date.now(),
+          type: 'success',
+          message: t('views.CreateEnvironmentView.createdSuccessfully'),
+        });
+
+        updateEnvironmentList();
+        setValidationMessage(<Redirect to="/" />);
+      } else if (
+        permissionsResults.some(
+          (i: { httpStatus: number }) =>
+            i.httpStatus === 403 || i.httpStatus === 401
+        )
+      ) {
+        createShortNotification({
+          id: Date.now(),
+          type: 'warning',
+          message: t('views.EditEnvironmentView.insufficientPermissions'),
+        });
+        setActionButtonsDisabled(false);
+        setButtonIsLoading(false);
+      } else {
+        createShortNotification({
+          id: Date.now(),
+          type: 'error',
+          message: 'Erro ao validar permissões.',
+        });
+        setActionButtonsDisabled(false);
+        setButtonIsLoading(false);
+      }
+    } else {
+      createShortNotification({
+        id: Date.now(),
+        type: 'error',
+        message: t(`classes.EnvironmentFormValidator.${lastMessage}`),
+      });
     }
   }
 
