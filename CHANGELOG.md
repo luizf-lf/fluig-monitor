@@ -5,6 +5,7 @@
   - The validation occurs on the create / edit environment save button
 - Moved main process services to dedicated folder.
 - Added a "report a bug" button on the "About" menu
+- Added a time indicator on the server response time graph (Currently showing as "Last 24 hours")
 
 # 0.2.1
 

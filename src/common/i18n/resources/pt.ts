@@ -293,6 +293,7 @@ const pt = {
     EnvironmentPerformanceGraph: {
       title: 'Performance',
       graphTitle: 'Tempo de resposta do servidor',
+      last24h: 'Ultimas 24 horas',
       insufficientOrNoData: 'Sem dados ou dados insuficientes.',
       responseTime: 'Tempo De Resposta (ms)',
     },

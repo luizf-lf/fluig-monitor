@@ -290,6 +290,7 @@ const en = {
     EnvironmentPerformanceGraph: {
       title: 'Performance',
       graphTitle: 'Server response time',
+      last24h: 'Last 24 hours',
       insufficientOrNoData: 'Insufficient or no data available.',
       responseTime: 'Response Time (ms)',
     },

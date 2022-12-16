@@ -37,7 +37,15 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
       ) : (
         <div className="widget-card" style={{ height: '55vh' }}>
           <div id="graph-title-container">
-            <h3>{t('components.EnvironmentPerformanceGraph.graphTitle')}</h3>
+            <h3>
+              {t('components.EnvironmentPerformanceGraph.graphTitle')}
+              <small
+                className="font-soft font-sm"
+                style={{ marginLeft: '0.5rem' }}
+              >
+                {t('components.EnvironmentPerformanceGraph.last24h')}
+              </small>
+            </h3>
           </div>
           <ResponsiveContainer width="100%" height="92%">
             <AreaChart data={pings}>
