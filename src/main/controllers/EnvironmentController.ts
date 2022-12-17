@@ -1,5 +1,5 @@
 import log from 'electron-log';
-import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
+import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentUpdateControllerInterface,

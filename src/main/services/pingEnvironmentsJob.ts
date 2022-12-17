@@ -8,7 +8,7 @@ import FluigAPIClient from '../../common/classes/FluigAPIClient';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import HttpResponseController from '../controllers/HttpResponseController';
 import frequencyToMs from '../utils/frequencyToMs';
-import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
+import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 
 async function notifyAbout(
   environment: EnvironmentWithRelatedData

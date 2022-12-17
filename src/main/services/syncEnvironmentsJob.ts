@@ -10,7 +10,7 @@ import MonitorHistoryController from '../controllers/MonitorHistoryController';
 import frequencyToMs from '../utils/frequencyToMs';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import { environmentScrapeSyncInterval } from '../utils/globalConstants';
-import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
+import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
