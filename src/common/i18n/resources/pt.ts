@@ -29,10 +29,6 @@ const pt = {
     },
   },
   views: {
-    EnvironmentView: {
-      empty:
-        'Selecione o ambiente acima ou utilize o botão "Novo" para criar um novo ambiente.',
-    },
     CreateEnvironmentView: {
       createdSuccessfully: 'Ambiente cadastrado com sucesso.',
       connecting: 'Conectando ...',
@@ -234,6 +230,7 @@ const pt = {
   components: {
     global: {
       noData: 'Sem dados disponíveis',
+      underDevelopment: 'Funcionalidade em desenvolvimento',
     },
     EnvironmentLicenses: {
       title: 'Licenças',

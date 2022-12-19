@@ -55,7 +55,9 @@ export default function NavActionButtons() {
       <button
         type="button"
         className="optionButton"
-        title={t('navbar.actionButtons.kioskMode')}
+        title={`${t('navbar.actionButtons.kioskMode')} [${t(
+          'components.global.underDevelopment'
+        )}]`}
         disabled
       >
         <FiAirplay />
@@ -63,7 +65,9 @@ export default function NavActionButtons() {
       <button
         type="button"
         className="optionButton"
-        title={t('navbar.actionButtons.notifications')}
+        title={`${t('navbar.actionButtons.notifications')} [${t(
+          'components.global.underDevelopment'
+        )}]`}
         disabled
       >
         <FiBell />
@@ -76,11 +80,12 @@ export default function NavActionButtons() {
       >
         {themeIcon}
       </button>
-      {/* TODO: Create options modal */}
       <button
         type="button"
         className="optionButton"
-        title={t('navbar.actionButtons.settings')}
+        title={`${t('navbar.actionButtons.settings')} [${t(
+          'components.global.underDevelopment'
+        )}]`}
         disabled
       >
         <FiSettings />

@@ -112,16 +112,32 @@ export default function EnvironmentView(): JSX.Element {
               <EnvironmentSummary environmentId={Number(environmentId)} />
             </Route>
             <Route path={`${path}/database`}>
-              <h2>Database</h2>
+              <>
+                <h2>{t('views.EnvironmentDataContainer.sideMenu.database')}</h2>
+                <p>{t('components.global.underDevelopment')}</p>
+              </>
             </Route>
             <Route path={`${path}/detailedMemory`}>
-              <h2>Detailed Memory</h2>
+              <>
+                <h2>
+                  {t('views.EnvironmentDataContainer.sideMenu.detailedMemory')}
+                </h2>
+                <p>{t('components.global.underDevelopment')}</p>
+              </>
             </Route>
             <Route path={`${path}/artifacts`}>
-              <h2>Artifacts</h2>
+              <>
+                <h2>
+                  {t('views.EnvironmentDataContainer.sideMenu.artifacts')}
+                </h2>
+                <p>{t('components.global.underDevelopment')}</p>
+              </>
             </Route>
             <Route path={`${path}/users`}>
-              <h2>Users</h2>
+              <>
+                <h2>{t('views.EnvironmentDataContainer.sideMenu.users')}</h2>
+                <p>{t('components.global.underDevelopment')}</p>
+              </>
             </Route>
 
             <Route path={`${path}/edit`}>

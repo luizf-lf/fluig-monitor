@@ -6,6 +6,7 @@
 - Moved main process services to dedicated folder.
 - Added a "report a bug" button on the "About" menu
 - Added a time indicator on the server response time graph (Currently showing as "Last 24 hours")
+- Added a "Under development" indicator to some views and components.
 
 # 0.2.1
 
@@ -20,8 +21,8 @@
 
 - Updated test connection endpoint to /api/servlet/ping
 - Changed environment availability check strategy
-  - Now the app uses the ping api to check the server availability on a shorter interval (10s to 1min)
-  - Statistics/Monitor/Licenses data scrape strategy updated. Data fetch occurs on larger time intervals (15min to 24hours)
+  - Now the app uses the ping api to check the server availability on a shorter interval (15s to 2min)
+  - Statistics/Monitor/Licenses data scrape strategy updated. Data fetching occurs on bigger time intervals (15min to 24hours)
 - Update only on work days option removed
 - Update time span option removed
 - Environment ping job implemented
@@ -33,7 +34,7 @@
 - System resources components added:
   - Disk Info
   - Memory Info
-  - Databse Info
+  - Database Info
 - Progress bar component updated
 - Splash Screen added
 - Environment status component added
