@@ -105,7 +105,7 @@ Novas funcionalidades vem sendo estudadas constantemente. Verifique na aba [Issu
 
 Para começar a monitorar um ambiente, siga os passos a seguir:
 
-1. Abra a aplicação. Ao abrir pela primeira vez, a aplicação irá criar o banco de dados (SQLite) e aplicar as atualização automaticamente.
+1. Abra a aplicação. Ao abrir pela primeira vez, a aplicação irá criar o banco de dados (SQLite) e aplicar as atualizações automaticamente.
 
 2. Clique no botão de "+" na tela inicial ou na barra de navegação para incluir um novo ambiente.
 
