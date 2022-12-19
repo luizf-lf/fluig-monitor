@@ -7,14 +7,16 @@ import path from 'path';
 import { app, BrowserWindow, shell, screen } from 'electron';
 
 import log from 'electron-log';
+import { scheduleJob } from 'node-schedule';
+
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import i18n from '../common/i18n/i18n';
 import {
-  environmentPingInterval,
-  environmentScrapeSyncInterval,
   isDevelopment,
   logStringFormat,
+  pingIntervalCron,
+  scrapeSyncIntervalCron,
 } from './utils/globalConstants';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
@@ -156,6 +158,18 @@ app.on('window-all-closed', async () => {
 app
   .whenReady()
   .then(async () => {
+    const splash = new BrowserWindow({
+      width: 720,
+      height: 230,
+      frame: false,
+      alwaysOnTop: true,
+      transparent: true,
+      icon: getAssetPath('icon.png'),
+    });
+
+    splash.loadFile(path.resolve(__dirname, '..', 'renderer', 'splash.html'));
+    splash.show();
+
     rotateLogFile();
 
     log.info(' ');
@@ -173,31 +187,19 @@ app
       app.setAppUserModelId(app.name);
     }
 
-    const splash = new BrowserWindow({
-      width: 720,
-      height: 230,
-      frame: false,
-      alwaysOnTop: true,
-      transparent: true,
-      icon: getAssetPath('icon.png'),
-    });
-
-    splash.loadFile(path.resolve(__dirname, '..', 'renderer', 'splash.html'));
-
     await runDbMigrations();
 
-    // this function shall be transformed into a nodejs worker,
-    //  but that's a problem for the future me
+    // Maybe this function shall be transformed into a nodejs worker.
     log.info('Dispatching environment ping jobs');
-    setInterval(async () => {
+    scheduleJob(pingIntervalCron, async () => {
       await pingEnvironmentsJob();
-    }, environmentPingInterval);
+    });
 
     log.info('Dispatching environment sync jobs');
     await syncEnvironmentsJob();
-    setInterval(async () => {
+    scheduleJob(scrapeSyncIntervalCron, async () => {
       await syncEnvironmentsJob();
-    }, environmentScrapeSyncInterval);
+    });
 
     setTimeout(async () => {
       await createWindow();
@@ -208,6 +210,11 @@ app
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
+    });
+
+    // trigger the log file rotation every day at 00:00:05 (5 seconds past midnight)
+    scheduleJob('5 0 0 * * *', () => {
+      rotateLogFile();
     });
   })
   .catch((e) => {

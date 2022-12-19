@@ -9,7 +9,7 @@ import HttpResponseController from '../controllers/HttpResponseController';
 import MonitorHistoryController from '../controllers/MonitorHistoryController';
 import frequencyToMs from '../utils/frequencyToMs';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
-import { environmentScrapeSyncInterval } from '../utils/globalConstants';
+import { scrapeSyncInterval } from '../utils/globalConstants';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 
 /**
@@ -359,7 +359,7 @@ export default async function syncEnvironmentsJob() {
 
   log.info(
     `syncEnvironmentsJob: Next sync will occur at ${new Date(
-      Date.now() + environmentScrapeSyncInterval
+      Date.now() + scrapeSyncInterval
     ).toLocaleString()}`
   );
 

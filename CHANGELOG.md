@@ -7,6 +7,8 @@
 - Added a "report a bug" button on the "About" menu
 - Added a time indicator on the server response time graph (Currently showing as "Last 24 hours")
 - Added a "Under development" indicator to some views and components.
+- Implemented a proper log file rotation with node-schedule.
+- Ping and sync jobs also have been altered to use node-schedule.
 
 # 0.2.1
 

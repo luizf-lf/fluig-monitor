@@ -18,8 +18,10 @@ if (isDevelopment) {
 export const logStringFormat =
   '[{y}-{m}-{d} {h}:{i}:{s}.{ms} {z}] [{level}] [{processType}] {text}';
 
-export const environmentScrapeSyncInterval = 900000;
-export const environmentPingInterval = 15000;
+export const scrapeSyncInterval = 900000; // 15 minutes
+export const scrapeSyncIntervalCron = '* */15 * * * *';
+export const pingInterval = 15000; // 15 seconds
+export const pingIntervalCron = '*/15 * * * * *';
 
 export const dbPath = isDevelopment
   ? path.resolve(__dirname, '../../../', 'prisma', 'app.db')
