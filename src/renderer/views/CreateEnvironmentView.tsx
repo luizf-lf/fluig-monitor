@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { motion } from 'framer-motion';
 import { ipcRenderer } from 'electron';
@@ -171,13 +172,31 @@ export default function CreateEnvironmentView(): JSX.Element {
           (i: { httpStatus: number }) => i.httpStatus === 200
         )
       ) {
+        let release = await ipcRenderer.invoke(
+          'getEnvironmentRelease',
+          {
+            consumerKey,
+            consumerSecret,
+            accessToken,
+            tokenSecret,
+          },
+          domainUrl
+        );
+
+        if (release) {
+          release = release.content.split(' - ')[1];
+        } else {
+          release = 'unknown';
+        }
+
+        log.info(`Current environment release is ${release}`);
+
         await createEnvironment({
           environment: {
             baseUrl: formData.baseUrl,
             kind: formData.kind,
             name: formData.name,
-            // TODO: Get Fluig version (release) from /api/public/wcm/version/v2 before creating
-            release: 'unknown',
+            release,
           },
           updateSchedule: formData.updateSchedule,
           environmentAuthKeys: {

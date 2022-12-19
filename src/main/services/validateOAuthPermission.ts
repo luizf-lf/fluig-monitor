@@ -1,13 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import log from 'electron-log';
+import AuthObject from '../../common/interfaces/AuthObject';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
-
-export interface AuthObject {
-  consumerKey: string;
-  consumerSecret: string;
-  accessToken: string;
-  tokenSecret: string;
-}
 
 /**
  * Validates if the oAuth user has the necessary permissions to collect data from the Fluig server

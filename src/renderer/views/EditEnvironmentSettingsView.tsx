@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -221,13 +222,32 @@ function EditEnvironmentSettingsView(): JSX.Element {
         'EditEnvironmentSettingsView: Form data is valid, updating environment'
       );
 
+      let release = await ipcRenderer.invoke(
+        'getEnvironmentRelease',
+        {
+          consumerKey,
+          consumerSecret,
+          accessToken,
+          tokenSecret,
+        },
+        domainUrl
+      );
+
+      if (release) {
+        release = release.content.split(' - ')[1];
+      } else {
+        release = 'unknown';
+      }
+
+      log.info(`Updated environment release to ${release}`);
+
       const result = await updateEnvironment(
         {
           id: formData.id,
           baseUrl: formData.baseUrl,
           kind: formData.kind,
           name: formData.name,
-          release: 'unknown',
+          release,
         },
         {
           environmentId: formData.id,

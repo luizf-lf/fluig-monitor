@@ -9,6 +9,7 @@
 - Added a "Under development" indicator to some views and components.
 - Implemented a proper log file rotation with node-schedule.
 - Ping and sync jobs also have been altered to use node-schedule.
+- The app now recovers the environment release on environment add or edit.
 
 # 0.2.1
 

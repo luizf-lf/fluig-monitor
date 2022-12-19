@@ -19,9 +19,11 @@ import syncEnvironmentsJob from '../services/syncEnvironmentsJob';
 import { CreateEnvironmentProps } from '../../renderer/ipc/environmentsIpcHandler';
 
 import { isDevelopment, logStringFormat } from './globalConstants';
-import validateOAuthPermission, {
-  AuthObject,
-} from '../services/validateOAuthPermission';
+import validateOAuthPermission from '../services/validateOAuthPermission';
+import getEnvironmentRelease, {
+  V2VersionApiResponse,
+} from '../services/getEnvironmentRelease';
+import AuthObject from '../../common/interfaces/AuthObject';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -256,6 +258,19 @@ export default function addIpcHandlers(): void {
       domainUrl: string
     ) => {
       const result = await validateOAuthPermission(auth, domainUrl);
+
+      return result;
+    }
+  );
+
+  ipcMain.handle(
+    'getEnvironmentRelease',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      auth: AuthObject,
+      domainUrl: string
+    ): Promise<V2VersionApiResponse | null> => {
+      const result = await getEnvironmentRelease(auth, domainUrl);
 
       return result;
     }
