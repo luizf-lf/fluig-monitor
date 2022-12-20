@@ -33,6 +33,7 @@ export default function CreateEnvironmentView(): JSX.Element {
   const [consumerSecret, setConsumerSecret] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [tokenSecret, setTokenSecret] = useState('');
+  const [useKeysEncryption, setUseKeysEncryption] = useState(true);
 
   const [scrapeFrequency, setScrapeFrequency] = useState('1h');
   const [pingFrequency, setPingFrequency] = useState('15s');
@@ -413,6 +414,21 @@ export default function CreateEnvironmentView(): JSX.Element {
                 setTokenSecret(event.target.value);
               }}
             />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group inline">
+            <input
+              type="checkbox"
+              name="useKeysEncryption"
+              id="useKeysEncryption"
+              checked={useKeysEncryption}
+              onChange={(event) => {
+                setUseKeysEncryption(event.target.checked);
+              }}
+            />
+            <label htmlFor="useKeysEncryption">Criptografar chaves?</label>
           </div>
         </div>
 

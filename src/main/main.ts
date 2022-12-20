@@ -190,6 +190,7 @@ app
     await runDbMigrations();
 
     // Maybe this function shall be transformed into a nodejs worker.
+    // BUG: sometimes, the jobs are dispatched multiple times on a 60 seconds period
     log.info('Dispatching environment ping jobs');
     scheduleJob(pingIntervalCron, async () => {
       await pingEnvironmentsJob();

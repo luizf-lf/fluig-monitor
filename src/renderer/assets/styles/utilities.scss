@@ -107,6 +107,16 @@
     margin-top: 0.3rem;
     color: var(--font-soft);
   }
+
+  &.inline {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+
+    label {
+      margin-bottom: 0;
+    }
+  }
 }
 
 .mt-1 {
