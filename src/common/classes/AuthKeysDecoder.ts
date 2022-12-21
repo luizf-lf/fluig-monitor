@@ -1,14 +1,21 @@
 import * as forge from 'node-forge';
 import log from 'electron-log';
+import Store from 'electron-store';
 import AuthObject from '../interfaces/AuthObject';
 
 interface ConstructorProps {
   payload: string;
   hash: string;
+  environmentId: number;
   secret?: string;
 }
 
 export default class AuthKeysDecoder {
+  /**
+   * the environment id referenced by the keys
+   */
+  environmentId: number;
+
   /**
    * the payload string
    */
@@ -29,10 +36,11 @@ export default class AuthKeysDecoder {
    */
   decoded: AuthObject | null;
 
-  constructor({ payload, hash, secret }: ConstructorProps) {
+  constructor({ payload, hash, secret, environmentId }: ConstructorProps) {
     this.payload = payload;
     this.hash = hash;
     this.secret = secret || '';
+    this.environmentId = environmentId;
     this.decoded = {
       accessToken: '',
       consumerKey: '',
@@ -50,6 +58,9 @@ export default class AuthKeysDecoder {
       if (this.hash === 'json') {
         this.decoded = JSON.parse(this.payload);
       } else if (this.hash.indexOf('forge:') === 0) {
+        this.secret = new Store().get(
+          `envToken_${this.environmentId}`
+        ) as string;
         const decipher = forge.cipher.createDecipher(
           'AES-CBC',
           forge.util.decode64(this.hash.split('forge:')[1])

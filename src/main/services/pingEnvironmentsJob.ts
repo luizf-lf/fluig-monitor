@@ -77,10 +77,14 @@ async function executePing(
   environment: EnvironmentWithRelatedData
 ): Promise<void> {
   if (environment.oAuthKeysId) {
-    const decodedKeys = new AuthKeysDecoder({
-      hash: environment.oAuthKeysId.hash,
-      payload: environment.oAuthKeysId.payload,
-    }).decode();
+    const decodedKeys = new AuthKeysDecoder(environment.oAuthKeysId).decode();
+
+    if (!decodedKeys) {
+      log.error(
+        'executePing: Could not decode the environment keys, ignoring ping.'
+      );
+      return;
+    }
 
     const requestData = {
       url: `${environment.baseUrl}/api/servlet/ping`,

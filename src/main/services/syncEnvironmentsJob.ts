@@ -21,10 +21,14 @@ async function syncLicenseData(
 ): Promise<void> {
   log.info('syncEnvironmentsJob: Fetching license data');
   if (item.oAuthKeysId) {
-    const decodedKeys = new AuthKeysDecoder({
-      hash: item.oAuthKeysId.hash,
-      payload: item.oAuthKeysId.payload,
-    }).decode();
+    const decodedKeys = new AuthKeysDecoder(item.oAuthKeysId).decode();
+
+    if (!decodedKeys) {
+      log.error(
+        'syncLicenseData: Could not decode the environment keys, ignoring sync.'
+      );
+      return;
+    }
 
     const requestData = {
       url: `${item.baseUrl}/license/api/v1/licenses`,
@@ -121,10 +125,14 @@ async function syncMonitorData(
   log.info('syncEnvironmentsJob: Fetching monitor data');
 
   if (item.oAuthKeysId) {
-    const decodedKeys = new AuthKeysDecoder({
-      hash: item.oAuthKeysId.hash,
-      payload: item.oAuthKeysId.payload,
-    }).decode();
+    const decodedKeys = new AuthKeysDecoder(item.oAuthKeysId).decode();
+
+    if (!decodedKeys) {
+      log.error(
+        'syncMonitorData: Could not decode the environment keys, ignoring sync.'
+      );
+      return;
+    }
 
     const requestData = {
       url: `${item.baseUrl}/monitoring/api/v1/monitors/report`,
@@ -215,10 +223,14 @@ async function syncStatisticsData(
   log.info('syncEnvironmentsJob: Fetching statistics data');
 
   if (item.oAuthKeysId) {
-    const decodedKeys = new AuthKeysDecoder({
-      hash: item.oAuthKeysId.hash,
-      payload: item.oAuthKeysId.payload,
-    }).decode();
+    const decodedKeys = new AuthKeysDecoder(item.oAuthKeysId).decode();
+
+    if (!decodedKeys) {
+      log.error(
+        'syncStatisticsData: Could not decode the environment keys, ignoring sync.'
+      );
+      return;
+    }
 
     const requestData = {
       url: `${item.baseUrl}/monitoring/api/v1/statistics/report`,

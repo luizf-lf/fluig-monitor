@@ -85,10 +85,20 @@ function EditEnvironmentSettingsView(): JSX.Element {
       setName(environmentData.name);
       setDomainUrl(environmentData.baseUrl);
       setKind(environmentData.kind);
-      setConsumerKey(oAuthKeys.consumerKey);
-      setConsumerSecret(oAuthKeys.consumerSecret);
-      setAccessToken(oAuthKeys.accessToken);
-      setTokenSecret(oAuthKeys.tokenSecret);
+      if (oAuthKeys) {
+        setConsumerKey(oAuthKeys.consumerKey);
+        setConsumerSecret(oAuthKeys.consumerSecret);
+        setAccessToken(oAuthKeys.accessToken);
+        setTokenSecret(oAuthKeys.tokenSecret);
+      } else {
+        setConsumerKey('');
+        setConsumerSecret('');
+        setAccessToken('');
+        setTokenSecret('');
+        log.warn(
+          'Could not decode environment auth keys, form will use empty values.'
+        );
+      }
 
       setScrapeFrequency(environmentData.updateScheduleId.scrapeFrequency);
       setPingFrequency(environmentData.updateScheduleId.pingFrequency);
