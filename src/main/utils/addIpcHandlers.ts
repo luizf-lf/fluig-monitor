@@ -1,5 +1,6 @@
 import log from 'electron-log';
 import { ipcMain } from 'electron';
+import Store from 'electron-store';
 
 import { AuthKeysControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
 import { EnvironmentUpdateControllerInterface } from '../../common/interfaces/EnvironmentControllerInterface';
@@ -95,7 +96,7 @@ export default function addIpcHandlers(): void {
       const createdAuthKeys = await new AuthKeysController().new({
         environmentId: createdEnvironment.id,
         payload: environmentAuthKeys.payload,
-        hash: 'json',
+        hash: environmentAuthKeys.hash,
       });
 
       await new LogController().writeLog({
@@ -273,6 +274,13 @@ export default function addIpcHandlers(): void {
       const result = await getEnvironmentRelease(auth, domainUrl);
 
       return result;
+    }
+  );
+
+  ipcMain.handle(
+    'setStoreValue',
+    (_event: Electron.IpcMainInvokeEvent, key: string, value: string) => {
+      new Store().set(key, value);
     }
   );
 }

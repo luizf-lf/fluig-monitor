@@ -14,7 +14,12 @@ import {
   AuthKeysControllerInterface,
   AuthKeysFormControllerInterface,
 } from '../../common/interfaces/AuthKeysControllerInterface';
-import { Environment, HTTPResponse } from '../../main/generated/client';
+import {
+  Environment,
+  EnvironmentAuthKeys,
+  HTTPResponse,
+  UpdateSchedule,
+} from '../../main/generated/client';
 import {
   DBStats,
   HDStats,
@@ -25,6 +30,12 @@ export interface CreateEnvironmentProps {
   environment: EnvironmentCreateControllerInterface;
   updateSchedule: UpdateScheduleFormControllerInterface;
   environmentAuthKeys: AuthKeysFormControllerInterface;
+}
+
+interface CreatedEnvironmentProps {
+  createdEnvironment: Environment;
+  createdUpdateSchedule: UpdateSchedule;
+  createdAuthKeys: EnvironmentAuthKeys;
 }
 
 export async function getAllEnvironments(): Promise<
@@ -71,7 +82,7 @@ export async function createEnvironment({
   environment,
   updateSchedule,
   environmentAuthKeys,
-}: CreateEnvironmentProps): Promise<Environment> {
+}: CreateEnvironmentProps): Promise<CreatedEnvironmentProps> {
   log.info('IPC Invoker: Requesting a new environment creation');
   const createdEnvironment = await ipcRenderer.invoke('createEnvironment', {
     environment,

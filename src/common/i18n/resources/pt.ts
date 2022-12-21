@@ -39,6 +39,8 @@ const pt = {
       authFieldsValidation:
         'Preencha os campos de URL e autenticação para continuar.',
       back: 'Voltar',
+      unableToEncrypt:
+        'Não foi possível criptografar as chaves de autenticação',
       form: {
         title: 'Cadastrar novo ambiente',
         environmentDataSection: 'Dados do ambiente',
@@ -75,6 +77,7 @@ const pt = {
           label: 'Token Secret:',
           placeholder: 'Informe o token secret',
         },
+        useEncryption: 'Criptografar chaves?',
         testConnection: 'Testar Conexão',
         serverVerification: {
           title: 'Verificação Do Servidor',

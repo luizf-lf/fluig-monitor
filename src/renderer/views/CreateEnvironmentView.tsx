@@ -11,10 +11,10 @@ import {
   FiRefreshCw,
   FiWifi,
 } from 'react-icons/fi';
+import log from 'electron-log';
 import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import log from 'electron-log';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import {
@@ -24,6 +24,7 @@ import {
 } from '../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
+import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -35,8 +36,8 @@ export default function CreateEnvironmentView(): JSX.Element {
   const [tokenSecret, setTokenSecret] = useState('');
   const [useKeysEncryption, setUseKeysEncryption] = useState(true);
 
-  const [scrapeFrequency, setScrapeFrequency] = useState('1h');
-  const [pingFrequency, setPingFrequency] = useState('15s');
+  const [scrapeFrequency, setScrapeFrequency] = useState('6h');
+  const [pingFrequency, setPingFrequency] = useState('1m');
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
@@ -149,8 +150,8 @@ export default function CreateEnvironmentView(): JSX.Element {
     };
 
     const envFormValidator = new EnvironmentFormValidator().validate(formData);
-
     const { isValid, lastMessage } = envFormValidator;
+    let encryptedPayload = null;
 
     if (isValid) {
       log.info('CreateEnvironmentView: Form is valid, creating environment.');
@@ -192,7 +193,37 @@ export default function CreateEnvironmentView(): JSX.Element {
 
         log.info(`Current environment release is ${release}`);
 
-        await createEnvironment({
+        let environmentAuthKeys = {
+          payload: '',
+          hash: '',
+        };
+
+        if (useKeysEncryption) {
+          log.info('Using encryption');
+          encryptedPayload = new AuthKeysEncoder(formData.auth).encode();
+          if (encryptedPayload) {
+            environmentAuthKeys = {
+              payload: encryptedPayload.encrypted,
+              hash: `forge:${encryptedPayload.key}`,
+            };
+          } else {
+            createShortNotification({
+              id: Date.now(),
+              type: 'error',
+              message: t('views.CreateEnvironmentView.unableToEncrypt'),
+            });
+            setButtonIsLoading(false);
+            setActionButtonsDisabled(false);
+            return;
+          }
+        } else {
+          environmentAuthKeys = {
+            payload: JSON.stringify(formData.auth),
+            hash: 'json',
+          };
+        }
+
+        const created = await createEnvironment({
           environment: {
             baseUrl: formData.baseUrl,
             kind: formData.kind,
@@ -200,12 +231,25 @@ export default function CreateEnvironmentView(): JSX.Element {
             release,
           },
           updateSchedule: formData.updateSchedule,
-          environmentAuthKeys: {
-            // TODO: Implement auth keys encoding with node forge
-            payload: JSON.stringify(formData.auth),
-            hash: 'json',
-          },
+          environmentAuthKeys,
         });
+
+        log.info(created);
+
+        if (useKeysEncryption && encryptedPayload !== null) {
+          // maybe it's not a good idea to use the Store library,
+          //  but in the meanwhile it's better than saving both keys on the same place.
+          log.info(
+            `Setting environment token for environment ${created.createdEnvironment.id}`
+          );
+
+          ipcRenderer.invoke(
+            'setStoreValue',
+            `envToken_${created.createdEnvironment.id}`,
+            encryptedPayload.iv
+          );
+          log.info('Token was set');
+        }
 
         log.info(
           'CreateEnvironmentView: Environment created, syncing environments and redirecting to home view'
@@ -349,7 +393,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               {t('views.CreateEnvironmentView.form.consumerKey.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="consumerKey"
               id="consumerKey"
               placeholder={t(
@@ -366,7 +410,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               {t('views.CreateEnvironmentView.form.consumerSecret.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="consumerSecret"
               id="consumerSecret"
               placeholder={t(
@@ -386,7 +430,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               {t('views.CreateEnvironmentView.form.accessToken.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="accessToken"
               id="accessToken"
               placeholder={t(
@@ -403,7 +447,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               {t('views.CreateEnvironmentView.form.tokenSecret.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="tokenSecret"
               id="tokenSecret"
               placeholder={t(
@@ -428,7 +472,9 @@ export default function CreateEnvironmentView(): JSX.Element {
                 setUseKeysEncryption(event.target.checked);
               }}
             />
-            <label htmlFor="useKeysEncryption">Criptografar chaves?</label>
+            <label htmlFor="useKeysEncryption">
+              {t('views.CreateEnvironmentView.form.useEncryption')}
+            </label>
           </div>
         </div>
 

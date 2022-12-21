@@ -39,6 +39,7 @@ const en = {
       authFieldsValidation:
         'Fill the url and authentication fields before continuing.',
       back: 'Back',
+      unableToEncrypt: 'Unable to encrypt the authentication keys.',
       form: {
         title: 'Create a new environment',
         environmentDataSection: 'Environment Info',
@@ -75,6 +76,7 @@ const en = {
           label: 'Token Secret:',
           placeholder: 'Inform the token secret',
         },
+        useEncryption: 'Encrypt keys?',
         testConnection: 'Test Connection',
         serverVerification: {
           title: 'Server Verification',

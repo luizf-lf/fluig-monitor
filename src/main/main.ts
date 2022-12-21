@@ -15,8 +15,8 @@ import i18n from '../common/i18n/i18n';
 import {
   isDevelopment,
   logStringFormat,
-  pingIntervalCron,
-  scrapeSyncIntervalCron,
+  pingInterval,
+  scrapeSyncInterval,
 } from './utils/globalConstants';
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
@@ -190,17 +190,16 @@ app
     await runDbMigrations();
 
     // Maybe this function shall be transformed into a nodejs worker.
-    // BUG: sometimes, the jobs are dispatched multiple times on a 60 seconds period
     log.info('Dispatching environment ping jobs');
-    scheduleJob(pingIntervalCron, async () => {
+    setTimeout(async () => {
       await pingEnvironmentsJob();
-    });
+    }, pingInterval);
 
     log.info('Dispatching environment sync jobs');
     await syncEnvironmentsJob();
-    scheduleJob(scrapeSyncIntervalCron, async () => {
+    setTimeout(async () => {
       await syncEnvironmentsJob();
-    });
+    }, scrapeSyncInterval);
 
     setTimeout(async () => {
       await createWindow();
