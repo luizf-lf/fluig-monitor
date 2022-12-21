@@ -122,6 +122,7 @@ const en = {
       clickAgain: 'Click again to confirm the environment deletion',
       deletedSuccessfully: 'Environment deleted successfully.',
       back: 'Back',
+      unableToEncrypt: 'Unable to encrypt the authentication keys.',
       form: {
         title: 'Edit Environment',
         environmentDataSection: 'Environment Data',
@@ -158,6 +159,7 @@ const en = {
           label: 'Token Secret:',
           placeholder: 'Fill out the token secret',
         },
+        useEncryption: 'Encrypt keys?',
         testConnection: 'Test Connection',
         serverVerification: {
           title: 'Server Verification',

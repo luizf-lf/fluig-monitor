@@ -207,6 +207,7 @@ export default function CreateEnvironmentView(): JSX.Element {
               hash: `forge:${encryptedPayload.key}`,
             };
           } else {
+            log.warn('Could not encrypt oAuth keys');
             createShortNotification({
               id: Date.now(),
               type: 'error',
@@ -240,7 +241,7 @@ export default function CreateEnvironmentView(): JSX.Element {
           // maybe it's not a good idea to use the Store library,
           //  but in the meanwhile it's better than saving both keys on the same place.
           log.info(
-            `Setting environment token for environment ${created.createdEnvironment.id}`
+            `Updating environment token for environment ${created.createdEnvironment.id}`
           );
 
           ipcRenderer.invoke(
@@ -248,7 +249,6 @@ export default function CreateEnvironmentView(): JSX.Element {
             `envToken_${created.createdEnvironment.id}`,
             encryptedPayload.iv
           );
-          log.info('Token was set');
         }
 
         log.info(

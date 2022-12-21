@@ -8,8 +8,8 @@
 - Added a time indicator on the server response time graph (Currently showing as "Last 24 hours")
 - Added a "Under development" indicator to some views and components.
 - Implemented a proper log file rotation with node-schedule.
-- Ping and sync jobs also have been altered to use node-schedule.
-- The app now recovers the environment release on environment add or edit.
+- The app now recovers the environment release when the environment is added or edited.
+- Implemented environment auth keys encryption option.
 
 # 0.2.1
 

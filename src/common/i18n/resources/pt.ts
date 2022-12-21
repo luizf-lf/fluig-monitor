@@ -125,6 +125,8 @@ const pt = {
       clickAgain: 'Clique novamente para confirmar a exclusão.',
       deletedSuccessfully: 'Ambiente excluído com sucesso.',
       back: 'Voltar',
+      unableToEncrypt:
+        'Não foi possível criptografar as chaves de autenticação',
       form: {
         title: 'Editar ambiente',
         environmentDataSection: 'Dados do ambiente',
@@ -161,6 +163,7 @@ const pt = {
           label: 'Token Secret:',
           placeholder: 'Informe o token secret',
         },
+        useEncryption: 'Criptografar chaves?',
         testConnection: 'Testar Conexão',
         serverVerification: {
           title: 'Verificação Do Servidor',

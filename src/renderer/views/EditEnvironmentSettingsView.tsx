@@ -26,6 +26,7 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
+import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId }: EnvironmentViewParams = useParams();
@@ -43,6 +44,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const [tokenSecret, setTokenSecret] = useState('');
   const [scrapeFrequency, setScrapeFrequency] = useState('');
   const [pingFrequency, setPingFrequency] = useState('');
+  const [useKeysEncryption, setUseKeysEncryption] = useState(true);
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
@@ -81,6 +83,10 @@ function EditEnvironmentSettingsView(): JSX.Element {
       const oAuthKeys = new AuthKeysDecoder(
         environmentData.oAuthKeysId
       ).decode();
+
+      if (environmentData.oAuthKeysId.hash.indexOf('forge:') < 0) {
+        setUseKeysEncryption(false);
+      }
 
       setName(environmentData.name);
       setDomainUrl(environmentData.baseUrl);
@@ -201,6 +207,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     const envFormValidator = new EnvironmentFormValidator().validate(formData);
 
     const { isValid, lastMessage } = envFormValidator;
+    let encryptedPayload = null;
 
     if (!isValid) {
       createShortNotification({
@@ -251,6 +258,46 @@ function EditEnvironmentSettingsView(): JSX.Element {
 
       log.info(`Updated environment release to ${release}`);
 
+      const authKeys = {
+        environmentId: formData.id,
+        payload: '',
+        hash: '',
+      };
+
+      if (useKeysEncryption) {
+        log.info('Using encryption');
+        encryptedPayload = new AuthKeysEncoder(formData.auth).encode();
+        if (encryptedPayload) {
+          authKeys.payload = encryptedPayload.encrypted;
+          authKeys.hash = `forge:${encryptedPayload.key}`;
+        } else {
+          log.warn('Could not encrypt oAuth keys');
+          createShortNotification({
+            id: Date.now(),
+            type: 'error',
+            message: t('views.EditEnvironmentView.unableToEncrypt'),
+          });
+          setButtonIsLoading(false);
+          setActionButtonsDisabled(false);
+          return;
+        }
+      } else {
+        authKeys.payload = JSON.stringify(formData.auth);
+        authKeys.hash = 'json';
+      }
+
+      if (useKeysEncryption && encryptedPayload !== null) {
+        log.info(
+          `Updating environment token for environment ${environmentData.id}`
+        );
+
+        ipcRenderer.invoke(
+          'setStoreValue',
+          `envToken_${environmentData.id}`,
+          encryptedPayload.iv
+        );
+      }
+
       const result = await updateEnvironment(
         {
           id: formData.id,
@@ -264,11 +311,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
           pingFrequency: formData.updateSchedule.pingFrequency,
           scrapeFrequency: formData.updateSchedule.scrapeFrequency,
         },
-        {
-          environmentId: formData.id,
-          payload: JSON.stringify(formData.auth),
-          hash: 'json',
-        }
+        authKeys
       );
 
       if (!result) {
@@ -428,7 +471,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.consumerKey.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="consumerKey"
               id="consumerKey"
               placeholder={t(
@@ -445,7 +488,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.consumerSecret.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="consumerSecret"
               id="consumerSecret"
               placeholder={t(
@@ -465,7 +508,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.accessToken.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="accessToken"
               id="accessToken"
               placeholder={t(
@@ -482,7 +525,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.tokenSecret.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="tokenSecret"
               id="tokenSecret"
               placeholder={t(
@@ -493,6 +536,23 @@ function EditEnvironmentSettingsView(): JSX.Element {
                 setTokenSecret(event.target.value);
               }}
             />
+          </div>
+        </div>
+
+        <div className="form-row">
+          <div className="form-group inline">
+            <input
+              type="checkbox"
+              name="useKeysEncryption"
+              id="useKeysEncryption"
+              checked={useKeysEncryption}
+              onChange={(event) => {
+                setUseKeysEncryption(event.target.checked);
+              }}
+            />
+            <label htmlFor="useKeysEncryption">
+              {t('views.EditEnvironmentView.form.useEncryption')}
+            </label>
           </div>
         </div>
 
