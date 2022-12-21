@@ -189,15 +189,18 @@ app
 
     await runDbMigrations();
 
-    // Maybe this function shall be transformed into a nodejs worker.
+    // When using node schedule with a cron like scheduler, sometimes the
+    //  sync function are dispatched every second for a minute.
+    // That's why the setInterval is still being used.
+    // Maybe this function shall be transformed into a nodejs worker?
     log.info('Dispatching environment ping jobs');
-    setTimeout(async () => {
+    setInterval(async () => {
       await pingEnvironmentsJob();
     }, pingInterval);
 
     log.info('Dispatching environment sync jobs');
     await syncEnvironmentsJob();
-    setTimeout(async () => {
+    setInterval(async () => {
       await syncEnvironmentsJob();
     }, scrapeSyncInterval);
 
