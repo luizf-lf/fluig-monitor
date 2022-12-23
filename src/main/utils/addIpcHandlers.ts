@@ -83,7 +83,7 @@ export default function addIpcHandlers(): void {
         environmentAuthKeys,
       }: CreateEnvironmentProps
     ) => {
-      log.info('IPC Handler: Saving environment');
+      log.info('IPC Handler: Creating a new environment');
 
       const createdEnvironment = await new EnvironmentController().new(
         environment
@@ -116,7 +116,7 @@ export default function addIpcHandlers(): void {
       updateSchedule: UpdateScheduleControllerInterface,
       authKeys: AuthKeysControllerInterface
     ) => {
-      log.info('IPC Handler: Updating environment');
+      log.info('IPC Handler: Updating an environment');
 
       const updatedEnvironment = await new EnvironmentController().update(
         environment
@@ -155,8 +155,7 @@ export default function addIpcHandlers(): void {
     'toggleEnvironmentFavorite',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
       log.info(
-        'IPC Handler: Toggling environment favorite for environment id',
-        id
+        `IPC Handler: Toggling environment favorite for environment with a id of ${id}`
       );
 
       const favorited = await EnvironmentController.toggleFavorite(id);
@@ -183,8 +182,7 @@ export default function addIpcHandlers(): void {
     'getLastHttpResponseFromEnvironment',
     async (_event: Electron.IpcMainInvokeEvent, environmentId: number) => {
       log.info(
-        'IPC Handler: Recovering last HTTP Response from environment',
-        environmentId
+        `IPC Handler: Recovering last HTTP Response from environment ${environmentId}`
       );
 
       const lastResponse =
@@ -242,7 +240,7 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle('forceEnvironmentSync', async () => {
-    log.info('IPC Handler: Forcing all environments Sync');
+    log.info('IPC Handler: Forcing all environments sync');
     await syncEnvironmentsJob();
   });
 
@@ -258,6 +256,7 @@ export default function addIpcHandlers(): void {
       auth: AuthObject,
       domainUrl: string
     ) => {
+      log.info('IPC Handler: Validating oAuth permissions');
       const result = await validateOAuthPermission(auth, domainUrl);
 
       return result;
@@ -271,6 +270,7 @@ export default function addIpcHandlers(): void {
       auth: AuthObject,
       domainUrl: string
     ): Promise<V2VersionApiResponse | null> => {
+      log.info('IPC Handler: Getting the environment release');
       const result = await getEnvironmentRelease(auth, domainUrl);
 
       return result;
