@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import log from 'electron-log';
 import { FiAirplay, FiBell, FiMoon, FiSettings, FiSun } from 'react-icons/fi';
 import '../../assets/styles/components/Navbar/RightButtons.scss';
@@ -18,17 +19,13 @@ export default function NavActionButtons() {
     if (theme === 'WHITE') {
       document.body.classList.remove('dark-theme');
       setThemeIcon(<FiSun />);
-
-      if (cacheToDb) {
-        updateFrontEndTheme('WHITE');
-      }
     } else {
       document.body.classList.add('dark-theme');
       setThemeIcon(<FiMoon />);
+    }
 
-      if (cacheToDb) {
-        updateFrontEndTheme('DARK');
-      }
+    if (cacheToDb) {
+      updateFrontEndTheme(theme);
     }
   }
 
@@ -80,16 +77,13 @@ export default function NavActionButtons() {
       >
         {themeIcon}
       </button>
-      <button
-        type="button"
+      <Link
+        to="/appSettings"
         className="optionButton"
-        title={`${t('navbar.actionButtons.settings')} [${t(
-          'components.global.underDevelopment'
-        )}]`}
-        disabled
+        title={t('navbar.actionButtons.settings')}
       >
         <FiSettings />
-      </button>
+      </Link>
     </section>
   );
 }

@@ -10,6 +10,8 @@
 - Implemented a proper log file rotation with node-schedule.
 - The app now recovers the environment release when the environment is added or edited.
 - Implemented environment auth keys encryption option.
+- Added a app settings component
+- Reduced log levels on the IPC channels
 
 # 0.2.1
 

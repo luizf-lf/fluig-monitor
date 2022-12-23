@@ -14,6 +14,7 @@ import './assets/styles/utilities.scss';
 // contexts
 import { EnvironmentListContextProvider } from './contexts/EnvironmentListContext';
 import { NotificationsContextProvider } from './contexts/NotificationsContext';
+import AppSettingsView from './views/AppSettingsView';
 
 export default function App() {
   // the useLocation hook is used to render a specific component per route
@@ -36,6 +37,9 @@ export default function App() {
                 </Route>
                 <Route path="/environment/:environmentId">
                   <EnvironmentView />
+                </Route>
+                <Route path="/appSettings">
+                  <AppSettingsView />
                 </Route>
               </Switch>
             </AnimatePresence>
