@@ -27,6 +27,7 @@ import rotateLogFile from './utils/logRotation';
 import syncEnvironmentsJob from './services/syncEnvironmentsJob';
 import pingEnvironmentsJob from './services/pingEnvironmentsJob';
 import addIpcHandlers from './utils/addIpcHandlers';
+import getAssetPath from './utils/getAssetPath';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -45,14 +46,6 @@ if (process.env.NODE_ENV === 'production') {
 if (isDevelopment) {
   require('electron-debug')();
 }
-
-const RESOURCES_PATH = app.isPackaged
-  ? path.join(process.resourcesPath, 'assets')
-  : path.join(__dirname, '../../assets');
-
-const getAssetPath = (...paths: string[]): string => {
-  return path.join(RESOURCES_PATH, ...paths);
-};
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
