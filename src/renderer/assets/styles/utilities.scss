@@ -97,6 +97,8 @@
     background-color: var(--card);
     color: var(--font-secondary);
 
+    outline: 3px solid var(--border-light);
+
     &:focus-visible {
       outline: 3px solid var(--light-blue);
     }
