@@ -12,6 +12,7 @@
 - Implemented environment auth keys encryption option.
 - Added a app settings component
 - Reduced log levels on the IPC channels
+- Settings panel layout implemented
 
 # 0.2.1
 

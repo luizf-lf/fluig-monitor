@@ -213,6 +213,27 @@ const pt = {
         minimize: 'Minimizar',
       },
     },
+    AppSettingsView: {
+      title: 'Configurações',
+      settingsMenu: {
+        categories: {
+          general: 'Gerais',
+          about: 'Sobre',
+        },
+        pages: {
+          theme: 'Tema',
+          language: 'Idioma',
+          about: 'Sobre',
+          github: 'GitHub',
+          reportABug: 'Reporte Um Bug',
+        },
+      },
+      emptyRoute: {
+        title: 'Configurações',
+        helper:
+          'Selecione um item ao lado para acessar as respectivas configurações.',
+      },
+    },
   },
   global: {
     environmentKinds: {
