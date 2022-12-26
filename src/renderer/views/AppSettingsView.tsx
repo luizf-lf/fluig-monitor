@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiSettings } from 'react-icons/fi';
+import { FiChevronRight, FiInfo, FiSettings } from 'react-icons/fi';
 import { Route, Switch, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import globalContainerVariants from '../utils/globalContainerVariants';
 import '../assets/styles/views/AppSettings.view.scss';
 
 interface SettingsMenuBuilder {
-  categoryTitle: {
+  title: {
     name: string;
     icon: JSX.Element;
   };
@@ -24,15 +24,40 @@ export default function AppSettingsView() {
 
   const menuBuilder = [
     {
-      categoryTitle: {
+      title: {
         name: 'Gerais',
         icon: <FiSettings />,
       },
       key: 'GENERAL_SETTINGS',
       children: [
         {
-          target: `${url}/relayMode`,
-          name: 'Modo Relay',
+          target: `${url}/theme`,
+          name: 'Tema',
+        },
+        {
+          target: `${url}/language`,
+          name: 'Idioma',
+        },
+      ],
+    },
+    {
+      title: {
+        name: 'Sobre',
+        icon: <FiInfo />,
+      },
+      key: 'ABOUT',
+      children: [
+        {
+          target: `${url}/about`,
+          name: 'Sobre',
+        },
+        {
+          target: `${url}/github`,
+          name: 'GitHub',
+        },
+        {
+          target: `${url}/reportABug`,
+          name: 'Reporte um Bug',
         },
       ],
     },
@@ -54,7 +79,7 @@ export default function AppSettingsView() {
             return (
               <div className="menu-category" key={category.key}>
                 <h5 className="category-title">
-                  {category.categoryTitle.icon} {category.categoryTitle.name}
+                  {category.title.icon} {category.title.name}
                 </h5>
                 <div className="category-items">
                   {category.children.map((submenuItem) => {
@@ -64,7 +89,7 @@ export default function AppSettingsView() {
                         to={submenuItem.target}
                         className="item"
                       >
-                        {submenuItem.name}
+                        <FiChevronRight /> {submenuItem.name}
                       </Link>
                     );
                   })}
@@ -73,12 +98,13 @@ export default function AppSettingsView() {
             );
           })}
         </aside>
-        <div className="settings-item-view">
+        <div className="settings-item-container">
           <Switch>
-            <Route path={`${path}/relayMode`}>Relay Mode</Route>
+            <Route path={`${path}/theme`}>Theme Options</Route>
 
             <Route exact path={path}>
-              Selecione um item ao lado
+              <h3>Configurações</h3>
+              <p>Selecione um item ao lado para acessar as configurações</p>
             </Route>
           </Switch>
         </div>
