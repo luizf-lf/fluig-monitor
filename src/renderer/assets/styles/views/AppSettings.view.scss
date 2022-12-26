@@ -1,0 +1,47 @@
+#appSettingsContainer {
+  width: 100%;
+
+  .settings-block-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 2rem;
+
+    .settings-menu {
+      display: flex;
+
+      .menu-category {
+        margin-bottom: 1rem;
+
+        .category-title {
+          font-weight: bold;
+          padding-bottom: 0.5rem;
+          margin-bottom: 0.5rem;
+          border-bottom: 2px solid var(--border-light);
+
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 0.5rem;
+        }
+        .category-items {
+          display: flex;
+          flex-direction: column;
+
+          .item {
+            color: var(--text-primary);
+            padding: 0.25rem 0.5rem;
+
+            &:hover {
+              background-color: var(--card);
+              border-radius: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+
+    .settings-item-view {
+      width: 100%;
+    }
+  }
+}
