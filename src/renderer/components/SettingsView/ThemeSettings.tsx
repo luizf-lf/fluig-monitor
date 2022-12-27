@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import log from 'electron-log';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { FiPenTool } from 'react-icons/fi';
 import globalContainerVariants from '../../utils/globalContainerVariants';
@@ -14,7 +15,8 @@ export default function ThemeSettings() {
     document.body.classList.contains('dark-theme') ? 'DARK' : 'WHITE'
   );
 
-  // TODO: Add i18n
+  const { t } = useTranslation();
+
   // TODO: Implement a theme context to update other components on theme change
 
   function setAppTheme(selectedTheme: string, cacheToDb = false) {
@@ -48,11 +50,9 @@ export default function ThemeSettings() {
         <span className="icon-dot purple-variant">
           <FiPenTool />
         </span>
-        Tema
+        {t('components.ThemeSettings.title')}
       </h3>
-      <p className="mb-2">
-        Utilize esta opção para definir o tema a ser utilizado pela aplicação.
-      </p>
+      <p className="mb-2">{t('components.ThemeSettings.helperText')}</p>
 
       <div className="preview-radios">
         <div className="radio-option-container">
@@ -71,7 +71,7 @@ export default function ThemeSettings() {
                 defaultChecked={theme === 'WHITE'}
                 onClick={() => toggleAppTheme('WHITE')}
               />
-              Modo Claro
+              {t('components.ThemeSettings.whiteTheme')}
             </span>
           </label>
         </div>
@@ -91,7 +91,7 @@ export default function ThemeSettings() {
                 defaultChecked={theme === 'DARK'}
                 onClick={() => toggleAppTheme('DARK')}
               />
-              Modo Escuro
+              {t('components.ThemeSettings.darkTheme')}
             </span>
           </label>
         </div>

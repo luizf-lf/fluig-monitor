@@ -321,6 +321,13 @@ const pt = {
       insufficientOrNoData: 'Sem dados ou dados insuficientes.',
       responseTime: 'Tempo De Resposta (ms)',
     },
+    ThemeSettings: {
+      title: 'Tema',
+      helperText:
+        'Utilize esta opção para definir o tema a ser utilizado pela aplicação',
+      whiteTheme: 'Tema Claro',
+      darkTheme: 'Tema Escuro',
+    },
   },
   classes: {
     EnvironmentFormValidator: {

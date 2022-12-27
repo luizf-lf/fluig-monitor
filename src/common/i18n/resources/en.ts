@@ -315,6 +315,12 @@ const en = {
       insufficientOrNoData: 'Insufficient or no data available.',
       responseTime: 'Response Time (ms)',
     },
+    ThemeSettings: {
+      title: 'Theme',
+      helperText: 'Use this option to define the theme used by the application',
+      whiteTheme: 'White Theme',
+      darkTheme: 'Dark Theme',
+    },
   },
   classes: {
     EnvironmentFormValidator: {
