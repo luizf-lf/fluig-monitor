@@ -317,9 +317,13 @@ const en = {
     },
     ThemeSettings: {
       title: 'Theme',
-      helperText: 'Use this option to define the theme used by the application',
+      helperText: 'Select the theme to be used by the application bellow: ',
       whiteTheme: 'White Theme',
       darkTheme: 'Dark Theme',
+    },
+    LanguageSettings: {
+      title: 'Language',
+      helperText: 'Select the language to be used by the application bellow: ',
     },
   },
   classes: {

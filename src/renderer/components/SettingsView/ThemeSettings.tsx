@@ -32,7 +32,7 @@ export default function ThemeSettings() {
           <label htmlFor="radioTheme_white">
             <img
               src={whiteThemePreview}
-              alt="white theme"
+              alt={t('components.ThemeSettings.whiteTheme')}
               className="preview-image"
             />
             <span className="radio-option">
@@ -52,7 +52,7 @@ export default function ThemeSettings() {
           <label htmlFor="radioTheme_dark">
             <img
               src={darkThemePreview}
-              alt="dark theme"
+              alt={t('components.ThemeSettings.darkTheme')}
               className="preview-image"
             />
             <span className="radio-option">

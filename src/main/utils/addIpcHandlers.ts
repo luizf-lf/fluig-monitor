@@ -25,6 +25,7 @@ import getEnvironmentRelease, {
   V2VersionApiResponse,
 } from '../services/getEnvironmentRelease';
 import AuthObject from '../../common/interfaces/AuthObject';
+import i18n from '../../common/i18n/i18n';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -281,6 +282,13 @@ export default function addIpcHandlers(): void {
     'setStoreValue',
     (_event: Electron.IpcMainInvokeEvent, key: string, value: string) => {
       new Store().set(key, value);
+    }
+  );
+
+  ipcMain.handle(
+    'updateLanguage',
+    (_event: Electron.IpcMainInvokeEvent, lang: string) => {
+      i18n.changeLanguage(lang);
     }
   );
 }

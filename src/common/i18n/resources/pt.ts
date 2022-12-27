@@ -323,10 +323,13 @@ const pt = {
     },
     ThemeSettings: {
       title: 'Tema',
-      helperText:
-        'Utilize esta opção para definir o tema a ser utilizado pela aplicação',
+      helperText: 'Selecione abaixo o tema a ser utilizado pela aplicação:',
       whiteTheme: 'Tema Claro',
       darkTheme: 'Tema Escuro',
+    },
+    LanguageSettings: {
+      title: 'Idioma',
+      helperText: 'Selecione abaixo o idioma a ser utilizado pela aplicação: ',
     },
   },
   classes: {

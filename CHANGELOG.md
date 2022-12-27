@@ -12,8 +12,9 @@
 - Implemented environment auth keys encryption option.
 - Added a app settings component
 - Reduced log levels on the IPC channels
-- Settings panel layout implemented
-  - Theme settings added to settings panel
+- Settings panel layout implemented. Settings implemented:
+  - Theme settings
+  - Language settings
 - Theme switcher implemented as a context
 
 # 0.2.1
