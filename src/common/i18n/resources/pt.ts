@@ -340,6 +340,14 @@ const pt = {
         'O uso desta ferramenta é opcional, e portanto, seu funcionamento total ou parcial não é garantido para todos os tipos de ambientes Fluig.',
       learnMoreAt: 'Saiba mais sobre o projeto no repositório oficial no ',
     },
+    ReportABugSection: {
+      title: 'Reporte um bug',
+      headline1:
+        'Encontrou algum bug ou possui alguma sugestão de desenvolvimento sobre esta ferramenta?',
+      headline2:
+        'Você pode utilizar o botão abaixo para ser direcionado até a página de Issues do repositório no GitHub:',
+      callToAction: 'Acessar',
+    },
   },
   classes: {
     EnvironmentFormValidator: {

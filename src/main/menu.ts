@@ -107,12 +107,6 @@ export default class MenuBuilder {
             );
           },
         },
-        // {
-        //   label: t('menu.about.aboutApp'),
-        //   click() {
-        //     // TODO: Open about window
-        //   },
-        // },
       ],
     };
 
@@ -248,12 +242,6 @@ export default class MenuBuilder {
               );
             },
           },
-          // {
-          //   label: t('menu.about.aboutApp'),
-          //   click() {
-          //     // TODO: Open about window
-          //   },
-          // },
         ],
       },
     ];

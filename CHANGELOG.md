@@ -16,6 +16,7 @@
   - Theme settings
   - Language settings
   - About section
+  - Report a bug section
 - Theme switcher implemented as a context
 
 # 0.2.1

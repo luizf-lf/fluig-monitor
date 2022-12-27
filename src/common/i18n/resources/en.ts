@@ -334,6 +334,14 @@ const en = {
       learnMoreAt:
         'Learn more about the project in the official repository at ',
     },
+    ReportABugSection: {
+      title: 'Report a bug',
+      headline1:
+        'Found a bug or have any development suggestions about this tool?',
+      headline2:
+        'You can use the button below to be directed to the Issues page of the repository on GitHub:',
+      callToAction: 'Access',
+    },
   },
   classes: {
     EnvironmentFormValidator: {
