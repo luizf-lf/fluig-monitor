@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiChevronRight, FiInfo, FiSettings } from 'react-icons/fi';
 import { Route, Switch, useRouteMatch } from 'react-router';
@@ -30,6 +31,7 @@ interface SettingsMenuBuilder {
 export default function AppSettingsView() {
   const { path, url } = useRouteMatch();
   const { t } = useTranslation();
+  const [selectedRoute, setSelectedRoute] = useState('');
 
   const menuBuilder = [
     {
@@ -101,7 +103,10 @@ export default function AppSettingsView() {
                       <Link
                         key={submenuItem.target}
                         to={submenuItem.target}
-                        className="item"
+                        className={`item ${
+                          selectedRoute === submenuItem.target ? 'active' : ''
+                        }`}
+                        onClick={() => setSelectedRoute(submenuItem.target)}
                       >
                         <FiChevronRight /> {submenuItem.name}
                       </Link>

@@ -139,10 +139,18 @@
 
       gap: 2rem;
 
+      &:hover {
+        cursor: pointer;
+      }
+
       .preview-image {
         width: 18rem;
         border-radius: 0.5rem;
         box-shadow: var(--card-shadow-sm);
+
+        &:hover {
+          cursor: pointer;
+        }
       }
 
       .radio-option {
@@ -156,6 +164,7 @@
 
     &:hover {
       box-shadow: var(--card-shadow);
+      cursor: pointer;
     }
   }
 }
