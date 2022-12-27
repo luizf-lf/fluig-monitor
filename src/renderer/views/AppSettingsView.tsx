@@ -125,7 +125,12 @@ export default function AppSettingsView() {
             })}
 
             <Route exact path={path}>
-              <h3>{t('views.AppSettingsView.emptyRoute.title')}</h3>
+              <h3 className="icon-title">
+                <span className="icon-dot">
+                  <FiSettings />
+                </span>
+                {t('views.AppSettingsView.emptyRoute.title')}
+              </h3>
               <p>{t('views.AppSettingsView.emptyRoute.helper')}</p>
             </Route>
           </Switch>

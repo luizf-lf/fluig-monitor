@@ -5,7 +5,7 @@
   - The validation occurs on the create / edit environment save button
 - Moved main process services to dedicated folder.
 - Added a "report a bug" button on the "About" menu
-- Added a time indicator on the server response time graph (Currently showing as "Last 24 hours")
+- Added a time period indicator on the server response time graph (Currently showing as "Last 24 hours")
 - Added a "Under development" indicator to some views and components.
 - Implemented a proper log file rotation with node-schedule.
 - The app now recovers the environment release when the environment is added or edited.
@@ -13,6 +13,7 @@
 - Added a app settings component
 - Reduced log levels on the IPC channels
 - Settings panel layout implemented
+  - Theme settings added to settings panel
 
 # 0.2.1
 

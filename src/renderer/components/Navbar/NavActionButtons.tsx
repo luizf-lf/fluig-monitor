@@ -14,7 +14,7 @@ export default function NavActionButtons() {
   const { t } = useTranslation();
 
   function setTheme(theme: string, cacheToDb = false) {
-    log.info('Updating app front end theme to', theme);
+    log.info(`Updating app front end theme to ${theme}`);
 
     if (theme === 'WHITE') {
       document.body.classList.remove('dark-theme');
