@@ -10,6 +10,8 @@ import HttpResponseController from '../controllers/HttpResponseController';
 import frequencyToMs from '../utils/frequencyToMs';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 
+import i18n from '../../common/i18n/i18n';
+
 async function notifyAbout(
   environment: EnvironmentWithRelatedData
 ): Promise<void> {
@@ -19,16 +21,18 @@ async function notifyAbout(
       10
     );
 
+    i18n.t('toasts.HighResponseTime.title');
+
     let notification = null;
     const lastResponse = responses[0];
     let previousResponse = null;
 
-    // TODO: Add translation to notifications
+    // TODO: Test all translations
 
     if (lastResponse.responseTimeMs > 1000) {
       notification = new Notification({
-        title: `${environment.name} com ping alto`,
-        body: 'O servidor está com um tempo de resposta muito alto.',
+        title: `${environment.name} ${i18n.t('toasts.HighResponseTime.title')}`,
+        body: i18n.t('toasts.HighResponseTime.message'),
       });
     }
 
@@ -40,8 +44,10 @@ async function notifyAbout(
         previousResponse.responseTimeMs >= 1000
       ) {
         notification = new Notification({
-          title: `${environment.name} operando normalmente`,
-          body: 'O servidor voltou a operar dentro do tempo de resposta correto.',
+          title: `${environment.name} ${i18n.t(
+            'toasts.OperatingCorrectly.title'
+          )}`,
+          body: i18n.t('toasts.OperatingCorrectly.message'),
         });
       }
 
@@ -50,16 +56,20 @@ async function notifyAbout(
         lastResponse.responseTimeMs > 0
       ) {
         notification = new Notification({
-          title: `${environment.name} disponível`,
-          body: 'O servidor voltou a operar novamente.',
+          title: `${environment.name} ${i18n.t(
+            'toasts.ServerAvailable.title'
+          )}`,
+          body: i18n.t('toasts.ServerAvailable.message'),
         });
       } else if (
         previousResponse.responseTimeMs > 0 &&
         lastResponse.responseTimeMs === 0
       ) {
         notification = new Notification({
-          title: `${environment.name} está indisponível`,
-          body: 'O servidor aparenta estar offline.',
+          title: `${environment.name} ${i18n.t(
+            'toasts.ServerUnavailable.title'
+          )}`,
+          body: i18n.t('toasts.ServerUnavailable.message'),
         });
       }
     }

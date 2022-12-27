@@ -355,6 +355,25 @@ const en = {
       pingFrequencyIsRequired: 'Ping frequency is required.',
     },
   },
+  toasts: {
+    HighResponseTime: {
+      title: ' with high ping.',
+      message: 'The server is with a very high response time.',
+    },
+    OperatingCorrectly: {
+      title: ' operating correctly.',
+      message:
+        "The server has returned to it's operation under the normal response time.",
+    },
+    ServerAvailable: {
+      title: ' available again.',
+      message: 'The server is back online.',
+    },
+    ServerUnavailable: {
+      title: ' unavailable.',
+      message: 'The server appears to be offline. Please check.',
+    },
+  },
 };
 
 export default en;

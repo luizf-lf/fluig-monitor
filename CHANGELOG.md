@@ -18,6 +18,7 @@
   - About section
   - Report a bug section
 - Theme switcher implemented as a context
+- Added translation (i18n) to toast notifications
 
 # 0.2.1
 
