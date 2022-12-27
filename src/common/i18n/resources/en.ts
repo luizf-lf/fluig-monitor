@@ -218,8 +218,7 @@ const en = {
         pages: {
           theme: 'Theme',
           language: 'Language',
-          about: 'About',
-          github: 'GitHub',
+          about: 'About this software',
           reportABug: 'Report A Bug',
         },
       },
@@ -324,6 +323,16 @@ const en = {
     LanguageSettings: {
       title: 'Language',
       helperText: 'Select the language to be used by the application bellow: ',
+    },
+    AboutSection: {
+      title: 'An open-source tool for monitoring Fluig servers.',
+      developedBy: 'Developed by ',
+      disclosure:
+        'This tool has been developed for self-teaching purposes, and has no connection with TOTVS.',
+      usageDisclosure:
+        'The use of this tool is optional, and therefore, its total or partial functioning is not guaranteed for all types of Fluig environments.',
+      learnMoreAt:
+        'Learn more about the project in the official repository at ',
     },
   },
   classes: {

@@ -10,7 +10,6 @@ import globalContainerVariants from '../utils/globalContainerVariants';
 import ThemeSettings from '../components/SettingsView/ThemeSettings';
 import LanguageSettings from '../components/SettingsView/LanguageSettings';
 import AboutSection from '../components/SettingsView/AboutSection';
-import GitHubSection from '../components/SettingsView/GitHubSection';
 import ReportABugSection from '../components/SettingsView/ReportABugSection';
 
 import '../assets/styles/views/AppSettings.view.scss';
@@ -66,11 +65,6 @@ export default function AppSettingsView() {
           component: <AboutSection />,
         },
         {
-          target: `${url}/github`,
-          name: t('views.AppSettingsView.settingsMenu.pages.github'),
-          component: <GitHubSection />,
-        },
-        {
           target: `${url}/reportABug`,
           name: t('views.AppSettingsView.settingsMenu.pages.reportABug'),
           component: <ReportABugSection />,
@@ -91,24 +85,24 @@ export default function AppSettingsView() {
       <h2>{t('views.AppSettingsView.title')}</h2>
       <div className="settings-block-container">
         <aside className="settings-menu">
-          {menuBuilder.map((category) => {
+          {menuBuilder.map(({ key, title, children }) => {
             return (
-              <div className="menu-category" key={category.key}>
+              <div className="menu-category" key={key}>
                 <h5 className="category-title">
-                  {category.title.icon} {category.title.name}
+                  {title.icon} {title.name}
                 </h5>
                 <div className="category-items">
-                  {category.children.map((submenuItem) => {
+                  {children.map(({ target, name }) => {
                     return (
                       <Link
-                        key={submenuItem.target}
-                        to={submenuItem.target}
+                        key={target}
+                        to={target}
                         className={`item ${
-                          selectedRoute === submenuItem.target ? 'active' : ''
+                          selectedRoute === target ? 'active' : ''
                         }`}
-                        onClick={() => setSelectedRoute(submenuItem.target)}
+                        onClick={() => setSelectedRoute(target)}
                       >
-                        <FiChevronRight /> {submenuItem.name}
+                        <FiChevronRight /> {name}
                       </Link>
                     );
                   })}
@@ -120,10 +114,10 @@ export default function AppSettingsView() {
         <div className="settings-item-container">
           <Switch>
             {menuBuilder.map((cat /** 😺 */) => {
-              return cat.children.map((item) => {
+              return cat.children.map(({ target, component }) => {
                 return (
-                  <Route path={item.target} key={item.target}>
-                    {item.component}
+                  <Route path={target} key={target}>
+                    {component}
                   </Route>
                 );
               });

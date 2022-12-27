@@ -9,21 +9,21 @@ export default function NavActionButtons() {
   const { t } = useTranslation();
   const { theme, setFrontEndTheme } = useTheme();
   const [themeIcon, setThemeIcon] = useState(
-    theme === 'DARK' ? <FiSun /> : <FiMoon />
+    theme === 'DARK' ? <FiMoon /> : <FiSun />
   );
 
   function toggleAppTheme() {
     if (document.body.classList.contains('dark-theme')) {
       setFrontEndTheme('WHITE');
-      setThemeIcon(<FiMoon />);
+      setThemeIcon(<FiSun />);
     } else {
       setFrontEndTheme('DARK');
-      setThemeIcon(<FiSun />);
+      setThemeIcon(<FiMoon />);
     }
   }
 
   useEffect(() => {
-    setThemeIcon(theme === 'DARK' ? <FiSun /> : <FiMoon />);
+    setThemeIcon(theme === 'DARK' ? <FiMoon /> : <FiSun />);
   }, [theme]);
 
   return (

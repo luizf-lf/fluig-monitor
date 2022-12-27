@@ -223,8 +223,7 @@ const pt = {
         pages: {
           theme: 'Tema',
           language: 'Idioma',
-          about: 'Sobre',
-          github: 'GitHub',
+          about: 'Sobre a ferramenta',
           reportABug: 'Reporte Um Bug',
         },
       },
@@ -330,6 +329,16 @@ const pt = {
     LanguageSettings: {
       title: 'Idioma',
       helperText: 'Selecione abaixo o idioma a ser utilizado pela aplicação: ',
+    },
+    AboutSection: {
+      title:
+        'Uma ferramenta open-source para monitoramento de ambientes Fluig.',
+      developedBy: 'Desenvolvido por ',
+      disclosure:
+        'Esta ferramenta vem sendo desenvolvida para fins de auto didática, e não possui nenhum vínculo com a TOTVS.',
+      usageDisclosure:
+        'O uso desta ferramenta é opcional, e portanto, seu funcionamento total ou parcial não é garantido para todos os tipos de ambientes Fluig.',
+      learnMoreAt: 'Saiba mais sobre o projeto no repositório oficial no ',
     },
   },
   classes: {

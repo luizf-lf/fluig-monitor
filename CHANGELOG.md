@@ -15,6 +15,7 @@
 - Settings panel layout implemented. Settings implemented:
   - Theme settings
   - Language settings
+  - About section
 - Theme switcher implemented as a context
 
 # 0.2.1

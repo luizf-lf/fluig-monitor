@@ -52,6 +52,11 @@
   }
 }
 
+.btn-subtle {
+  font-weight: bold;
+  color: inherit;
+}
+
 .top-return-button {
   background-color: transparent;
   color: var(--font-secondary);
@@ -167,6 +172,10 @@
       cursor: pointer;
     }
   }
+}
+
+.mt-2 {
+  margin-top: 2rem;
 }
 
 .mt-1 {
@@ -301,6 +310,10 @@
 
 .text-secondary {
   color: var(--font-secondary) !important;
+}
+
+.text-soft {
+  color: var(--font-soft) !important;
 }
 
 .text-sm {
