@@ -1,51 +1,30 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import log from 'electron-log';
 import { FiAirplay, FiBell, FiMoon, FiSettings, FiSun } from 'react-icons/fi';
 import '../../assets/styles/components/Navbar/RightButtons.scss';
 import { useTranslation } from 'react-i18next';
-import {
-  getFrontEndTheme,
-  updateFrontEndTheme,
-} from '../../ipc/settingsIpcHandler';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export default function NavActionButtons() {
-  const [themeIcon, setThemeIcon] = useState(<FiSun />);
   const { t } = useTranslation();
-
-  function setTheme(theme: string, cacheToDb = false) {
-    log.info(`Updating app front end theme to ${theme}`);
-
-    if (theme === 'WHITE') {
-      document.body.classList.remove('dark-theme');
-      setThemeIcon(<FiSun />);
-    } else {
-      document.body.classList.add('dark-theme');
-      setThemeIcon(<FiMoon />);
-    }
-
-    if (cacheToDb) {
-      updateFrontEndTheme(theme);
-    }
-  }
+  const { theme, setFrontEndTheme } = useTheme();
+  const [themeIcon, setThemeIcon] = useState(
+    theme === 'DARK' ? <FiSun /> : <FiMoon />
+  );
 
   function toggleAppTheme() {
     if (document.body.classList.contains('dark-theme')) {
-      setTheme('WHITE', true);
+      setFrontEndTheme('WHITE');
+      setThemeIcon(<FiMoon />);
     } else {
-      setTheme('DARK', true);
+      setFrontEndTheme('DARK');
+      setThemeIcon(<FiSun />);
     }
   }
 
   useEffect(() => {
-    async function fetch() {
-      const theme = await getFrontEndTheme();
-
-      setTheme(theme);
-    }
-
-    fetch();
-  }, []);
+    setThemeIcon(theme === 'DARK' ? <FiSun /> : <FiMoon />);
+  }, [theme]);
 
   return (
     <section id="rightButtons">

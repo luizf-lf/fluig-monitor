@@ -1,6 +1,4 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import log from 'electron-log';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { FiPenTool } from 'react-icons/fi';
@@ -8,36 +6,11 @@ import globalContainerVariants from '../../utils/globalContainerVariants';
 
 import whiteThemePreview from '../../assets/img/theme-preview-white.png';
 import darkThemePreview from '../../assets/img/theme-preview-dark.png';
-import { updateFrontEndTheme } from '../../ipc/settingsIpcHandler';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export default function ThemeSettings() {
-  const [theme, setTheme] = useState(
-    document.body.classList.contains('dark-theme') ? 'DARK' : 'WHITE'
-  );
-
   const { t } = useTranslation();
-
-  // TODO: Implement a theme context to update other components on theme change
-
-  function setAppTheme(selectedTheme: string, cacheToDb = false) {
-    log.info(`Updating app front end theme to ${selectedTheme}`);
-
-    if (selectedTheme === 'WHITE') {
-      document.body.classList.remove('dark-theme');
-    } else {
-      document.body.classList.add('dark-theme');
-    }
-
-    setTheme(selectedTheme);
-
-    if (cacheToDb) {
-      updateFrontEndTheme(selectedTheme);
-    }
-  }
-
-  function toggleAppTheme(selectedTheme: string) {
-    setAppTheme(selectedTheme, true);
-  }
+  const { theme, setFrontEndTheme } = useTheme();
 
   return (
     <motion.div
@@ -68,8 +41,8 @@ export default function ThemeSettings() {
                 name="radioTheme"
                 id="radioTheme_white"
                 value="WHITE"
-                defaultChecked={theme === 'WHITE'}
-                onClick={() => toggleAppTheme('WHITE')}
+                checked={theme === 'WHITE'}
+                onChange={() => setFrontEndTheme('WHITE')}
               />
               {t('components.ThemeSettings.whiteTheme')}
             </span>
@@ -88,8 +61,8 @@ export default function ThemeSettings() {
                 name="radioTheme"
                 id="radioTheme_dark"
                 value="DARK"
-                defaultChecked={theme === 'DARK'}
-                onClick={() => toggleAppTheme('DARK')}
+                checked={theme === 'DARK'}
+                onChange={() => setFrontEndTheme('DARK')}
               />
               {t('components.ThemeSettings.darkTheme')}
             </span>

@@ -14,6 +14,7 @@
 - Reduced log levels on the IPC channels
 - Settings panel layout implemented
   - Theme settings added to settings panel
+- Theme switcher implemented as a context
 
 # 0.2.1
 
