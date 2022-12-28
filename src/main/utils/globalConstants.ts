@@ -23,11 +23,15 @@ export const scrapeSyncIntervalCron = '* */15 * * * *';
 export const pingInterval = 15000; // 15 seconds
 export const pingIntervalCron = '*/15 * * * * *';
 
+export const legacyDbName = 'app.db';
+export const dbName = 'fluig-monitor.db';
 export const dbPath = isDevelopment
-  ? path.resolve(__dirname, '../../../', 'prisma', 'app.db')
-  : path.resolve(getAppDataFolder(), 'app.db');
+  ? path.resolve(__dirname, '../../../', 'prisma')
+  : path.resolve(getAppDataFolder());
 export const dbUrl =
-  (isDevelopment ? process.env.DATABASE_URL : `file:${dbPath}`) || '';
+  (isDevelopment
+    ? process.env.DATABASE_URL
+    : `file:${path.resolve(dbPath, dbName)}`) || '';
 
 // Must be updated every time a migration is created
 export const latestMigration = '20221205230300_create_resource_type_field';

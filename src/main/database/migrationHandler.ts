@@ -4,11 +4,13 @@ import * as fs from 'fs';
 import path from 'path';
 import runPrismaCommand from '../utils/runPrismaCommand';
 import {
+  dbName,
   dbPath,
   dbUrl,
   extraResourcesPath,
   isDevelopment,
   latestMigration,
+  legacyDbName,
 } from '../utils/globalConstants';
 import prismaClient from './prismaContext';
 import seedDb from './seedDb';
@@ -18,9 +20,22 @@ import LogController from '../controllers/LogController';
 export default async function runDbMigrations() {
   let needsMigration = false;
   let mustSeed = false;
-  log.info(`Checking database at ${dbPath}`);
-  // TODO: Update database name and check for existing legacy name when updating.
-  const dbExists = fs.existsSync(dbPath);
+  const fullDbPath = path.resolve(dbPath, dbName);
+
+  log.info(`Checking database at ${fullDbPath}`);
+
+  // checks if the legacy db exists (app.db), which was the name used until v0.2.1
+  const legacyDbExists = fs.existsSync(path.resolve(dbPath, legacyDbName));
+  if (legacyDbExists) {
+    log.info(
+      `Legacy database detected at ${path.resolve(dbPath, legacyDbName)}.`
+    );
+    log.info(`Database will be renamed to ${dbName}.`);
+
+    fs.renameSync(path.resolve(dbPath, legacyDbName), fullDbPath);
+  }
+
+  const dbExists = fs.existsSync(fullDbPath);
 
   if (!dbExists) {
     log.info('Database does not exists. Migration and seeding is needed.');
@@ -28,7 +43,7 @@ export default async function runDbMigrations() {
     mustSeed = true;
     // since prisma has trouble if the database file does not exist, touches an empty file
     log.info('Touching database file.');
-    fs.closeSync(fs.openSync(dbPath, 'w'));
+    fs.closeSync(fs.openSync(fullDbPath, 'w'));
   } else {
     log.info('Database exists. Verifying the latest migration');
     log.info(`Latest generated migration is: ${latestMigration}`);
