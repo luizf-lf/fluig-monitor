@@ -21,6 +21,7 @@
 - Added translation (i18n) to toast notifications.
 - Database renamed from "app.db" to "fluig-monitor.db", with automatic legacy database detection and renaming.
 - Log file name has been changed to "fluig-monitor.log".
+- Added a "breathing" animation to the environment status indicator card.
 
 # 0.2.1
 
