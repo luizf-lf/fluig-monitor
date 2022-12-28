@@ -218,7 +218,7 @@ const en = {
         pages: {
           theme: 'Theme',
           language: 'Language',
-          about: 'About this software',
+          about: 'About This Software',
           reportABug: 'Report A Bug',
         },
       },
@@ -269,7 +269,7 @@ const en = {
       title: 'Services',
       operational: 'Operational',
       unused: 'Unused',
-      failed: 'Fail',
+      failed: 'Failed',
     },
     EnvironmentStatusCard: {
       title: 'Status',
@@ -335,7 +335,7 @@ const en = {
         'Learn more about the project in the official repository at ',
     },
     ReportABugSection: {
-      title: 'Report a bug',
+      title: 'Report A Bug',
       headline1:
         'Found a bug or have any development suggestions about this tool?',
       headline2:
@@ -357,20 +357,20 @@ const en = {
   },
   toasts: {
     HighResponseTime: {
-      title: ' with high ping.',
+      title: 'with high ping.',
       message: 'The server is with a very high response time.',
     },
     OperatingCorrectly: {
-      title: ' operating correctly.',
+      title: 'operating correctly.',
       message:
         "The server has returned to it's operation under the normal response time.",
     },
     ServerAvailable: {
-      title: ' available again.',
+      title: 'available again.',
       message: 'The server is back online.',
     },
     ServerUnavailable: {
-      title: ' unavailable.',
+      title: 'unavailable.',
       message: 'The server appears to be offline. Please check.',
     },
   },

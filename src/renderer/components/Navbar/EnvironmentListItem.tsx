@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { ipcRenderer } from 'electron';
 import { Link } from 'react-router-dom';
-import { Environment } from '../../../main/generated/client';
+import { useTranslation } from 'react-i18next';
 import SmallTag from '../SmallTag';
+import { Environment } from '../../../main/generated/client';
 import '../../assets/styles/components/EnvironmentListItem.scss';
 
 interface EnvironmentListItemInterface {
@@ -16,21 +17,21 @@ export default function EnvironmentListItem({
 }: EnvironmentListItemInterface) {
   let environmentKindTitle = '';
   const [isOnline, setIsOnline] = useState(true);
+  const { t } = useTranslation();
 
   ipcRenderer.on(`serverPinged_${data.id}`, (_event, { serverIsOnline }) => {
     setIsOnline(serverIsOnline);
   });
 
-  // TODO: Add i18n to environment kinds
   switch (data.kind) {
     case 'PROD':
-      environmentKindTitle = 'Produção';
+      environmentKindTitle = t('global.environmentKinds.PROD');
       break;
     case 'HML':
-      environmentKindTitle = 'Homologação';
+      environmentKindTitle = t('global.environmentKinds.HML');
       break;
     case 'DEV':
-      environmentKindTitle = 'Desenvolvimento';
+      environmentKindTitle = t('global.environmentKinds.DEV');
       break;
 
     default:

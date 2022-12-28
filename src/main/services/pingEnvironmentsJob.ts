@@ -27,8 +27,6 @@ async function notifyAbout(
     const lastResponse = responses[0];
     let previousResponse = null;
 
-    // TODO: Test all translations
-
     if (lastResponse.responseTimeMs > 1000) {
       notification = new Notification({
         title: `${environment.name} ${i18n.t('toasts.HighResponseTime.title')}`,

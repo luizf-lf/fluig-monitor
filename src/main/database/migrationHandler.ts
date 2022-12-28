@@ -19,6 +19,7 @@ export default async function runDbMigrations() {
   let needsMigration = false;
   let mustSeed = false;
   log.info(`Checking database at ${dbPath}`);
+  // TODO: Update database name and check for existing legacy name when updating.
   const dbExists = fs.existsSync(dbPath);
 
   if (!dbExists) {

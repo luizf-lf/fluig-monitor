@@ -223,7 +223,7 @@ const pt = {
         pages: {
           theme: 'Tema',
           language: 'Idioma',
-          about: 'Sobre a ferramenta',
+          about: 'Sobre A Ferramenta',
           reportABug: 'Reporte Um Bug',
         },
       },
@@ -363,20 +363,20 @@ const pt = {
   },
   toasts: {
     HighResponseTime: {
-      title: ' com ping algo.',
+      title: 'com ping algo.',
       message: 'O servidor está com um tempo de resposta muito alto.',
     },
     OperatingCorrectly: {
-      title: ' operando normalmente.',
+      title: 'operando normalmente.',
       message:
         'O servidor voltou a operar dentro do tempo de resposta correto.',
     },
     ServerAvailable: {
-      title: ' disponível novamente.',
+      title: 'disponível novamente.',
       message: 'O servidor voltou a operar novamente.',
     },
     ServerUnavailable: {
-      title: ' indisponível.',
+      title: 'indisponível.',
       message: 'O servidor aparenta estar offline. Verifique.',
     },
   },
