@@ -1,7 +1,7 @@
 import prismaClient from '../database/prismaContext';
 import { HTTPResponse, StatisticsHistory } from '../generated/client';
 import HttpResponseController from './HttpResponseController';
-import HttpResponseResourceType from '../../common/interfaces/httpResponseResourceTypes';
+import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 
 interface CreateStatisticHistoryProps {
   environmentId: number;

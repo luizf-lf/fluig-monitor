@@ -1,4 +1,3 @@
-import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import {
   UpdateScheduleControllerInterface,
@@ -14,7 +13,12 @@ import {
   AuthKeysControllerInterface,
   AuthKeysFormControllerInterface,
 } from '../../common/interfaces/AuthKeysControllerInterface';
-import { Environment, HTTPResponse } from '../../main/generated/client';
+import {
+  Environment,
+  EnvironmentAuthKeys,
+  HTTPResponse,
+  UpdateSchedule,
+} from '../../main/generated/client';
 import {
   DBStats,
   HDStats,
@@ -27,12 +31,16 @@ export interface CreateEnvironmentProps {
   environmentAuthKeys: AuthKeysFormControllerInterface;
 }
 
+interface CreatedEnvironmentProps {
+  createdEnvironment: Environment;
+  createdUpdateSchedule: UpdateSchedule;
+  createdAuthKeys: EnvironmentAuthKeys;
+}
+
 export async function getAllEnvironments(): Promise<
   EnvironmentWithRelatedData[]
 > {
-  log.info('IPC Handler: Requesting all environments');
   const environments = ipcRenderer.sendSync('getAllEnvironments');
-
   return environments;
 }
 
@@ -43,11 +51,6 @@ export async function getEnvironmentById(
   if (!id) {
     throw new Error('id is required');
   }
-  log.info(
-    'IPC Invoker: Requesting environment with id',
-    id,
-    includeRelatedData === true ? 'with related data' : 'without related data'
-  );
   const environment = ipcRenderer.invoke(
     'getEnvironmentById',
     id,
@@ -71,8 +74,7 @@ export async function createEnvironment({
   environment,
   updateSchedule,
   environmentAuthKeys,
-}: CreateEnvironmentProps): Promise<Environment> {
-  log.info('IPC Invoker: Requesting a new environment creation');
+}: CreateEnvironmentProps): Promise<CreatedEnvironmentProps> {
   const createdEnvironment = await ipcRenderer.invoke('createEnvironment', {
     environment,
     updateSchedule,
@@ -87,8 +89,6 @@ export async function updateEnvironment(
   updateSchedule: UpdateScheduleControllerInterface,
   authKeys: AuthKeysControllerInterface
 ): Promise<Environment> {
-  log.info('IPC Invoker: Requesting an environment update');
-
   const updatedEnvironment = await ipcRenderer.invoke(
     'updateEnvironment',
     environment,
@@ -100,8 +100,6 @@ export async function updateEnvironment(
 }
 
 export async function deleteEnvironment(id: number): Promise<boolean> {
-  log.info('IPC Invoker: Deleting environment', id);
-
   const deleted = await ipcRenderer.invoke('deleteEnvironment', id);
 
   return deleted;
@@ -110,7 +108,6 @@ export async function deleteEnvironment(id: number): Promise<boolean> {
 export async function toggleEnvironmentFavorite(
   id: number
 ): Promise<{ favorited: boolean; exception: string | null }> {
-  log.info('IPC Invoker: Toggling environment favorite for id', id);
   const favorited = await ipcRenderer.invoke('toggleEnvironmentFavorite', id);
 
   return favorited;
@@ -119,10 +116,6 @@ export async function toggleEnvironmentFavorite(
 export async function getLastHttpResponseById(
   environmentId: number
 ): Promise<HTTPResponse> {
-  log.info(
-    'IPC Invoker: Requesting last http response from environment',
-    environmentId
-  );
   const lastResponse = await ipcRenderer.invoke(
     'getLastHttpResponseFromEnvironment',
     environmentId
@@ -132,7 +125,6 @@ export async function getLastHttpResponseById(
 }
 
 export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
-  log.info('IPC Invoker: Requesting historical disk info for environment', id);
   const diskInfo = await ipcRenderer.invoke('getHistoricalDiskInfo', id);
 
   return diskInfo;
@@ -141,10 +133,6 @@ export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
 export async function getHistoricalMemoryInfo(
   id: number
 ): Promise<MemoryStats[]> {
-  log.info(
-    'IPC Invoker: Requesting historical memory info for environment',
-    id
-  );
   const memoryInfo = await ipcRenderer.invoke('getHistoricalMemoryInfo', id);
 
   return memoryInfo;
@@ -153,10 +141,6 @@ export async function getHistoricalMemoryInfo(
 export async function getHistoricalDatabaseInfo(
   id: number
 ): Promise<DBStats[]> {
-  log.info(
-    'IPC Invoker: Requesting historical database info for environment',
-    id
-  );
   const databaseInfo = await ipcRenderer.invoke(
     'getHistoricalDatabaseInfo',
     id
@@ -166,13 +150,9 @@ export async function getHistoricalDatabaseInfo(
 }
 
 export async function forceEnvironmentSync(): Promise<void> {
-  log.info('IPC Invoker: Requesting all environments sync.');
-
   await ipcRenderer.invoke('forceEnvironmentSync');
 }
 
 export async function forceEnvironmentPing(): Promise<void> {
-  log.info('IPC Invoker: Requesting all environments ping.');
-
   await ipcRenderer.invoke('forceEnvironmentPing');
 }

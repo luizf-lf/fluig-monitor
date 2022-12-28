@@ -100,9 +100,11 @@ export default class MenuBuilder {
           },
         },
         {
-          label: t('menu.about.aboutApp'),
+          label: t('menu.about.bugReport'),
           click() {
-            // TODO: Open about window
+            shell.openExternal(
+              'https://github.com/luizf-lf/fluig-monitor/issues/new/choose'
+            );
           },
         },
       ],
@@ -233,9 +235,11 @@ export default class MenuBuilder {
             },
           },
           {
-            label: t('menu.about.aboutApp'),
+            label: t('menu.about.bugReport'),
             click() {
-              // TODO: Open about window
+              shell.openExternal(
+                'https://github.com/luizf-lf/fluig-monitor/issues/new/choose'
+              );
             },
           },
         ],

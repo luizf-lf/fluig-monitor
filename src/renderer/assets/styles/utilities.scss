@@ -52,6 +52,11 @@
   }
 }
 
+.btn-subtle {
+  font-weight: bold;
+  color: inherit;
+}
+
 .top-return-button {
   background-color: transparent;
   color: var(--font-secondary);
@@ -90,12 +95,14 @@
     margin-bottom: 0.25rem;
   }
 
-  input,
+  input:not([type='checkbox'], [type='radio']),
   select {
     padding: 0.5rem;
     border-radius: 0.35rem;
     background-color: var(--card);
     color: var(--font-secondary);
+
+    outline: 3px solid var(--border-light);
 
     &:focus-visible {
       outline: 3px solid var(--light-blue);
@@ -107,6 +114,68 @@
     margin-top: 0.3rem;
     color: var(--font-soft);
   }
+
+  &.inline {
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+
+    label {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.preview-radios {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-around;
+
+  .radio-option-container {
+    border: 3px solid var(--border-light);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+
+    label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      gap: 2rem;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .preview-image {
+        width: 18rem;
+        border-radius: 0.5rem;
+        box-shadow: var(--card-shadow-sm);
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+
+      .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+    }
+
+    transition: box-shadow 200ms;
+
+    &:hover {
+      box-shadow: var(--card-shadow);
+      cursor: pointer;
+    }
+  }
+}
+
+.mt-2 {
+  margin-top: 2rem;
 }
 
 .mt-1 {
@@ -121,7 +190,7 @@
 }
 
 .info-blip {
-  border: 1px solid var(--purple);
+  border: 2px solid var(--purple);
   color: var(--purple);
   background-color: var(--light-purple);
   padding: 0.5rem 1rem;
@@ -138,19 +207,19 @@
   &.has-success {
     background-color: var(--light-green);
     color: var(--green);
-    border: 1px solid var(--green);
+    border: 2px solid var(--green);
   }
 
   &.has-error {
     background-color: var(--light-red);
     color: var(--red);
-    border: 1px solid var(--red);
+    border: 2px solid var(--red);
   }
 
   &.has-warning {
     background-color: var(--light-yellow);
     color: var(--yellow);
-    border: 1px solid var(--yellow);
+    border: 2px solid var(--yellow);
   }
 }
 
@@ -195,6 +264,12 @@
   }
 }
 
+.icon-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .icon-dot {
   padding: 0.5rem;
   background-color: var(--green);
@@ -202,6 +277,7 @@
   border-radius: 100%;
   width: 2rem;
   height: 2rem;
+  display: inline-flex;
 
   &.red-variant {
     background-color: var(--red);
@@ -236,6 +312,10 @@
   color: var(--font-secondary) !important;
 }
 
+.text-soft {
+  color: var(--font-soft) !important;
+}
+
 .text-sm {
   font-size: 0.8rem;
 }
@@ -252,4 +332,11 @@
   gap: 0.25rem;
 
   width: 100%;
+}
+
+.card {
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  background-color: var(--card);
 }

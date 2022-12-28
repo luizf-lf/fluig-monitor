@@ -3,6 +3,7 @@ const pt = {
     about: {
       label: '&Sobre',
       aboutApp: 'Sobre o Fluig Monitor',
+      bugReport: 'Reportar um bug',
     },
     languages: {
       label: '&Idioma',
@@ -28,10 +29,6 @@ const pt = {
     },
   },
   views: {
-    EnvironmentView: {
-      empty:
-        'Selecione o ambiente acima ou utilize o botão "Novo" para criar um novo ambiente.',
-    },
     CreateEnvironmentView: {
       createdSuccessfully: 'Ambiente cadastrado com sucesso.',
       connecting: 'Conectando ...',
@@ -42,6 +39,8 @@ const pt = {
       authFieldsValidation:
         'Preencha os campos de URL e autenticação para continuar.',
       back: 'Voltar',
+      unableToEncrypt:
+        'Não foi possível criptografar as chaves de autenticação',
       form: {
         title: 'Cadastrar novo ambiente',
         environmentDataSection: 'Dados do ambiente',
@@ -78,6 +77,7 @@ const pt = {
           label: 'Token Secret:',
           placeholder: 'Informe o token secret',
         },
+        useEncryption: 'Criptografar chaves?',
         testConnection: 'Testar Conexão',
         serverVerification: {
           title: 'Verificação Do Servidor',
@@ -114,6 +114,7 @@ const pt = {
       connecting: 'Conectando...',
       connectionError: 'Erro na conexão',
       connectionOk: 'Conexão Ok',
+      insufficientPermissions: 'Usuário aplicativo sem permissões suficientes.',
       connectionUnavailable:
         'Erro de conexão. Verifique a URL de domínio e a disponibilidade do servidor.',
       authFieldsValidation:
@@ -124,6 +125,8 @@ const pt = {
       clickAgain: 'Clique novamente para confirmar a exclusão.',
       deletedSuccessfully: 'Ambiente excluído com sucesso.',
       back: 'Voltar',
+      unableToEncrypt:
+        'Não foi possível criptografar as chaves de autenticação',
       form: {
         title: 'Editar ambiente',
         environmentDataSection: 'Dados do ambiente',
@@ -160,6 +163,7 @@ const pt = {
           label: 'Token Secret:',
           placeholder: 'Informe o token secret',
         },
+        useEncryption: 'Criptografar chaves?',
         testConnection: 'Testar Conexão',
         serverVerification: {
           title: 'Verificação Do Servidor',
@@ -209,6 +213,26 @@ const pt = {
         minimize: 'Minimizar',
       },
     },
+    AppSettingsView: {
+      title: 'Configurações',
+      settingsMenu: {
+        categories: {
+          general: 'Gerais',
+          about: 'Sobre',
+        },
+        pages: {
+          theme: 'Tema',
+          language: 'Idioma',
+          about: 'Sobre A Ferramenta',
+          reportABug: 'Reporte Um Bug',
+        },
+      },
+      emptyRoute: {
+        title: 'Configurações',
+        helper:
+          'Selecione um item ao lado para acessar as respectivas configurações.',
+      },
+    },
   },
   global: {
     environmentKinds: {
@@ -232,6 +256,7 @@ const pt = {
   components: {
     global: {
       noData: 'Sem dados disponíveis',
+      underDevelopment: 'Funcionalidade em desenvolvimento',
     },
     EnvironmentLicenses: {
       title: 'Licenças',
@@ -291,8 +316,37 @@ const pt = {
     EnvironmentPerformanceGraph: {
       title: 'Performance',
       graphTitle: 'Tempo de resposta do servidor',
+      last24h: 'Ultimas 24 horas',
       insufficientOrNoData: 'Sem dados ou dados insuficientes.',
       responseTime: 'Tempo De Resposta (ms)',
+    },
+    ThemeSettings: {
+      title: 'Tema',
+      helperText: 'Selecione abaixo o tema a ser utilizado pela aplicação:',
+      whiteTheme: 'Tema Claro',
+      darkTheme: 'Tema Escuro',
+    },
+    LanguageSettings: {
+      title: 'Idioma',
+      helperText: 'Selecione abaixo o idioma a ser utilizado pela aplicação: ',
+    },
+    AboutSection: {
+      title:
+        'Uma ferramenta open-source para monitoramento de ambientes Fluig.',
+      developedBy: 'Desenvolvido por ',
+      disclosure:
+        'Esta ferramenta vem sendo desenvolvida para fins de auto didática, e não possui nenhum vínculo com a TOTVS.',
+      usageDisclosure:
+        'O uso desta ferramenta é opcional, e portanto, seu funcionamento total ou parcial não é garantido para todos os tipos de ambientes Fluig.',
+      learnMoreAt: 'Saiba mais sobre o projeto no repositório oficial no ',
+    },
+    ReportABugSection: {
+      title: 'Reporte um bug',
+      headline1:
+        'Encontrou algum bug ou possui alguma sugestão de desenvolvimento sobre esta ferramenta?',
+      headline2:
+        'Você pode utilizar o botão abaixo para ser direcionado até a página de Issues do repositório no GitHub:',
+      callToAction: 'Acessar',
     },
   },
   classes: {
@@ -305,6 +359,25 @@ const pt = {
       tokenSecretIsRequired: 'Token Secret é obrigatório.',
       scrapeFrequencyIsRequired: 'Frequência de coleta é obrigatório.',
       pingFrequencyIsRequired: 'Frequência de verificação é obrigatório.',
+    },
+  },
+  toasts: {
+    HighResponseTime: {
+      title: 'com ping algo.',
+      message: 'O servidor está com um tempo de resposta muito alto.',
+    },
+    OperatingCorrectly: {
+      title: 'operando normalmente.',
+      message:
+        'O servidor voltou a operar dentro do tempo de resposta correto.',
+    },
+    ServerAvailable: {
+      title: 'disponível novamente.',
+      message: 'O servidor voltou a operar novamente.',
+    },
+    ServerUnavailable: {
+      title: 'indisponível.',
+      message: 'O servidor aparenta estar offline. Verifique.',
     },
   },
 };

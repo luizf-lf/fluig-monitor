@@ -3,6 +3,7 @@ const en = {
     about: {
       label: '&About',
       aboutApp: 'About Fluig Monitor',
+      bugReport: 'Report a bug',
     },
     languages: {
       label: '&Language',
@@ -28,10 +29,6 @@ const en = {
     },
   },
   views: {
-    EnvironmentView: {
-      empty:
-        'Select the environment above or use the "New" button to create a new environment.',
-    },
     CreateEnvironmentView: {
       createdSuccessfully: 'Environment created successfully',
       connecting: 'Connecting ...',
@@ -42,6 +39,7 @@ const en = {
       authFieldsValidation:
         'Fill the url and authentication fields before continuing.',
       back: 'Back',
+      unableToEncrypt: 'Unable to encrypt the authentication keys.',
       form: {
         title: 'Create a new environment',
         environmentDataSection: 'Environment Info',
@@ -78,6 +76,7 @@ const en = {
           label: 'Token Secret:',
           placeholder: 'Inform the token secret',
         },
+        useEncryption: 'Encrypt keys?',
         testConnection: 'Test Connection',
         serverVerification: {
           title: 'Server Verification',
@@ -113,6 +112,7 @@ const en = {
       connecting: 'Connecting...',
       connectionError: 'Connection error',
       connectionOk: 'Connection Ok',
+      insufficientPermissions: 'User without sufficient permissions.',
       connectionUnavailable:
         'Connection Error. Check the domain url and the server availability',
       authFieldsValidation:
@@ -122,6 +122,7 @@ const en = {
       clickAgain: 'Click again to confirm the environment deletion',
       deletedSuccessfully: 'Environment deleted successfully.',
       back: 'Back',
+      unableToEncrypt: 'Unable to encrypt the authentication keys.',
       form: {
         title: 'Edit Environment',
         environmentDataSection: 'Environment Data',
@@ -158,6 +159,7 @@ const en = {
           label: 'Token Secret:',
           placeholder: 'Fill out the token secret',
         },
+        useEncryption: 'Encrypt keys?',
         testConnection: 'Test Connection',
         serverVerification: {
           title: 'Server Verification',
@@ -206,6 +208,25 @@ const en = {
         minimize: 'Minimize',
       },
     },
+    AppSettingsView: {
+      title: 'Configurações',
+      settingsMenu: {
+        categories: {
+          general: 'General',
+          about: 'About',
+        },
+        pages: {
+          theme: 'Theme',
+          language: 'Language',
+          about: 'About This Software',
+          reportABug: 'Report A Bug',
+        },
+      },
+      emptyRoute: {
+        title: 'Settings',
+        helper: "Select an item on the side to access it's settings.",
+      },
+    },
   },
   global: {
     environmentKinds: {
@@ -229,6 +250,7 @@ const en = {
   components: {
     global: {
       noData: 'No data to display',
+      underDevelopment: 'Feature under development',
     },
     EnvironmentLicenses: {
       title: 'Licenses',
@@ -247,7 +269,7 @@ const en = {
       title: 'Services',
       operational: 'Operational',
       unused: 'Unused',
-      failed: 'Fail',
+      failed: 'Failed',
     },
     EnvironmentStatusCard: {
       title: 'Status',
@@ -288,8 +310,37 @@ const en = {
     EnvironmentPerformanceGraph: {
       title: 'Performance',
       graphTitle: 'Server response time',
+      last24h: 'Last 24 hours',
       insufficientOrNoData: 'Insufficient or no data available.',
       responseTime: 'Response Time (ms)',
+    },
+    ThemeSettings: {
+      title: 'Theme',
+      helperText: 'Select the theme to be used by the application bellow: ',
+      whiteTheme: 'White Theme',
+      darkTheme: 'Dark Theme',
+    },
+    LanguageSettings: {
+      title: 'Language',
+      helperText: 'Select the language to be used by the application bellow: ',
+    },
+    AboutSection: {
+      title: 'An open-source tool for monitoring Fluig servers.',
+      developedBy: 'Developed by ',
+      disclosure:
+        'This tool has been developed for self-teaching purposes, and has no connection with TOTVS.',
+      usageDisclosure:
+        'The use of this tool is optional, and therefore, its total or partial functioning is not guaranteed for all types of Fluig environments.',
+      learnMoreAt:
+        'Learn more about the project in the official repository at ',
+    },
+    ReportABugSection: {
+      title: 'Report A Bug',
+      headline1:
+        'Found a bug or have any development suggestions about this tool?',
+      headline2:
+        'You can use the button below to be directed to the Issues page of the repository on GitHub:',
+      callToAction: 'Access',
     },
   },
   classes: {
@@ -302,6 +353,25 @@ const en = {
       tokenSecretIsRequired: 'Token secret is required.',
       scrapeFrequencyIsRequired: 'Scrape frequency is required.',
       pingFrequencyIsRequired: 'Ping frequency is required.',
+    },
+  },
+  toasts: {
+    HighResponseTime: {
+      title: 'with high ping.',
+      message: 'The server is with a very high response time.',
+    },
+    OperatingCorrectly: {
+      title: 'operating correctly.',
+      message:
+        "The server has returned to it's operation under the normal response time.",
+    },
+    ServerAvailable: {
+      title: 'available again.',
+      message: 'The server is back online.',
+    },
+    ServerUnavailable: {
+      title: 'unavailable.',
+      message: 'The server appears to be offline. Please check.',
     },
   },
 };

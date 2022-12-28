@@ -1,8 +1,10 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Redirect, useParams } from 'react-router';
 import log from 'electron-log';
+import { ipcRenderer } from 'electron';
 import {
   FiAlertCircle,
   FiAlertTriangle,
@@ -24,7 +26,7 @@ import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
-import FluigAPIClient from '../../common/classes/FluigAPIClient';
+import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId }: EnvironmentViewParams = useParams();
@@ -42,11 +44,13 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const [tokenSecret, setTokenSecret] = useState('');
   const [scrapeFrequency, setScrapeFrequency] = useState('');
   const [pingFrequency, setPingFrequency] = useState('');
+  const [useKeysEncryption, setUseKeysEncryption] = useState(true);
 
   const [testMessage, setTestMessage] = useState(<></>);
   const [validationMessage, setValidationMessage] = useState(<></>);
   const [confirmBtnClicked, setConfirmBtnClicked] = useState(false);
   const [actionButtonsDisabled, setActionButtonsDisabled] = useState(false);
+  const [buttonIsLoading, setButtonIsLoading] = useState(false);
 
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
@@ -80,27 +84,37 @@ function EditEnvironmentSettingsView(): JSX.Element {
         environmentData.oAuthKeysId
       ).decode();
 
+      if (environmentData.oAuthKeysId.hash.indexOf('forge:') < 0) {
+        setUseKeysEncryption(false);
+      }
+
       setName(environmentData.name);
       setDomainUrl(environmentData.baseUrl);
       setKind(environmentData.kind);
-      setConsumerKey(oAuthKeys.consumerKey);
-      setConsumerSecret(oAuthKeys.consumerSecret);
-      setAccessToken(oAuthKeys.accessToken);
-      setTokenSecret(oAuthKeys.tokenSecret);
+      if (oAuthKeys) {
+        setConsumerKey(oAuthKeys.consumerKey);
+        setConsumerSecret(oAuthKeys.consumerSecret);
+        setAccessToken(oAuthKeys.accessToken);
+        setTokenSecret(oAuthKeys.tokenSecret);
+      } else {
+        setConsumerKey('');
+        setConsumerSecret('');
+        setAccessToken('');
+        setTokenSecret('');
+        log.warn(
+          'Could not decode environment auth keys, form will use empty values.'
+        );
+      }
 
       setScrapeFrequency(environmentData.updateScheduleId.scrapeFrequency);
       setPingFrequency(environmentData.updateScheduleId.pingFrequency);
     }
   }, [environmentData]);
 
-  async function sendTestConnection() {
-    const auth = {
-      consumerKey,
-      consumerSecret,
-      accessToken,
-      tokenSecret,
-    };
-
+  /**
+   * Dispatches the oAuth validator function caller
+   */
+  async function validateOauthPermission() {
     if (
       domainUrl !== '' &&
       (consumerKey !== '' ||
@@ -108,10 +122,6 @@ function EditEnvironmentSettingsView(): JSX.Element {
         accessToken !== '' ||
         tokenSecret !== '')
     ) {
-      log.info(
-        'EditEnvironmentSettingsView: Sending test connection to',
-        domainUrl
-      );
       setTestMessage(
         <span className="info-blip">
           <FiRefreshCw className="rotating" />
@@ -119,47 +129,45 @@ function EditEnvironmentSettingsView(): JSX.Element {
         </span>
       );
 
-      const fluigClient = new FluigAPIClient({
-        oAuthKeys: auth,
-        requestData: {
-          method: 'GET',
-          url: `${domainUrl}/api/servlet/ping`,
+      const results = await ipcRenderer.invoke(
+        'validateOauthPermission',
+        {
+          consumerKey,
+          consumerSecret,
+          accessToken,
+          tokenSecret,
         },
-      });
+        domainUrl
+      );
 
-      await fluigClient.get();
-
-      if (fluigClient.httpStatus) {
-        if (fluigClient.httpStatus !== 200) {
-          log.info(
-            'Test connection failed with status',
-            fluigClient.httpStatus
-          );
-          setTestMessage(
-            <span className="info-blip has-warning">
-              <FiAlertCircle />
-              {t('views.EditEnvironmentView.connectionError')} (
-              {fluigClient.httpStatus})
-            </span>
-          );
-        } else {
-          log.info(
-            'Test connection done successfully (',
-            fluigClient.httpStatus,
-            ')'
-          );
-          setTestMessage(
-            <span className="info-blip has-success">
-              <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}
-            </span>
-          );
-        }
+      if (results.every((i: { httpStatus: number }) => i.httpStatus === 200)) {
+        setTestMessage(
+          <span className="info-blip has-success">
+            <FiCheck /> {t('views.EditEnvironmentView.connectionOk')}
+          </span>
+        );
+      } else if (
+        results.some(
+          (i: { httpStatus: number }) =>
+            i.httpStatus === 403 || i.httpStatus === 401
+        )
+      ) {
+        setTestMessage(
+          <span className="info-blip has-warning">
+            <FiAlertCircle />
+            {t('views.EditEnvironmentView.insufficientPermissions')}
+            {` (${
+              results.filter(
+                (i: { httpStatus: number }) => i.httpStatus === 200
+              ).length
+            }/${results.length})`}
+          </span>
+        );
       } else {
-        log.info('Test connection failed (server may be unavailable)');
         setTestMessage(
           <span className="info-blip has-error">
-            <FiAlertTriangle />
-            {t('views.EditEnvironmentView.connectionUnavailable')}
+            <FiAlertTriangle />{' '}
+            {t('views.CreateEnvironmentView.connectionUnavailable')}
           </span>
         );
       }
@@ -176,6 +184,8 @@ function EditEnvironmentSettingsView(): JSX.Element {
   async function handleUpdateData(event: FormEvent) {
     log.info('EditEnvironmentSettingsView: Handling form submit');
     event.preventDefault();
+    setActionButtonsDisabled(true);
+    setButtonIsLoading(true);
 
     const formData = {
       id: environmentData.id,
@@ -197,6 +207,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
     const envFormValidator = new EnvironmentFormValidator().validate(formData);
 
     const { isValid, lastMessage } = envFormValidator;
+    let encryptedPayload = null;
 
     if (!isValid) {
       createShortNotification({
@@ -208,49 +219,141 @@ function EditEnvironmentSettingsView(): JSX.Element {
       return;
     }
 
-    log.info(
-      'EditEnvironmentSettingsView: Form data is valid, updating environment'
+    const permissionsResults = await ipcRenderer.invoke(
+      'validateOauthPermission',
+      {
+        consumerKey,
+        consumerSecret,
+        accessToken,
+        tokenSecret,
+      },
+      domainUrl
     );
 
-    const result = await updateEnvironment(
-      {
-        id: formData.id,
-        baseUrl: formData.baseUrl,
-        kind: formData.kind,
-        name: formData.name,
-        release: 'unknown',
-      },
-      {
-        environmentId: formData.id,
-        pingFrequency: formData.updateSchedule.pingFrequency,
-        scrapeFrequency: formData.updateSchedule.scrapeFrequency,
-      },
-      {
-        environmentId: formData.id,
-        payload: JSON.stringify(formData.auth),
-        hash: 'json',
+    if (
+      permissionsResults.every(
+        (i: { httpStatus: number }) => i.httpStatus === 200
+      )
+    ) {
+      log.info(
+        'EditEnvironmentSettingsView: Form data is valid, updating environment'
+      );
+
+      let release = await ipcRenderer.invoke(
+        'getEnvironmentRelease',
+        {
+          consumerKey,
+          consumerSecret,
+          accessToken,
+          tokenSecret,
+        },
+        domainUrl
+      );
+
+      if (release) {
+        release = release.content.split(' - ')[1];
+      } else {
+        release = 'unknown';
       }
-    );
 
-    if (!result) {
+      log.info(`Updated environment release to ${release}`);
+
+      const authKeys = {
+        environmentId: formData.id,
+        payload: '',
+        hash: '',
+      };
+
+      if (useKeysEncryption) {
+        log.info('Using encryption');
+        encryptedPayload = new AuthKeysEncoder(formData.auth).encode();
+        if (encryptedPayload) {
+          authKeys.payload = encryptedPayload.encrypted;
+          authKeys.hash = `forge:${encryptedPayload.key}`;
+        } else {
+          log.warn('Could not encrypt oAuth keys');
+          createShortNotification({
+            id: Date.now(),
+            type: 'error',
+            message: t('views.EditEnvironmentView.unableToEncrypt'),
+          });
+          setButtonIsLoading(false);
+          setActionButtonsDisabled(false);
+          return;
+        }
+      } else {
+        authKeys.payload = JSON.stringify(formData.auth);
+        authKeys.hash = 'json';
+      }
+
+      if (useKeysEncryption && encryptedPayload !== null) {
+        log.info(
+          `Updating environment token for environment ${environmentData.id}`
+        );
+
+        ipcRenderer.invoke(
+          'setStoreValue',
+          `envToken_${environmentData.id}`,
+          encryptedPayload.iv
+        );
+      }
+
+      const result = await updateEnvironment(
+        {
+          id: formData.id,
+          baseUrl: formData.baseUrl,
+          kind: formData.kind,
+          name: formData.name,
+          release,
+        },
+        {
+          environmentId: formData.id,
+          pingFrequency: formData.updateSchedule.pingFrequency,
+          scrapeFrequency: formData.updateSchedule.scrapeFrequency,
+        },
+        authKeys
+      );
+
+      if (!result) {
+        createShortNotification({
+          id: Date.now(),
+          type: 'error',
+          message: t('views.EditEnvironmentView.updateError'),
+        });
+
+        return;
+      }
+
+      createShortNotification({
+        id: Date.now(),
+        type: 'success',
+        message: t('views.EditEnvironmentView.updatedSuccessfully'),
+      });
+
+      updateEnvironmentList();
+      setValidationMessage(<Redirect to="/" />);
+    } else if (
+      permissionsResults.some(
+        (i: { httpStatus: number }) =>
+          i.httpStatus === 403 || i.httpStatus === 401
+      )
+    ) {
+      createShortNotification({
+        id: Date.now(),
+        type: 'warning',
+        message: t('views.EditEnvironmentView.insufficientPermissions'),
+      });
+      setActionButtonsDisabled(false);
+      setButtonIsLoading(false);
+    } else {
       createShortNotification({
         id: Date.now(),
         type: 'error',
-        message: t('views.EditEnvironmentView.updateError'),
+        message: 'Erro ao validar permissões.',
       });
-
-      return;
+      setActionButtonsDisabled(false);
+      setButtonIsLoading(false);
     }
-
-    setActionButtonsDisabled(true);
-    createShortNotification({
-      id: Date.now(),
-      type: 'success',
-      message: t('views.EditEnvironmentView.updatedSuccessfully'),
-    });
-
-    updateEnvironmentList();
-    setValidationMessage(<Redirect to="/" />);
   }
 
   async function confirmDelete() {
@@ -368,7 +471,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.consumerKey.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="consumerKey"
               id="consumerKey"
               placeholder={t(
@@ -385,7 +488,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.consumerSecret.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="consumerSecret"
               id="consumerSecret"
               placeholder={t(
@@ -405,7 +508,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.accessToken.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="accessToken"
               id="accessToken"
               placeholder={t(
@@ -422,7 +525,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
               {t('views.EditEnvironmentView.form.tokenSecret.label')}
             </label>
             <input
-              type="text"
+              type="password"
               name="tokenSecret"
               id="tokenSecret"
               placeholder={t(
@@ -436,11 +539,28 @@ function EditEnvironmentSettingsView(): JSX.Element {
           </div>
         </div>
 
+        <div className="form-row">
+          <div className="form-group inline">
+            <input
+              type="checkbox"
+              name="useKeysEncryption"
+              id="useKeysEncryption"
+              checked={useKeysEncryption}
+              onChange={(event) => {
+                setUseKeysEncryption(event.target.checked);
+              }}
+            />
+            <label htmlFor="useKeysEncryption">
+              {t('views.EditEnvironmentView.form.useEncryption')}
+            </label>
+          </div>
+        </div>
+
         <div className="button-action-row mt-1 mb-2">
           <button
             type="button"
             className="button is-secondary"
-            onClick={sendTestConnection}
+            onClick={validateOauthPermission}
           >
             <FiWifi /> {t('views.EditEnvironmentView.form.testConnection')}
           </button>
@@ -542,7 +662,15 @@ function EditEnvironmentSettingsView(): JSX.Element {
             type="submit"
             disabled={actionButtonsDisabled}
           >
-            <FiCheck /> {t('views.EditEnvironmentView.form.buttonSave')}
+            {buttonIsLoading ? (
+              <>
+                <FiRefreshCw className="rotating" />
+              </>
+            ) : (
+              <>
+                <FiCheck /> {t('views.EditEnvironmentView.form.buttonSave')}
+              </>
+            )}
           </button>
           <button
             className="button is-danger"

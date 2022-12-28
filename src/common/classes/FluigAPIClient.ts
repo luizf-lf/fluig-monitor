@@ -22,20 +22,44 @@ interface ConstructorProps {
 }
 
 export default class FluigAPIClient {
+  /**
+   * The Http request status code (ex.: 200, 404, 500)
+   */
   httpStatus: number | null;
 
+  /**
+   * The http request status code message (Ex.: If it's 200: 'Ok', if it's 500: 'Internal Server Error')
+   */
   httpStatusText: string;
 
+  /**
+   * The http response data from the API (Usually a JSON)
+   */
   httpResponse: any;
 
+  /**
+   * The decoded auth keys passed as an argument on the constructor
+   */
   decodedKeys: AuthKeys;
 
+  /**
+   * The RequestData object containing the url endpoint and method (Currently only GET is supported)
+   */
   requestData: RequestData;
 
+  /**
+   * The oAuth helper from the oAuth-1.0a library
+   */
   oAuth: OAuth;
 
+  /**
+   * If the fluig client class has an error
+   */
   hasError: boolean;
 
+  /**
+   * The error stack, if the fluig client class has an error
+   */
   errorStack: string;
 
   constructor({ oAuthKeys, requestData }: ConstructorProps) {
@@ -64,6 +88,10 @@ export default class FluigAPIClient {
     this.errorStack = '';
   }
 
+  /**
+   * Makes a GET request
+   * @param silent if the request should not write logs (defaults to false)
+   */
   async get(silent?: boolean) {
     try {
       const token = {

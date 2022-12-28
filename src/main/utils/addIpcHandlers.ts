@@ -1,5 +1,6 @@
 import log from 'electron-log';
 import { ipcMain } from 'electron';
+import Store from 'electron-store';
 
 import { AuthKeysControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
 import { EnvironmentUpdateControllerInterface } from '../../common/interfaces/EnvironmentControllerInterface';
@@ -13,12 +14,18 @@ import SettingsController from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import UpdateScheduleController from '../controllers/UpdateScheduleController';
 
-import pingEnvironmentsJob from '../jobs/pingEnvironmentsJob';
-import syncEnvironmentsJob from '../jobs/syncEnvironmentsJob';
+import pingEnvironmentsJob from '../services/pingEnvironmentsJob';
+import syncEnvironmentsJob from '../services/syncEnvironmentsJob';
 
 import { CreateEnvironmentProps } from '../../renderer/ipc/environmentsIpcHandler';
 
 import { isDevelopment, logStringFormat } from './globalConstants';
+import validateOAuthPermission from '../services/validateOAuthPermission';
+import getEnvironmentRelease, {
+  V2VersionApiResponse,
+} from '../services/getEnvironmentRelease';
+import AuthObject from '../../common/interfaces/AuthObject';
+import i18n from '../../common/i18n/i18n';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -77,7 +84,7 @@ export default function addIpcHandlers(): void {
         environmentAuthKeys,
       }: CreateEnvironmentProps
     ) => {
-      log.info('IPC Handler: Saving environment');
+      log.info('IPC Handler: Creating a new environment');
 
       const createdEnvironment = await new EnvironmentController().new(
         environment
@@ -90,7 +97,7 @@ export default function addIpcHandlers(): void {
       const createdAuthKeys = await new AuthKeysController().new({
         environmentId: createdEnvironment.id,
         payload: environmentAuthKeys.payload,
-        hash: 'json',
+        hash: environmentAuthKeys.hash,
       });
 
       await new LogController().writeLog({
@@ -110,7 +117,7 @@ export default function addIpcHandlers(): void {
       updateSchedule: UpdateScheduleControllerInterface,
       authKeys: AuthKeysControllerInterface
     ) => {
-      log.info('IPC Handler: Updating environment');
+      log.info('IPC Handler: Updating an environment');
 
       const updatedEnvironment = await new EnvironmentController().update(
         environment
@@ -149,8 +156,7 @@ export default function addIpcHandlers(): void {
     'toggleEnvironmentFavorite',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
       log.info(
-        'IPC Handler: Toggling environment favorite for environment id',
-        id
+        `IPC Handler: Toggling environment favorite for environment with a id of ${id}`
       );
 
       const favorited = await EnvironmentController.toggleFavorite(id);
@@ -177,8 +183,7 @@ export default function addIpcHandlers(): void {
     'getLastHttpResponseFromEnvironment',
     async (_event: Electron.IpcMainInvokeEvent, environmentId: number) => {
       log.info(
-        'IPC Handler: Recovering last HTTP Response from environment',
-        environmentId
+        `IPC Handler: Recovering last HTTP Response from environment ${environmentId}`
       );
 
       const lastResponse =
@@ -236,7 +241,7 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle('forceEnvironmentSync', async () => {
-    log.info('IPC Handler: Forcing all environments Sync');
+    log.info('IPC Handler: Forcing all environments sync');
     await syncEnvironmentsJob();
   });
 
@@ -244,4 +249,46 @@ export default function addIpcHandlers(): void {
     log.info('IPC Handler: Forcing all environments ping');
     await pingEnvironmentsJob();
   });
+
+  ipcMain.handle(
+    'validateOauthPermission',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      auth: AuthObject,
+      domainUrl: string
+    ) => {
+      log.info('IPC Handler: Validating oAuth permissions');
+      const result = await validateOAuthPermission(auth, domainUrl);
+
+      return result;
+    }
+  );
+
+  ipcMain.handle(
+    'getEnvironmentRelease',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      auth: AuthObject,
+      domainUrl: string
+    ): Promise<V2VersionApiResponse | null> => {
+      log.info('IPC Handler: Getting the environment release');
+      const result = await getEnvironmentRelease(auth, domainUrl);
+
+      return result;
+    }
+  );
+
+  ipcMain.handle(
+    'setStoreValue',
+    (_event: Electron.IpcMainInvokeEvent, key: string, value: string) => {
+      new Store().set(key, value);
+    }
+  );
+
+  ipcMain.handle(
+    'updateLanguage',
+    (_event: Electron.IpcMainInvokeEvent, lang: string) => {
+      i18n.changeLanguage(lang);
+    }
+  );
 }

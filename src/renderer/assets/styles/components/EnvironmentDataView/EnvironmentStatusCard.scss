@@ -40,13 +40,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin-left: 0.5rem;
+        margin-right: 1rem;
 
         min-width: fit-content;
 
-        // &.breathe {
-        //   // TODO: Add breathe animation
-        // }
+        &.breathe {
+          animation: breathing 5s cubic-bezier(0.1, 0.8, 0.4, 1) infinite;
+        }
 
         &.has-warning {
           background-color: var(--yellow);
@@ -117,5 +117,14 @@
         }
       }
     }
+  }
+}
+
+@keyframes breathing {
+  0% {
+    box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.75);
+  }
+  75% {
+    box-shadow: 0 0 5px 25px rgba(16, 185, 129, 0);
   }
 }

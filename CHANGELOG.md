@@ -1,3 +1,28 @@
+# 0.3
+
+- The app now validates if the oAuth user has sufficient permissions for data collection.
+  - The validation occurs on the test connection button.
+  - The validation occurs on the create / edit environment save button.
+- Moved main process services to dedicated folder.
+- Added a "report a bug" button on the "About" menu.
+- Added a time period indicator on the server response time graph (Currently showing as "Last 24 hours")
+- Added a "Under development" indicator to some views and components.
+- Implemented a proper log file rotation with node-schedule.
+- The app now recovers the environment release when the environment is added or edited.
+- Implemented environment auth keys encryption option.
+- Added a app settings component.
+- Reduced log levels on the IPC channels.
+- Settings panel layout implemented. Settings implemented:
+  - Theme settings.
+  - Language settings.
+  - About section.
+  - Report a bug section.
+- Theme switcher implemented as a context.
+- Added translation (i18n) to toast notifications.
+- Database renamed from "app.db" to "fluig-monitor.db", with automatic legacy database detection and renaming.
+- Log file name has been changed to "fluig-monitor.log".
+- Added a "breathing" animation to the environment status indicator card.
+
 # 0.2.1
 
 - Implemented a mini line graph on the server list view from the last 20 ping responses (when there are responses)
@@ -11,8 +36,8 @@
 
 - Updated test connection endpoint to /api/servlet/ping
 - Changed environment availability check strategy
-  - Now the app uses the ping api to check the server availability on a shorter interval (10s to 1min)
-  - Statistics/Monitor/Licenses data scrape strategy updated. Data fetch occurs on larger time intervals (15min to 24hours)
+  - Now the app uses the ping api to check the server availability on a shorter interval (15s to 2min)
+  - Statistics/Monitor/Licenses data scrape strategy updated. Data fetching occurs on bigger time intervals (15min to 24hours)
 - Update only on work days option removed
 - Update time span option removed
 - Environment ping job implemented
@@ -24,7 +49,7 @@
 - System resources components added:
   - Disk Info
   - Memory Info
-  - Databse Info
+  - Database Info
 - Progress bar component updated
 - Splash Screen added
 - Environment status component added

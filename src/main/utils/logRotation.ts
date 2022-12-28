@@ -11,27 +11,40 @@ import getAppDataFolder from './fsUtils';
  */
 export default function rotateLogFile(): void {
   try {
-    const todayDateFormat = new Date()
-      .toLocaleDateString('pt')
-      .split('/')
-      .reverse()
-      .join('-');
+    const today = new Date();
     const filePath = path.resolve(
       getAppDataFolder(),
       'logs',
       isDevelopment ? 'app.dev.log' : 'app.log'
     );
+    const yesterday = new Date().setDate(today.getDate() - 1);
+    const yesterdayFileFormat = new Date(yesterday)
+      .toLocaleDateString('pt')
+      .split('/')
+      .reverse()
+      .join('-');
+    let logContent = null;
 
+    // checks if the log file exists
+    if (!fs.existsSync(filePath)) {
+      return;
+    }
+
+    // if the current log file was last modified on a date previous to today and the rotated log file does not exits
     if (
-      fs.statSync(filePath).mtime.getDate() !== new Date().getDate() &&
-      !fs.existsSync(filePath.replace('.log', `_${todayDateFormat}.log`))
+      fs.statSync(filePath).mtime.getDate() !== today.getDate() &&
+      !fs.existsSync(filePath.replace('.log', `_${yesterdayFileFormat}.log`))
     ) {
       log.info('This log file needs rotation and will be archived');
 
-      fs.renameSync(
-        filePath,
-        filePath.replace('.log', `_${todayDateFormat}.log`)
+      logContent = fs.readFileSync(filePath, 'utf-8');
+
+      fs.writeFileSync(
+        filePath.replace('.log', `_${yesterdayFileFormat}.log`),
+        logContent
       );
+
+      fs.writeFileSync(filePath, '');
 
       log.info('Previous log file has been archived due to file rotation');
     }

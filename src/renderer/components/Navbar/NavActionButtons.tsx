@@ -1,61 +1,39 @@
 import { useEffect, useState } from 'react';
-import log from 'electron-log';
+import { Link } from 'react-router-dom';
 import { FiAirplay, FiBell, FiMoon, FiSettings, FiSun } from 'react-icons/fi';
 import '../../assets/styles/components/Navbar/RightButtons.scss';
 import { useTranslation } from 'react-i18next';
-import {
-  getFrontEndTheme,
-  updateFrontEndTheme,
-} from '../../ipc/settingsIpcHandler';
+import { useTheme } from '../../contexts/ThemeContext';
 
 export default function NavActionButtons() {
-  const [themeIcon, setThemeIcon] = useState(<FiSun />);
   const { t } = useTranslation();
-
-  function setTheme(theme: string, cacheToDb = false) {
-    log.info('Updating app front end theme to', theme);
-
-    if (theme === 'WHITE') {
-      document.body.classList.remove('dark-theme');
-      setThemeIcon(<FiSun />);
-
-      if (cacheToDb) {
-        updateFrontEndTheme('WHITE');
-      }
-    } else {
-      document.body.classList.add('dark-theme');
-      setThemeIcon(<FiMoon />);
-
-      if (cacheToDb) {
-        updateFrontEndTheme('DARK');
-      }
-    }
-  }
+  const { theme, setFrontEndTheme } = useTheme();
+  const [themeIcon, setThemeIcon] = useState(
+    theme === 'DARK' ? <FiMoon /> : <FiSun />
+  );
 
   function toggleAppTheme() {
     if (document.body.classList.contains('dark-theme')) {
-      setTheme('WHITE', true);
+      setFrontEndTheme('WHITE');
+      setThemeIcon(<FiSun />);
     } else {
-      setTheme('DARK', true);
+      setFrontEndTheme('DARK');
+      setThemeIcon(<FiMoon />);
     }
   }
 
   useEffect(() => {
-    async function fetch() {
-      const theme = await getFrontEndTheme();
-
-      setTheme(theme);
-    }
-
-    fetch();
-  }, []);
+    setThemeIcon(theme === 'DARK' ? <FiMoon /> : <FiSun />);
+  }, [theme]);
 
   return (
     <section id="rightButtons">
       <button
         type="button"
         className="optionButton"
-        title={t('navbar.actionButtons.kioskMode')}
+        title={`${t('navbar.actionButtons.kioskMode')} [${t(
+          'components.global.underDevelopment'
+        )}]`}
         disabled
       >
         <FiAirplay />
@@ -63,7 +41,9 @@ export default function NavActionButtons() {
       <button
         type="button"
         className="optionButton"
-        title={t('navbar.actionButtons.notifications')}
+        title={`${t('navbar.actionButtons.notifications')} [${t(
+          'components.global.underDevelopment'
+        )}]`}
         disabled
       >
         <FiBell />
@@ -76,15 +56,13 @@ export default function NavActionButtons() {
       >
         {themeIcon}
       </button>
-      {/* TODO: Create options modal */}
-      <button
-        type="button"
+      <Link
+        to="/appSettings"
         className="optionButton"
         title={t('navbar.actionButtons.settings')}
-        disabled
       >
         <FiSettings />
-      </button>
+      </Link>
     </section>
   );
 }

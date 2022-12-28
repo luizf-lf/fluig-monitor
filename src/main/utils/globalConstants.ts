@@ -18,14 +18,20 @@ if (isDevelopment) {
 export const logStringFormat =
   '[{y}-{m}-{d} {h}:{i}:{s}.{ms} {z}] [{level}] [{processType}] {text}';
 
-export const environmentScrapeSyncInterval = 900000;
-export const environmentPingInterval = 15000;
+export const scrapeSyncInterval = 900000; // 15 minutes
+export const scrapeSyncIntervalCron = '* */15 * * * *';
+export const pingInterval = 15000; // 15 seconds
+export const pingIntervalCron = '*/15 * * * * *';
 
+export const legacyDbName = 'app.db';
+export const dbName = 'fluig-monitor.db';
 export const dbPath = isDevelopment
-  ? path.resolve(__dirname, '../../../', 'prisma', 'app.db')
-  : path.resolve(getAppDataFolder(), 'app.db');
+  ? path.resolve(__dirname, '../../../', 'prisma')
+  : path.resolve(getAppDataFolder());
 export const dbUrl =
-  (isDevelopment ? process.env.DATABASE_URL : `file:${dbPath}`) || '';
+  (isDevelopment
+    ? process.env.DATABASE_URL
+    : `file:${path.resolve(dbPath, dbName)}`) || '';
 
 // Must be updated every time a migration is created
 export const latestMigration = '20221205230300_create_resource_type_field';
@@ -39,9 +45,9 @@ export const platformToExecutables: any = {
   },
   linux: {
     migrationEngine:
-      'node_modules/@prisma/engines/migration-engine-debian-openssl-1.1.x',
+      'node_modules/@prisma/engines/migration-engine-debian-openssl-3.0.x',
     queryEngine:
-      'node_modules/@prisma/engines/libquery_engine-debian-openssl-1.1.x.so.node',
+      'node_modules/@prisma/engines/libquery_engine-debian-openssl-3.0.x.so.node',
   },
   darwin: {
     migrationEngine: 'node_modules/@prisma/engines/migration-engine-darwin',
