@@ -19,6 +19,11 @@ const pt = {
       label: '&Arquivo',
       quit: 'Sair',
     },
+    systemTray: {
+      running: 'Fluig Monitor em execução',
+      open: 'Abrir',
+      quit: 'Sair',
+    },
   },
   navbar: {
     actionButtons: {
@@ -225,6 +230,7 @@ const pt = {
           language: 'Idioma',
           about: 'Sobre A Ferramenta',
           reportABug: 'Reporte Um Bug',
+          systemTray: 'Bandeja Do Sistema',
         },
       },
       emptyRoute: {
@@ -330,6 +336,11 @@ const pt = {
       title: 'Idioma',
       helperText: 'Selecione abaixo o idioma a ser utilizado pela aplicação: ',
     },
+    SystemTraySettings: {
+      title: 'Bandeja Do Sistema',
+      helperText:
+        'Utilize esta opção para definir o comportamento da aplicação na bandeja do sistema.',
+    },
     AboutSection: {
       title:
         'Uma ferramenta open-source para monitoramento de ambientes Fluig.',
@@ -378,6 +389,11 @@ const pt = {
     ServerUnavailable: {
       title: 'indisponível.',
       message: 'O servidor aparenta estar offline. Verifique.',
+    },
+    StillAlive: {
+      title: 'Ainda estou aqui.',
+      message:
+        'O Fluig Monitor está sendo executado na bandeja do sistema, você pode alterar este comportamento no painel de controle.',
     },
   },
 };

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiChevronRight, FiInfo, FiSettings } from 'react-icons/fi';
+import { FiChevronRight, FiInfo, FiLayers, FiSettings } from 'react-icons/fi';
 import { Route, Switch, useRouteMatch } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,7 @@ import ThemeSettings from '../components/SettingsView/ThemeSettings';
 import LanguageSettings from '../components/SettingsView/LanguageSettings';
 import AboutSection from '../components/SettingsView/AboutSection';
 import ReportABugSection from '../components/SettingsView/ReportABugSection';
+import SystemTraySettings from '../components/SettingsView/SystemTraySettings';
 
 import '../assets/styles/views/AppSettings.view.scss';
 
@@ -32,7 +33,6 @@ export default function AppSettingsView() {
   const { t } = useTranslation();
   const [selectedRoute, setSelectedRoute] = useState('');
 
-  // TODO: add a route to app behavior settings (system tray settings)
   const menuBuilder = [
     {
       title: {
@@ -50,6 +50,20 @@ export default function AppSettingsView() {
           target: `${url}/language`,
           name: t('views.AppSettingsView.settingsMenu.pages.language'),
           component: <LanguageSettings />,
+        },
+      ],
+    },
+    {
+      key: 'BEHAVIOR',
+      title: {
+        name: 'Comportamento',
+        icon: <FiLayers />,
+      },
+      children: [
+        {
+          target: `${url}/systemTray`,
+          name: t('views.AppSettingsView.settingsMenu.pages.systemTray'),
+          component: <SystemTraySettings />,
         },
       ],
     },

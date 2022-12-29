@@ -120,6 +120,8 @@ const createWindow = async () => {
     if (savedLanguage !== lang) {
       await new LanguageController().update(lang);
     }
+
+    // TODO: Rebuild system tray icon on language change
   });
 
   // change the language to the locally saved language
@@ -146,11 +148,10 @@ const createWindow = async () => {
     shell.openExternal(url);
   });
 
-  // TODO: Add i18n
   mainWindow.on('minimize', () => {
     const notification = new Notification({
-      title: 'Ainda estou aqui.',
-      body: 'O Fluig Monitor está sendo executado na bandeja do sistema, você pode alterar este comportamento no painel de controle.',
+      title: i18n.t('toasts.StillAlive.title'),
+      body: i18n.t('toasts.StillAlive.message'),
       icon: path.join(getAssetPath(), 'icon.png'),
     });
 
@@ -236,7 +237,7 @@ app
 
     // creates a system tray icon
     const trayIcon = new Tray(path.join(getAssetPath(), 'icon.ico'));
-    trayIcon.setToolTip('Fluig Monitor is running');
+    trayIcon.setToolTip(i18n.t('menu.systemTray.running'));
     trayIcon.on('click', reopenWindow);
     trayIcon.setContextMenu(
       Menu.buildFromTemplate([
@@ -248,12 +249,12 @@ app
         { type: 'separator' },
         {
           type: 'normal',
-          label: 'Abrir',
+          label: i18n.t('menu.systemTray.open'),
           click: reopenWindow,
         },
         {
           type: 'normal',
-          label: 'Sair',
+          label: i18n.t('menu.systemTray.quit'),
           click: () => {
             log.info(
               'App will be closed since the system tray option has been clicked.'

@@ -21,8 +21,6 @@ async function notifyAbout(
       10
     );
 
-    i18n.t('toasts.HighResponseTime.title');
-
     let notification = null;
     const lastResponse = responses[0];
     let previousResponse = null;

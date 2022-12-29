@@ -19,6 +19,11 @@ const en = {
       label: '&File',
       quit: 'Quit',
     },
+    systemTray: {
+      running: 'Fluig Monitor is running',
+      open: 'Open',
+      quit: 'Quit',
+    },
   },
   navbar: {
     actionButtons: {
@@ -220,6 +225,7 @@ const en = {
           language: 'Language',
           about: 'About This Software',
           reportABug: 'Report A Bug',
+          systemTray: 'System Tray',
         },
       },
       emptyRoute: {
@@ -324,6 +330,11 @@ const en = {
       title: 'Language',
       helperText: 'Select the language to be used by the application bellow: ',
     },
+    SystemTraySettings: {
+      title: 'System Tray',
+      helperText:
+        'Use this option to define how the app should behave on the system tray.',
+    },
     AboutSection: {
       title: 'An open-source tool for monitoring Fluig servers.',
       developedBy: 'Developed by ',
@@ -372,6 +383,11 @@ const en = {
     ServerUnavailable: {
       title: 'unavailable.',
       message: 'The server appears to be offline. Please check.',
+    },
+    StillAlive: {
+      title: "I'm still alive.",
+      message:
+        'Fluig Monitor is still running on the system tray. You can change this behavior on the settings panel.',
     },
   },
 };
