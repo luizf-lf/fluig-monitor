@@ -4,7 +4,15 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell, screen } from 'electron';
+import {
+  app,
+  BrowserWindow,
+  shell,
+  screen,
+  Tray,
+  Menu,
+  Notification,
+} from 'electron';
 
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
@@ -137,18 +145,29 @@ const createWindow = async () => {
     event.preventDefault();
     shell.openExternal(url);
   });
+
+  // TODO: Add i18n
+  mainWindow.on('minimize', () => {
+    const notification = new Notification({
+      title: 'Ainda estou aqui.',
+      body: 'O Fluig Monitor está sendo executado na bandeja do sistema, você pode alterar este comportamento no painel de controle.',
+      icon: path.join(getAssetPath(), 'icon.png'),
+    });
+
+    notification.show();
+    mainWindow?.hide();
+  });
 };
 
 addIpcHandlers();
 
-app.on('window-all-closed', async () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
-    log.info('Main windows closed. Exiting the app.');
+const reopenWindow = () => {
+  if (mainWindow === null) {
+    createWindow();
+  } else {
+    BrowserWindow.getAllWindows()[0].show();
   }
-});
+};
 
 app
   .whenReady()
@@ -214,6 +233,36 @@ app
     scheduleJob('5 0 0 * * *', () => {
       rotateLogFile();
     });
+
+    // creates a system tray icon
+    const trayIcon = new Tray(path.join(getAssetPath(), 'icon.ico'));
+    trayIcon.setToolTip('Fluig Monitor is running');
+    trayIcon.on('click', reopenWindow);
+    trayIcon.setContextMenu(
+      Menu.buildFromTemplate([
+        {
+          type: 'normal',
+          label: `Fluig Monitor - v${version}`,
+          enabled: false,
+        },
+        { type: 'separator' },
+        {
+          type: 'normal',
+          label: 'Abrir',
+          click: reopenWindow,
+        },
+        {
+          type: 'normal',
+          label: 'Sair',
+          click: () => {
+            log.info(
+              'App will be closed since the system tray option has been clicked.'
+            );
+            app.quit();
+          },
+        },
+      ])
+    );
   })
   .catch((e) => {
     log.error('An unknown error occurred:');

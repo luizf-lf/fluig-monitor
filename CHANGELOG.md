@@ -1,4 +1,8 @@
-# 0.3
+# 0.4.0-rc
+
+- Added a minimize to system tray feature
+
+# 0.3.0
 
 - The app now validates if the oAuth user has sufficient permissions for data collection.
   - The validation occurs on the test connection button.

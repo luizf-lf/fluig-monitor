@@ -32,6 +32,7 @@ export default function AppSettingsView() {
   const { t } = useTranslation();
   const [selectedRoute, setSelectedRoute] = useState('');
 
+  // TODO: add a route to app behavior settings (system tray settings)
   const menuBuilder = [
     {
       title: {

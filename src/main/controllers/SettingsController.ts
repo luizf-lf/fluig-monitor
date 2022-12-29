@@ -30,17 +30,20 @@ export default class SettingsController {
     return this.found;
   }
 
+  // TODO: Maybe implement a method to find and create if it not exists?
+
   async update(data: AppSettingUpdatePropsInterface): Promise<AppSetting> {
     log.info(
       'SettingsController: Updating system settings with data:',
       JSON.stringify(data)
     );
 
-    this.updated = await prismaClient.appSetting.update({
+    this.updated = await prismaClient.appSetting.upsert({
       where: {
         settingId: data.settingId,
       },
-      data,
+      create: data,
+      update: data,
     });
 
     return this.updated;
