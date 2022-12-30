@@ -2,10 +2,10 @@ import log from 'electron-log';
 import prismaClient from '../database/prismaContext';
 import { AppSetting } from '../generated/client';
 
-interface AppSettingUpdatePropsInterface {
+export interface AppSettingUpdatePropsInterface {
   settingId: string;
   value: string;
-  group?: string;
+  group?: string | null;
 }
 
 export default class SettingsController {

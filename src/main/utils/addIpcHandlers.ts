@@ -1,7 +1,9 @@
+/* eslint-disable no-await-in-loop */
 import log from 'electron-log';
 import { ipcMain } from 'electron';
 import Store from 'electron-store';
 
+import { AppSetting } from '../generated/client';
 import { AuthKeysControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
 import { EnvironmentUpdateControllerInterface } from '../../common/interfaces/EnvironmentControllerInterface';
 import { UpdateScheduleControllerInterface } from '../../common/interfaces/UpdateScheduleControllerInterface';
@@ -10,7 +12,9 @@ import AuthKeysController from '../controllers/AuthKeysController';
 import EnvironmentController from '../controllers/EnvironmentController';
 import LanguageController from '../controllers/LanguageController';
 import LogController from '../controllers/LogController';
-import SettingsController from '../controllers/SettingsController';
+import SettingsController, {
+  AppSettingUpdatePropsInterface,
+} from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import UpdateScheduleController from '../controllers/UpdateScheduleController';
 
@@ -165,6 +169,9 @@ export default function addIpcHandlers(): void {
     }
   );
 
+  /**
+   * @deprecated in favor fo updateSettings method
+   */
   ipcMain.handle(
     'updateFrontEndTheme',
     async (_event: Electron.IpcMainInvokeEvent, theme: string) => {
@@ -176,6 +183,36 @@ export default function addIpcHandlers(): void {
       });
 
       return updated;
+    }
+  );
+
+  ipcMain.handle(
+    'updateSettings',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      settings: AppSettingUpdatePropsInterface[]
+    ): Promise<AppSetting[]> => {
+      const settingsController = new SettingsController();
+      const updated = [];
+
+      for (let i = 0; i < settings.length; i += 1) {
+        updated.push(await settingsController.update(settings[i]));
+      }
+
+      return updated;
+    }
+  );
+
+  // TODO: Add an option to create a default value if the setting hasn't been found
+  ipcMain.handle(
+    'getSetting',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      settingId: string
+    ): Promise<AppSetting | null> => {
+      const found = await new SettingsController().find(settingId);
+
+      return found;
     }
   );
 
