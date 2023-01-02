@@ -15,7 +15,7 @@ export default function rotateLogFile(): void {
     const filePath = path.resolve(
       getAppDataFolder(),
       'logs',
-      isDevelopment ? 'app.dev.log' : 'app.log'
+      isDevelopment ? 'fluig-monitor.dev.log' : 'fluig-monitor.log'
     );
     const yesterday = new Date().setDate(today.getDate() - 1);
     const yesterdayFileFormat = new Date(yesterday)
