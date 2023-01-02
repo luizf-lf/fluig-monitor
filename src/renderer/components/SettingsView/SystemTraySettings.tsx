@@ -19,7 +19,6 @@ export default function SystemTraySettings() {
       {
         settingId: 'ENABLE_MINIMIZE_FEATURE',
         value: String(checked),
-        group: 'BEHAVIOR',
       },
     ]);
   }
@@ -31,14 +30,18 @@ export default function SystemTraySettings() {
       {
         settingId: 'DISABLE_MINIMIZE_NOTIFICATION',
         value: String(checked),
-        group: 'BEHAVIOR',
       },
     ]);
   }
 
   async function loadSettings() {
     const minimizeFeatureSetting = await getAppSetting(
-      'ENABLE_MINIMIZE_FEATURE'
+      'ENABLE_MINIMIZE_FEATURE',
+      true,
+      {
+        value: 'true',
+        group: 'BEHAVIOR',
+      }
     );
 
     if (minimizeFeatureSetting) {
@@ -46,7 +49,12 @@ export default function SystemTraySettings() {
     }
 
     const disableNotificationSetting = await getAppSetting(
-      'DISABLE_MINIMIZE_NOTIFICATION'
+      'DISABLE_MINIMIZE_NOTIFICATION',
+      true,
+      {
+        value: 'false',
+        group: 'BEHAVIOR',
+      }
     );
 
     if (disableNotificationSetting) {
@@ -58,7 +66,6 @@ export default function SystemTraySettings() {
     loadSettings();
   }, []);
 
-  // TODO: Add i18n
   return (
     <motion.div
       variants={globalContainerVariants}
@@ -87,12 +94,11 @@ export default function SystemTraySettings() {
             }
             style={{ marginRight: '0.5rem' }}
           />
-          Minimizar para a bandeja do sistema
+          {t('components.SystemTraySettings.minimizeToSystemTray')}
         </label>
 
         <small className="font-soft">
-          Ao habilitar esta opção, o Fluig Monitor será minimizado para a
-          bandeja do sistema ao ser minimizado, e continuará em execução.
+          {t('components.SystemTraySettings.minimizeToSystemTrayHelper')}
         </small>
       </div>
 
@@ -108,12 +114,11 @@ export default function SystemTraySettings() {
             }
             style={{ marginRight: '0.5rem' }}
           />
-          Desabilitar notificação
+          {t('components.SystemTraySettings.disableNotification')}
         </label>
 
         <small className="font-soft">
-          Utilize esta opção para desabilitar a notificação de que o Fluig
-          Monitor ainda está em execução.
+          {t('components.SystemTraySettings.disableNotificationHelper')}
         </small>
       </div>
     </motion.div>

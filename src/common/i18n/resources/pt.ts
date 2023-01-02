@@ -340,6 +340,12 @@ const pt = {
       title: 'Bandeja Do Sistema',
       helperText:
         'Utilize esta opção para definir o comportamento da aplicação na bandeja do sistema.',
+      minimizeToSystemTray: 'Minimizar para a bandeja do sistema',
+      minimizeToSystemTrayHelper:
+        'Ao habilitar esta opção, o Fluig Monitor será minimizado para a bandeja do sistema ao ser minimizado, e continuará em execução.',
+      disableNotification: 'Desabilitar notificação',
+      disableNotificationHelper:
+        'Utilize esta opção para desabilitar a notificação de que o Fluig Monitor ainda está em execução.',
     },
     AboutSection: {
       title:

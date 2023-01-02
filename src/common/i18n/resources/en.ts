@@ -334,6 +334,12 @@ const en = {
       title: 'System Tray',
       helperText:
         'Use this option to define how the app should behave on the system tray.',
+      minimizeToSystemTray: 'Minimize to system tray',
+      minimizeToSystemTrayHelper:
+        'When enabling this option, Fluig Monitor will be minimized to the system tray and will keep running.',
+      disableNotification: 'Disable notification',
+      disableNotificationHelper:
+        'Use this option to disable the notification telling that Fluig Monitor is still running.',
     },
     AboutSection: {
       title: 'An open-source tool for monitoring Fluig servers.',

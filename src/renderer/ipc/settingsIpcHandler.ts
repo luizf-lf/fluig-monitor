@@ -1,6 +1,9 @@
 import { ipcRenderer } from 'electron';
 import { AppSetting } from '../../main/generated/client';
-import { AppSettingUpdatePropsInterface } from '../../main/controllers/SettingsController';
+import {
+  AppSettingCreateDefaultPropsInterface,
+  AppSettingUpdatePropsInterface,
+} from '../../main/controllers/SettingsController';
 
 export async function updateAppSettings(
   settings: AppSettingUpdatePropsInterface[]
@@ -11,9 +14,16 @@ export async function updateAppSettings(
 }
 
 export async function getAppSetting(
-  settingId: string
+  settingId: string,
+  createIfNotExists = false,
+  createData: AppSettingCreateDefaultPropsInterface | null = null
 ): Promise<AppSetting | null> {
-  const found = await ipcRenderer.invoke('getSetting', settingId);
+  const found = await ipcRenderer.invoke(
+    'getSetting',
+    settingId,
+    createIfNotExists,
+    createData
+  );
 
   return found;
 }

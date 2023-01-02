@@ -8,6 +8,11 @@ export interface AppSettingUpdatePropsInterface {
   group?: string | null;
 }
 
+export interface AppSettingCreateDefaultPropsInterface {
+  value: string;
+  group?: string | null;
+}
+
 export default class SettingsController {
   updated: null | AppSetting;
 
@@ -18,19 +23,38 @@ export default class SettingsController {
     this.found = null;
   }
 
-  async find(settingId: string) {
+  async find(
+    settingId: string,
+    createIfNotExists: boolean,
+    createData: AppSettingCreateDefaultPropsInterface | null
+  ) {
     log.info('SettingsController: Finding system setting with id:', settingId);
 
-    this.found = await prismaClient.appSetting.findUnique({
+    const found = await prismaClient.appSetting.findUnique({
       where: {
         settingId,
       },
     });
 
+    if (found === null && createIfNotExists && createData) {
+      log.info(
+        `SettingsController: Setting not found and will be created with default values: ${JSON.stringify(
+          createData
+        )}`
+      );
+      this.found = await prismaClient.appSetting.create({
+        data: {
+          settingId,
+          value: createData.value,
+          group: createData.group,
+        },
+      });
+    } else {
+      this.found = found;
+    }
+
     return this.found;
   }
-
-  // TODO: Maybe implement a method to find and create if it not exists?
 
   async update(data: AppSettingUpdatePropsInterface): Promise<AppSetting> {
     log.info(
