@@ -169,23 +169,6 @@ export default function addIpcHandlers(): void {
     }
   );
 
-  /**
-   * @deprecated in favor fo updateSettings method
-   */
-  ipcMain.handle(
-    'updateFrontEndTheme',
-    async (_event: Electron.IpcMainInvokeEvent, theme: string) => {
-      log.info('IPC Handler: Updating front end theme');
-
-      const updated = await new SettingsController().update({
-        settingId: 'FRONT_END_THEME',
-        value: theme,
-      });
-
-      return updated;
-    }
-  );
-
   ipcMain.handle(
     'updateSettings',
     async (
@@ -231,14 +214,6 @@ export default function addIpcHandlers(): void {
       return lastResponse;
     }
   );
-
-  ipcMain.handle('getFrontEndTheme', async () => {
-    log.info('IPC Handler: Getting front end theme');
-
-    const theme = await new SettingsController().find('FRONT_END_THEME');
-
-    return theme;
-  });
 
   ipcMain.handle(
     'getHistoricalDiskInfo',
