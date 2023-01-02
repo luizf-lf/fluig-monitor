@@ -36,6 +36,7 @@ import syncEnvironmentsJob from './services/syncEnvironmentsJob';
 import pingEnvironmentsJob from './services/pingEnvironmentsJob';
 import addIpcHandlers from './utils/addIpcHandlers';
 import getAssetPath from './utils/getAssetPath';
+import SettingsController from './controllers/SettingsController';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -148,15 +149,28 @@ const createWindow = async () => {
     shell.openExternal(url);
   });
 
-  mainWindow.on('minimize', () => {
-    const notification = new Notification({
-      title: i18n.t('toasts.StillAlive.title'),
-      body: i18n.t('toasts.StillAlive.message'),
-      icon: path.join(getAssetPath(), 'icon.png'),
-    });
+  mainWindow.on('minimize', async () => {
+    const settingsController = new SettingsController();
+    const appSettings = {
+      disableNotify: await settingsController.find(
+        'DISABLE_MINIMIZE_NOTIFICATION'
+      ),
+      enableMinimize: await settingsController.find('ENABLE_MINIMIZE_FEATURE'),
+    };
 
-    notification.show();
-    mainWindow?.hide();
+    if (appSettings.enableMinimize?.value === 'true') {
+      if (appSettings.disableNotify?.value === 'false') {
+        const notification = new Notification({
+          title: i18n.t('toasts.StillAlive.title'),
+          body: i18n.t('toasts.StillAlive.message'),
+          icon: path.join(getAssetPath(), 'icon.png'),
+        });
+
+        notification.show();
+      }
+
+      mainWindow?.hide();
+    }
   });
 };
 

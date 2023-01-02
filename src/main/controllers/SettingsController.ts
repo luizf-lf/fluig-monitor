@@ -25,8 +25,8 @@ export default class SettingsController {
 
   async find(
     settingId: string,
-    createIfNotExists: boolean,
-    createData: AppSettingCreateDefaultPropsInterface | null
+    createIfNotExists = false,
+    createData: AppSettingCreateDefaultPropsInterface | null = null
   ) {
     log.info('SettingsController: Finding system setting with id:', settingId);
 
