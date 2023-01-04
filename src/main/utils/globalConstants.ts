@@ -16,7 +16,7 @@ if (isDevelopment) {
 }
 
 export const logStringFormat =
-  '{y}-{m}-{d} {h}:{i}:{s}.{ms} {z} [{level}] ({processType}) {text}';
+  '{y}-{m}-{d} {h}:{i}:{s}.{ms} [{level}] ({processType}) {text}';
 
 export const scrapeSyncInterval = 900000; // 15 minutes
 export const scrapeSyncIntervalCron = '* */15 * * * *';

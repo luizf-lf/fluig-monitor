@@ -23,8 +23,8 @@ ipcRenderer.on(
 i18n.language = ipcRenderer.sendSync('getLanguage');
 
 log.transports.file.fileName = ipcRenderer.sendSync('getIsDevelopment')
-  ? 'app.dev.log'
-  : 'app.log';
+  ? 'fluig-monitor.dev.log'
+  : 'fluig-monitor.log';
 log.transports.file.format = ipcRenderer.sendSync('getLogStringFormat');
 
 render(

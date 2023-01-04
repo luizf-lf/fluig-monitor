@@ -35,18 +35,20 @@ export default function rotateLogFile(): void {
       fs.statSync(filePath).mtime.getDate() !== today.getDate() &&
       !fs.existsSync(filePath.replace('.log', `_${yesterdayFileFormat}.log`))
     ) {
-      log.info('This log file needs rotation and will be archived');
+      const archiveFilePath = filePath.replace(
+        '.log',
+        `_${yesterdayFileFormat}.log`
+      );
 
       logContent = fs.readFileSync(filePath, 'utf-8');
 
-      fs.writeFileSync(
-        filePath.replace('.log', `_${yesterdayFileFormat}.log`),
-        logContent
-      );
+      fs.writeFileSync(archiveFilePath, logContent);
 
       fs.writeFileSync(filePath, '');
 
-      log.info('Previous log file has been archived due to file rotation');
+      log.info(
+        `Previous log file has been archived as ${archiveFilePath} due to file rotation`
+      );
     }
   } catch (e: any) {
     log.error('Could not rotate log file: ');
