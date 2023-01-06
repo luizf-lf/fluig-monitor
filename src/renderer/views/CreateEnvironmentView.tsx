@@ -235,8 +235,6 @@ export default function CreateEnvironmentView(): JSX.Element {
           environmentAuthKeys,
         });
 
-        log.info(created);
-
         if (useKeysEncryption && encryptedPayload !== null) {
           // maybe it's not a good idea to use the Store library,
           //  but in the meanwhile it's better than saving both keys on the same place.
