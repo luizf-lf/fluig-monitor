@@ -1,5 +1,7 @@
 # Fluig Monitor
 
+[![wakatime](https://wakatime.com/badge/github/luizf-lf/fluig-monitor.svg)](https://wakatime.com/badge/github/luizf-lf/fluig-monitor)
+
 > Check out the **english** documentation [here](./docs/README.md).
 
 ![Banner](./docs/img/banner.png)
