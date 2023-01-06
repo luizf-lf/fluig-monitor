@@ -109,8 +109,12 @@ async function executePing(
     });
 
     const initialTiming = Date.now();
+    let timeout = null;
+    if (environment.updateScheduleId) {
+      timeout = frequencyToMs(environment.updateScheduleId?.pingFrequency);
+    }
 
-    await fluigClient.get(true);
+    await fluigClient.get(true, timeout);
 
     const responseTimeMs = Date.now() - initialTiming;
 
