@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { FiClock } from 'react-icons/fi';
 import { LicenseHistoryWithHttpResponse } from '../../../common/interfaces/EnvironmentControllerInterface';
 import SpinnerLoader from '../Loaders/Spinner';
 import ProgressBar from '../ProgressBar';
@@ -41,6 +42,12 @@ export default function EnvironmentLicenses({ licenses }: Props) {
               current={licenses[0].activeUsers}
               showPercentage
             />
+
+            {/* TODO: Only show time sync indicators when the last sync was on the previous day */}
+            <div className="sync-time-indicator">
+              <FiClock />
+              {licenses[0].httpResponse.timestamp.toLocaleTimeString()}
+            </div>
           </>
         ) : (
           <span>{t('components.global.noData')}</span>
