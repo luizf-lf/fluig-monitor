@@ -3,6 +3,8 @@
 - Added a configurable minimize to system tray feature
 - Deprecated the updateFrontEndTheme method in favor of the generic updateSettings method
 - Fixed log rotation file name
+- Added a default timeout to the FluigAPI class
+- Time indicator component added
 
 # 0.3.0
 
