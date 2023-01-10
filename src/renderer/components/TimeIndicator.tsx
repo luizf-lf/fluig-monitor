@@ -1,5 +1,4 @@
 /* eslint-disable react/require-default-props */
-import { useState } from 'react';
 import { FiClock } from 'react-icons/fi';
 
 interface Props {
