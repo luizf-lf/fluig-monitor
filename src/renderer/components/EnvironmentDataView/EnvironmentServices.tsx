@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { FiClock } from 'react-icons/fi';
 import SpinnerLoader from '../Loaders/Spinner';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentServices.scss';
 import { MonitorHistoryWithHttpResponse } from '../../../common/interfaces/EnvironmentControllerInterface';
+import TimeIndicator from '../TimeIndicator';
 
 interface Props {
   monitors: MonitorHistoryWithHttpResponse[];
@@ -74,10 +74,7 @@ export default function EnvironmentServices({ monitors }: Props) {
                 return null;
               })}
             </div>
-            <div className="sync-time-indicator">
-              <FiClock />
-              {monitors[0].httpResponse.timestamp.toLocaleTimeString()}
-            </div>
+            <TimeIndicator date={monitors[0].httpResponse.timestamp} />
           </>
         ) : (
           <span>{t('components.global.noData')}</span>

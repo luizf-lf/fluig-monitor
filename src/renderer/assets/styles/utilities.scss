@@ -320,10 +320,11 @@
   font-size: 0.8rem;
 }
 
-.sync-time-indicator {
+.time-indicator {
   margin-top: 1rem;
   font-size: 0.75rem;
   color: var(--font-soft);
+  font-weight: normal;
 
   display: flex;
   align-items: center;
