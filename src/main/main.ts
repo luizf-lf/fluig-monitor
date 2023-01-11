@@ -37,6 +37,7 @@ import pingEnvironmentsJob from './services/pingEnvironmentsJob';
 import addIpcHandlers from './utils/addIpcHandlers';
 import getAssetPath from './utils/getAssetPath';
 import SettingsController from './controllers/SettingsController';
+import checkAppUpdate from './services/checkAppUpdate';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -217,6 +218,8 @@ app
     }
 
     await runDbMigrations();
+
+    checkAppUpdate();
 
     // When using node schedule with a cron like scheduler, sometimes the
     //  sync function are dispatched every second for a minute.
