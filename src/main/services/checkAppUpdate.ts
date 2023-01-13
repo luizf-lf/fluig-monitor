@@ -1,15 +1,27 @@
 import path from 'path';
+import fs, { createWriteStream } from 'fs';
 import log from 'electron-log';
 import axios from 'axios';
-import { createWriteStream } from 'fs';
+import { exec } from 'child_process';
+import { app } from 'electron';
 import GitHubReleaseInterface from '../interfaces/GitHubReleaseInterface';
 import { version as appVersion } from '../../../package.json';
 import getAppDataFolder from '../utils/fsUtils';
 import formatBytes from '../../common/utils/formatBytes';
+import byteSpeed from '../../common/utils/byteSpeed';
 
 export default async function checkAppUpdate() {
   try {
-    log.info('Checking for app updates.');
+    log.info('App Updater: Checking for app updates.');
+    const updatesPath = path.resolve(getAppDataFolder(), 'updates');
+
+    if (!fs.existsSync(updatesPath)) {
+      fs.mkdirSync(updatesPath);
+      log.info(
+        `App Updater: Updates folder has been created at ${updatesPath}`
+      );
+    }
+
     const response = await axios.get(
       'https://api.github.com/repos/luizf-lf/fluig-monitor/releases'
     );
@@ -18,7 +30,7 @@ export default async function checkAppUpdate() {
     // checks if the response is successful
     if (response.status !== 200) {
       log.warn(
-        `An error occurred while fetching the latest app update (HTTP ${response.status}: ${response.statusText})`
+        `App Updater: An error occurred while fetching the latest app update (HTTP ${response.status}: ${response.statusText})`
       );
       return;
     }
@@ -34,7 +46,7 @@ export default async function checkAppUpdate() {
     // checks if the current app version has been found on the releases array
     if (typeof currentRelease === 'undefined') {
       log.warn(
-        'Could not determine app version from the releases page. This may happen when the current version is a pre-release or an unofficial release.'
+        'App Updater: Could not determine app version from the releases page. This may happen when the current version is a pre-release or an unofficial release.'
       );
       return;
     }
@@ -44,7 +56,9 @@ export default async function checkAppUpdate() {
       new Date(currentRelease.published_at).getTime()
     ) {
       // has a new version
-      log.info(`A new app version is available (${latestRelease.tag_name})`);
+      log.info(
+        `App Updater: A new app version is available (${latestRelease.tag_name})`
+      );
 
       const windowsReleaseAsset = latestRelease.assets.find(
         (asset) => asset.name.indexOf('.exe') > 0
@@ -55,8 +69,18 @@ export default async function checkAppUpdate() {
         typeof windowsReleaseAsset === 'object'
       ) {
         const fileSize = formatBytes(windowsReleaseAsset.size);
+
+        if (
+          fs
+            .readdirSync(updatesPath)
+            .find((fileName) => fileName === windowsReleaseAsset.name)
+        ) {
+          log.info('App Updater: Update file has already been downloaded.');
+          return;
+        }
+
         log.info(
-          `Downloading the latest release for Windows (${windowsReleaseAsset.name}) (${fileSize})`
+          `App Updater: Downloading the latest release for Windows (${windowsReleaseAsset.name}) (${fileSize})`
         );
         const timer = Date.now();
         const streamRes = await axios.get(
@@ -67,20 +91,35 @@ export default async function checkAppUpdate() {
         );
 
         if (streamRes.status !== 200) {
-          log.warn('Could not download the latest release file.');
+          log.warn(
+            `App Updater: Could not download the latest release file (HTTP ${streamRes.status}: ${streamRes.statusText}`
+          );
           return;
         }
 
         const fileStream = createWriteStream(
-          path.resolve(getAppDataFolder(), windowsReleaseAsset.name)
+          path.resolve(updatesPath, windowsReleaseAsset.name)
         );
         streamRes.data.pipe(fileStream);
 
         fileStream.on('finish', () => {
           log.info(
-            `Downloaded ${fileSize} in ${Date.now() - timer}ms @ ${formatBytes(
-              windowsReleaseAsset.size / ((Date.now() - timer) / 1000)
-            )}/s`
+            `App Updater: Downloaded ${fileSize} in ${
+              Date.now() - timer
+            }ms @ ${byteSpeed(windowsReleaseAsset.size, Date.now() - timer)}`
+          );
+
+          // TODO: Check file hash if possible
+
+          // executes the updater
+          exec(path.resolve(updatesPath, windowsReleaseAsset.name)).on(
+            'spawn',
+            () => {
+              log.info('App Updater: App will quit and update itself');
+              setTimeout(() => {
+                app.quit();
+              }, 2500);
+            }
           );
         });
       }
@@ -89,7 +128,9 @@ export default async function checkAppUpdate() {
       // TODO: Implement auto-update settings
     }
   } catch (error) {
-    log.error('An unknown error occurred while checking for app updates:');
+    log.error(
+      'App Updater: An unknown error occurred while checking for app updates:'
+    );
     log.error(error);
   }
 }

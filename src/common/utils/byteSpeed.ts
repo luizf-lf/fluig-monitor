@@ -8,5 +8,5 @@ import formatBytes from './formatBytes';
  * @since 0.4.0
  */
 export default function byteSpeed(size: number, timer: number): string {
-  return `${formatBytes(size / ((Date.now() - timer) / 1000))}/s`;
+  return `${formatBytes(size / (timer / 1000))}/s`;
 }
