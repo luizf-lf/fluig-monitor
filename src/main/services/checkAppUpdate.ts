@@ -1,7 +1,11 @@
+import path from 'path';
 import log from 'electron-log';
 import axios from 'axios';
+import { createWriteStream } from 'fs';
 import GitHubReleaseInterface from '../interfaces/GitHubReleaseInterface';
 import { version as appVersion } from '../../../package.json';
+import getAppDataFolder from '../utils/fsUtils';
+import formatBytes from '../../common/utils/formatBytes';
 
 export default async function checkAppUpdate() {
   try {
@@ -19,7 +23,8 @@ export default async function checkAppUpdate() {
       return;
     }
 
-    const currentVersion = appVersion.replace(rgx, '');
+    const currentVersion = '0.2.0';
+    // const currentVersion = appVersion.replace(rgx, '');
     const releases = response.data as GitHubReleaseInterface[];
     const latestRelease = releases[0];
     const currentRelease = releases.find(
@@ -40,6 +45,45 @@ export default async function checkAppUpdate() {
     ) {
       // has a new version
       log.info(`A new app version is available (${latestRelease.tag_name})`);
+
+      const windowsReleaseAsset = latestRelease.assets.find(
+        (asset) => asset.name.indexOf('.exe') > 0
+      );
+
+      if (
+        process.platform === 'win32' &&
+        typeof windowsReleaseAsset === 'object'
+      ) {
+        const fileSize = formatBytes(windowsReleaseAsset.size);
+        log.info(
+          `Downloading the latest release for Windows (${windowsReleaseAsset.name}) (${fileSize})`
+        );
+        const timer = Date.now();
+        const streamRes = await axios.get(
+          windowsReleaseAsset.browser_download_url,
+          {
+            responseType: 'stream',
+          }
+        );
+
+        if (streamRes.status !== 200) {
+          log.warn('Could not download the latest release file.');
+          return;
+        }
+
+        const fileStream = createWriteStream(
+          path.resolve(getAppDataFolder(), windowsReleaseAsset.name)
+        );
+        streamRes.data.pipe(fileStream);
+
+        fileStream.on('finish', () => {
+          log.info(
+            `Downloaded ${fileSize} in ${Date.now() - timer}ms @ ${formatBytes(
+              windowsReleaseAsset.size / ((Date.now() - timer) / 1000)
+            )}/s`
+          );
+        });
+      }
 
       // TODO: Notify about the latest release
       // TODO: Implement auto-update settings
