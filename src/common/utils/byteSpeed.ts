@@ -1,7 +1,7 @@
 import formatBytes from './formatBytes';
 
 /**
- * Return a byte speed in bytes per seconds
+ * Returns a string describing data speed in bytes per seconds
  * @param size total byte size
  * @param timer total time span in milliseconds
  * @returns a string describing the byte speed (eg.: 458KB/s)
