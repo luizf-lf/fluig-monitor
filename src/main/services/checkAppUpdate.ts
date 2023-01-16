@@ -86,8 +86,7 @@ export default async function checkAppUpdate() {
       return;
     }
 
-    const currentVersion = '0.2.0';
-    // const currentVersion = appVersion.replace(rgx, '');
+    const currentVersion = appVersion.replace(rgx, '');
     const releases = response.data as GitHubReleaseInterface[];
     const latestRelease = releases[0];
     const currentRelease = releases.find(
