@@ -10,6 +10,24 @@ import getAppDataFolder from '../utils/fsUtils';
 import formatBytes from '../../common/utils/formatBytes';
 import byteSpeed from '../../common/utils/byteSpeed';
 
+/**
+ * Executes the installer file
+ * @param execPath the executable file path
+ * @since 0.4.0
+ */
+function executeUpdater(execPath: string) {
+  exec(execPath).on('spawn', () => {
+    log.info('App Updater: App will quit and update itself');
+    setTimeout(() => {
+      app.quit();
+    }, 5000);
+  });
+}
+
+/**
+ * Checks for app updates and download the latest release from the official GitHub repository.
+ * @since 0.4.0
+ */
 export default async function checkAppUpdate() {
   try {
     log.info('App Updater: Checking for app updates.');
@@ -69,6 +87,7 @@ export default async function checkAppUpdate() {
         typeof windowsReleaseAsset === 'object'
       ) {
         const fileSize = formatBytes(windowsReleaseAsset.size);
+        const filePath = path.resolve(updatesPath, windowsReleaseAsset.name);
 
         if (
           fs
@@ -76,6 +95,7 @@ export default async function checkAppUpdate() {
             .find((fileName) => fileName === windowsReleaseAsset.name)
         ) {
           log.info('App Updater: Update file has already been downloaded.');
+          executeUpdater(filePath);
           return;
         }
 
@@ -97,9 +117,7 @@ export default async function checkAppUpdate() {
           return;
         }
 
-        const fileStream = createWriteStream(
-          path.resolve(updatesPath, windowsReleaseAsset.name)
-        );
+        const fileStream = createWriteStream(filePath);
         streamRes.data.pipe(fileStream);
 
         fileStream.on('finish', () => {
@@ -112,15 +130,7 @@ export default async function checkAppUpdate() {
           // TODO: Check file hash if possible
 
           // executes the updater
-          exec(path.resolve(updatesPath, windowsReleaseAsset.name)).on(
-            'spawn',
-            () => {
-              log.info('App Updater: App will quit and update itself');
-              setTimeout(() => {
-                app.quit();
-              }, 2500);
-            }
-          );
+          executeUpdater(filePath);
         });
       }
 
