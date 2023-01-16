@@ -402,6 +402,16 @@ const pt = {
         'O Fluig Monitor está sendo executado na bandeja do sistema, você pode alterar este comportamento no painel de controle.',
     },
   },
+  dialogs: {
+    updateDialog: {
+      title: 'Atualização disponível',
+      message: 'Deseja atualizar o Fluig Monitor?',
+      detail:
+        'Uma nova atualização do Fluig Monitor foi baixada e está pronta para ser executada.',
+      btnYes: 'Atualizar',
+      btnNo: 'Cancelar',
+    },
+  },
 };
 
 export default pt;

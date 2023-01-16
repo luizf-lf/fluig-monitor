@@ -3,25 +3,47 @@ import fs, { createWriteStream } from 'fs';
 import log from 'electron-log';
 import axios from 'axios';
 import { exec } from 'child_process';
-import { app } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 import GitHubReleaseInterface from '../interfaces/GitHubReleaseInterface';
 import { version as appVersion } from '../../../package.json';
 import getAppDataFolder from '../utils/fsUtils';
 import formatBytes from '../../common/utils/formatBytes';
 import byteSpeed from '../../common/utils/byteSpeed';
+import i18n from '../../common/i18n/i18n';
 
 /**
  * Executes the installer file
  * @param execPath the executable file path
  * @since 0.4.0
  */
-function executeUpdater(execPath: string) {
-  exec(execPath).on('spawn', () => {
-    log.info('App Updater: App will quit and update itself');
-    setTimeout(() => {
-      app.quit();
-    }, 5000);
-  });
+function showUpdateDialog(execPath: string) {
+  dialog
+    .showMessageBox(BrowserWindow.getAllWindows()[0], {
+      title: i18n.t('dialogs.updateDialog.title'),
+      message: i18n.t('dialogs.updateDialog.message'),
+      detail: i18n.t('dialogs.updateDialog.detail'),
+      buttons: [
+        i18n.t('dialogs.updateDialog.btnYes'),
+        i18n.t('dialogs.updateDialog.btnNo'),
+      ],
+      cancelId: 1,
+    })
+    .then((clicked) => {
+      if (clicked.response === 0) {
+        exec(execPath).on('spawn', () => {
+          log.info('App Updater: App will quit and update itself');
+          setTimeout(() => {
+            app.quit();
+          }, 2500);
+        });
+      }
+
+      log.info("User doesn't like updates :{");
+      return null;
+    })
+    .catch((error) => {
+      log.error(error);
+    });
 }
 
 /**
@@ -95,7 +117,8 @@ export default async function checkAppUpdate() {
             .find((fileName) => fileName === windowsReleaseAsset.name)
         ) {
           log.info('App Updater: Update file has already been downloaded.');
-          executeUpdater(filePath);
+
+          showUpdateDialog(filePath);
           return;
         }
 
@@ -130,7 +153,7 @@ export default async function checkAppUpdate() {
           // TODO: Check file hash if possible
 
           // executes the updater
-          executeUpdater(filePath);
+          showUpdateDialog(filePath);
         });
       }
 

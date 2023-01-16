@@ -396,6 +396,16 @@ const en = {
         'Fluig Monitor is still running on the system tray. You can change this behavior on the settings panel.',
     },
   },
+  dialogs: {
+    updateDialog: {
+      title: 'Update available',
+      message: 'Do you wish to update Fluig Monitor?',
+      detail:
+        "A new version of Fluig Monitor has been downloaded and it's ready to be executed.",
+      btnYes: 'Update',
+      btnNo: 'Cancel',
+    },
+  },
 };
 
 export default en;
