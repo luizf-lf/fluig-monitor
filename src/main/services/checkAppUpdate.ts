@@ -1,5 +1,11 @@
 import path from 'path';
-import fs, { createWriteStream } from 'fs';
+import {
+  createWriteStream,
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  rmSync,
+} from 'fs';
 import log from 'electron-log';
 import axios from 'axios';
 import { exec } from 'child_process';
@@ -55,8 +61,8 @@ export default async function checkAppUpdate() {
     log.info('App Updater: Checking for app updates.');
     const updatesPath = path.resolve(getAppDataFolder(), 'updates');
 
-    if (!fs.existsSync(updatesPath)) {
-      fs.mkdirSync(updatesPath);
+    if (!existsSync(updatesPath)) {
+      mkdirSync(updatesPath);
       log.info(
         `App Updater: Updates folder has been created at ${updatesPath}`
       );
@@ -75,8 +81,7 @@ export default async function checkAppUpdate() {
       return;
     }
 
-    const currentVersion = '0.2.0';
-    // const currentVersion = appVersion.replace(rgx, '');
+    const currentVersion = appVersion.replace(rgx, '');
     const releases = response.data as GitHubReleaseInterface[];
     const latestRelease = releases[0];
     const currentRelease = releases.find(
@@ -91,17 +96,36 @@ export default async function checkAppUpdate() {
       return;
     }
 
+    // TODO: Optimize release assets and os check logic
+
+    const windowsReleaseAsset = latestRelease.assets.find(
+      (asset) => asset.name.indexOf('.exe') > 0
+    );
+
+    if (currentRelease.tag_name === latestRelease.tag_name) {
+      log.info('App is already up to date');
+
+      if (
+        process.platform === 'win32' &&
+        typeof windowsReleaseAsset === 'object'
+      ) {
+        const downloadedFilePath = path.resolve(
+          updatesPath,
+          windowsReleaseAsset.name
+        );
+        if (existsSync(downloadedFilePath)) {
+          rmSync(downloadedFilePath);
+          log.info(`File ${downloadedFilePath} has been deleted.`);
+        }
+      }
+    }
+
     if (
       new Date(latestRelease.published_at).getTime() >
       new Date(currentRelease.published_at).getTime()
     ) {
-      // has a new version
       log.info(
         `App Updater: A new app version is available (${latestRelease.tag_name})`
-      );
-
-      const windowsReleaseAsset = latestRelease.assets.find(
-        (asset) => asset.name.indexOf('.exe') > 0
       );
 
       if (
@@ -112,9 +136,9 @@ export default async function checkAppUpdate() {
         const filePath = path.resolve(updatesPath, windowsReleaseAsset.name);
 
         if (
-          fs
-            .readdirSync(updatesPath)
-            .find((fileName) => fileName === windowsReleaseAsset.name)
+          readdirSync(updatesPath).find(
+            (fileName) => fileName === windowsReleaseAsset.name
+          )
         ) {
           log.info('App Updater: Update file has already been downloaded.');
 
