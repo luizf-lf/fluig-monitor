@@ -5,6 +5,7 @@
 - Fixed log rotation file name
 - Added a default timeout to the FluigAPI class
 - Time indicator component added
+- Updates check and auto download implemented
 
 # 0.3.0
 

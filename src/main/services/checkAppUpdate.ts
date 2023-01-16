@@ -23,33 +23,38 @@ import i18n from '../../common/i18n/i18n';
  * @since 0.4.0
  */
 function showUpdateDialog(execPath: string) {
-  dialog
-    .showMessageBox(BrowserWindow.getAllWindows()[0], {
-      title: i18n.t('dialogs.updateDialog.title'),
-      message: i18n.t('dialogs.updateDialog.message'),
-      detail: i18n.t('dialogs.updateDialog.detail'),
-      buttons: [
-        i18n.t('dialogs.updateDialog.btnYes'),
-        i18n.t('dialogs.updateDialog.btnNo'),
-      ],
-      cancelId: 1,
-    })
-    .then((clicked) => {
-      if (clicked.response === 0) {
-        exec(execPath).on('spawn', () => {
-          log.info('App Updater: App will quit and update itself');
-          setTimeout(() => {
-            app.quit();
-          }, 2500);
-        });
-      }
+  setTimeout(
+    () => {
+      dialog
+        .showMessageBox(BrowserWindow.getAllWindows()[0], {
+          title: i18n.t('dialogs.updateDialog.title'),
+          message: i18n.t('dialogs.updateDialog.message'),
+          detail: i18n.t('dialogs.updateDialog.detail'),
+          buttons: [
+            i18n.t('dialogs.updateDialog.btnYes'),
+            i18n.t('dialogs.updateDialog.btnNo'),
+          ],
+          cancelId: 1,
+        })
+        .then((clicked) => {
+          if (clicked.response === 0) {
+            exec(execPath).on('spawn', () => {
+              log.info('App Updater: App will quit and update itself');
+              setTimeout(() => {
+                app.quit();
+              }, 2500);
+            });
+          }
 
-      log.info("User doesn't like updates :{");
-      return null;
-    })
-    .catch((error) => {
-      log.error(error);
-    });
+          log.info("User doesn't like updates :{");
+          return null;
+        })
+        .catch((error) => {
+          log.error(error);
+        });
+    },
+    10000 // adds a 10 seconds timeout to make sure the current language is loaded before the dialog is shown
+  );
 }
 
 /**
@@ -81,7 +86,8 @@ export default async function checkAppUpdate() {
       return;
     }
 
-    const currentVersion = appVersion.replace(rgx, '');
+    const currentVersion = '0.2.0';
+    // const currentVersion = appVersion.replace(rgx, '');
     const releases = response.data as GitHubReleaseInterface[];
     const latestRelease = releases[0];
     const currentRelease = releases.find(
