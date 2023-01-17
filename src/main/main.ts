@@ -188,6 +188,7 @@ const reopenWindow = () => {
 app
   .whenReady()
   .then(async () => {
+    const appUpdater = new AppUpdater();
     const splash = new BrowserWindow({
       width: 720,
       height: 230,
@@ -219,8 +220,7 @@ app
 
     await runDbMigrations();
 
-    //  TODO: Add to a scheduler
-    new AppUpdater().checkUpdates();
+    appUpdater.checkUpdates();
 
     // When using node schedule with a cron like scheduler, sometimes the
     //  sync function are dispatched every second for a minute.
@@ -251,6 +251,11 @@ app
     // trigger the log file rotation every day at 00:00:05 (5 seconds past midnight)
     scheduleJob('5 0 0 * * *', () => {
       rotateLogFile();
+    });
+
+    // trigger the updater to check for updates every day at 00:00:10 (10s past midnight)
+    scheduleJob('10 0 0 * * *', () => {
+      appUpdater.checkUpdates();
     });
 
     // creates a system tray icon
