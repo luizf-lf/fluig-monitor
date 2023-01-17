@@ -7,6 +7,7 @@
 - Time indicator component added
 - Updates check and auto download implemented
 - Implemented hash verification to update file when downloaded
+- Archived log files are now compressed.
 
 # 0.3.0
 
