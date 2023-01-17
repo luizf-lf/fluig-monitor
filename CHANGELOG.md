@@ -6,6 +6,7 @@
 - Added a default timeout to the FluigAPI class
 - Time indicator component added
 - Updates check and auto download implemented
+- Implemented hash verification to update file when downloaded
 
 # 0.3.0
 
