@@ -1,4 +1,4 @@
-interface Author {
+export interface ReleaseAuthor {
   login: string;
   id: number;
   node_id: string;
@@ -19,7 +19,7 @@ interface Author {
   site_admin: boolean;
 }
 
-interface Uploader {
+export interface ReleaseUploader {
   login: string;
   id: number;
   node_id: string;
@@ -40,13 +40,13 @@ interface Uploader {
   site_admin: boolean;
 }
 
-interface Asset {
+export interface ReleaseAsset {
   url: string;
   id: number;
   node_id: string;
   name: string;
   label?: string;
-  uploader: Uploader;
+  uploader: ReleaseUploader;
   content_type: string;
   state: string;
   size: number;
@@ -62,7 +62,7 @@ export default interface GitHubReleaseInterface {
   upload_url: string;
   html_url: string;
   id: number;
-  author: Author;
+  author: ReleaseAuthor;
   node_id: string;
   tag_name: string;
   target_commitish: string;
@@ -71,7 +71,7 @@ export default interface GitHubReleaseInterface {
   prerelease: boolean;
   created_at: Date;
   published_at: Date;
-  assets: Asset[];
+  assets: ReleaseAsset[];
   tarball_url: string;
   zipball_url: string;
   body: string;
