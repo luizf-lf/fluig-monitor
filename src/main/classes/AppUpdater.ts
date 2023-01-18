@@ -89,7 +89,7 @@ export default class AppUpdater {
    * @since 0.4.0
    */
   static executeUpdater(execPath: string): void {
-    // TODO: Create an app setting to auto apply updates (without the dialog)
+    // TODO: Read settings from database
 
     // adds a 10 seconds timeout to make sure the current language is loaded before the dialog is shown
     //  (in case the file has already been downloaded)

@@ -229,6 +229,7 @@ const pt = {
         pages: {
           theme: 'Tema',
           language: 'Idioma',
+          update: 'Atualizações',
           about: 'Sobre A Ferramenta',
           reportABug: 'Reporte Um Bug',
           systemTray: 'Bandeja Do Sistema',
@@ -332,6 +333,11 @@ const pt = {
       helperText: 'Selecione abaixo o tema a ser utilizado pela aplicação:',
       whiteTheme: 'Tema Claro',
       darkTheme: 'Tema Escuro',
+    },
+    UpdatesSettings: {
+      title: 'Atualizações',
+      helperText:
+        'Aqui você poderá escolher como a aplicação deverá se comportar com as atualizações.',
     },
     LanguageSettings: {
       title: 'Idioma',

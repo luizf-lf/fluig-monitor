@@ -224,6 +224,7 @@ const en = {
         pages: {
           theme: 'Theme',
           language: 'Language',
+          update: 'Updates',
           about: 'About This Software',
           reportABug: 'Report A Bug',
           systemTray: 'System Tray',
@@ -326,6 +327,11 @@ const en = {
       helperText: 'Select the theme to be used by the application bellow: ',
       whiteTheme: 'White Theme',
       darkTheme: 'Dark Theme',
+    },
+    UpdatesSettings: {
+      title: 'Updates',
+      helperText:
+        'Here you can configure how the application should behave with updates.',
     },
     LanguageSettings: {
       title: 'Language',

@@ -36,6 +36,7 @@ export default class SettingsController {
       },
     });
 
+    // TODO: Move default creation values to controller
     if (found === null && createIfNotExists && createData) {
       log.info(
         `SettingsController: Setting not found and will be created with default values: ${JSON.stringify(

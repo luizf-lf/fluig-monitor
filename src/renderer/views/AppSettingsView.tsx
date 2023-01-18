@@ -12,6 +12,7 @@ import LanguageSettings from '../components/SettingsView/LanguageSettings';
 import AboutSection from '../components/SettingsView/AboutSection';
 import ReportABugSection from '../components/SettingsView/ReportABugSection';
 import SystemTraySettings from '../components/SettingsView/SystemTraySettings';
+import UpdatesSettings from '../components/SettingsView/UpdatesSettings';
 
 import '../assets/styles/views/AppSettings.view.scss';
 
@@ -49,6 +50,11 @@ export default function AppSettingsView() {
           target: `language`,
           name: t('views.AppSettingsView.settingsMenu.pages.language'),
           component: <LanguageSettings />,
+        },
+        {
+          target: `updates`,
+          name: t('views.AppSettingsView.settingsMenu.pages.update'),
+          component: <UpdatesSettings />,
         },
       ],
     },
