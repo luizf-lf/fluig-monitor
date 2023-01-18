@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
@@ -10,7 +11,6 @@ import {
   shell,
   screen,
   Tray,
-  Menu,
   Notification,
 } from 'electron';
 
@@ -38,6 +38,7 @@ import addIpcHandlers from './utils/addIpcHandlers';
 import getAssetPath from './utils/getAssetPath';
 import SettingsController from './controllers/SettingsController';
 import AppUpdater from './classes/AppUpdater';
+import trayBuilder from './utils/trayBuilder';
 
 // log.transports.file.resolvePath = () =>
 //   path.resolve(getAppDataFolder(), 'logs');
@@ -124,8 +125,7 @@ const createWindow = async () => {
       await new LanguageController().update(lang);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    buildDefaultTray(); // TODO: Needs optimization (no-use-before-define)
+    trayIcon = trayBuilder(trayIcon, reopenWindow);
   });
 
   // change the language to the locally saved language
@@ -177,8 +177,6 @@ const createWindow = async () => {
   });
 };
 
-addIpcHandlers();
-
 const reopenWindow = () => {
   if (mainWindow === null) {
     createWindow();
@@ -187,41 +185,7 @@ const reopenWindow = () => {
   }
 };
 
-function buildDefaultTray() {
-  if (trayIcon !== null) {
-    trayIcon.destroy();
-
-    trayIcon = null;
-  }
-  trayIcon = new Tray(path.join(getAssetPath(), 'icon.ico'));
-  trayIcon.setToolTip(i18n.t('menu.systemTray.running'));
-  trayIcon.on('click', reopenWindow);
-  trayIcon.setContextMenu(
-    Menu.buildFromTemplate([
-      {
-        type: 'normal',
-        label: `Fluig Monitor - v${version}`,
-        enabled: false,
-      },
-      { type: 'separator' },
-      {
-        type: 'normal',
-        label: i18n.t('menu.systemTray.open'),
-        click: reopenWindow,
-      },
-      {
-        type: 'normal',
-        label: i18n.t('menu.systemTray.quit'),
-        click: () => {
-          log.info(
-            'App will be closed since the system tray option has been clicked.'
-          );
-          app.quit();
-        },
-      },
-    ])
-  );
-}
+addIpcHandlers();
 
 app
   .whenReady()
