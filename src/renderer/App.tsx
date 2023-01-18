@@ -1,4 +1,4 @@
-import { Switch, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // views / components
@@ -30,20 +30,18 @@ export default function App() {
             <main id="mainWindow">
               <AnimatePresence exitBeforeEnter>
                 {/* <Switch location={location} key={location.pathname}> */}
-                <Switch>
-                  <Route exact path="/">
-                    <HomeEnvironmentListView />
-                  </Route>
-                  <Route path="/settings/environments/new">
-                    <CreateEnvironmentView />
-                  </Route>
-                  <Route path="/environment/:environmentId">
-                    <EnvironmentView />
-                  </Route>
-                  <Route path="/appSettings">
-                    <AppSettingsView />
-                  </Route>
-                </Switch>
+                <Routes>
+                  <Route path="/" element={<HomeEnvironmentListView />} />
+                  <Route
+                    path="/settings/environments/new"
+                    element={<CreateEnvironmentView />}
+                  />
+                  <Route
+                    path="/environment/:environmentId/*"
+                    element={<EnvironmentView />}
+                  />
+                  <Route path="/appSettings/*" element={<AppSettingsView />} />
+                </Routes>
               </AnimatePresence>
             </main>
           </div>

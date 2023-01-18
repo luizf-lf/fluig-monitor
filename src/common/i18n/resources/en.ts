@@ -218,6 +218,7 @@ const en = {
       settingsMenu: {
         categories: {
           general: 'General',
+          behavior: 'Behavior',
           about: 'About',
         },
         pages: {

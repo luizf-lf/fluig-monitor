@@ -5,14 +5,7 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import {
-  app,
-  BrowserWindow,
-  shell,
-  screen,
-  Tray,
-  Notification,
-} from 'electron';
+import { app, BrowserWindow, screen, Tray, Notification } from 'electron';
 
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
@@ -144,12 +137,6 @@ const createWindow = async () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
-  });
-
-  // Open urls in the user's browser
-  mainWindow.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
-    shell.openExternal(url);
   });
 
   mainWindow.on('minimize', async () => {

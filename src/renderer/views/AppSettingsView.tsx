@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiChevronRight, FiInfo, FiLayers, FiSettings } from 'react-icons/fi';
-import { Route, Switch, useRouteMatch } from 'react-router';
+import { Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -29,7 +29,6 @@ interface SettingsMenuBuilder {
 }
 
 export default function AppSettingsView() {
-  const { path, url } = useRouteMatch();
   const { t } = useTranslation();
   const [selectedRoute, setSelectedRoute] = useState('');
 
@@ -42,12 +41,12 @@ export default function AppSettingsView() {
       key: 'GENERAL_SETTINGS',
       children: [
         {
-          target: `${url}/theme`,
+          target: `theme`,
           name: t('views.AppSettingsView.settingsMenu.pages.theme'),
           component: <ThemeSettings />,
         },
         {
-          target: `${url}/language`,
+          target: `language`,
           name: t('views.AppSettingsView.settingsMenu.pages.language'),
           component: <LanguageSettings />,
         },
@@ -56,12 +55,12 @@ export default function AppSettingsView() {
     {
       key: 'BEHAVIOR',
       title: {
-        name: 'Comportamento',
+        name: t('views.AppSettingsView.settingsMenu.categories.behavior'),
         icon: <FiLayers />,
       },
       children: [
         {
-          target: `${url}/systemTray`,
+          target: `systemTray`,
           name: t('views.AppSettingsView.settingsMenu.pages.systemTray'),
           component: <SystemTraySettings />,
         },
@@ -75,12 +74,12 @@ export default function AppSettingsView() {
       key: 'ABOUT',
       children: [
         {
-          target: `${url}/about`,
+          target: `about`,
           name: t('views.AppSettingsView.settingsMenu.pages.about'),
           component: <AboutSection />,
         },
         {
-          target: `${url}/reportABug`,
+          target: `reportABug`,
           name: t('views.AppSettingsView.settingsMenu.pages.reportABug'),
           component: <ReportABugSection />,
         },
@@ -127,27 +126,28 @@ export default function AppSettingsView() {
           })}
         </aside>
         <div className="settings-item-container">
-          <Switch>
+          <Routes>
             {menuBuilder.map((cat /** 😺 */) => {
               return cat.children.map(({ target, component }) => {
-                return (
-                  <Route path={target} key={target}>
-                    {component}
-                  </Route>
-                );
+                return <Route path={target} key={target} element={component} />;
               });
             })}
 
-            <Route exact path={path}>
-              <h3 className="icon-title">
-                <span className="icon-dot">
-                  <FiSettings />
-                </span>
-                {t('views.AppSettingsView.emptyRoute.title')}
-              </h3>
-              <p>{t('views.AppSettingsView.emptyRoute.helper')}</p>
-            </Route>
-          </Switch>
+            <Route
+              path="/"
+              element={
+                <>
+                  <h3 className="icon-title">
+                    <span className="icon-dot">
+                      <FiSettings />
+                    </span>
+                    {t('views.AppSettingsView.emptyRoute.title')}
+                  </h3>
+                  <p>{t('views.AppSettingsView.emptyRoute.helper')}</p>
+                </>
+              }
+            />
+          </Routes>
         </div>
       </div>
     </motion.div>

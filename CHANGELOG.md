@@ -7,7 +7,11 @@
 - Time indicator component added
 - Updates check and auto download implemented
 - Implemented hash verification to update file when downloaded
-- Archived log files are now compressed.
+- Old log files are now archived as compressed files.
+- Updated major dependencies with breaking changes:
+  - Electron 18 -> 22
+  - React 17 -> 18
+  - React-router 5.3 -> 6.6
 
 # 0.3.0
 

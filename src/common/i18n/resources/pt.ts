@@ -223,6 +223,7 @@ const pt = {
       settingsMenu: {
         categories: {
           general: 'Gerais',
+          behavior: 'Comportamento',
           about: 'Sobre',
         },
         pages: {
