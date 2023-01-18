@@ -49,6 +49,7 @@ log.transports.file.fileName = isDevelopment
 log.transports.file.maxSize = 0; // disable default electron-log file rotation
 
 let mainWindow: BrowserWindow | null = null;
+let trayIcon: Tray | null = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -123,7 +124,8 @@ const createWindow = async () => {
       await new LanguageController().update(lang);
     }
 
-    // TODO: Rebuild system tray icon on language change
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    buildDefaultTray(); // TODO: Needs optimization (no-use-before-define)
   });
 
   // change the language to the locally saved language
@@ -184,6 +186,42 @@ const reopenWindow = () => {
     BrowserWindow.getAllWindows()[0].show();
   }
 };
+
+function buildDefaultTray() {
+  if (trayIcon !== null) {
+    trayIcon.destroy();
+
+    trayIcon = null;
+  }
+  trayIcon = new Tray(path.join(getAssetPath(), 'icon.ico'));
+  trayIcon.setToolTip(i18n.t('menu.systemTray.running'));
+  trayIcon.on('click', reopenWindow);
+  trayIcon.setContextMenu(
+    Menu.buildFromTemplate([
+      {
+        type: 'normal',
+        label: `Fluig Monitor - v${version}`,
+        enabled: false,
+      },
+      { type: 'separator' },
+      {
+        type: 'normal',
+        label: i18n.t('menu.systemTray.open'),
+        click: reopenWindow,
+      },
+      {
+        type: 'normal',
+        label: i18n.t('menu.systemTray.quit'),
+        click: () => {
+          log.info(
+            'App will be closed since the system tray option has been clicked.'
+          );
+          app.quit();
+        },
+      },
+    ])
+  );
+}
 
 app
   .whenReady()
@@ -257,36 +295,6 @@ app
     scheduleJob('10 0 0 * * *', () => {
       appUpdater.checkUpdates();
     });
-
-    // creates a system tray icon
-    const trayIcon = new Tray(path.join(getAssetPath(), 'icon.ico'));
-    trayIcon.setToolTip(i18n.t('menu.systemTray.running'));
-    trayIcon.on('click', reopenWindow);
-    trayIcon.setContextMenu(
-      Menu.buildFromTemplate([
-        {
-          type: 'normal',
-          label: `Fluig Monitor - v${version}`,
-          enabled: false,
-        },
-        { type: 'separator' },
-        {
-          type: 'normal',
-          label: i18n.t('menu.systemTray.open'),
-          click: reopenWindow,
-        },
-        {
-          type: 'normal',
-          label: i18n.t('menu.systemTray.quit'),
-          click: () => {
-            log.info(
-              'App will be closed since the system tray option has been clicked.'
-            );
-            app.quit();
-          },
-        },
-      ])
-    );
   })
   .catch((e) => {
     log.error('An unknown error occurred:');
