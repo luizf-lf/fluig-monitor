@@ -91,7 +91,7 @@ export default class AppUpdater {
   static executeUpdater(execPath: string): void {
     // TODO: Read settings from database
 
-    // adds a 10 seconds timeout to make sure the current language is loaded before the dialog is shown
+    // adds a 5 seconds timeout to make sure the current language is loaded before the dialog is shown
     //  (in case the file has already been downloaded)
     setTimeout(() => {
       dialog
@@ -123,7 +123,7 @@ export default class AppUpdater {
         .catch((error) => {
           log.error(`showUpdateDialog: Unknown error: ${error}`);
         });
-    }, 10000);
+    }, 5000);
   }
 
   /**
