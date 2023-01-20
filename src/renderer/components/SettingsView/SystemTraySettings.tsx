@@ -36,12 +36,7 @@ export default function SystemTraySettings() {
 
   async function loadSettings() {
     const minimizeFeatureSetting = await getAppSetting(
-      'ENABLE_MINIMIZE_FEATURE',
-      true,
-      {
-        value: 'true',
-        group: 'BEHAVIOR',
-      }
+      'ENABLE_MINIMIZE_FEATURE'
     );
 
     if (minimizeFeatureSetting) {
@@ -49,12 +44,7 @@ export default function SystemTraySettings() {
     }
 
     const disableNotificationSetting = await getAppSetting(
-      'DISABLE_MINIMIZE_NOTIFICATION',
-      true,
-      {
-        value: 'false',
-        group: 'BEHAVIOR',
-      }
+      'DISABLE_MINIMIZE_NOTIFICATION'
     );
 
     if (disableNotificationSetting) {

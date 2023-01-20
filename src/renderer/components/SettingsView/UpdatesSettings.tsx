@@ -14,12 +14,7 @@ export default function UpdatesSettings() {
 
   async function loadSettings() {
     const enableAutoDownloadSetting = await getAppSetting(
-      'ENABLE_AUTO_DOWNLOAD_UPDATE',
-      true,
-      {
-        value: 'true',
-        group: 'GENERAL',
-      }
+      'ENABLE_AUTO_DOWNLOAD_UPDATE'
     );
 
     if (enableAutoDownloadSetting) {
@@ -27,12 +22,7 @@ export default function UpdatesSettings() {
     }
 
     const enableAutoInstallSetting = await getAppSetting(
-      'ENABLE_AUTO_INSTALL_UPDATE',
-      true,
-      {
-        value: 'true',
-        group: 'GENERAL',
-      }
+      'ENABLE_AUTO_INSTALL_UPDATE'
     );
 
     if (enableAutoInstallSetting) {

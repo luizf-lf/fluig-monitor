@@ -13,7 +13,6 @@ import EnvironmentController from '../controllers/EnvironmentController';
 import LanguageController from '../controllers/LanguageController';
 import LogController from '../controllers/LogController';
 import SettingsController, {
-  AppSettingCreateDefaultPropsInterface,
   AppSettingUpdatePropsInterface,
 } from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
@@ -191,15 +190,9 @@ export default function addIpcHandlers(): void {
     'getSetting',
     async (
       _event: Electron.IpcMainInvokeEvent,
-      settingId: string,
-      createIfNotExists = false,
-      createData: AppSettingCreateDefaultPropsInterface | null = null
+      settingId: string
     ): Promise<AppSetting | null> => {
-      const found = await new SettingsController().find(
-        settingId,
-        createIfNotExists,
-        createData
-      );
+      const found = await new SettingsController().find(settingId);
 
       return found;
     }

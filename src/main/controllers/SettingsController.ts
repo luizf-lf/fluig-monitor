@@ -8,11 +8,6 @@ export interface AppSettingUpdatePropsInterface {
   group?: string | null;
 }
 
-export interface AppSettingCreateDefaultPropsInterface {
-  value: string;
-  group?: string | null;
-}
-
 export default class SettingsController {
   updated: null | AppSetting;
 
@@ -23,11 +18,36 @@ export default class SettingsController {
     this.found = null;
   }
 
-  async find(
-    settingId: string,
-    createIfNotExists = false,
-    createData: AppSettingCreateDefaultPropsInterface | null = null
-  ) {
+  static getDefaultSetting(
+    settingId: string
+  ): { value: string; group: string } | null {
+    switch (settingId) {
+      case 'ENABLE_MINIMIZE_FEATURE':
+        return {
+          value: 'true',
+          group: 'BEHAVIOR',
+        };
+      case 'ENABLE_AUTO_DOWNLOAD_UPDATE':
+        return {
+          value: 'true',
+          group: 'GENERAL',
+        };
+      case 'DISABLE_MINIMIZE_NOTIFICATION':
+        return {
+          value: 'false',
+          group: 'BEHAVIOR',
+        };
+      case 'ENABLE_AUTO_INSTALL_UPDATE':
+        return {
+          value: 'true',
+          group: 'GENERAL',
+        };
+      default:
+        return null;
+    }
+  }
+
+  async find(settingId: string) {
     log.info('SettingsController: Finding system setting with id:', settingId);
 
     const found = await prismaClient.appSetting.findUnique({
@@ -36,20 +56,23 @@ export default class SettingsController {
       },
     });
 
-    // TODO: Move default creation values to controller
-    if (found === null && createIfNotExists && createData) {
-      log.info(
-        `SettingsController: Setting not found and will be created with default values: ${JSON.stringify(
-          createData
-        )}`
-      );
-      this.found = await prismaClient.appSetting.create({
-        data: {
-          settingId,
-          value: createData.value,
-          group: createData.group,
-        },
-      });
+    if (found === null) {
+      const defaultValues = SettingsController.getDefaultSetting(settingId);
+
+      if (defaultValues) {
+        log.info(
+          `SettingsController: Setting not found and will be created with default values: ${JSON.stringify(
+            defaultValues
+          )}`
+        );
+        this.found = await prismaClient.appSetting.create({
+          data: {
+            settingId,
+            value: defaultValues.value,
+            group: defaultValues.group,
+          },
+        });
+      }
     } else {
       this.found = found;
     }
