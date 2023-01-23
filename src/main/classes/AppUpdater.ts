@@ -14,6 +14,7 @@ import getAppDataFolder from '../utils/fsUtils';
 import formatBytes from '../../common/utils/formatBytes';
 import byteSpeed from '../../common/utils/byteSpeed';
 import i18n from '../../common/i18n/i18n';
+import SettingsController from '../controllers/SettingsController';
 
 /**
  * The app updater class.
@@ -68,6 +69,16 @@ export default class AppUpdater {
   win32FilePath: string | undefined;
 
   /**
+   * If the app update file should be automatically downloaded
+   */
+  shouldAutoDownload: boolean;
+
+  /**
+   * If the app should auto update itself
+   */
+  shouldAutoInstall: boolean;
+
+  /**
    * The class constructor. Sets the properties to it's default values.
    * @since 0.4.0
    */
@@ -81,6 +92,8 @@ export default class AppUpdater {
     this.latestRelease = undefined;
     this.win32ReleaseAsset = undefined;
     this.win32FilePath = '';
+    this.shouldAutoDownload = false;
+    this.shouldAutoInstall = false;
   }
 
   /**
@@ -88,8 +101,17 @@ export default class AppUpdater {
    * @param execPath the executable file path
    * @since 0.4.0
    */
-  static executeUpdater(execPath: string): void {
-    // TODO: Read settings from database
+  executeUpdater(execPath: string): void {
+    if (this.shouldAutoInstall) {
+      exec(execPath).on('spawn', () => {
+        log.info('AppUpdater: App will auto quit and update itself');
+        setTimeout(() => {
+          app.quit();
+        }, 5000);
+      });
+
+      return;
+    }
 
     // adds a 5 seconds timeout to make sure the current language is loaded before the dialog is shown
     //  (in case the file has already been downloaded)
@@ -134,6 +156,21 @@ export default class AppUpdater {
   async checkUpdates(): Promise<void> {
     try {
       log.info('AppUpdater: Checking for app updates.');
+
+      // recovers the app settings related to updates
+      const settings = new SettingsController();
+      const autoDownloadSetting = await settings.find(
+        'ENABLE_AUTO_DOWNLOAD_UPDATE'
+      );
+      const autoInstallSetting = await settings.find(
+        'ENABLE_AUTO_INSTALL_UPDATE'
+      );
+      if (autoDownloadSetting) {
+        this.shouldAutoDownload = autoDownloadSetting.value === 'true';
+      }
+      if (autoInstallSetting) {
+        this.shouldAutoInstall = autoInstallSetting.value === 'true';
+      }
 
       if (!fs.existsSync(this.updatesPath)) {
         fs.mkdirSync(this.updatesPath);
@@ -213,113 +250,116 @@ export default class AppUpdater {
           ) {
             log.info('AppUpdater: Update file has already been downloaded.');
 
-            AppUpdater.executeUpdater(this.win32FilePath);
+            this.executeUpdater(this.win32FilePath);
             return;
           }
 
-          log.info(
-            `AppUpdater: Downloading the latest release for Windows (${this.win32ReleaseAsset.name}) (${fileSize})`
-          );
-          const timer = Date.now();
-          const streamRes = await axios.get(
-            this.win32ReleaseAsset.browser_download_url,
-            {
-              responseType: 'stream',
-            }
-          );
-
-          if (streamRes.status !== 200) {
-            log.warn(
-              `AppUpdater: Could not download the latest release file (HTTP ${streamRes.status}: ${streamRes.statusText}`
+          if (this.shouldAutoDownload) {
+            log.info(
+              `AppUpdater: Downloading the latest release for Windows (${this.win32ReleaseAsset.name}) (${fileSize})`
             );
-            return;
-          }
-
-          const fileStream = fs.createWriteStream(this.win32FilePath);
-          streamRes.data.pipe(fileStream);
-
-          fileStream.on('finish', async () => {
-            try {
-              if (
-                this.win32ReleaseAsset &&
-                this.latestRelease &&
-                this.win32FilePath
-              ) {
-                log.info(
-                  `AppUpdater: Downloaded ${fileSize} in ${
-                    Date.now() - timer
-                  }ms @ ${byteSpeed(
-                    this.win32ReleaseAsset.size,
-                    Date.now() - timer
-                  )}`
-                );
-                let checkHash = false;
-
-                // Checks the file hash from the description
-                const description = this.latestRelease.body.split('\r\n');
-                const win32ReleaseIndexInDescription = description.findIndex(
-                  (line: string) =>
-                    this.win32ReleaseAsset &&
-                    line
-                      .replace(' ', '.')
-                      .indexOf(this.win32ReleaseAsset.name) > 0
-                );
-                const win32FileSHA256IndexInDescription = description.findIndex(
-                  (line: string, idx: number) =>
-                    line.indexOf('SHA256: ') === 0 &&
-                    idx > win32ReleaseIndexInDescription
-                );
-
-                if (
-                  win32ReleaseIndexInDescription > -1 &&
-                  win32FileSHA256IndexInDescription > -1
-                ) {
-                  checkHash = true;
-                } else {
-                  log.info(
-                    'AppUpdater: File hash not found on the release description, skipping check.'
-                  );
-                }
-
-                if (checkHash) {
-                  if (process.platform === 'win32') {
-                    log.info('AppUpdater: Checking file hash for win32');
-                    const win32OriginHash =
-                      description[win32FileSHA256IndexInDescription].split(
-                        ': '
-                      )[1];
-
-                    const fileData = fs.readFileSync(this.win32FilePath);
-
-                    // using crypto instead of forge, since it's faster and can read the original file buffer
-                    const localFileHash = crypto
-                      .createHash('sha256')
-                      .update(fileData)
-                      .digest('hex');
-
-                    if (localFileHash === win32OriginHash) {
-                      log.info('AppUpdater: Hashes match');
-                      AppUpdater.executeUpdater(this.win32FilePath);
-                    } else {
-                      log.warn(
-                        'AppUpdater: Hashes does not match. Installer has been deleted and will not be executed.'
-                      );
-                      fs.rmSync(this.win32FilePath);
-                    }
-                  }
-                } else {
-                  log.warn(
-                    'AppUpdater: Executing updater without hash verification.'
-                  );
-                  AppUpdater.executeUpdater(this.win32FilePath);
-                }
+            const timer = Date.now();
+            const streamRes = await axios.get(
+              this.win32ReleaseAsset.browser_download_url,
+              {
+                responseType: 'stream',
               }
-            } catch (error) {
-              log.error(
-                `AppUpdater: An error ocurred while saving update file: ${error}`
+            );
+
+            if (streamRes.status !== 200) {
+              log.warn(
+                `AppUpdater: Could not download the latest release file (HTTP ${streamRes.status}: ${streamRes.statusText}`
               );
+              return;
             }
-          });
+
+            const fileStream = fs.createWriteStream(this.win32FilePath);
+            streamRes.data.pipe(fileStream);
+
+            fileStream.on('finish', async () => {
+              try {
+                if (
+                  this.win32ReleaseAsset &&
+                  this.latestRelease &&
+                  this.win32FilePath
+                ) {
+                  log.info(
+                    `AppUpdater: Downloaded ${fileSize} in ${
+                      Date.now() - timer
+                    }ms @ ${byteSpeed(
+                      this.win32ReleaseAsset.size,
+                      Date.now() - timer
+                    )}`
+                  );
+                  let checkHash = false;
+
+                  // Checks the file hash from the description
+                  const description = this.latestRelease.body.split('\r\n');
+                  const win32ReleaseIndexInDescription = description.findIndex(
+                    (line: string) =>
+                      this.win32ReleaseAsset &&
+                      line
+                        .replace(' ', '.')
+                        .indexOf(this.win32ReleaseAsset.name) > 0
+                  );
+                  const win32FileSHA256IndexInDescription =
+                    description.findIndex(
+                      (line: string, idx: number) =>
+                        line.indexOf('SHA256: ') === 0 &&
+                        idx > win32ReleaseIndexInDescription
+                    );
+
+                  if (
+                    win32ReleaseIndexInDescription > -1 &&
+                    win32FileSHA256IndexInDescription > -1
+                  ) {
+                    checkHash = true;
+                  } else {
+                    log.info(
+                      'AppUpdater: File hash not found on the release description, skipping check.'
+                    );
+                  }
+
+                  if (checkHash) {
+                    if (process.platform === 'win32') {
+                      log.info('AppUpdater: Checking file hash for win32');
+                      const win32OriginHash =
+                        description[win32FileSHA256IndexInDescription].split(
+                          ': '
+                        )[1];
+
+                      const fileData = fs.readFileSync(this.win32FilePath);
+
+                      // using crypto instead of forge, since it's faster and can read the original file buffer
+                      const localFileHash = crypto
+                        .createHash('sha256')
+                        .update(fileData)
+                        .digest('hex');
+
+                      if (localFileHash === win32OriginHash) {
+                        log.info('AppUpdater: Hashes match');
+                        this.executeUpdater(this.win32FilePath);
+                      } else {
+                        log.warn(
+                          'AppUpdater: Hashes does not match. Installer has been deleted and will not be executed.'
+                        );
+                        fs.rmSync(this.win32FilePath);
+                      }
+                    }
+                  } else {
+                    log.warn(
+                      'AppUpdater: Executing updater without hash verification.'
+                    );
+                    this.executeUpdater(this.win32FilePath);
+                  }
+                }
+              } catch (error) {
+                log.error(
+                  `AppUpdater: An error ocurred while saving update file: ${error}`
+                );
+              }
+            });
+          }
         } else {
           log.info(
             "AppUpdater: Curiously, there's no release available for the current OS. You can only ponder."
