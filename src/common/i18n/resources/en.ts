@@ -332,6 +332,19 @@ const en = {
       title: 'Updates',
       helperText:
         'Here you can configure how the application should behave with updates.',
+      enableAutoDownload: {
+        label: 'Download updates automatically.',
+        helper:
+          'When you enable this option, Fluig monitor will download the available updates automatically.',
+      },
+      enableAutoInstall: {
+        label: 'Install updates automatically',
+        helper:
+          'When you enable this option, Fluig Monitor will automatically install the updates after they are downloaded.',
+      },
+      updateFrequency: {
+        helper: 'Updates are always verified daily.',
+      },
     },
     LanguageSettings: {
       title: 'Language',

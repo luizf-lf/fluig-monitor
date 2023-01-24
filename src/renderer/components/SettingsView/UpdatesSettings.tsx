@@ -59,12 +59,11 @@ export default function UpdatesSettings() {
             onChange={(event) => setEnableAutoDownload(event.target.checked)}
             style={{ marginRight: '0.5rem' }}
           />
-          Baixar atualizações automaticamente.
+          {t('components.UpdatesSettings.enableAutoDownload.label')}
         </label>
 
         <small className="font-soft">
-          Ao habilitar esta opção, o Fluig Monitor irá baixar as atualizações
-          disponível automaticamente.
+          {t('components.UpdatesSettings.enableAutoDownload.helper')}
         </small>
       </div>
 
@@ -79,17 +78,16 @@ export default function UpdatesSettings() {
             style={{ marginRight: '0.5rem' }}
             disabled={!enableAutoDownload}
           />
-          Instalar atualizações automaticamente.
+          {t('components.UpdatesSettings.enableAutoInstall.label')}
         </label>
 
         <small className="font-soft">
-          Ao habilitar esta opção, o Fluig Monitor irá instalar as atualizações
-          automaticamente após efetuar o download.
+          {t('components.UpdatesSettings.enableAutoInstall.helper')}
         </small>
       </div>
 
       <p className="mt-2 font-soft">
-        <FiInfo /> As atualizações são sempre verificadas diariamente.
+        <FiInfo /> {t('components.UpdatesSettings.updateFrequency.helper')}
       </p>
     </motion.div>
   );

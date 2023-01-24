@@ -338,6 +338,19 @@ const pt = {
       title: 'Atualizações',
       helperText:
         'Aqui você poderá escolher como a aplicação deverá se comportar com as atualizações.',
+      enableAutoDownload: {
+        label: 'Baixar atualizações automaticamente.',
+        helper:
+          'Ao habilitar esta opção, o Fluig Monitor irá baixar as atualizações disponível automaticamente.',
+      },
+      enableAutoInstall: {
+        label: 'Instalar atualizações automaticamente.',
+        helper:
+          'Ao habilitar esta opção, o Fluig Monitor irá instalar as atualizações automaticamente após efetuar o download.',
+      },
+      updateFrequency: {
+        helper: 'As atualizações são sempre verificadas diariamente.',
+      },
     },
     LanguageSettings: {
       title: 'Idioma',
