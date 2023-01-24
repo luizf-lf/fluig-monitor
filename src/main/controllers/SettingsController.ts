@@ -2,6 +2,10 @@ import log from 'electron-log';
 import prismaClient from '../database/prismaContext';
 import { AppSetting } from '../generated/client';
 
+interface DynamicObject {
+  [key: string]: string;
+}
+
 export interface AppSettingUpdatePropsInterface {
   settingId: string;
   value: string;
@@ -13,9 +17,15 @@ export default class SettingsController {
 
   found: null | AppSetting;
 
+  allSettings: AppSetting[];
+
+  settingsObject: DynamicObject;
+
   constructor() {
     this.updated = null;
     this.found = null;
+    this.allSettings = [];
+    this.settingsObject = {};
   }
 
   static getDefaultSetting(
@@ -47,9 +57,25 @@ export default class SettingsController {
     }
   }
 
-  // TODO: Add "get all as object" method (key / value)
-  // TODO: Add "get all as array" method (array of AppSetting)
-  // both methods should also be able to create all default values if they don't exist
+  async getAll(): Promise<AppSetting[]> {
+    this.allSettings = await prismaClient.appSetting.findMany();
+
+    // TODO: Create settings if they don't exist
+
+    return this.allSettings;
+  }
+
+  async getAllAsObject(): Promise<DynamicObject> {
+    const allSettings = await prismaClient.appSetting.findMany();
+
+    // TODO: Create settings if they don't exist
+
+    allSettings.forEach((setting) => {
+      this.settingsObject[setting.settingId] = setting.value;
+    });
+
+    return this.settingsObject;
+  }
 
   async find(settingId: string) {
     log.info('SettingsController: Finding system setting with id:', settingId);
