@@ -33,14 +33,12 @@ import SettingsController from './controllers/SettingsController';
 import AppUpdater from './classes/AppUpdater';
 import trayBuilder from './utils/trayBuilder';
 
-// log.transports.file.resolvePath = () =>
-//   path.resolve(getAppDataFolder(), 'logs');
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
 log.transports.file.fileName = isDevelopment
   ? 'fluig-monitor.dev.log'
   : 'fluig-monitor.log';
-log.transports.file.maxSize = 0; // disable default electron-log file rotation
+log.transports.file.maxSize = 0; // disable the default electron-log file rotation
 
 let mainWindow: BrowserWindow | null = null;
 let trayIcon: Tray | null = null;

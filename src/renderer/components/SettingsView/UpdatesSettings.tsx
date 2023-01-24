@@ -13,6 +13,7 @@ export default function UpdatesSettings() {
   const [enableAutoInstall, setEnableAutoInstall] = useState(true);
 
   async function loadSettings() {
+    // TODO: Use the get all as object
     const enableAutoDownloadSetting = await getAppSetting(
       'ENABLE_AUTO_DOWNLOAD_UPDATE'
     );

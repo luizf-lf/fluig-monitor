@@ -47,6 +47,10 @@ export default class SettingsController {
     }
   }
 
+  // TODO: Add "get all as object" method (key / value)
+  // TODO: Add "get all as array" method (array of AppSetting)
+  // both methods should also be able to create all default values if they don't exist
+
   async find(settingId: string) {
     log.info('SettingsController: Finding system setting with id:', settingId);
 

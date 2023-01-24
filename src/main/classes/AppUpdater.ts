@@ -157,6 +157,7 @@ export default class AppUpdater {
     try {
       log.info('AppUpdater: Checking for app updates.');
 
+      // TODO: Use the get all as object
       // recovers the app settings related to updates
       const settings = new SettingsController();
       const autoDownloadSetting = await settings.find(
