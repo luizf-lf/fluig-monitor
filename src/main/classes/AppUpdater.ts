@@ -156,21 +156,15 @@ export default class AppUpdater {
   async checkUpdates(): Promise<void> {
     try {
       log.info('AppUpdater: Checking for app updates.');
-
-      // TODO: Use the get all as object
       // recovers the app settings related to updates
-      const settings = new SettingsController();
-      const autoDownloadSetting = await settings.find(
-        'ENABLE_AUTO_DOWNLOAD_UPDATE'
-      );
-      const autoInstallSetting = await settings.find(
-        'ENABLE_AUTO_INSTALL_UPDATE'
-      );
-      if (autoDownloadSetting) {
-        this.shouldAutoDownload = autoDownloadSetting.value === 'true';
+
+      const { ENABLE_AUTO_DOWNLOAD_UPDATE, ENABLE_AUTO_INSTALL_UPDATE } =
+        await new SettingsController().getAllAsObject();
+      if (ENABLE_AUTO_DOWNLOAD_UPDATE) {
+        this.shouldAutoDownload = ENABLE_AUTO_DOWNLOAD_UPDATE.value === 'true';
       }
-      if (autoInstallSetting) {
-        this.shouldAutoInstall = autoInstallSetting.value === 'true';
+      if (ENABLE_AUTO_INSTALL_UPDATE) {
+        this.shouldAutoInstall = ENABLE_AUTO_INSTALL_UPDATE.value === 'true';
       }
 
       if (!fs.existsSync(this.updatesPath)) {

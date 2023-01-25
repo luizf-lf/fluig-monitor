@@ -1,10 +1,10 @@
 /* eslint-disable no-await-in-loop */
 import log from 'electron-log';
-import prismaClient from '../database/prismaContext';
 import { AppSetting } from '../generated/client';
+import prismaClient from '../database/prismaContext';
 
-interface DynamicObject {
-  [key: string]: string;
+export interface SettingsObject {
+  [key: string]: AppSetting;
 }
 
 interface DefaultSetting {
@@ -38,7 +38,7 @@ export default class SettingsController {
   /**
    * All of the app settings as objects. Populated when the getAllAsObject() method is used
    */
-  settingsObject: DynamicObject;
+  settingsObject: SettingsObject;
 
   /**
    * The default app settings. Populated on the constructor
@@ -111,12 +111,12 @@ export default class SettingsController {
    * Recovers all the app settings as an object.
    * @returns a promise with all app settings as an object
    */
-  async getAllAsObject(): Promise<DynamicObject> {
+  async getAllAsObject(): Promise<SettingsObject> {
     const allSettings = await prismaClient.appSetting.findMany();
     const { defaultSettings } = this;
 
     for (let i = 0; i < defaultSettings.length; i += 1) {
-      const defaultSetting = allSettings[i];
+      const defaultSetting = defaultSettings[i];
 
       if (
         !allSettings.find(
@@ -127,6 +127,7 @@ export default class SettingsController {
           `Default setting ${defaultSetting.settingId} was not found and will be created with the value ${defaultSetting.value}`
         );
 
+        // TODO: Validate
         allSettings[i] = await prismaClient.appSetting.create({
           data: defaultSetting,
         });
@@ -134,7 +135,7 @@ export default class SettingsController {
     }
 
     allSettings.forEach((setting) => {
-      this.settingsObject[setting.settingId] = setting.value;
+      this.settingsObject[setting.settingId] = setting;
     });
 
     return this.settingsObject;

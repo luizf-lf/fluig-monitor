@@ -1,6 +1,9 @@
 import { ipcRenderer } from 'electron';
 import { AppSetting } from '../../main/generated/client';
-import { AppSettingUpdatePropsInterface } from '../../main/controllers/SettingsController';
+import {
+  AppSettingUpdatePropsInterface,
+  SettingsObject,
+} from '../../main/controllers/SettingsController';
 
 export async function updateAppSettings(
   settings: AppSettingUpdatePropsInterface[]
@@ -16,4 +19,10 @@ export async function getAppSetting(
   const found = await ipcRenderer.invoke('getSetting', settingId);
 
   return found;
+}
+
+export async function getAppSettingsAsObject(): Promise<SettingsObject> {
+  const settings = await ipcRenderer.invoke('getSettingsAsObject');
+
+  return settings;
 }

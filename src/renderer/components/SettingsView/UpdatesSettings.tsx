@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FiInfo, FiPackage } from 'react-icons/fi';
 import globalContainerVariants from '../../utils/globalContainerVariants';
-import { getAppSetting } from '../../ipc/settingsIpcHandler';
+import { getAppSettingsAsObject } from '../../ipc/settingsIpcHandler';
 import parseBoolean from '../../../common/utils/parseBoolean';
 
 export default function UpdatesSettings() {
@@ -13,22 +13,11 @@ export default function UpdatesSettings() {
   const [enableAutoInstall, setEnableAutoInstall] = useState(true);
 
   async function loadSettings() {
-    // TODO: Use the get all as object
-    const enableAutoDownloadSetting = await getAppSetting(
-      'ENABLE_AUTO_DOWNLOAD_UPDATE'
-    );
+    const { ENABLE_AUTO_DOWNLOAD_UPDATE, ENABLE_AUTO_INSTALL_UPDATE } =
+      await getAppSettingsAsObject();
 
-    if (enableAutoDownloadSetting) {
-      setEnableAutoDownload(parseBoolean(enableAutoDownloadSetting.value));
-    }
-
-    const enableAutoInstallSetting = await getAppSetting(
-      'ENABLE_AUTO_INSTALL_UPDATE'
-    );
-
-    if (enableAutoInstallSetting) {
-      setEnableAutoInstall(parseBoolean(enableAutoInstallSetting.value));
-    }
+    setEnableAutoDownload(parseBoolean(ENABLE_AUTO_DOWNLOAD_UPDATE.value));
+    setEnableAutoInstall(parseBoolean(ENABLE_AUTO_INSTALL_UPDATE.value));
   }
 
   useEffect(() => {

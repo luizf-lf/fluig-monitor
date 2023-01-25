@@ -14,6 +14,7 @@ import LanguageController from '../controllers/LanguageController';
 import LogController from '../controllers/LogController';
 import SettingsController, {
   AppSettingUpdatePropsInterface,
+  SettingsObject,
 } from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import UpdateScheduleController from '../controllers/UpdateScheduleController';
@@ -193,6 +194,15 @@ export default function addIpcHandlers(): void {
       settingId: string
     ): Promise<AppSetting | null> => {
       const found = await new SettingsController().find(settingId);
+
+      return found;
+    }
+  );
+
+  ipcMain.handle(
+    'getSettingsAsObject',
+    async (/** _event: Electron.IpcMainInvokeEvent */): Promise<SettingsObject> => {
+      const found = await new SettingsController().getAllAsObject();
 
       return found;
     }
