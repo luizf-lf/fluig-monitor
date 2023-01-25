@@ -1,9 +1,16 @@
+/* eslint-disable no-await-in-loop */
 import log from 'electron-log';
 import prismaClient from '../database/prismaContext';
 import { AppSetting } from '../generated/client';
 
 interface DynamicObject {
   [key: string]: string;
+}
+
+interface DefaultSetting {
+  settingId: string;
+  value: string;
+  group: string;
 }
 
 export interface AppSettingUpdatePropsInterface {
@@ -13,62 +20,118 @@ export interface AppSettingUpdatePropsInterface {
 }
 
 export default class SettingsController {
+  /**
+   * The last updated app setting
+   */
   updated: null | AppSetting;
 
+  /**
+   * The last app setting found by the find() method
+   */
   found: null | AppSetting;
 
+  /**
+   * All of the app settings recovered by the getAll() method
+   */
   allSettings: AppSetting[];
 
+  /**
+   * All of the app settings as objects. Populated when the getAllAsObject() method is used
+   */
   settingsObject: DynamicObject;
 
+  /**
+   * The default app settings. Populated on the constructor
+   */
+  defaultSettings: DefaultSetting[];
+
+  /**
+   * The default class constructor
+   */
   constructor() {
     this.updated = null;
     this.found = null;
     this.allSettings = [];
     this.settingsObject = {};
+
+    this.defaultSettings = [
+      {
+        settingId: 'ENABLE_MINIMIZE_FEATURE',
+        value: 'true',
+        group: 'BEHAVIOR',
+      },
+      {
+        settingId: 'ENABLE_AUTO_DOWNLOAD_UPDATE',
+        value: 'true',
+        group: 'GENERAL',
+      },
+      {
+        settingId: 'DISABLE_MINIMIZE_NOTIFICATION',
+        value: 'false',
+        group: 'BEHAVIOR',
+      },
+      {
+        settingId: 'ENABLE_AUTO_INSTALL_UPDATE',
+        value: 'true',
+        group: 'GENERAL',
+      },
+    ];
   }
 
-  static getDefaultSetting(
-    settingId: string
-  ): { value: string; group: string } | null {
-    switch (settingId) {
-      case 'ENABLE_MINIMIZE_FEATURE':
-        return {
-          value: 'true',
-          group: 'BEHAVIOR',
-        };
-      case 'ENABLE_AUTO_DOWNLOAD_UPDATE':
-        return {
-          value: 'true',
-          group: 'GENERAL',
-        };
-      case 'DISABLE_MINIMIZE_NOTIFICATION':
-        return {
-          value: 'false',
-          group: 'BEHAVIOR',
-        };
-      case 'ENABLE_AUTO_INSTALL_UPDATE':
-        return {
-          value: 'true',
-          group: 'GENERAL',
-        };
-      default:
-        return null;
-    }
-  }
-
+  /**
+   * Recovers all the app settings.
+   * @returns a promise with all of the app settings as an array
+   */
   async getAll(): Promise<AppSetting[]> {
-    this.allSettings = await prismaClient.appSetting.findMany();
+    const allSettings = await prismaClient.appSetting.findMany();
+    const { defaultSettings } = this;
+    const generated = [] as AppSetting[];
 
-    // TODO: Create settings if they don't exist
+    for (let i = 0; i < defaultSettings.length; i += 1) {
+      const defaultSetting = defaultSettings[i];
 
+      if (
+        !allSettings.find(
+          (setting) => setting.settingId === defaultSetting.settingId
+        )
+      ) {
+        generated.push(
+          await prismaClient.appSetting.create({
+            data: defaultSetting,
+          })
+        );
+      }
+    }
+
+    this.allSettings = [...allSettings, ...generated];
     return this.allSettings;
   }
 
+  /**
+   * Recovers all the app settings as an object.
+   * @returns a promise with all app settings as an object
+   */
   async getAllAsObject(): Promise<DynamicObject> {
     const allSettings = await prismaClient.appSetting.findMany();
+    const { defaultSettings } = this;
 
-    // TODO: Create settings if they don't exist
+    for (let i = 0; i < defaultSettings.length; i += 1) {
+      const defaultSetting = allSettings[i];
+
+      if (
+        !allSettings.find(
+          (setting) => setting.settingId === defaultSetting.settingId
+        )
+      ) {
+        log.info(
+          `Default setting ${defaultSetting.settingId} was not found and will be created with the value ${defaultSetting.value}`
+        );
+
+        allSettings[i] = await prismaClient.appSetting.create({
+          data: defaultSetting,
+        });
+      }
+    }
 
     allSettings.forEach((setting) => {
       this.settingsObject[setting.settingId] = setting.value;
@@ -77,7 +140,13 @@ export default class SettingsController {
     return this.settingsObject;
   }
 
-  async find(settingId: string) {
+  /**
+   * Finds a specific app setting. Will try to create it with the default value.
+   *  If the default value was not defined, will return null;
+   * @param settingId a string with the setting key
+   * @returns a promise with a single app setting or null
+   */
+  async find(settingId: string): Promise<AppSetting | null> {
     log.info('SettingsController: Finding system setting with id:', settingId);
 
     const found = await prismaClient.appSetting.findUnique({
@@ -87,7 +156,9 @@ export default class SettingsController {
     });
 
     if (found === null) {
-      const defaultValues = SettingsController.getDefaultSetting(settingId);
+      const defaultValues = this.defaultSettings.find(
+        (setting) => setting.settingId === settingId
+      );
 
       if (defaultValues) {
         log.info(
@@ -110,6 +181,11 @@ export default class SettingsController {
     return this.found;
   }
 
+  /**
+   * Updates a single app setting
+   * @param data The update data payload.
+   * @returns The updated data
+   */
   async update(data: AppSettingUpdatePropsInterface): Promise<AppSetting> {
     log.info(
       'SettingsController: Updating system settings with data:',
