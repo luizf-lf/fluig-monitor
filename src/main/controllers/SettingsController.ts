@@ -127,7 +127,6 @@ export default class SettingsController {
           `Default setting ${defaultSetting.settingId} was not found and will be created with the value ${defaultSetting.value}`
         );
 
-        // TODO: Validate
         allSettings[i] = await prismaClient.appSetting.create({
           data: defaultSetting,
         });
