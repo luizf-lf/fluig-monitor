@@ -4,14 +4,15 @@
 - Deprecated the updateFrontEndTheme method in favor of the generic updateSettings method
 - Fixed log rotation file name
 - Added a default timeout to the FluigAPI class
-- Time indicator component added
+- Last sync indicator added to some components
 - Updates check and auto download implemented
-- Implemented hash verification to update file when downloaded
+- Implemented hash verification to the update file after being downloaded
 - Old log files are now archived as compressed files.
 - Updated major dependencies with breaking changes:
   - Electron 18 -> 22
   - React 17 -> 18
   - React-router 5.3 -> 6.6
+- App Settings controller updated with default values and new methods.
 
 # 0.3.0
 
