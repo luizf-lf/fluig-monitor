@@ -12,6 +12,14 @@ import '../../assets/styles/components/Navbar/RightButtons.scss';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
 
+interface MenuButtonObject {
+  title: string;
+  disabled?: boolean;
+  icon: JSX.Element;
+  linkTo?: string;
+  onclick?: () => void;
+}
+
 export default function NavActionButtons() {
   const { t } = useTranslation();
   const { theme, setFrontEndTheme } = useTheme();
@@ -31,7 +39,7 @@ export default function NavActionButtons() {
 
   const buttons = [
     {
-      title: 'Atualização disponível',
+      title: t('navbar.actionButtons.updateAvailable'),
       disabled: false,
       icon: <FiDownloadCloud />,
       linkTo: null,
@@ -65,7 +73,7 @@ export default function NavActionButtons() {
       icon: <FiSettings />,
       linkTo: '/appSettings',
     },
-  ];
+  ] as MenuButtonObject[];
 
   useEffect(() => {
     setThemeIcon(theme === 'DARK' ? <FiMoon /> : <FiSun />);

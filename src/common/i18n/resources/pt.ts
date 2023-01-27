@@ -27,6 +27,8 @@ const pt = {
   },
   navbar: {
     actionButtons: {
+      updateDownloaded: 'Atualização Baixada. Clique para instalar.',
+      updateAvailable: 'Atualização Disponível. Clique para baixar.',
       kioskMode: 'Habilitar Modo Quiosque',
       notifications: 'Abrir Notificações',
       theme: 'Alterar Tema',

@@ -27,6 +27,8 @@ const en = {
   },
   navbar: {
     actionButtons: {
+      updateDownloaded: 'Update downloaded. Click to install.',
+      updateAvailable: 'Update available. Click to download.',
       kioskMode: 'Enable Kiosk Mode',
       notifications: 'Open Notifications',
       theme: 'Toggle Color Theme',
