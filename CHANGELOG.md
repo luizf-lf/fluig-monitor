@@ -13,6 +13,7 @@
   - React 17 -> 18
   - React-router 5.3 -> 6.6
 - App Settings controller updated with default values and new methods.
+- App updates are shown on the app navbar when available
 
 # 0.3.0
 
