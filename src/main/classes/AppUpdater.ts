@@ -79,6 +79,11 @@ export default class AppUpdater {
   shouldAutoInstall: boolean;
 
   /**
+   * The time to evaluate actions timeout
+   */
+  actionsTimeout: number;
+
+  /**
    * The class constructor. Sets the properties to it's default values.
    * @since 0.4.0
    */
@@ -94,6 +99,7 @@ export default class AppUpdater {
     this.win32FilePath = '';
     this.shouldAutoDownload = false;
     this.shouldAutoInstall = false;
+    this.actionsTimeout = 4000;
   }
 
   /**
@@ -107,7 +113,7 @@ export default class AppUpdater {
         log.info('AppUpdater: App will auto quit and update itself');
         setTimeout(() => {
           app.quit();
-        }, 5000);
+        }, this.actionsTimeout);
       });
 
       return;
@@ -120,7 +126,7 @@ export default class AppUpdater {
           status: 'DOWNLOADED',
         });
       });
-    }, 4000);
+    }, this.actionsTimeout);
 
     // adds a 5 seconds timeout to make sure the current language is loaded before the dialog is shown
     //  (in case the file has already been downloaded)
@@ -142,7 +148,7 @@ export default class AppUpdater {
               log.info('AppUpdater: App will quit and update itself');
               setTimeout(() => {
                 app.quit();
-              }, 5000);
+              }, this.actionsTimeout);
             });
 
             return null;
@@ -154,7 +160,7 @@ export default class AppUpdater {
         .catch((error) => {
           log.error(`showUpdateDialog: Unknown error: ${error}`);
         });
-    }, 5000);
+    }, this.actionsTimeout);
   }
 
   /**
@@ -371,7 +377,7 @@ export default class AppUpdater {
                   status: 'AVAILABLE',
                 });
               });
-            }, 4000);
+            }, this.actionsTimeout);
           }
         } else {
           log.info(
