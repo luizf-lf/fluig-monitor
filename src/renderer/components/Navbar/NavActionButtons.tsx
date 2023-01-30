@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
@@ -13,8 +14,9 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
 
 interface MenuButtonObject {
+  uid: string;
   title: string;
-  disabled?: boolean;
+  disabled?: boolean | false;
   icon: JSX.Element;
   linkTo?: string | null;
   onclick?: () => void;
@@ -38,43 +40,50 @@ export default function NavActionButtons() {
     }
   }
 
-  setNavButtons([
-    {
-      title: t('navbar.actionButtons.updateAvailable'),
-      disabled: false,
-      icon: <FiDownloadCloud />,
-      linkTo: null,
-    },
-    {
-      title: `${t('navbar.actionButtons.kioskMode')} [${t(
-        'components.global.underDevelopment'
-      )}]`,
-      disabled: true,
-      icon: <FiAirplay />,
-      linkTo: null,
-    },
-    {
-      title: `${t('navbar.actionButtons.notifications')} [${t(
-        'components.global.underDevelopment'
-      )}]`,
-      disabled: true,
-      icon: <FiBell />,
-      linkTo: null,
-    },
-    {
-      title: t('navbar.actionButtons.theme'),
-      disabled: false,
-      icon: themeIcon,
-      linkTo: null,
-      onclick: toggleAppTheme,
-    },
-    {
-      title: t('navbar.actionButtons.settings'),
-      disabled: true,
-      icon: <FiSettings />,
-      linkTo: '/appSettings',
-    },
-  ]);
+  useEffect(() => {
+    setNavButtons([
+      {
+        uid: 'UPDATE_AVAILABLE',
+        title: t('navbar.actionButtons.updateAvailable'),
+        disabled: false,
+        icon: <FiDownloadCloud />,
+        linkTo: null,
+      },
+      {
+        uid: 'KIOSK_MODE',
+        title: `${t('navbar.actionButtons.kioskMode')} [${t(
+          'components.global.underDevelopment'
+        )}]`,
+        disabled: true,
+        icon: <FiAirplay />,
+        linkTo: null,
+      },
+      {
+        uid: 'NOTIFICATIONS',
+        title: `${t('navbar.actionButtons.notifications')} [${t(
+          'components.global.underDevelopment'
+        )}]`,
+        disabled: true,
+        icon: <FiBell />,
+        linkTo: null,
+      },
+      {
+        uid: 'THEME_SWITCH',
+        title: t('navbar.actionButtons.theme'),
+        disabled: false,
+        icon: themeIcon,
+        linkTo: null,
+        onclick: toggleAppTheme,
+      },
+      {
+        uid: 'SETTINGS',
+        title: t('navbar.actionButtons.settings'),
+        disabled: true,
+        icon: <FiSettings />,
+        linkTo: '/appSettings',
+      },
+    ]);
+  }, []);
 
   useEffect(() => {
     setThemeIcon(theme === 'DARK' ? <FiMoon /> : <FiSun />);
@@ -82,13 +91,14 @@ export default function NavActionButtons() {
 
   return (
     <section id="rightButtons">
-      {navButtons.map(({ linkTo, title, disabled, icon, onclick }) => {
+      {navButtons.map(({ uid, linkTo, title, disabled, icon, onclick }) => {
         return linkTo ? (
-          <Link to={linkTo} className="optionButton" title={title}>
+          <Link to={linkTo} className="optionButton" title={title} key={uid}>
             {icon}
           </Link>
         ) : (
           <button
+            key={uid}
             type="button"
             className="optionButton"
             title={title}
