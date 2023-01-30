@@ -16,7 +16,7 @@ interface MenuButtonObject {
   title: string;
   disabled?: boolean;
   icon: JSX.Element;
-  linkTo?: string;
+  linkTo?: string | null;
   onclick?: () => void;
 }
 
@@ -26,6 +26,7 @@ export default function NavActionButtons() {
   const [themeIcon, setThemeIcon] = useState(
     theme === 'DARK' ? <FiMoon /> : <FiSun />
   );
+  const [navButtons, setNavButtons] = useState([] as MenuButtonObject[]);
 
   function toggleAppTheme() {
     if (document.body.classList.contains('dark-theme')) {
@@ -37,7 +38,7 @@ export default function NavActionButtons() {
     }
   }
 
-  const buttons = [
+  setNavButtons([
     {
       title: t('navbar.actionButtons.updateAvailable'),
       disabled: false,
@@ -73,7 +74,7 @@ export default function NavActionButtons() {
       icon: <FiSettings />,
       linkTo: '/appSettings',
     },
-  ] as MenuButtonObject[];
+  ]);
 
   useEffect(() => {
     setThemeIcon(theme === 'DARK' ? <FiMoon /> : <FiSun />);
@@ -81,7 +82,7 @@ export default function NavActionButtons() {
 
   return (
     <section id="rightButtons">
-      {buttons.map(({ linkTo, title, disabled, icon, onclick }) => {
+      {navButtons.map(({ linkTo, title, disabled, icon, onclick }) => {
         return linkTo ? (
           <Link to={linkTo} className="optionButton" title={title}>
             {icon}
