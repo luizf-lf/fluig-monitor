@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
+import { ipcRenderer } from 'electron';
 import { Link } from 'react-router-dom';
 import {
   FiAirplay,
   FiBell,
+  FiDownload,
   FiDownloadCloud,
   FiMoon,
   FiSettings,
@@ -40,54 +42,81 @@ export default function NavActionButtons() {
     }
   }
 
+  const defaultButtons = [
+    {
+      uid: 'KIOSK_MODE',
+      title: `${t('navbar.actionButtons.kioskMode')} [${t(
+        'components.global.underDevelopment'
+      )}]`,
+      disabled: true,
+      icon: <FiAirplay />,
+      linkTo: null,
+    },
+    {
+      uid: 'NOTIFICATIONS',
+      title: `${t('navbar.actionButtons.notifications')} [${t(
+        'components.global.underDevelopment'
+      )}]`,
+      disabled: true,
+      icon: <FiBell />,
+      linkTo: null,
+    },
+    {
+      uid: 'THEME_SWITCH',
+      title: t('navbar.actionButtons.theme'),
+      disabled: false,
+      icon: themeIcon,
+      linkTo: null,
+      onclick: toggleAppTheme,
+    },
+    {
+      uid: 'SETTINGS',
+      title: t('navbar.actionButtons.settings'),
+      disabled: true,
+      icon: <FiSettings />,
+      linkTo: '/appSettings',
+    },
+  ];
+
   useEffect(() => {
-    setNavButtons([
-      {
-        uid: 'UPDATE_AVAILABLE',
-        title: t('navbar.actionButtons.updateAvailable'),
-        disabled: false,
-        icon: <FiDownloadCloud />,
-        linkTo: null,
-      },
-      {
-        uid: 'KIOSK_MODE',
-        title: `${t('navbar.actionButtons.kioskMode')} [${t(
-          'components.global.underDevelopment'
-        )}]`,
-        disabled: true,
-        icon: <FiAirplay />,
-        linkTo: null,
-      },
-      {
-        uid: 'NOTIFICATIONS',
-        title: `${t('navbar.actionButtons.notifications')} [${t(
-          'components.global.underDevelopment'
-        )}]`,
-        disabled: true,
-        icon: <FiBell />,
-        linkTo: null,
-      },
-      {
-        uid: 'THEME_SWITCH',
-        title: t('navbar.actionButtons.theme'),
-        disabled: false,
-        icon: themeIcon,
-        linkTo: null,
-        onclick: toggleAppTheme,
-      },
-      {
-        uid: 'SETTINGS',
-        title: t('navbar.actionButtons.settings'),
-        disabled: true,
-        icon: <FiSettings />,
-        linkTo: '/appSettings',
-      },
-    ]);
+    setNavButtons(defaultButtons);
   }, []);
 
   useEffect(() => {
     setThemeIcon(theme === 'DARK' ? <FiMoon /> : <FiSun />);
   }, [theme]);
+
+  ipcRenderer.on(
+    'appUpdateStatusChange',
+    (_event: Electron.IpcRendererEvent, { status }: { status: string }) => {
+      // TODO: Add an click event to buttons
+      if (status === 'AVAILABLE') {
+        setNavButtons([
+          {
+            uid: 'UPDATE_AVAILABLE',
+            title: t('navbar.actionButtons.updateAvailable'),
+            disabled: false,
+            icon: <FiDownloadCloud />,
+          },
+          ...defaultButtons,
+        ]);
+
+        return;
+      }
+
+      if (status === 'DOWNLOADED') {
+        setNavButtons([
+          {
+            uid: 'UPDATE_DOWNLOADED',
+            title: t('navbar.actionButtons.updateDownloaded'),
+            disabled: false,
+            icon: <FiDownload />,
+          },
+          ...defaultButtons,
+        ]);
+      }
+    }
+  );
 
   return (
     <section id="rightButtons">

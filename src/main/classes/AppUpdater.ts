@@ -113,6 +113,15 @@ export default class AppUpdater {
       return;
     }
 
+    // sends a notification about the downloaded update
+    setTimeout(() => {
+      BrowserWindow.getAllWindows().forEach((windowElement) => {
+        windowElement.webContents.send('appUpdateStatusChange', {
+          status: 'DOWNLOADED',
+        });
+      });
+    }, 4000);
+
     // adds a 5 seconds timeout to make sure the current language is loaded before the dialog is shown
     //  (in case the file has already been downloaded)
     setTimeout(() => {
@@ -354,6 +363,15 @@ export default class AppUpdater {
                 );
               }
             });
+          } else {
+            // sends a notification about the available update
+            setTimeout(() => {
+              BrowserWindow.getAllWindows().forEach((windowElement) => {
+                windowElement.webContents.send('appUpdateStatusChange', {
+                  status: 'AVAILABLE',
+                });
+              });
+            }, 4000);
           }
         } else {
           log.info(
