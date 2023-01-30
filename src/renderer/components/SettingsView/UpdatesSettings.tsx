@@ -3,7 +3,10 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FiInfo, FiPackage } from 'react-icons/fi';
 import globalContainerVariants from '../../utils/globalContainerVariants';
-import { getAppSettingsAsObject } from '../../ipc/settingsIpcHandler';
+import {
+  getAppSettingsAsObject,
+  updateAppSettings,
+} from '../../ipc/settingsIpcHandler';
 import parseBoolean from '../../../common/utils/parseBoolean';
 
 export default function UpdatesSettings() {
@@ -20,6 +23,28 @@ export default function UpdatesSettings() {
     setEnableAutoInstall(parseBoolean(ENABLE_AUTO_INSTALL_UPDATE.value));
   }
 
+  function handleEnableUpdateAutoInstall(checked: boolean) {
+    setEnableAutoInstall(checked);
+    updateAppSettings([
+      {
+        settingId: 'ENABLE_AUTO_INSTALL_UPDATE',
+        value: String(checked),
+      },
+    ]);
+  }
+
+  function handleEnableUpdateAutoDownload(checked: boolean) {
+    setEnableAutoDownload(checked);
+    if (!checked) {
+      handleEnableUpdateAutoInstall(false);
+    }
+    updateAppSettings([
+      {
+        settingId: 'ENABLE_AUTO_DOWNLOAD_UPDATE',
+        value: String(checked),
+      },
+    ]);
+  }
   useEffect(() => {
     loadSettings();
   }, []);
@@ -46,7 +71,9 @@ export default function UpdatesSettings() {
             name="enableAutoDownload"
             id="enableAutoDownload"
             checked={enableAutoDownload}
-            onChange={(event) => setEnableAutoDownload(event.target.checked)}
+            onChange={(event) =>
+              handleEnableUpdateAutoDownload(event.target.checked)
+            }
             style={{ marginRight: '0.5rem' }}
           />
           {t('components.UpdatesSettings.enableAutoDownload.label')}
@@ -64,7 +91,9 @@ export default function UpdatesSettings() {
             name="enableAutoInstall"
             id="enableAutoInstall"
             checked={enableAutoInstall}
-            onChange={(event) => setEnableAutoInstall(event.target.checked)}
+            onChange={(event) =>
+              handleEnableUpdateAutoInstall(event.target.checked)
+            }
             style={{ marginRight: '0.5rem' }}
             disabled={!enableAutoDownload}
           />
