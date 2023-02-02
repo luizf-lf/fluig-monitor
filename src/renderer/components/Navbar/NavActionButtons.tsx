@@ -14,15 +14,7 @@ import {
 import '../../assets/styles/components/Navbar/RightButtons.scss';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../contexts/ThemeContext';
-
-interface MenuButtonObject {
-  uid: string;
-  title: string;
-  disabled?: boolean | false;
-  icon: JSX.Element;
-  linkTo?: string | null;
-  onclick?: () => void;
-}
+import SpinnerLoader from '../Loaders/Spinner';
 
 export default function NavActionButtons() {
   const { t } = useTranslation();
@@ -30,7 +22,7 @@ export default function NavActionButtons() {
   const [themeIcon, setThemeIcon] = useState(
     theme === 'DARK' ? <FiMoon /> : <FiSun />
   );
-  const [navButtons, setNavButtons] = useState([] as MenuButtonObject[]);
+  const [updateActionButton, setUpdateActionButton] = useState(<></>);
 
   function toggleAppTheme() {
     if (document.body.classList.contains('dark-theme')) {
@@ -42,46 +34,6 @@ export default function NavActionButtons() {
     }
   }
 
-  const defaultButtons = [
-    {
-      uid: 'KIOSK_MODE',
-      title: `${t('navbar.actionButtons.kioskMode')} [${t(
-        'components.global.underDevelopment'
-      )}]`,
-      disabled: true,
-      icon: <FiAirplay />,
-      linkTo: null,
-    },
-    {
-      uid: 'NOTIFICATIONS',
-      title: `${t('navbar.actionButtons.notifications')} [${t(
-        'components.global.underDevelopment'
-      )}]`,
-      disabled: true,
-      icon: <FiBell />,
-      linkTo: null,
-    },
-    {
-      uid: 'THEME_SWITCH',
-      title: t('navbar.actionButtons.theme'),
-      disabled: false,
-      icon: themeIcon,
-      linkTo: null,
-      onclick: toggleAppTheme,
-    },
-    {
-      uid: 'SETTINGS',
-      title: t('navbar.actionButtons.settings'),
-      disabled: true,
-      icon: <FiSettings />,
-      linkTo: '/appSettings',
-    },
-  ];
-
-  useEffect(() => {
-    setNavButtons(defaultButtons);
-  }, []);
-
   useEffect(() => {
     setThemeIcon(theme === 'DARK' ? <FiMoon /> : <FiSun />);
   }, [theme]);
@@ -89,63 +41,85 @@ export default function NavActionButtons() {
   ipcRenderer.on(
     'appUpdateStatusChange',
     (_event: Electron.IpcRendererEvent, { status }: { status: string }) => {
-      // TODO: Add an click event to buttons
       if (status === 'AVAILABLE') {
-        setNavButtons([
-          {
-            uid: 'UPDATE_AVAILABLE',
-            title: t('navbar.actionButtons.updateAvailable'),
-            disabled: false,
-            icon: <FiDownloadCloud />,
-            onclick: () => {
-              // TODO: Update to a loading state
-              ipcRenderer.invoke('callAppUpdater', { forceDownload: true });
-            },
-          },
-          ...defaultButtons,
-        ]);
+        setUpdateActionButton(
+          <button
+            type="button"
+            className="optionButton"
+            title={t('navbar.actionButtons.updateAvailable')}
+            onClick={() => {
+              ipcRenderer.invoke('callAppUpdater', {
+                forceOptions: { forceDownload: true },
+              });
+              setUpdateActionButton(<SpinnerLoader />);
+            }}
+          >
+            <FiDownloadCloud />
+          </button>
+        );
 
         return;
       }
 
       if (status === 'DOWNLOADED') {
-        setNavButtons([
-          {
-            uid: 'UPDATE_DOWNLOADED',
-            title: t('navbar.actionButtons.updateDownloaded'),
-            disabled: false,
-            icon: <FiDownload />,
-            onclick: () => {
-              // TODO: Update to a loading state
-              ipcRenderer.invoke('callAppUpdater', { forceInstall: true });
-            },
-          },
-          ...defaultButtons,
-        ]);
+        setUpdateActionButton(
+          <button
+            type="button"
+            className="optionButton"
+            title={t('navbar.actionButtons.updateDownloaded')}
+            onClick={() => {
+              ipcRenderer.invoke('callAppUpdater', {
+                forceOptions: { forceInstall: true },
+              });
+              setUpdateActionButton(<SpinnerLoader />);
+            }}
+          >
+            <FiDownload />
+          </button>
+        );
       }
     }
   );
 
   return (
     <section id="rightButtons">
-      {navButtons.map(({ uid, linkTo, title, disabled, icon, onclick }) => {
-        return linkTo ? (
-          <Link to={linkTo} className="optionButton" title={title} key={uid}>
-            {icon}
-          </Link>
-        ) : (
-          <button
-            key={uid}
-            type="button"
-            className="optionButton"
-            title={title}
-            disabled={disabled}
-            onClick={onclick}
-          >
-            {icon}
-          </button>
-        );
-      })}
+      {updateActionButton}
+      <button
+        type="button"
+        className="optionButton"
+        title={`${t('navbar.actionButtons.kioskMode')} [${t(
+          'components.global.underDevelopment'
+        )}]`}
+        disabled
+      >
+        <FiAirplay />
+      </button>
+      <button
+        type="button"
+        className="optionButton"
+        title={`${t('navbar.actionButtons.notifications')} [${t(
+          'components.global.underDevelopment'
+        )}]`}
+        disabled
+      >
+        <FiBell />
+      </button>
+      <button
+        type="button"
+        className="optionButton"
+        title={t('navbar.actionButtons.settings')}
+        disabled
+        onClick={toggleAppTheme}
+      >
+        {themeIcon}
+      </button>
+      <Link
+        to="/appSettings"
+        className="optionButton"
+        title={t('navbar.actionButtons.settings')}
+      >
+        <FiSettings />
+      </Link>
     </section>
   );
 }

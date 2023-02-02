@@ -106,7 +106,6 @@ export default class AppUpdater {
       'https://api.github.com/repos/luizf-lf/fluig-monitor/releases';
     this.updatesPath = path.resolve(getAppDataFolder(), 'updates');
     this.versionRgx = /([A-Z])+/gi;
-    // this.currentVersion = '0.2.0';
     this.currentVersion = appVersion.replace(this.versionRgx, '');
     this.releases = [];
     this.latestRelease = undefined;
