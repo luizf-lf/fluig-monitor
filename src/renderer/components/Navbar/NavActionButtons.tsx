@@ -97,6 +97,10 @@ export default function NavActionButtons() {
             title: t('navbar.actionButtons.updateAvailable'),
             disabled: false,
             icon: <FiDownloadCloud />,
+            onclick: () => {
+              // TODO: Update to a loading state
+              ipcRenderer.invoke('callAppUpdater', { forceDownload: true });
+            },
           },
           ...defaultButtons,
         ]);
@@ -111,6 +115,10 @@ export default function NavActionButtons() {
             title: t('navbar.actionButtons.updateDownloaded'),
             disabled: false,
             icon: <FiDownload />,
+            onclick: () => {
+              // TODO: Update to a loading state
+              ipcRenderer.invoke('callAppUpdater', { forceInstall: true });
+            },
           },
           ...defaultButtons,
         ]);

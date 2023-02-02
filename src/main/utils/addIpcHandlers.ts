@@ -31,6 +31,9 @@ import getEnvironmentRelease, {
 } from '../services/getEnvironmentRelease';
 import AuthObject from '../../common/interfaces/AuthObject';
 import i18n from '../../common/i18n/i18n';
+import AppUpdater, {
+  AppUpdaterConstructorOptions,
+} from '../classes/AppUpdater';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -310,6 +313,16 @@ export default function addIpcHandlers(): void {
     'updateLanguage',
     (_event: Electron.IpcMainInvokeEvent, lang: string) => {
       i18n.changeLanguage(lang);
+    }
+  );
+
+  ipcMain.handle(
+    'callAppUpdater',
+    (
+      _event: Electron.IpcMainInvokeEvent,
+      options: AppUpdaterConstructorOptions
+    ) => {
+      new AppUpdater(options).checkUpdates();
     }
   );
 }

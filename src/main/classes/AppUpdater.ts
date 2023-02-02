@@ -16,6 +16,10 @@ import byteSpeed from '../../common/utils/byteSpeed';
 import i18n from '../../common/i18n/i18n';
 import SettingsController from '../controllers/SettingsController';
 
+export interface AppUpdaterConstructorOptions {
+  forceOptions: { forceDownload?: boolean; forceInstall?: boolean };
+}
+
 /**
  * The app updater class.
  * It should check the latest available release from the GitHub releases page and download the latest release according
@@ -84,14 +88,25 @@ export default class AppUpdater {
   actionsTimeout: number;
 
   /**
+   * If the update download will be forced (Override the db setting)
+   */
+  forceDownload: boolean;
+
+  /**
+   * If the update file execution will be forced (Override database settings)
+   */
+  forceInstall: boolean;
+
+  /**
    * The class constructor. Sets the properties to it's default values.
    * @since 0.4.0
    */
-  constructor() {
+  constructor(options?: AppUpdaterConstructorOptions) {
     this.releasesEndpoint =
       'https://api.github.com/repos/luizf-lf/fluig-monitor/releases';
     this.updatesPath = path.resolve(getAppDataFolder(), 'updates');
     this.versionRgx = /([A-Z])+/gi;
+    // this.currentVersion = '0.2.0';
     this.currentVersion = appVersion.replace(this.versionRgx, '');
     this.releases = [];
     this.latestRelease = undefined;
@@ -100,6 +115,14 @@ export default class AppUpdater {
     this.shouldAutoDownload = false;
     this.shouldAutoInstall = false;
     this.actionsTimeout = 4000;
+    this.forceDownload = false;
+    this.forceInstall = false;
+    if (options && options.forceOptions.forceDownload) {
+      this.forceDownload = true;
+    }
+    if (options && options.forceOptions.forceInstall) {
+      this.forceInstall = true;
+    }
   }
 
   /**
@@ -180,6 +203,16 @@ export default class AppUpdater {
       }
       if (ENABLE_AUTO_INSTALL_UPDATE) {
         this.shouldAutoInstall = ENABLE_AUTO_INSTALL_UPDATE.value === 'true';
+      }
+
+      if (this.forceDownload) {
+        log.info(`AppUpdater: shouldAutoDownload option has been overwritten`);
+        this.shouldAutoDownload = true;
+      }
+
+      if (this.forceInstall) {
+        log.info(`AppUpdater: shouldAutoInstall option has been overwritten`);
+        this.shouldAutoInstall = true;
       }
 
       if (!fs.existsSync(this.updatesPath)) {
