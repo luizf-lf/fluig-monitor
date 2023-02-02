@@ -107,8 +107,7 @@ export default function NavActionButtons() {
       <button
         type="button"
         className="optionButton"
-        title={t('navbar.actionButtons.settings')}
-        disabled
+        title={t('navbar.actionButtons.theme')}
         onClick={toggleAppTheme}
       >
         {themeIcon}
