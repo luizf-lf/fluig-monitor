@@ -1,7 +1,9 @@
+/* eslint-disable no-await-in-loop */
 import log from 'electron-log';
 import { ipcMain } from 'electron';
 import Store from 'electron-store';
 
+import { AppSetting } from '../generated/client';
 import { AuthKeysControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
 import { EnvironmentUpdateControllerInterface } from '../../common/interfaces/EnvironmentControllerInterface';
 import { UpdateScheduleControllerInterface } from '../../common/interfaces/UpdateScheduleControllerInterface';
@@ -10,7 +12,10 @@ import AuthKeysController from '../controllers/AuthKeysController';
 import EnvironmentController from '../controllers/EnvironmentController';
 import LanguageController from '../controllers/LanguageController';
 import LogController from '../controllers/LogController';
-import SettingsController from '../controllers/SettingsController';
+import SettingsController, {
+  AppSettingUpdatePropsInterface,
+  SettingsObject,
+} from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import UpdateScheduleController from '../controllers/UpdateScheduleController';
 
@@ -26,6 +31,9 @@ import getEnvironmentRelease, {
 } from '../services/getEnvironmentRelease';
 import AuthObject from '../../common/interfaces/AuthObject';
 import i18n from '../../common/i18n/i18n';
+import AppUpdater, {
+  AppUpdaterConstructorOptions,
+} from '../classes/AppUpdater';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -166,16 +174,40 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
-    'updateFrontEndTheme',
-    async (_event: Electron.IpcMainInvokeEvent, theme: string) => {
-      log.info('IPC Handler: Updating front end theme');
+    'updateSettings',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      settings: AppSettingUpdatePropsInterface[]
+    ): Promise<AppSetting[]> => {
+      const settingsController = new SettingsController();
+      const updated = [];
 
-      const updated = await new SettingsController().update({
-        settingId: 'FRONT_END_THEME',
-        value: theme,
-      });
+      for (let i = 0; i < settings.length; i += 1) {
+        updated.push(await settingsController.update(settings[i]));
+      }
 
       return updated;
+    }
+  );
+
+  ipcMain.handle(
+    'getSetting',
+    async (
+      _event: Electron.IpcMainInvokeEvent,
+      settingId: string
+    ): Promise<AppSetting | null> => {
+      const found = await new SettingsController().find(settingId);
+
+      return found;
+    }
+  );
+
+  ipcMain.handle(
+    'getSettingsAsObject',
+    async (/** _event: Electron.IpcMainInvokeEvent */): Promise<SettingsObject> => {
+      const found = await new SettingsController().getAllAsObject();
+
+      return found;
     }
   );
 
@@ -194,14 +226,6 @@ export default function addIpcHandlers(): void {
       return lastResponse;
     }
   );
-
-  ipcMain.handle('getFrontEndTheme', async () => {
-    log.info('IPC Handler: Getting front end theme');
-
-    const theme = await new SettingsController().find('FRONT_END_THEME');
-
-    return theme;
-  });
 
   ipcMain.handle(
     'getHistoricalDiskInfo',
@@ -289,6 +313,16 @@ export default function addIpcHandlers(): void {
     'updateLanguage',
     (_event: Electron.IpcMainInvokeEvent, lang: string) => {
       i18n.changeLanguage(lang);
+    }
+  );
+
+  ipcMain.handle(
+    'callAppUpdater',
+    (
+      _event: Electron.IpcMainInvokeEvent,
+      options: AppUpdaterConstructorOptions
+    ) => {
+      new AppUpdater(options).checkUpdates();
     }
   );
 }

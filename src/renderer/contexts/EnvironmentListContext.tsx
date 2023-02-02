@@ -8,7 +8,7 @@ interface EnvironmentListContextProviderProps {
 
 interface EnvironmentListContextData {
   environmentList: EnvironmentWithRelatedData[];
-  updateEnvironmentList: () => void;
+  updateEnvironmentList: () => Promise<void>;
 }
 
 export const EnvironmentListContext = createContext(

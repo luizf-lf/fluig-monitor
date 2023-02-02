@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Redirect, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import {
@@ -14,7 +14,6 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
-import EnvironmentViewParams from '../../common/interfaces/EnvironmentViewParams';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import {
   deleteEnvironment,
@@ -29,7 +28,7 @@ import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 
 function EditEnvironmentSettingsView(): JSX.Element {
-  const { environmentId }: EnvironmentViewParams = useParams();
+  const { environmentId } = useParams();
 
   const [environmentData, setEnvironmentData] = useState(
     {} as EnvironmentWithRelatedData
@@ -331,7 +330,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
       });
 
       updateEnvironmentList();
-      setValidationMessage(<Redirect to="/" />);
+      setValidationMessage(<Navigate to="/" />);
     } else if (
       permissionsResults.some(
         (i: { httpStatus: number }) =>
@@ -377,7 +376,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
         type: 'success',
         message: t('views.EditEnvironmentView.deletedSuccessfully'),
       });
-      setValidationMessage(<Redirect to="/" />);
+      setValidationMessage(<Navigate to="/" />);
     }
   }
 

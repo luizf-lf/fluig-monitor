@@ -22,7 +22,13 @@ export default function HomeEnvironmentListView() {
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
 
-  useEffect(() => updateEnvironmentList(), []);
+  useEffect(() => {
+    async function fetchData() {
+      updateEnvironmentList();
+    }
+
+    fetchData();
+  }, []);
 
   const createEnvironmentHelper = (
     <div className="createEnvironmentCard">

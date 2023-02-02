@@ -1,6 +1,12 @@
 import log from 'electron-log';
-import { createContext, ReactNode, useContext, useState } from 'react';
-import { updateFrontEndTheme } from '../ipc/settingsIpcHandler';
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { getAppSetting, updateAppSettings } from '../ipc/settingsIpcHandler';
 
 interface ThemeContextProviderProps {
   children: ReactNode;
@@ -22,7 +28,7 @@ export function ThemeContextProvider({ children }: ThemeContextProviderProps) {
   );
 
   // function that sets the theme to the body and the local database
-  function setFrontEndTheme(selectedTheme: string) {
+  function setFrontEndTheme(selectedTheme: string, updateDbValue = true) {
     log.info(`Updating app front end theme to ${selectedTheme} via context.`);
 
     if (selectedTheme === 'WHITE') {
@@ -32,8 +38,29 @@ export function ThemeContextProvider({ children }: ThemeContextProviderProps) {
     }
 
     setTheme(selectedTheme);
-    updateFrontEndTheme(selectedTheme);
+
+    if (updateDbValue) {
+      updateAppSettings([
+        {
+          settingId: 'FRONT_END_THEME',
+          value: selectedTheme,
+        },
+      ]);
+    }
   }
+
+  // loads the theme saved on the database
+  useEffect(() => {
+    async function loadThemeFromDb() {
+      const savedTheme = await getAppSetting('FRONT_END_THEME');
+
+      if (savedTheme) {
+        setFrontEndTheme(savedTheme.value, false);
+      }
+    }
+
+    loadThemeFromDb();
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, setFrontEndTheme }}>

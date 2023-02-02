@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fi';
 import log from 'electron-log';
 import { Link } from 'react-router-dom';
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
@@ -235,8 +235,6 @@ export default function CreateEnvironmentView(): JSX.Element {
           environmentAuthKeys,
         });
 
-        log.info(created);
-
         if (useKeysEncryption && encryptedPayload !== null) {
           // maybe it's not a good idea to use the Store library,
           //  but in the meanwhile it's better than saving both keys on the same place.
@@ -265,7 +263,7 @@ export default function CreateEnvironmentView(): JSX.Element {
         });
 
         updateEnvironmentList();
-        setValidationMessage(<Redirect to="/" />);
+        setValidationMessage(<Navigate to="/" />);
       } else if (
         permissionsResults.some(
           (i: { httpStatus: number }) =>

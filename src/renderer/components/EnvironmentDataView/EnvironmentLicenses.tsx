@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { LicenseHistoryWithHttpResponse } from '../../../common/interfaces/EnvironmentControllerInterface';
 import SpinnerLoader from '../Loaders/Spinner';
 import ProgressBar from '../ProgressBar';
+import TimeIndicator from '../TimeIndicator';
 
 interface Props {
   licenses: LicenseHistoryWithHttpResponse[];
@@ -41,6 +42,8 @@ export default function EnvironmentLicenses({ licenses }: Props) {
               current={licenses[0].activeUsers}
               showPercentage
             />
+
+            <TimeIndicator date={licenses[0].httpResponse.timestamp} />
           </>
         ) : (
           <span>{t('components.global.noData')}</span>

@@ -1,4 +1,5 @@
 /* eslint-disable prefer-destructuring */
+import path from 'path';
 import log from 'electron-log';
 import { BrowserWindow, Notification } from 'electron';
 import EnvironmentController from '../controllers/EnvironmentController';
@@ -8,6 +9,7 @@ import FluigAPIClient from '../../common/classes/FluigAPIClient';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
 import HttpResponseController from '../controllers/HttpResponseController';
 import frequencyToMs from '../utils/frequencyToMs';
+import getAssetPath from '../utils/getAssetPath';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 
 import i18n from '../../common/i18n/i18n';
@@ -21,8 +23,6 @@ async function notifyAbout(
       10
     );
 
-    i18n.t('toasts.HighResponseTime.title');
-
     let notification = null;
     const lastResponse = responses[0];
     let previousResponse = null;
@@ -31,6 +31,7 @@ async function notifyAbout(
       notification = new Notification({
         title: `${environment.name} ${i18n.t('toasts.HighResponseTime.title')}`,
         body: i18n.t('toasts.HighResponseTime.message'),
+        icon: path.join(getAssetPath(), 'resources', 'warning.png'),
       });
     }
 
@@ -46,6 +47,7 @@ async function notifyAbout(
             'toasts.OperatingCorrectly.title'
           )}`,
           body: i18n.t('toasts.OperatingCorrectly.message'),
+          icon: path.join(getAssetPath(), 'resources', 'success.png'),
         });
       }
 
@@ -58,6 +60,7 @@ async function notifyAbout(
             'toasts.ServerAvailable.title'
           )}`,
           body: i18n.t('toasts.ServerAvailable.message'),
+          icon: path.join(getAssetPath(), 'resources', 'success.png'),
         });
       } else if (
         previousResponse.responseTimeMs > 0 &&
@@ -68,6 +71,7 @@ async function notifyAbout(
             'toasts.ServerUnavailable.title'
           )}`,
           body: i18n.t('toasts.ServerUnavailable.message'),
+          icon: path.join(getAssetPath(), 'resources', 'error.png'),
         });
       }
     }
@@ -105,8 +109,12 @@ async function executePing(
     });
 
     const initialTiming = Date.now();
+    let timeout = null;
+    if (environment.updateScheduleId) {
+      timeout = frequencyToMs(environment.updateScheduleId?.pingFrequency);
+    }
 
-    await fluigClient.get(true);
+    await fluigClient.get(true, timeout);
 
     const responseTimeMs = Date.now() - initialTiming;
 

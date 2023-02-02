@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, shell, screen } from 'electron';
+import { app, BrowserWindow, screen, Tray, Notification } from 'electron';
 
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
@@ -28,17 +29,19 @@ import syncEnvironmentsJob from './services/syncEnvironmentsJob';
 import pingEnvironmentsJob from './services/pingEnvironmentsJob';
 import addIpcHandlers from './utils/addIpcHandlers';
 import getAssetPath from './utils/getAssetPath';
+import SettingsController from './controllers/SettingsController';
+import AppUpdater from './classes/AppUpdater';
+import trayBuilder from './utils/trayBuilder';
 
-// log.transports.file.resolvePath = () =>
-//   path.resolve(getAppDataFolder(), 'logs');
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
 log.transports.file.fileName = isDevelopment
   ? 'fluig-monitor.dev.log'
   : 'fluig-monitor.log';
-log.transports.file.maxSize = 0; // disable default electron-log file rotation
+log.transports.file.maxSize = 0; // disable the default electron-log file rotation
 
 let mainWindow: BrowserWindow | null = null;
+let trayIcon: Tray | null = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -112,6 +115,8 @@ const createWindow = async () => {
     if (savedLanguage !== lang) {
       await new LanguageController().update(lang);
     }
+
+    trayIcon = trayBuilder(trayIcon, reopenWindow);
   });
 
   // change the language to the locally saved language
@@ -132,27 +137,45 @@ const createWindow = async () => {
     mainWindow = null;
   });
 
-  // Open urls in the user's browser
-  mainWindow.webContents.on('new-window', (event, url) => {
-    event.preventDefault();
-    shell.openExternal(url);
+  mainWindow.on('minimize', async () => {
+    const settingsController = new SettingsController();
+    const appSettings = {
+      disableNotify: await settingsController.find(
+        'DISABLE_MINIMIZE_NOTIFICATION'
+      ),
+      enableMinimize: await settingsController.find('ENABLE_MINIMIZE_FEATURE'),
+    };
+
+    if (appSettings.enableMinimize?.value === 'true') {
+      if (appSettings.disableNotify?.value === 'false') {
+        const notification = new Notification({
+          title: i18n.t('toasts.StillAlive.title'),
+          body: i18n.t('toasts.StillAlive.message'),
+          icon: path.join(getAssetPath(), 'icon.png'),
+        });
+
+        notification.show();
+      }
+
+      mainWindow?.hide();
+    }
   });
+};
+
+const reopenWindow = () => {
+  if (mainWindow === null) {
+    createWindow();
+  } else {
+    BrowserWindow.getAllWindows()[0].show();
+  }
 };
 
 addIpcHandlers();
 
-app.on('window-all-closed', async () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
-    log.info('Main windows closed. Exiting the app.');
-  }
-});
-
 app
   .whenReady()
   .then(async () => {
+    const appUpdater = new AppUpdater();
     const splash = new BrowserWindow({
       width: 720,
       height: 230,
@@ -184,6 +207,8 @@ app
 
     await runDbMigrations();
 
+    appUpdater.checkUpdates();
+
     // When using node schedule with a cron like scheduler, sometimes the
     //  sync function are dispatched every second for a minute.
     // That's why the setInterval is still being used.
@@ -213,6 +238,11 @@ app
     // trigger the log file rotation every day at 00:00:05 (5 seconds past midnight)
     scheduleJob('5 0 0 * * *', () => {
       rotateLogFile();
+    });
+
+    // trigger the updater to check for updates every day at 00:00:10 (10s past midnight)
+    scheduleJob('10 0 0 * * *', () => {
+      appUpdater.checkUpdates();
     });
   })
   .catch((e) => {

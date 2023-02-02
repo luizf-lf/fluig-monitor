@@ -19,9 +19,16 @@ const en = {
       label: '&File',
       quit: 'Quit',
     },
+    systemTray: {
+      running: 'Fluig Monitor is running',
+      open: 'Open',
+      quit: 'Quit',
+    },
   },
   navbar: {
     actionButtons: {
+      updateDownloaded: 'Update downloaded. Click to install.',
+      updateAvailable: 'Update available. Click to download.',
       kioskMode: 'Enable Kiosk Mode',
       notifications: 'Open Notifications',
       theme: 'Toggle Color Theme',
@@ -213,13 +220,16 @@ const en = {
       settingsMenu: {
         categories: {
           general: 'General',
+          behavior: 'Behavior',
           about: 'About',
         },
         pages: {
           theme: 'Theme',
           language: 'Language',
+          update: 'Updates',
           about: 'About This Software',
           reportABug: 'Report A Bug',
+          systemTray: 'System Tray',
         },
       },
       emptyRoute: {
@@ -320,9 +330,38 @@ const en = {
       whiteTheme: 'White Theme',
       darkTheme: 'Dark Theme',
     },
+    UpdatesSettings: {
+      title: 'Updates',
+      helperText:
+        'Here you can configure how the application should behave with updates.',
+      enableAutoDownload: {
+        label: 'Download updates automatically.',
+        helper:
+          'When you enable this option, Fluig monitor will download the available updates automatically.',
+      },
+      enableAutoInstall: {
+        label: 'Install updates automatically',
+        helper:
+          'When you enable this option, Fluig Monitor will automatically install the updates after they are downloaded.',
+      },
+      updateFrequency: {
+        helper: 'Updates are always verified daily.',
+      },
+    },
     LanguageSettings: {
       title: 'Language',
       helperText: 'Select the language to be used by the application bellow: ',
+    },
+    SystemTraySettings: {
+      title: 'System Tray',
+      helperText:
+        'Use this option to define how the app should behave on the system tray.',
+      minimizeToSystemTray: 'Minimize to system tray',
+      minimizeToSystemTrayHelper:
+        'When enabling this option, Fluig Monitor will be minimized to the system tray and will keep running.',
+      disableNotification: 'Disable notification',
+      disableNotificationHelper:
+        'Use this option to disable the notification telling that Fluig Monitor is still running.',
     },
     AboutSection: {
       title: 'An open-source tool for monitoring Fluig servers.',
@@ -372,6 +411,21 @@ const en = {
     ServerUnavailable: {
       title: 'unavailable.',
       message: 'The server appears to be offline. Please check.',
+    },
+    StillAlive: {
+      title: "I'm still alive.",
+      message:
+        'Fluig Monitor is still running on the system tray. You can change this behavior on the settings panel.',
+    },
+  },
+  dialogs: {
+    updateDialog: {
+      title: 'Update available',
+      message: 'Do you wish to update Fluig Monitor?',
+      detail:
+        "A new version of Fluig Monitor has been downloaded and it's ready to be executed.",
+      btnYes: 'Update',
+      btnNo: 'Cancel',
     },
   },
 };

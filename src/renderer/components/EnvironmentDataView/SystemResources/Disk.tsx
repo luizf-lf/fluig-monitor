@@ -6,13 +6,14 @@ import { getHistoricalDiskInfo } from '../../../ipc/environmentsIpcHandler';
 import { HDStats } from '../../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../../common/utils/formatBytes';
 import ProgressBar from '../../ProgressBar';
+import TimeIndicator from '../../TimeIndicator';
 
 interface Props {
   environmentId: number;
 }
 
 export default function Disk({ environmentId }: Props) {
-  const [diskInfo, setDiskInfo] = useState([{}] as HDStats[]);
+  const [diskInfo, setDiskInfo] = useState([] as HDStats[]);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -66,6 +67,8 @@ export default function Disk({ environmentId }: Props) {
           showIndicator={false}
           gradient={false}
         />
+
+        <TimeIndicator date={diskInfo[0].httpResponse.timestamp} />
       </div>
     </div>
   );

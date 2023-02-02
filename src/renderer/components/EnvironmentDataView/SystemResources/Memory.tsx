@@ -6,13 +6,14 @@ import SpinnerLoader from '../../Loaders/Spinner';
 import { getHistoricalMemoryInfo } from '../../../ipc/environmentsIpcHandler';
 import { MemoryStats } from '../../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../../common/utils/formatBytes';
+import TimeIndicator from '../../TimeIndicator';
 
 interface Props {
   environmentId: number;
 }
 
 export default function Memory({ environmentId }: Props) {
-  const [memoryInfo, setMemoryInfo] = useState([{}] as MemoryStats[]);
+  const [memoryInfo, setMemoryInfo] = useState([] as MemoryStats[]);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -68,6 +69,8 @@ export default function Memory({ environmentId }: Props) {
           showIndicator={false}
           gradient={false}
         />
+
+        <TimeIndicator date={memoryInfo[0].httpResponse.timestamp} />
       </div>
     </div>
   );

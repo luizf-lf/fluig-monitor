@@ -92,7 +92,7 @@ export default class FluigAPIClient {
    * Makes a GET request
    * @param silent if the request should not write logs (defaults to false)
    */
-  async get(silent?: boolean) {
+  async get(silent?: boolean, timeout?: number | null) {
     try {
       const token = {
         key: this.decodedKeys.accessToken,
@@ -107,6 +107,7 @@ export default class FluigAPIClient {
         headers: {
           ...this.oAuth.toHeader(this.oAuth.authorize(this.requestData, token)),
         },
+        timeout: timeout || 60000, // defaults the timeout to 60 seconds
       });
 
       this.httpStatus = response.status;

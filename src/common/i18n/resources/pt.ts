@@ -19,9 +19,16 @@ const pt = {
       label: '&Arquivo',
       quit: 'Sair',
     },
+    systemTray: {
+      running: 'Fluig Monitor em execução',
+      open: 'Abrir',
+      quit: 'Sair',
+    },
   },
   navbar: {
     actionButtons: {
+      updateDownloaded: 'Atualização baixada. Clique para instalar.',
+      updateAvailable: 'Atualização disponível. Clique para baixar.',
       kioskMode: 'Habilitar Modo Quiosque',
       notifications: 'Abrir Notificações',
       theme: 'Alterar Tema',
@@ -218,13 +225,16 @@ const pt = {
       settingsMenu: {
         categories: {
           general: 'Gerais',
+          behavior: 'Comportamento',
           about: 'Sobre',
         },
         pages: {
           theme: 'Tema',
           language: 'Idioma',
+          update: 'Atualizações',
           about: 'Sobre A Ferramenta',
           reportABug: 'Reporte Um Bug',
+          systemTray: 'Bandeja Do Sistema',
         },
       },
       emptyRoute: {
@@ -326,9 +336,38 @@ const pt = {
       whiteTheme: 'Tema Claro',
       darkTheme: 'Tema Escuro',
     },
+    UpdatesSettings: {
+      title: 'Atualizações',
+      helperText:
+        'Aqui você poderá escolher como a aplicação deverá se comportar com as atualizações.',
+      enableAutoDownload: {
+        label: 'Baixar atualizações automaticamente.',
+        helper:
+          'Ao habilitar esta opção, o Fluig Monitor irá baixar as atualizações disponível automaticamente.',
+      },
+      enableAutoInstall: {
+        label: 'Instalar atualizações automaticamente.',
+        helper:
+          'Ao habilitar esta opção, o Fluig Monitor irá instalar as atualizações automaticamente após efetuar o download.',
+      },
+      updateFrequency: {
+        helper: 'As atualizações são sempre verificadas diariamente.',
+      },
+    },
     LanguageSettings: {
       title: 'Idioma',
       helperText: 'Selecione abaixo o idioma a ser utilizado pela aplicação: ',
+    },
+    SystemTraySettings: {
+      title: 'Bandeja Do Sistema',
+      helperText:
+        'Utilize esta opção para definir o comportamento da aplicação na bandeja do sistema.',
+      minimizeToSystemTray: 'Minimizar para a bandeja do sistema',
+      minimizeToSystemTrayHelper:
+        'Ao habilitar esta opção, o Fluig Monitor será minimizado para a bandeja do sistema ao ser minimizado, e continuará em execução.',
+      disableNotification: 'Desabilitar notificação',
+      disableNotificationHelper:
+        'Utilize esta opção para desabilitar a notificação de que o Fluig Monitor ainda está em execução.',
     },
     AboutSection: {
       title:
@@ -378,6 +417,21 @@ const pt = {
     ServerUnavailable: {
       title: 'indisponível.',
       message: 'O servidor aparenta estar offline. Verifique.',
+    },
+    StillAlive: {
+      title: 'Ainda estou aqui.',
+      message:
+        'O Fluig Monitor está sendo executado na bandeja do sistema, você pode alterar este comportamento no painel de controle.',
+    },
+  },
+  dialogs: {
+    updateDialog: {
+      title: 'Atualização disponível',
+      message: 'Deseja atualizar o Fluig Monitor?',
+      detail:
+        'Uma nova atualização do Fluig Monitor foi baixada e está pronta para ser executada.',
+      btnYes: 'Atualizar',
+      btnNo: 'Cancelar',
     },
   },
 };

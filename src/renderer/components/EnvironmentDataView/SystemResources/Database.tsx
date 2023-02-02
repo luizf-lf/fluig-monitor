@@ -5,13 +5,14 @@ import SpinnerLoader from '../../Loaders/Spinner';
 import { getHistoricalDatabaseInfo } from '../../../ipc/environmentsIpcHandler';
 import { DBStats } from '../../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../../common/utils/formatBytes';
+import TimeIndicator from '../../TimeIndicator';
 
 interface Props {
   environmentId: number;
 }
 
 export default function Database({ environmentId }: Props) {
-  const [dbInfo, setDbInfo] = useState([{}] as DBStats[]);
+  const [dbInfo, setDbInfo] = useState([] as DBStats[]);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -68,6 +69,8 @@ export default function Database({ environmentId }: Props) {
             </div>
           </>
         )}
+
+        <TimeIndicator date={dbInfo[0].httpResponse.timestamp} />
       </div>
     </div>
   );

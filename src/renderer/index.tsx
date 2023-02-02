@@ -1,7 +1,7 @@
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import { Suspense } from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import { HashRouter } from 'react-router-dom';
 import App from './App';
@@ -23,17 +23,19 @@ ipcRenderer.on(
 i18n.language = ipcRenderer.sendSync('getLanguage');
 
 log.transports.file.fileName = ipcRenderer.sendSync('getIsDevelopment')
-  ? 'app.dev.log'
-  : 'app.log';
+  ? 'fluig-monitor.dev.log'
+  : 'fluig-monitor.log';
 log.transports.file.format = ipcRenderer.sendSync('getLogStringFormat');
 
-render(
-  <Suspense fallback="Loading">
-    <I18nextProvider i18n={i18n}>
-      <HashRouter>
-        <App />
-      </HashRouter>
-    </I18nextProvider>
-  </Suspense>,
-  document.getElementById('root')
-);
+const container = document.getElementById('root');
+if (container) {
+  createRoot(container).render(
+    <Suspense fallback="Loading">
+      <I18nextProvider i18n={i18n}>
+        <HashRouter>
+          <App />
+        </HashRouter>
+      </I18nextProvider>
+    </Suspense>
+  );
+}

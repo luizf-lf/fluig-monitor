@@ -29,7 +29,7 @@ export default function LanguageSettings() {
       <p className="mb-2">{t('components.LanguageSettings.helperText')}</p>
 
       <div className="form-group" style={{ gap: '.25rem' }}>
-        <label htmlFor="radioLanguage_PT">
+        <label htmlFor="radioLanguage_pt">
           <input
             type="radio"
             name="radioLanguage"
@@ -39,7 +39,7 @@ export default function LanguageSettings() {
           />{' '}
           {t('menu.languages.pt')}
         </label>
-        <label htmlFor="radioLanguage_EN">
+        <label htmlFor="radioLanguage_en">
           <input
             type="radio"
             name="radioLanguage"
