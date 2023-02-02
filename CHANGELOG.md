@@ -1,4 +1,4 @@
-# 0.4.0-rc
+# 0.4.0
 
 - Added a configurable minimize to system tray feature
 - Deprecated the updateFrontEndTheme method in favor of the generic updateSettings method
