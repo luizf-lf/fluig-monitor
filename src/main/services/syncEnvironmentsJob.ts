@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import log from 'electron-log';
+import { BrowserWindow } from 'electron';
 import EnvironmentController from '../controllers/EnvironmentController';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
@@ -417,6 +418,13 @@ export default async function syncEnvironmentsJob() {
           await syncLicenseData(environment);
           await syncMonitorData(environment);
           await syncStatisticsData(environment);
+
+          // sends a signal to the renderer with the server status as an argument
+          BrowserWindow.getAllWindows().forEach((windowElement) => {
+            windowElement.webContents.send(`serverSynced_${environment.id}`, {
+              syncJobFinished: true,
+            });
+          });
 
           log.info('syncEnvironmentsJob: Environment sync job finished.');
         } else {

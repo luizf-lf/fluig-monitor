@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+import { ipcRenderer } from 'electron';
 import { useTranslation } from 'react-i18next';
 import { FiArrowDownRight, FiArrowUpRight, FiDatabase } from 'react-icons/fi';
 import SpinnerLoader from '../../Loaders/Spinner';
-import { getHistoricalDatabaseInfo } from '../../../ipc/environmentsIpcHandler';
+import { getDatabaseInfo } from '../../../ipc/environmentsIpcHandler';
 import { DBStats } from '../../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../../common/utils/formatBytes';
 import TimeIndicator from '../../TimeIndicator';
@@ -17,10 +18,18 @@ export default function Database({ environmentId }: Props) {
 
   useEffect(() => {
     async function getData() {
-      setDbInfo(await getHistoricalDatabaseInfo(environmentId));
+      setDbInfo(await getDatabaseInfo(environmentId));
     }
 
+    ipcRenderer.on(`serverSynced_${environmentId}`, async () => {
+      setDbInfo(await getDatabaseInfo(environmentId));
+    });
+
     getData();
+
+    return () => {
+      ipcRenderer.removeAllListeners(`serverSynced_${environmentId}`);
+    };
   }, [environmentId]);
 
   if (dbInfo.length === 0) {

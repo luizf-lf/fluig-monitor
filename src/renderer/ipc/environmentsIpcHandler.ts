@@ -25,6 +25,12 @@ import {
   MemoryStats,
 } from '../../main/controllers/StatisticsHistoryController';
 
+export enum SystemResourceTypes {
+  DISK = 'DISK',
+  MEMORY = 'MEMORY',
+  DATABASE = 'DATABASE',
+}
+
 export interface CreateEnvironmentProps {
   environment: EnvironmentCreateControllerInterface;
   updateSchedule: UpdateScheduleFormControllerInterface;
@@ -124,27 +130,20 @@ export async function getLastHttpResponseById(
   return lastResponse;
 }
 
-export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
-  const diskInfo = await ipcRenderer.invoke('getHistoricalDiskInfo', id);
+export async function getDiskInfo(id: number): Promise<HDStats[]> {
+  const diskInfo = await ipcRenderer.invoke('getDiskInfo', id);
 
   return diskInfo;
 }
 
-export async function getHistoricalMemoryInfo(
-  id: number
-): Promise<MemoryStats[]> {
-  const memoryInfo = await ipcRenderer.invoke('getHistoricalMemoryInfo', id);
+export async function getMemoryInfo(id: number): Promise<MemoryStats[]> {
+  const memoryInfo = await ipcRenderer.invoke('getMemoryInfo', id);
 
   return memoryInfo;
 }
 
-export async function getHistoricalDatabaseInfo(
-  id: number
-): Promise<DBStats[]> {
-  const databaseInfo = await ipcRenderer.invoke(
-    'getHistoricalDatabaseInfo',
-    id
-  );
+export async function getDatabaseInfo(id: number): Promise<DBStats[]> {
+  const databaseInfo = await ipcRenderer.invoke('getDatabaseInfo', id);
 
   return databaseInfo;
 }

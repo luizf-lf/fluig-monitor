@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
+import { ipcRenderer } from 'electron';
 import { useTranslation } from 'react-i18next';
 import { FiServer } from 'react-icons/fi';
 import ProgressBar from '../../ProgressBar';
 import SpinnerLoader from '../../Loaders/Spinner';
-import { getHistoricalMemoryInfo } from '../../../ipc/environmentsIpcHandler';
+import { getMemoryInfo } from '../../../ipc/environmentsIpcHandler';
 import { MemoryStats } from '../../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../../common/utils/formatBytes';
 import TimeIndicator from '../../TimeIndicator';
@@ -18,10 +19,18 @@ export default function Memory({ environmentId }: Props) {
 
   useEffect(() => {
     async function getData() {
-      setMemoryInfo(await getHistoricalMemoryInfo(environmentId));
+      setMemoryInfo(await getMemoryInfo(environmentId));
     }
 
+    ipcRenderer.on(`serverSynced_${environmentId}`, async () => {
+      setMemoryInfo(await getMemoryInfo(environmentId));
+    });
+
     getData();
+
+    return () => {
+      ipcRenderer.removeAllListeners(`serverSynced_${environmentId}`);
+    };
   }, [environmentId]);
 
   if (memoryInfo.length === 0) {

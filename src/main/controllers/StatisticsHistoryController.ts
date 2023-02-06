@@ -130,14 +130,14 @@ export default class StatisticsHistoryController {
     return this.created;
   }
 
-  static async getHistoricalDiskInfo(id: number): Promise<HDStats[] | []> {
+  static async getDiskInfo(id: number): Promise<HDStats[]> {
     const stats = await prismaClient.statisticsHistory.findMany({
       select: {
         systemServerHDFree: true,
         systemServerHDSize: true,
         httpResponse: true,
       },
-      take: 100,
+      take: 1,
       orderBy: {
         httpResponse: {
           timestamp: 'desc',
@@ -151,14 +151,14 @@ export default class StatisticsHistoryController {
     return stats;
   }
 
-  static async getHistoricalMemoryInfo(id: number): Promise<MemoryStats[]> {
+  static async getMemoryInfo(id: number): Promise<MemoryStats[]> {
     const stats = await prismaClient.statisticsHistory.findMany({
       select: {
         systemServerMemorySize: true,
         systemServerMemoryFree: true,
         httpResponse: true,
       },
-      take: 100,
+      take: 1,
       orderBy: {
         httpResponse: {
           timestamp: 'desc',
@@ -172,7 +172,7 @@ export default class StatisticsHistoryController {
     return stats;
   }
 
-  static async getHistoricalDatabaseInfo(id: number): Promise<DBStats[]> {
+  static async getDatabaseInfo(id: number): Promise<DBStats[]> {
     const stats = await prismaClient.statisticsHistory.findMany({
       select: {
         dbTraficRecieved: true,
@@ -180,7 +180,7 @@ export default class StatisticsHistoryController {
         dbSize: true,
         httpResponse: true,
       },
-      take: 100,
+      take: 1,
       orderBy: {
         httpResponse: {
           timestamp: 'desc',

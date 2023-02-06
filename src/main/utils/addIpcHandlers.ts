@@ -228,37 +228,33 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
-    'getHistoricalDiskInfo',
+    'getDiskInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting historical disk info');
+      log.info('IPC Handler: Getting disk info');
 
-      const diskInfo = await StatisticsHistoryController.getHistoricalDiskInfo(
-        id
-      );
+      const diskInfo = await StatisticsHistoryController.getDiskInfo(id);
 
       return diskInfo;
     }
   );
 
   ipcMain.handle(
-    'getHistoricalMemoryInfo',
+    'getMemoryInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting historical memory info');
+      log.info('IPC Handler: Getting memory info');
 
-      const memoryInfo =
-        await StatisticsHistoryController.getHistoricalMemoryInfo(id);
+      const memoryInfo = await StatisticsHistoryController.getMemoryInfo(id);
 
       return memoryInfo;
     }
   );
 
   ipcMain.handle(
-    'getHistoricalDatabaseInfo',
+    'getDatabaseInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting historical database info');
+      log.info('IPC Handler: Getting database info');
 
-      const dbInfo =
-        await StatisticsHistoryController.getHistoricalDatabaseInfo(id);
+      const dbInfo = await StatisticsHistoryController.getDatabaseInfo(id);
 
       return dbInfo;
     }

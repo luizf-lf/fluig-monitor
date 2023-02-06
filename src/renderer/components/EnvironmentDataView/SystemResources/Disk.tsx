@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
+import { ipcRenderer } from 'electron';
 import { useTranslation } from 'react-i18next';
 import { FiHardDrive } from 'react-icons/fi';
 import SpinnerLoader from '../../Loaders/Spinner';
-import { getHistoricalDiskInfo } from '../../../ipc/environmentsIpcHandler';
+import { getDiskInfo } from '../../../ipc/environmentsIpcHandler';
 import { HDStats } from '../../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../../common/utils/formatBytes';
 import ProgressBar from '../../ProgressBar';
@@ -18,10 +19,18 @@ export default function Disk({ environmentId }: Props) {
 
   useEffect(() => {
     async function getData() {
-      setDiskInfo(await getHistoricalDiskInfo(environmentId));
+      setDiskInfo(await getDiskInfo(environmentId));
     }
 
+    ipcRenderer.on(`serverSynced_${environmentId}`, async () => {
+      setDiskInfo(await getDiskInfo(environmentId));
+    });
+
     getData();
+
+    return () => {
+      ipcRenderer.removeAllListeners(`serverSynced_${environmentId}`);
+    };
   }, [environmentId]);
 
   if (diskInfo.length === 0) {
