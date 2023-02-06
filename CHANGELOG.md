@@ -1,3 +1,8 @@
+# 0.5.0-rc
+
+- Fixed system resources components not being updated
+- Changed get system resources methods to recover only the last resource
+
 # 0.4.0
 
 - Added a configurable minimize to system tray feature
