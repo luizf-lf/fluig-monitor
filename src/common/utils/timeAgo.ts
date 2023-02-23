@@ -8,17 +8,13 @@ interface TimeBlocksObject {
 }
 
 /**
- * transforms a given amount of seconds into a "time ago" string format
+ * transforms a given amount of seconds into a time block, in order to be used as a "time ago" string format
  * @example
- *  timeAgo(1036800) => "12 days ago"
+ *  timeAgo(90) => { days: 0, hours: 0, minutes: 1, seconds: 30 }
  * @since 0.1.2
  */
 export default function timeAgo(totalSeconds: number): TimeBlocksObject | null {
   try {
-    if (!totalSeconds) {
-      throw new Error('totalSeconds is required');
-    }
-
     /**
      * minutes to seconds = 60
      * hours to seconds = 3600
