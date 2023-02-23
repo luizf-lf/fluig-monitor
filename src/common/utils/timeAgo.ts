@@ -1,6 +1,6 @@
 import log from 'electron-log';
 
-interface ReturnInterface {
+interface TimeBlocksObject {
   days: number;
   hours: number;
   minutes: number;
@@ -13,7 +13,7 @@ interface ReturnInterface {
  *  timeAgo(1036800) => "12 days ago"
  * @since 0.1.2
  */
-export default function timeAgo(totalSeconds: number): ReturnInterface | null {
+export default function timeAgo(totalSeconds: number): TimeBlocksObject | null {
   try {
     if (!totalSeconds) {
       throw new Error('totalSeconds is required');
