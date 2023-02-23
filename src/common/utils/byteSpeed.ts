@@ -13,6 +13,6 @@ export default function byteSpeed(size: number, timer: number): string {
     return `${formatBytes(size / (timer / 1000))}/s`;
   } catch (error) {
     log.error(`byteSpeed -> Could not determine the byte speed: ${error}`);
-    return '0b/s';
+    return '0 Bytes/s';
   }
 }
