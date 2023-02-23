@@ -37,7 +37,7 @@ const pt = {
   },
   views: {
     CreateEnvironmentView: {
-      createdSuccessfully: 'Ambiente cadastrado com sucesso.',
+      createdSuccessfully: 'Ambiente incluído com sucesso.',
       connecting: 'Conectando ...',
       connectionError: 'Erro na conexão: ',
       connectionOk: 'Conexão Ok',
@@ -49,7 +49,7 @@ const pt = {
       unableToEncrypt:
         'Não foi possível criptografar as chaves de autenticação',
       form: {
-        title: 'Cadastrar novo ambiente',
+        title: 'Incluir um novo ambiente',
         environmentDataSection: 'Dados do ambiente',
         environmentName: {
           label: 'Nome do ambiente:',
@@ -207,7 +207,7 @@ const pt = {
     HomeEnvironmentListView: {
       header: 'Seus Ambientes',
       createEnvironmentHelper:
-        'Cadastre um novo ambiente utilizando o botão ao lado.',
+        'Inclua um novo ambiente utilizando o botão ao lado.',
     },
     EnvironmentDataContainer: {
       sideMenu: {

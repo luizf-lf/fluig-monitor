@@ -37,7 +37,7 @@ const en = {
   },
   views: {
     CreateEnvironmentView: {
-      createdSuccessfully: 'Environment created successfully',
+      createdSuccessfully: 'Environment added successfully',
       connecting: 'Connecting ...',
       connectionError: 'Connection Error: ',
       connectionOk: 'Connection Ok',
@@ -48,7 +48,7 @@ const en = {
       back: 'Back',
       unableToEncrypt: 'Unable to encrypt the authentication keys.',
       form: {
-        title: 'Create a new environment',
+        title: 'Add a new environment',
         environmentDataSection: 'Environment Info',
         environmentName: {
           label: 'Environment Name:',
@@ -202,7 +202,7 @@ const en = {
     HomeEnvironmentListView: {
       header: 'Your environments',
       createEnvironmentHelper:
-        'Register a new environment using the button on the side.',
+        'Add a new environment using the button on the side.',
     },
     EnvironmentDataContainer: {
       sideMenu: {
