@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import log from 'electron-log';
 
 /**
  * Parses a numeric or integer value into a boolean value.
@@ -9,17 +10,24 @@
  *  parseBoolean('aaa') => false
  */
 export default function parseBoolean(strBool: any): boolean {
-  if (!['int', 'string'].includes(typeof strBool)) {
+  try {
+    if (!['int', 'string'].includes(typeof strBool)) {
+      return false;
+    }
+
+    if ([0, 'false', 'FALSE'].includes(strBool)) {
+      return false;
+    }
+
+    if ([1, 'true', 'TRUE'].includes(strBool)) {
+      return true;
+    }
+
+    return false;
+  } catch (error) {
+    log.error(
+      `parseBoolean -> Could not parse the non boolean value: ${error}`
+    );
     return false;
   }
-
-  if ([0, 'false', 'FALSE'].includes(strBool)) {
-    return false;
-  }
-
-  if ([1, 'true', 'TRUE'].includes(strBool)) {
-    return true;
-  }
-
-  return false;
 }
