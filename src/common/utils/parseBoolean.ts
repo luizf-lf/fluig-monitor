@@ -2,24 +2,24 @@
 import log from 'electron-log';
 
 /**
- * Parses a numeric or integer value into a boolean value.
- * Will return false if it's a invalid value
+ * Parses a numeric or string value into a boolean value.
+ * Will return false to unknown values;
  * @example
  *  parseBoolean('true') => true
  *  parseBoolean(0) => false
- *  parseBoolean('aaa') => false
+ *  parseBoolean('sample') => false
  */
-export default function parseBoolean(strBool: any): boolean {
+export default function parseBoolean(source: any): boolean {
   try {
-    if (!['int', 'string'].includes(typeof strBool)) {
+    if (!['number', 'string'].includes(typeof source)) {
       return false;
     }
 
-    if ([0, 'false', 'FALSE'].includes(strBool)) {
+    if ([0, 'false', 'FALSE'].includes(source)) {
       return false;
     }
 
-    if ([1, 'true', 'TRUE'].includes(strBool)) {
+    if ([1, 'true', 'TRUE'].includes(source)) {
       return true;
     }
 
