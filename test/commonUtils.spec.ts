@@ -5,17 +5,17 @@ import byteSpeed from '../src/common/utils/byteSpeed';
 
 describe('Common util functions', () => {
   describe('Parse boolean util', () => {
-    it('Should parse falsy values', () => {
+    it('Parses falsy values', () => {
       expect(parseBoolean('false')).toBeFalsy();
       expect(parseBoolean('FALSE')).toBeFalsy();
       expect(parseBoolean(0)).toBeFalsy();
     });
-    it('Should parse truthy values', () => {
+    it('Parses truthy values', () => {
       expect(parseBoolean('true')).toBeTruthy();
       expect(parseBoolean('TRUE')).toBeTruthy();
       expect(parseBoolean(1)).toBeTruthy();
     });
-    it('Should return falsy to unknown values', () => {
+    it('Returns false to unknown values', () => {
       expect(parseBoolean(null)).toBeFalsy();
       expect(parseBoolean(undefined)).toBeFalsy();
       expect(parseBoolean([1, 2, 3])).toBeFalsy();
@@ -23,23 +23,23 @@ describe('Common util functions', () => {
     });
   });
 
-  describe('Time ago util', () => {
-    it('Should calculate seconds', () => {
+  describe('Relative time util', () => {
+    it('Calculates seconds', () => {
       expect(timeAgo(35)).toHaveProperty('seconds', 35);
     });
-    it('Should calculate minutes', () => {
+    it('Calculates minutes', () => {
       expect(timeAgo(130)).toHaveProperty('minutes', 2);
     });
-    it('Should calculate hours', () => {
+    it('Calculates hours', () => {
       expect(timeAgo(11000)).toHaveProperty('hours', 3);
     });
-    it('Should calculate days', () => {
+    it('Calculates days', () => {
       expect(timeAgo(300000)).toHaveProperty('days', 3);
     });
   });
 
-  describe('Format bytes util', () => {
-    it('Should format from bytes to petabytes', () => {
+  describe('Format data size util', () => {
+    it('Formats common data sizes', () => {
       expect(formatBytes(1)).toBe('1 Bytes');
       expect(formatBytes(1024)).toBe('1 KB');
       expect(formatBytes(1048576)).toBe('1 MB');
@@ -50,7 +50,7 @@ describe('Common util functions', () => {
   });
 
   describe('Bytes per seconds util', () => {
-    it('Should calculate data speed', () => {
+    it('Calculates data speed', () => {
       expect(byteSpeed(1024, 1000)).toBe('1 KB/s');
       expect(byteSpeed(1048576, 1000)).toBe('1 MB/s');
     });
