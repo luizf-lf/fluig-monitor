@@ -13,6 +13,11 @@ interface Props {
   environmentId: number;
 }
 
+/**
+ * Disk usage component.
+ * @since 0.1.4
+ * @deprecated since 0.5 in favor of DiskPanel.tsx
+ */
 export default function Disk({ environmentId }: Props) {
   const [diskInfo, setDiskInfo] = useState([] as HDStats[]);
   const { t } = useTranslation();
