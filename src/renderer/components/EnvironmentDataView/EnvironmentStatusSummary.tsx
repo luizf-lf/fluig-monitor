@@ -9,6 +9,7 @@ import '../../assets/styles/components/EnvironmentDataView/EnvironmentStatusSumm
 import Disk from './SystemResources/Disk';
 import Database from './SystemResources/Database';
 import Memory from './SystemResources/Memory';
+import DiskPanel from '../Panels/SystemResources/DiskPanel';
 
 interface Props {
   environment: EnvironmentWithHistory;
@@ -59,7 +60,7 @@ export default function EnvironmentStatusSummary({ environment }: Props) {
       <div className="components-container">
         <EnvironmentStatusCard environment={environment} />
         <div className="system-resources">
-          <Disk environmentId={environment.id} />
+          <DiskPanel />
           <Memory environmentId={environment.id} />
           <Database environmentId={environment.id} />
         </div>
