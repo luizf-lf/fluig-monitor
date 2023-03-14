@@ -421,7 +421,7 @@ export default async function syncEnvironmentsJob() {
 
           // sends a signal to the renderer with the server status as an argument
           BrowserWindow.getAllWindows().forEach((windowElement) => {
-            windowElement.webContents.send(`serverSynced_${environment.id}`, {
+            windowElement.webContents.send(`environmentDataUpdated_${environment.id}`, {
               syncJobFinished: true,
             });
           });

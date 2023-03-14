@@ -230,7 +230,7 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getDiskInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting disk info');
+      log.info(`IPC Handler: Recovering disk info for environment ${id}`);
 
       const diskInfo = await StatisticsHistoryController.getDiskInfo(id);
 
@@ -241,7 +241,7 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getMemoryInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting memory info');
+      log.info(`IPC Handler: Recovering memory info for environment ${id}`);
 
       const memoryInfo = await StatisticsHistoryController.getMemoryInfo(id);
 
@@ -252,7 +252,7 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getDatabaseInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting database info');
+      log.info(`IPC Handler: Recovering database info for environment ${id}`);
 
       const dbInfo = await StatisticsHistoryController.getDatabaseInfo(id);
 

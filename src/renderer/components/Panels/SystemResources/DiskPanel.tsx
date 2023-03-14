@@ -1,10 +1,103 @@
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
+import { FiHardDrive } from 'react-icons/fi';
+import { useTranslation } from 'react-i18next';
+import { ipcRenderer } from 'electron';
+import log from 'electron-log';
+
+import formatBytes from '../../../../common/utils/formatBytes';
+import { getDiskInfo } from '../../../ipc/environmentsIpcHandler';
+import { HDStats } from '../../../../main/controllers/StatisticsHistoryController';
+import SpinnerLoader from '../../Loaders/Spinner';
+import ProgressBar from '../../ProgressBar';
+import TimeIndicator from '../../TimeIndicator';
+
 /**
- * Self loading disk usage panel component.
+ * Environment aware self loading disk usage panel component.
+ *  Uses the useLocation hook to identify the current environment in view.
  * @since 0.5
- * // TODO: Update component to load data asynchronously using the ipc helper
  */
 function DiskPanel() {
-  return <div>DiskPanel</div>;
+  const [diskInfo, setDiskInfo] = useState<HDStats[] | null>(null);
+  const location = useLocation();
+  const { t } = useTranslation();
+  const environmentId = location.pathname.split('/')[2];
+
+  useEffect(() => {
+    async function loadDiskInfo() {
+      log.info(
+        `Loading disk data for environment ${environmentId} using the self aware component.`
+      );
+
+      const result = await getDiskInfo(Number(environmentId));
+      setDiskInfo(result);
+    }
+
+    ipcRenderer.on(`environmentDataUpdated_${environmentId}`, async () => {
+      setDiskInfo(await getDiskInfo(Number(environmentId)));
+    });
+
+    loadDiskInfo();
+    return () => {
+      ipcRenderer.removeAllListeners(`environmentDataUpdated_${environmentId}`);
+      setDiskInfo(null);
+    };
+  }, [environmentId]);
+
+  return (
+    <div className="card system-resource-card">
+      <div className="header">
+        <div className="icon-dot purple-variant">
+          <FiHardDrive />
+        </div>
+        <span className="text-purple">
+          {t('components.SystemResources.Disk.title')}
+        </span>
+      </div>
+      {diskInfo === null ? (
+        <SpinnerLoader />
+      ) : (
+        <>
+          {diskInfo.length === 0 ? (
+            <p>{t('components.global.noData')}</p>
+          ) : (
+            <>
+              <div className="body">
+                <p className="font-soft">
+                  {t('components.SystemResources.Disk.used')}
+                </p>
+                <h3>
+                  {formatBytes(
+                    Number(diskInfo[0].systemServerHDSize) -
+                      Number(diskInfo[0].systemServerHDFree)
+                  )}
+                </h3>
+                <p className="font-soft">
+                  {t('components.SystemResources.Disk.outOf')}{' '}
+                  {formatBytes(Number(diskInfo[0].systemServerHDSize))}
+                </p>
+              </div>
+              <div className="footer">
+                <ProgressBar
+                  total={Number(diskInfo[0].systemServerHDSize)}
+                  showPercentage={false}
+                  showValues={false}
+                  current={
+                    Number(diskInfo[0].systemServerHDSize) -
+                    Number(diskInfo[0].systemServerHDFree)
+                  }
+                  showIndicator={false}
+                  gradient={false}
+                />
+
+                <TimeIndicator date={diskInfo[0].httpResponse.timestamp} />
+              </div>
+            </>
+          )}
+        </>
+      )}
+    </div>
+  );
 }
 
 export default DiskPanel;
