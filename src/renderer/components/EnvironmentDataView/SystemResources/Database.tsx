@@ -21,14 +21,14 @@ export default function Database({ environmentId }: Props) {
       setDbInfo(await getDatabaseInfo(environmentId));
     }
 
-    ipcRenderer.on(`serverSynced_${environmentId}`, async () => {
+    ipcRenderer.on(`environmentDataUpdated_${environmentId}`, async () => {
       setDbInfo(await getDatabaseInfo(environmentId));
     });
 
     getData();
 
     return () => {
-      ipcRenderer.removeAllListeners(`serverSynced_${environmentId}`);
+      ipcRenderer.removeAllListeners(`environmentDataUpdated_${environmentId}`);
     };
   }, [environmentId]);
 

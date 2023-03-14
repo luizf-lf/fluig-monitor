@@ -27,14 +27,14 @@ export default function Disk({ environmentId }: Props) {
       setDiskInfo(await getDiskInfo(environmentId));
     }
 
-    ipcRenderer.on(`serverSynced_${environmentId}`, async () => {
+    ipcRenderer.on(`environmentDataUpdated_${environmentId}`, async () => {
       setDiskInfo(await getDiskInfo(environmentId));
     });
 
     getData();
 
     return () => {
-      ipcRenderer.removeAllListeners(`serverSynced_${environmentId}`);
+      ipcRenderer.removeAllListeners(`environmentDataUpdated_${environmentId}`);
     };
   }, [environmentId]);
 

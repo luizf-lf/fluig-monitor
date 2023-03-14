@@ -22,14 +22,14 @@ export default function Memory({ environmentId }: Props) {
       setMemoryInfo(await getMemoryInfo(environmentId));
     }
 
-    ipcRenderer.on(`serverSynced_${environmentId}`, async () => {
+    ipcRenderer.on(`environmentDataUpdated_${environmentId}`, async () => {
       setMemoryInfo(await getMemoryInfo(environmentId));
     });
 
     getData();
 
     return () => {
-      ipcRenderer.removeAllListeners(`serverSynced_${environmentId}`);
+      ipcRenderer.removeAllListeners(`environmentDataUpdated_${environmentId}`);
     };
   }, [environmentId]);
 
