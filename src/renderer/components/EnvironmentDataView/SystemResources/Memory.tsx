@@ -13,6 +13,10 @@ interface Props {
   environmentId: number;
 }
 
+/**
+ * Legacy Memory component indicator.
+ * @deprecated in favor of MemoryPanel
+ */
 export default function Memory({ environmentId }: Props) {
   const [memoryInfo, setMemoryInfo] = useState([] as MemoryStats[]);
   const { t } = useTranslation();

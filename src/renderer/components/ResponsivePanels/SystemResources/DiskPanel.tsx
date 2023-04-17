@@ -26,7 +26,7 @@ function DiskPanel() {
   useEffect(() => {
     async function loadDiskInfo() {
       log.info(
-        `Loading disk data for environment ${environmentId} using the self aware component.`
+        `Loading disk data for environment ${environmentId} using the responsive component.`
       );
 
       const result = await getDiskInfo(Number(environmentId));
