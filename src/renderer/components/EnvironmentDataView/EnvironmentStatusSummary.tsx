@@ -9,7 +9,7 @@ import '../../assets/styles/components/EnvironmentDataView/EnvironmentStatusSumm
 import Disk from './SystemResources/Disk';
 import Database from './SystemResources/Database';
 import Memory from './SystemResources/Memory';
-import DiskPanel from '../Panels/SystemResources/DiskPanel';
+import DiskPanel from '../ResponsivePanels/SystemResources/DiskPanel';
 
 interface Props {
   environment: EnvironmentWithHistory;
