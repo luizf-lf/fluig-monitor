@@ -4,14 +4,11 @@ import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentCo
 import EnvironmentStatusCard from './EnvironmentStatusCard';
 import SpinnerLoader from '../Loaders/Spinner';
 
-import '../../assets/styles/components/EnvironmentDataView/EnvironmentStatusSummary.scss';
-
-import Disk from './SystemResources/Disk';
-import Database from './SystemResources/Database';
-import Memory from './SystemResources/Memory';
-
 import DiskPanel from '../ResponsivePanels/SystemResources/DiskPanel';
 import MemoryPanel from '../ResponsivePanels/SystemResources/MemoryPanel';
+import DatabasePanel from '../ResponsivePanels/SystemResources/DatabasePanel';
+
+import '../../assets/styles/components/EnvironmentDataView/EnvironmentStatusSummary.scss';
 
 interface Props {
   environment: EnvironmentWithHistory;
@@ -31,9 +28,9 @@ export default function EnvironmentStatusSummary({ environment }: Props) {
         <div className="components-container">
           <div className="card">{t('components.global.noData')}</div>
           <div className="system-resources">
-            <Disk environmentId={environment.id} />
-            <Memory environmentId={environment.id} />
-            <Database environmentId={environment.id} />
+            <DiskPanel />
+            <MemoryPanel />
+            <DatabasePanel />
           </div>
         </div>
       </div>
@@ -64,7 +61,7 @@ export default function EnvironmentStatusSummary({ environment }: Props) {
         <div className="system-resources">
           <DiskPanel />
           <MemoryPanel />
-          <Database environmentId={environment.id} />
+          <DatabasePanel />
         </div>
       </div>
     </div>

@@ -12,6 +12,9 @@ interface Props {
   environmentId: number;
 }
 
+/**
+ * @deprecated in favor of DatabasePanel
+ */
 export default function Database({ environmentId }: Props) {
   const [dbInfo, setDbInfo] = useState([] as DBStats[]);
   const { t } = useTranslation();
