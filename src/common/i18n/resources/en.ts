@@ -314,7 +314,7 @@ const en = {
         title: 'Database',
         size: 'Size',
         traffic: 'Traffic',
-        trafficNotAllowed: 'Traffic not allowed',
+        trafficNotAllowed: 'Traffic not available',
       },
     },
     EnvironmentPerformanceGraph: {

@@ -320,7 +320,7 @@ const pt = {
         title: 'Banco De Dados',
         size: 'Tamanho',
         traffic: 'Tráfego',
-        trafficNotAllowed: 'Tráfego não permitido',
+        trafficNotAllowed: 'Tráfego indisponível',
       },
     },
     EnvironmentPerformanceGraph: {
