@@ -14,6 +14,7 @@ import {
 import { Link } from 'react-router-dom';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentSummary from '../components/EnvironmentDataView/EnvironmentSummary';
+import EnvironmentDatabaseContainer from '../containers/EnvironmentDatabaseContainer';
 import EditEnvironmentSettingsView from './EditEnvironmentSettingsView';
 
 import '../assets/styles/views/EnvironmentView.scss';
@@ -111,17 +112,7 @@ export default function EnvironmentView(): JSX.Element {
                 <EnvironmentSummary environmentId={Number(environmentId)} />
               }
             />
-            <Route
-              path="database"
-              element={
-                <>
-                  <h2>
-                    {t('views.EnvironmentDataContainer.sideMenu.database')}
-                  </h2>
-                  <p>{t('components.global.underDevelopment')}</p>
-                </>
-              }
-            />
+            <Route path="database" element={<EnvironmentDatabaseContainer />} />
             <Route
               path="detailedMemory"
               element={
