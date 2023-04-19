@@ -337,6 +337,10 @@ const pt = {
       insufficientOrNoData: 'Sem dados ou dados insuficientes.',
       responseTime: 'Tempo De Resposta (ms)',
     },
+    DatabaseEvolutionGraph: {
+      title: 'Armazenamento Do Banco De Dados',
+      graphTitle: 'Armazenamento ao longo do tempo',
+    },
     ThemeSettings: {
       title: 'Tema',
       helperText: 'Selecione abaixo o tema a ser utilizado pela aplicação:',

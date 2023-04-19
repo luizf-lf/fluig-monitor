@@ -4,7 +4,7 @@ import { useLocation } from 'react-router';
 import { ipcRenderer } from 'electron';
 import { FiArrowDownRight, FiArrowUpRight, FiDatabase } from 'react-icons/fi';
 
-import { DBStats } from '../../../../main/controllers/StatisticsHistoryController';
+import { DbStatistic } from '../../../../main/controllers/StatisticsHistoryController';
 import { getDatabaseInfo } from '../../../ipc/environmentsIpcHandler';
 import formatBytes from '../../../../common/utils/formatBytes';
 import TimeIndicator from '../../TimeIndicator';
@@ -16,7 +16,7 @@ import SpinnerLoader from '../../Loaders/Spinner';
  * @since 0.5
  */
 export default function DatabasePanel() {
-  const [dbInfo, setDbInfo] = useState<DBStats[] | null>(null);
+  const [dbInfo, setDbInfo] = useState<DbStatistic[] | null>(null);
   const { t } = useTranslation();
 
   const location = useLocation();

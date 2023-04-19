@@ -69,7 +69,9 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
               />
               <Tooltip
                 content={(content) => {
-                  return <EnvironmentGraphTooltip content={content} />;
+                  return (
+                    <EnvironmentGraphTooltip content={content} unit="ms" />
+                  );
                 }}
               />
               <Area

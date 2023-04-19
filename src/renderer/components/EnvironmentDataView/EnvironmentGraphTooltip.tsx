@@ -5,12 +5,14 @@ import {
 import { TooltipProps } from 'recharts/types/component/Tooltip';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentGraphTooltip.scss';
+import formatBytes from '../../../common/utils/formatBytes';
 
 interface Props {
   content: TooltipProps<ValueType, NameType>;
+  unit: string;
 }
 
-export default function EnvironmentGraphTooltip({ content }: Props) {
+export default function EnvironmentGraphTooltip({ content, unit }: Props) {
   if (content && content.active) {
     return (
       <div className="custom-graph-tooltip">
@@ -19,16 +21,22 @@ export default function EnvironmentGraphTooltip({ content }: Props) {
           {content.payload?.map((item) => {
             if (item.dataKey) {
               let dataKeyTitle = '';
-              switch (item.dataKey) {
-                case 'responseTimeMs':
+              switch (unit) {
+                case 'ms':
                   dataKeyTitle = 'Ping';
+                  break;
+                case 'bytes':
+                  dataKeyTitle = 'Tamanho';
                   break;
                 default:
                   break;
               }
               return (
                 <span key={item.dataKey}>
-                  {dataKeyTitle}: {item.payload[item.dataKey]}ms
+                  {dataKeyTitle}:{' '}
+                  {unit === 'bytes'
+                    ? formatBytes(item.payload[item.dataKey])
+                    : `${item.payload[item.dataKey]}${unit}`}
                 </span>
               );
             }

@@ -20,7 +20,7 @@ import {
   UpdateSchedule,
 } from '../../main/generated/client';
 import {
-  DBStats,
+  DbStatistic,
   DatabaseProperties,
   HDStats,
   MemoryStats,
@@ -143,7 +143,7 @@ export async function getMemoryInfo(id: number): Promise<MemoryStats[]> {
   return memoryInfo;
 }
 
-export async function getDatabaseInfo(id: number): Promise<DBStats[]> {
+export async function getDatabaseInfo(id: number): Promise<DbStatistic[]> {
   const databaseInfo = await ipcRenderer.invoke('getDatabaseInfo', id);
 
   return databaseInfo;
@@ -158,6 +158,17 @@ export async function getDatabaseProperties(
   );
 
   return databaseProperties;
+}
+
+export async function getDatabaseStatisticsHistory(
+  id: number
+): Promise<DbStatistic[]> {
+  const dbStatistics = await ipcRenderer.invoke(
+    'getDatabaseStatisticsHistory',
+    id
+  );
+
+  return dbStatistics;
 }
 
 export async function forceEnvironmentSync(): Promise<void> {

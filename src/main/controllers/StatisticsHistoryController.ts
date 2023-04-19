@@ -60,7 +60,7 @@ export interface MemoryStats {
   httpResponse: HTTPResponse;
 }
 
-export interface DBStats {
+export interface DbStatistic {
   dbTraficRecieved: bigint | null;
   dbTraficSent: bigint | null;
   dbSize: bigint | null;
@@ -180,7 +180,11 @@ export default class StatisticsHistoryController {
     return stats;
   }
 
-  static async getDatabaseInfo(id: number): Promise<DBStats[]> {
+  /**
+   * Recovers the database info as an array.
+   * @deprecated in favor of new methods (getDatabaseStatisticsHistory and getLastDatabaseStatistic)
+   */
+  static async getDatabaseInfo(id: number): Promise<DbStatistic[]> {
     const stats = await prismaClient.statisticsHistory.findMany({
       select: {
         dbTraficRecieved: true,
@@ -228,5 +232,43 @@ export default class StatisticsHistoryController {
     });
 
     return props;
+  }
+
+  /**
+   * Recovers the last 100 database statistics ordered by the http response timestamp, given the environment id.
+   * @since 0.5
+   */
+  static async getDatabaseStatisticsHistory(
+    id: number
+  ): Promise<DbStatistic[]> {
+    const statistics = await prismaClient.statisticsHistory.findMany({
+      select: {
+        dbTraficRecieved: true,
+        dbTraficSent: true,
+        dbSize: true,
+        httpResponse: true,
+      },
+      take: 100,
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return statistics;
+  }
+
+  /**
+   * Similar to getDatabaseStatisticsHistory, but returns only the latest statistic
+   * @since 0.5
+   */
+  static async getLastDatabaseStatistic(): Promise<DbStatistic | null> {
+    // TODO: Finish implementation
+
+    return null;
   }
 }

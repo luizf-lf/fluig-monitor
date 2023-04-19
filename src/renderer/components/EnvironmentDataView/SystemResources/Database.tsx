@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FiArrowDownRight, FiArrowUpRight, FiDatabase } from 'react-icons/fi';
 import SpinnerLoader from '../../Loaders/Spinner';
 import { getDatabaseInfo } from '../../../ipc/environmentsIpcHandler';
-import { DBStats } from '../../../../main/controllers/StatisticsHistoryController';
+import { DbStatistic } from '../../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../../common/utils/formatBytes';
 import TimeIndicator from '../../TimeIndicator';
 
@@ -16,7 +16,7 @@ interface Props {
  * @deprecated in favor of DatabasePanel
  */
 export default function Database({ environmentId }: Props) {
-  const [dbInfo, setDbInfo] = useState([] as DBStats[]);
+  const [dbInfo, setDbInfo] = useState([] as DbStatistic[]);
   const { t } = useTranslation();
 
   useEffect(() => {

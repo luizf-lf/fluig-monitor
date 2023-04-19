@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import globalContainerVariants from '../utils/globalContainerVariants';
 
 import DatabasePropsPanel from '../components/ResponsivePanels/DatabasePropsPanel';
-import DatabaseEvolutionGraph from '../components/ResponsivePanels/DatabaseEvolutionGraph';
+import DatabaseStorageGraph from '../components/ResponsivePanels/DatabaseStorageGraph';
 
 /**
  * Environment database info container. Has a 5 x 1 grid template.
@@ -23,7 +23,7 @@ export default function EnvironmentDatabaseContainer() {
         gap: '2rem',
       }}
     >
-      <DatabaseEvolutionGraph />
+      <DatabaseStorageGraph />
       <DatabasePropsPanel />
     </motion.div>
   );

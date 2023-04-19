@@ -331,6 +331,10 @@ const en = {
       insufficientOrNoData: 'Insufficient or no data available.',
       responseTime: 'Response Time (ms)',
     },
+    DatabaseEvolutionGraph: {
+      title: 'Database Storage',
+      graphTitle: 'Storage Over Time',
+    },
     ThemeSettings: {
       title: 'Theme',
       helperText: 'Select the theme to be used by the application bellow: ',
