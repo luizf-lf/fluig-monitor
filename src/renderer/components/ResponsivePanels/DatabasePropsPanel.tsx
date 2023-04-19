@@ -46,19 +46,15 @@ export default function DatabasePropsPanel() {
 
   useEffect(() => {
     if (dbProps && dbProps.dbName) {
-      switch (dbProps.dbName) {
-        case 'MySQL':
-          setDbIllustration(mySqlLogo);
-          break;
-        case 'Microsoft SQL Server':
-          setDbIllustration(sqlServerLogo);
-          break;
-        case 'Oracle':
-          setDbIllustration(oracleLogo);
-          break;
-        default:
-          setDbIllustration(defaultDatabaseLogo);
-          break;
+      const { dbName } = dbProps;
+      if (dbName.toLocaleLowerCase().indexOf('mysql') > -1) {
+        setDbIllustration(mySqlLogo);
+      } else if (dbName.toLocaleLowerCase().indexOf('sql server') > -1) {
+        setDbIllustration(sqlServerLogo);
+      } else if (dbName.toLocaleLowerCase().indexOf('oracle') > -1) {
+        setDbIllustration(oracleLogo);
+      } else {
+        setDbIllustration(defaultDatabaseLogo);
       }
     }
   }, [dbProps]);
