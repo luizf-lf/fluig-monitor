@@ -58,36 +58,42 @@ export default function MemoryPanel() {
         <SpinnerLoader />
       ) : (
         <>
-          <div className="body">
-            <p className="font-soft">
-              {t('components.SystemResources.Memory.used')}
-            </p>
-            <h3>
-              {formatBytes(
-                Number(memoryInfo[0].systemServerMemorySize) -
-                  Number(memoryInfo[0].systemServerMemoryFree)
-              )}
-            </h3>
-            <p className="font-soft">
-              {t('components.SystemResources.Memory.outOf')}{' '}
-              {formatBytes(Number(memoryInfo[0].systemServerMemorySize))}
-            </p>
-          </div>
-          <div className="footer">
-            <ProgressBar
-              total={Number(memoryInfo[0].systemServerMemorySize)}
-              showPercentage={false}
-              showValues={false}
-              current={
-                Number(memoryInfo[0].systemServerMemorySize) -
-                Number(memoryInfo[0].systemServerMemoryFree)
-              }
-              showIndicator={false}
-              gradient={false}
-            />
+          {memoryInfo.length === 0 ? (
+            <p>{t('components.global.noData')}</p>
+          ) : (
+            <>
+              <div className="body">
+                <p className="font-soft">
+                  {t('components.SystemResources.Memory.used')}
+                </p>
+                <h3>
+                  {formatBytes(
+                    Number(memoryInfo[0].systemServerMemorySize) -
+                      Number(memoryInfo[0].systemServerMemoryFree)
+                  )}
+                </h3>
+                <p className="font-soft">
+                  {t('components.SystemResources.Memory.outOf')}{' '}
+                  {formatBytes(Number(memoryInfo[0].systemServerMemorySize))}
+                </p>
+              </div>
+              <div className="footer">
+                <ProgressBar
+                  total={Number(memoryInfo[0].systemServerMemorySize)}
+                  showPercentage={false}
+                  showValues={false}
+                  current={
+                    Number(memoryInfo[0].systemServerMemorySize) -
+                    Number(memoryInfo[0].systemServerMemoryFree)
+                  }
+                  showIndicator={false}
+                  gradient={false}
+                />
 
-            <TimeIndicator date={memoryInfo[0].httpResponse.timestamp} />
-          </div>
+                <TimeIndicator date={memoryInfo[0].httpResponse.timestamp} />
+              </div>
+            </>
+          )}
         </>
       )}
     </div>

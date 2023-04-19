@@ -52,37 +52,43 @@ export default function DatabasePanel() {
         <SpinnerLoader />
       ) : (
         <>
-          <div className="body">
-            <p className="font-soft">
-              {t('components.SystemResources.Database.size')}
-            </p>
-            <h3>{formatBytes(Number(dbInfo[0].dbSize))}</h3>
-          </div>
-          <div className="footer">
-            {Number(dbInfo[0].dbTraficRecieved) === -1 ? (
-              <p className="font-soft font-sm">
-                {t('components.SystemResources.Database.trafficNotAllowed')}
-              </p>
-            ) : (
-              <>
+          {dbInfo.length === 0 ? (
+            <p>{t('components.global.noData')}</p>
+          ) : (
+            <>
+              <div className="body">
                 <p className="font-soft">
-                  {t('components.SystemResources.Database.traffic')}
+                  {t('components.SystemResources.Database.size')}
                 </p>
-                <div className="database-traffic-container">
-                  <div className="received text-green">
-                    <FiArrowDownRight />
-                    {formatBytes(Number(dbInfo[0].dbTraficRecieved))}
-                  </div>
-                  <div className="sent text-purple">
-                    <FiArrowUpRight />
-                    {formatBytes(Number(dbInfo[0].dbTraficSent))}
-                  </div>
-                </div>
-              </>
-            )}
+                <h3>{formatBytes(Number(dbInfo[0].dbSize))}</h3>
+              </div>
+              <div className="footer">
+                {Number(dbInfo[0].dbTraficRecieved) === -1 ? (
+                  <p className="font-soft font-sm">
+                    {t('components.SystemResources.Database.trafficNotAllowed')}
+                  </p>
+                ) : (
+                  <>
+                    <p className="font-soft">
+                      {t('components.SystemResources.Database.traffic')}
+                    </p>
+                    <div className="database-traffic-container">
+                      <div className="received text-green">
+                        <FiArrowDownRight />
+                        {formatBytes(Number(dbInfo[0].dbTraficRecieved))}
+                      </div>
+                      <div className="sent text-purple">
+                        <FiArrowUpRight />
+                        {formatBytes(Number(dbInfo[0].dbTraficSent))}
+                      </div>
+                    </div>
+                  </>
+                )}
 
-            <TimeIndicator date={dbInfo[0].httpResponse.timestamp} />
-          </div>
+                <TimeIndicator date={dbInfo[0].httpResponse.timestamp} />
+              </div>
+            </>
+          )}
         </>
       )}
     </div>
