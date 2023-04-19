@@ -316,6 +316,13 @@ const en = {
         traffic: 'Traffic',
         trafficNotAllowed: 'Traffic not available',
       },
+      DatabasePropsPanel: {
+        title: 'Database',
+        dbName: 'DBMS:',
+        dbVersion: 'Version',
+        dbDriverName: 'Driver:',
+        dbDriverVersion: 'Driver Version:',
+      },
     },
     EnvironmentPerformanceGraph: {
       title: 'Performance',

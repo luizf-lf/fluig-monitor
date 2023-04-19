@@ -2,6 +2,8 @@
 
 - Fixed system resources components not being updated
 - Changed get system resources methods to recover only the last resource
+- Updated various components to a new responsive and self loading model
+- Created the database properties dashboard (From the environment view menu)
 
 # 0.4.0
 

@@ -67,6 +67,14 @@ export interface DBStats {
   httpResponse: HTTPResponse;
 }
 
+export interface DatabaseProperties {
+  dbName: string | null;
+  dbVersion: string | null;
+  dbDriverName: string | null;
+  dbDriverVersion: string | null;
+  httpResponse: HTTPResponse;
+}
+
 export default class StatisticsHistoryController {
   created: StatisticsHistory | null;
 
@@ -192,5 +200,33 @@ export default class StatisticsHistoryController {
     });
 
     return stats;
+  }
+
+  /**
+   * Gets the latest database properties from the statistics history.
+   * @since 0.5
+   */
+  static async getDatabaseProperties(
+    id: number
+  ): Promise<DatabaseProperties | null> {
+    const props = await prismaClient.statisticsHistory.findFirst({
+      select: {
+        dbName: true,
+        dbVersion: true,
+        dbDriverName: true,
+        dbDriverVersion: true,
+        httpResponse: true,
+      },
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return props;
   }
 }

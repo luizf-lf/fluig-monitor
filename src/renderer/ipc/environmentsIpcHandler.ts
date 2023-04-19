@@ -21,6 +21,7 @@ import {
 } from '../../main/generated/client';
 import {
   DBStats,
+  DatabaseProperties,
   HDStats,
   MemoryStats,
 } from '../../main/controllers/StatisticsHistoryController';
@@ -146,6 +147,17 @@ export async function getDatabaseInfo(id: number): Promise<DBStats[]> {
   const databaseInfo = await ipcRenderer.invoke('getDatabaseInfo', id);
 
   return databaseInfo;
+}
+
+export async function getDatabaseProperties(
+  id: number
+): Promise<DatabaseProperties> {
+  const databaseProperties = await ipcRenderer.invoke(
+    'getDatabaseProperties',
+    id
+  );
+
+  return databaseProperties;
 }
 
 export async function forceEnvironmentSync(): Promise<void> {

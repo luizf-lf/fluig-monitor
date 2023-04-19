@@ -260,6 +260,19 @@ export default function addIpcHandlers(): void {
     }
   );
 
+  ipcMain.handle(
+    'getDatabaseProperties',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(`IPC Handler: Recovering database props for environment ${id}`);
+
+      const dbProps = await StatisticsHistoryController.getDatabaseProperties(
+        id
+      );
+
+      return dbProps;
+    }
+  );
+
   ipcMain.handle('forceEnvironmentSync', async () => {
     log.info('IPC Handler: Forcing all environments sync');
     await syncEnvironmentsJob();

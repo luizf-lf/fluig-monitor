@@ -322,6 +322,13 @@ const pt = {
         traffic: 'Tráfego',
         trafficNotAllowed: 'Tráfego indisponível',
       },
+      DatabasePropsPanel: {
+        title: 'Banco de dados',
+        dbName: 'SGBD:',
+        dbVersion: 'Versão',
+        dbDriverName: 'Driver:',
+        dbDriverVersion: 'Versão Do Driver:',
+      },
     },
     EnvironmentPerformanceGraph: {
       title: 'Performance',

@@ -51,7 +51,7 @@ export default function DatabaseEvolutionGraph() {
               dataKey="dbSize"
               type="number"
               domain={[0, (dataMax: number) => Math.ceil(dataMax / 250) * 250]}
-              // tickCount={9}
+              tickCount={9}
             />
             <Tooltip
               content={(content) => {
@@ -60,7 +60,7 @@ export default function DatabaseEvolutionGraph() {
             />
             <Area
               type="monotone"
-              dataKey="responseTimeMs"
+              dataKey="dbSize"
               dot={false}
               stroke="var(--purple)"
               strokeWidth={2}
