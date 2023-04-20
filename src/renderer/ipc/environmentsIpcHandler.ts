@@ -25,6 +25,7 @@ import {
   HDStats,
   MemoryStats,
 } from '../../main/controllers/StatisticsHistoryController';
+import { EnvironmentLicenseData } from '../../main/controllers/LicenseHistoryController';
 
 export enum SystemResourceTypes {
   DISK = 'DISK',
@@ -169,6 +170,17 @@ export async function getDatabaseStatisticsHistory(
   );
 
   return dbStatistics;
+}
+
+export async function getLastEnvironmentLicenseData(
+  id: number
+): Promise<EnvironmentLicenseData | null> {
+  const lastLicenseData = await ipcRenderer.invoke(
+    'getLastEnvironmentLicenseData',
+    id
+  );
+
+  return lastLicenseData;
 }
 
 export async function forceEnvironmentSync(): Promise<void> {

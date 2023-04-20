@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { EnvironmentWithHistory } from '../../../common/interfaces/EnvironmentControllerInterface';
 import { getEnvironmentHistoryById } from '../../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../../utils/globalContainerVariants';
-import EnvironmentLicenses from './EnvironmentLicenses';
+import EnvironmentLicensesPanel from '../ResponsivePanels/EnvironmentLicensesPanel';
 import EnvironmentPerformanceGraph from './EnvironmentPerformanceGraph';
 import EnvironmentServerInfo from './EnvironmentServerInfo';
 import EnvironmentServices from './EnvironmentServices';
@@ -64,7 +64,7 @@ export default function EnvironmentSummary({ environmentId }: Props) {
           endpoint={environment.baseUrl}
           statistics={environment.statisticHistory}
         />
-        <EnvironmentLicenses licenses={environment.licenseHistory} />
+        <EnvironmentLicensesPanel />
         <EnvironmentServices monitors={environment.monitorHistory} />
       </section>
     </motion.div>

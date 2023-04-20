@@ -18,6 +18,7 @@ import SettingsController, {
 } from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import UpdateScheduleController from '../controllers/UpdateScheduleController';
+import LicenseHistoryController from '../controllers/LicenseHistoryController';
 
 import pingEnvironmentsJob from '../services/pingEnvironmentsJob';
 import syncEnvironmentsJob from '../services/syncEnvironmentsJob';
@@ -284,6 +285,19 @@ export default function addIpcHandlers(): void {
         await StatisticsHistoryController.getDatabaseStatisticsHistory(id);
 
       return dbProps;
+    }
+  );
+
+  ipcMain.handle(
+    'getLastEnvironmentLicenseData',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(
+        `IPC Handler: Recovering last license data for environment ${id}`
+      );
+
+      const licenseData = await LicenseHistoryController.getLastLicenseData(id);
+
+      return licenseData;
     }
   );
 

@@ -1,5 +1,5 @@
 import log from 'electron-log';
-import { LicenseHistory } from '../generated/client';
+import { HTTPResponse, LicenseHistory } from '../generated/client';
 import prismaClient from '../database/prismaContext';
 import HttpResponseController from './HttpResponseController';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
@@ -17,6 +17,15 @@ interface LogLicenseProps {
     tenantId: number;
     totalLicenses: number;
   };
+}
+
+export interface EnvironmentLicenseData {
+  id: number;
+  activeUsers: number;
+  remainingLicenses: number;
+  totalLicenses: number;
+  tenantId: number;
+  httpResponse: HTTPResponse;
 }
 
 export default class LicenseHistoryController {
@@ -62,5 +71,34 @@ export default class LicenseHistoryController {
     });
 
     return this.created;
+  }
+
+  /**
+   * Gets the latest license data from a given environment by id.
+   * @since 0.5
+   */
+  static async getLastLicenseData(
+    environmentId: number
+  ): Promise<EnvironmentLicenseData | null> {
+    const licenseData = await prismaClient.licenseHistory.findFirst({
+      select: {
+        id: true,
+        activeUsers: true,
+        remainingLicenses: true,
+        totalLicenses: true,
+        tenantId: true,
+        httpResponse: true,
+      },
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId,
+      },
+    });
+
+    return licenseData;
   }
 }
