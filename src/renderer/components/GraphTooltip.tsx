@@ -4,15 +4,15 @@ import {
 } from 'recharts/types/component/DefaultTooltipContent';
 import { TooltipProps } from 'recharts/types/component/Tooltip';
 
-import '../../assets/styles/components/EnvironmentDataView/EnvironmentGraphTooltip.scss';
-import formatBytes from '../../../common/utils/formatBytes';
+import '../assets/styles/components/GraphTooltip.scss';
+import formatBytes from '../../common/utils/formatBytes';
 
 interface Props {
   content: TooltipProps<ValueType, NameType>;
   unit: string;
 }
 
-export default function EnvironmentGraphTooltip({ content, unit }: Props) {
+export default function GraphTooltip({ content, unit }: Props) {
   if (content && content.active) {
     return (
       <div className="custom-graph-tooltip">

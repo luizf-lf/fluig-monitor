@@ -9,7 +9,7 @@ import {
   YAxis,
 } from 'recharts';
 import SpinnerLoader from '../Loaders/Spinner';
-import EnvironmentGraphTooltip from './EnvironmentGraphTooltip';
+import GraphTooltip from '../GraphTooltip';
 import { HTTPResponse } from '../../../main/generated/client';
 
 interface Props {
@@ -69,9 +69,7 @@ export default function EnvironmentPerformanceGraph({ pings }: Props) {
               />
               <Tooltip
                 content={(content) => {
-                  return (
-                    <EnvironmentGraphTooltip content={content} unit="ms" />
-                  );
+                  return <GraphTooltip content={content} unit="ms" />;
                 }}
               />
               <Area

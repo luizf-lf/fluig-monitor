@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 import { useTranslation } from 'react-i18next';
 
-import EnvironmentGraphTooltip from '../EnvironmentDataView/EnvironmentGraphTooltip';
+import GraphTooltip from '../GraphTooltip';
 import { DbStatistic } from '../../../main/controllers/StatisticsHistoryController';
 import formatBytes from '../../../common/utils/formatBytes';
 import { getDatabaseStatisticsHistory } from '../../ipc/environmentsIpcHandler';
@@ -87,9 +87,7 @@ export default function DatabaseStorageGraph() {
             />
             <Tooltip
               content={(content) => {
-                return (
-                  <EnvironmentGraphTooltip content={content} unit="bytes" />
-                );
+                return <GraphTooltip content={content} unit="bytes" />;
               }}
             />
             <Area
