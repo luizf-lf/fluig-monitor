@@ -9,6 +9,7 @@ interface Props {
   monitors: MonitorHistoryWithHttpResponse[];
 }
 
+// TODO: Update to the self loading strategy
 export default function EnvironmentServices({ monitors }: Props) {
   const { t } = useTranslation();
 

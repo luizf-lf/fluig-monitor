@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Route, Routes, useParams } from 'react-router';
+import { Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   FiAirplay,
@@ -13,7 +13,7 @@ import {
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import globalContainerVariants from '../utils/globalContainerVariants';
-import EnvironmentSummary from '../components/EnvironmentDataView/EnvironmentSummary';
+import EnvironmentSummary from '../containers/EnvironmentSummaryContainer';
 import EnvironmentDatabaseContainer from '../containers/EnvironmentDatabaseContainer';
 import EditEnvironmentSettingsView from './EditEnvironmentSettingsView';
 
@@ -21,7 +21,6 @@ import '../assets/styles/views/EnvironmentView.scss';
 
 export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();
-  const { environmentId } = useParams();
   const [menuIsClosed, setMenuIsClosed] = useState(true);
 
   const submenuItems = [
@@ -106,12 +105,7 @@ export default function EnvironmentView(): JSX.Element {
 
         <section id="menu-content">
           <Routes>
-            <Route
-              path="summary"
-              element={
-                <EnvironmentSummary environmentId={Number(environmentId)} />
-              }
-            />
+            <Route path="summary" element={<EnvironmentSummary />} />
             <Route path="database" element={<EnvironmentDatabaseContainer />} />
             <Route
               path="detailedMemory"

@@ -16,6 +16,8 @@ interface Props {
   pings: HTTPResponse[];
 }
 
+// TODO: Update to the self loading strategy
+
 export default function EnvironmentPerformanceGraph({ pings }: Props) {
   const { t } = useTranslation();
 

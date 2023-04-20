@@ -8,6 +8,7 @@ interface Props {
   environment: EnvironmentWithHistory;
 }
 
+// TODO: Update to the self loading strategy
 export default function EnvironmentStatusCard({ environment }: Props) {
   const { t } = useTranslation();
   const lastResponse =

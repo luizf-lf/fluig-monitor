@@ -15,6 +15,7 @@ interface Props {
   statistics: StatisticsHistory[];
 }
 
+// TODO: Update to the self loading strategy
 export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
   const { t } = useTranslation();
   const [serverLogo, setServerLogo] = useState(<></>);
