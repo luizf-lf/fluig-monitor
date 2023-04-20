@@ -3,6 +3,7 @@ import {
   NameType,
 } from 'recharts/types/component/DefaultTooltipContent';
 import { TooltipProps } from 'recharts/types/component/Tooltip';
+import { useTranslation } from 'react-i18next';
 
 import '../assets/styles/components/GraphTooltip.scss';
 import formatBytes from '../../common/utils/formatBytes';
@@ -13,6 +14,8 @@ interface Props {
 }
 
 export default function GraphTooltip({ content, unit }: Props) {
+  const { t } = useTranslation();
+
   if (content && content.active) {
     return (
       <div className="custom-graph-tooltip">
@@ -23,10 +26,10 @@ export default function GraphTooltip({ content, unit }: Props) {
               let dataKeyTitle = '';
               switch (unit) {
                 case 'ms':
-                  dataKeyTitle = 'Ping';
+                  dataKeyTitle = t('components.GraphTooltip.unitTitles.ms');
                   break;
                 case 'bytes':
-                  dataKeyTitle = 'Tamanho';
+                  dataKeyTitle = t('components.GraphTooltip.unitTitles.bytes');
                   break;
                 default:
                   break;

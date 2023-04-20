@@ -398,6 +398,12 @@ const pt = {
         'Você pode utilizar o botão abaixo para ser direcionado até a página de Issues do repositório no GitHub:',
       callToAction: 'Acessar',
     },
+    GraphTooltip: {
+      unitTitles: {
+        ms: 'Tempo',
+        bytes: 'Tamanho',
+      },
+    },
   },
   classes: {
     EnvironmentFormValidator: {

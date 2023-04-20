@@ -392,6 +392,12 @@ const en = {
         'You can use the button below to be directed to the Issues page of the repository on GitHub:',
       callToAction: 'Access',
     },
+    GraphTooltip: {
+      unitTitles: {
+        ms: 'Time',
+        bytes: 'Size',
+      },
+    },
   },
   classes: {
     EnvironmentFormValidator: {
