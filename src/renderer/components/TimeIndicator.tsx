@@ -4,6 +4,7 @@ import { FiClock } from 'react-icons/fi';
 interface Props {
   date: Date;
   mode?: 'FULL' | 'COMPACT' | 'AUTO';
+  noMargin?: boolean;
 }
 
 /**
@@ -12,7 +13,11 @@ interface Props {
  *
  * If the mode property is set to AUTO, will render a full datetime when the date is not equal to the current system date.
  */
-export default function TimeIndicator({ date, mode = 'AUTO' }: Props) {
+export default function TimeIndicator({
+  date,
+  mode = 'AUTO',
+  noMargin = false,
+}: Props) {
   let dateFormat = '';
 
   switch (mode) {
@@ -33,7 +38,7 @@ export default function TimeIndicator({ date, mode = 'AUTO' }: Props) {
   }
 
   return (
-    <div className="time-indicator">
+    <div className="time-indicator" style={noMargin ? { margin: 0 } : {}}>
       <FiClock />
       {dateFormat}
     </div>

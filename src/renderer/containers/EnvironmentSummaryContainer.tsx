@@ -5,7 +5,7 @@ import EnvironmentLicensesPanel from '../components/ResponsivePanels/Environment
 import EnvironmentPerformanceGraph from '../components/EnvironmentDataView/EnvironmentPerformanceGraph';
 import EnvironmentServerInfo from '../components/EnvironmentDataView/EnvironmentServerInfo';
 import EnvironmentServices from '../components/EnvironmentDataView/EnvironmentServices';
-import EnvironmentStatusCard from '../components/EnvironmentDataView/EnvironmentStatusCard';
+import EnvironmentAvailabilityPanel from '../components/ResponsivePanels/EnvironmentAvailabilityPanel';
 import DatabasePanel from '../components/ResponsivePanels/SystemResources/DatabasePanel';
 import DiskPanel from '../components/ResponsivePanels/SystemResources/DiskPanel';
 import MemoryPanel from '../components/ResponsivePanels/SystemResources/MemoryPanel';
@@ -41,7 +41,7 @@ export default function EnvironmentSummary() {
               gap: '1rem',
             }}
           >
-            {/* <EnvironmentStatusCard /> */}
+            <EnvironmentAvailabilityPanel />
             <div
               style={{
                 display: 'flex',

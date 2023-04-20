@@ -321,7 +321,7 @@
 }
 
 .time-indicator {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   font-size: 0.75rem;
   color: var(--font-soft);
   font-weight: normal;
@@ -331,7 +331,7 @@
   justify-content: end;
 
   gap: 0.25rem;
-  width: 100%;
+  // width: 100%;
 
   svg {
     font-size: 0.75rem;
