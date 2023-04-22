@@ -215,10 +215,6 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getLastHttpResponseFromEnvironment',
     async (_event: Electron.IpcMainInvokeEvent, environmentId: number) => {
-      log.info(
-        `IPC Handler: Recovering last HTTP Response from environment ${environmentId}`
-      );
-
       const lastResponse =
         await new EnvironmentController().getLastHttpResponseById(
           environmentId
