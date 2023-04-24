@@ -132,6 +132,17 @@ export async function getLastHttpResponseById(
   return lastResponse;
 }
 
+export async function getHttpResponsesById(
+  environmentId: number
+): Promise<HTTPResponse[]> {
+  const responses = await ipcRenderer.invoke(
+    'getHttpResponsesById',
+    environmentId
+  );
+
+  return responses;
+}
+
 export async function getDiskInfo(id: number): Promise<HDStats[]> {
   const diskInfo = await ipcRenderer.invoke('getDiskInfo', id);
 

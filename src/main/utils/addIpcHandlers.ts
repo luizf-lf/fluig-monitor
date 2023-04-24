@@ -76,6 +76,17 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
+    'getHttpResponsesById',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      const responses = await new EnvironmentController().getHttpResponsesById(
+        id
+      );
+
+      return responses;
+    }
+  );
+
+  ipcMain.handle(
     'getEnvironmentHistoryById',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
       const environment = await new EnvironmentController().getHistoryById(id);
