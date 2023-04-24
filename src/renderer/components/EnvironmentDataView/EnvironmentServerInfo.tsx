@@ -1,101 +1,132 @@
 import { useEffect, useState } from 'react';
+import { ipcRenderer } from 'electron';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FiClock, FiCpu, FiDatabase, FiServer } from 'react-icons/fi';
-import { StatisticsHistory } from '../../../main/generated/client';
+
 import DynamicImageLoad from '../DynamicImageLoad';
 import defaultServerLogo from '../../assets/img/defaultServerLogo.png';
-import SpinnerLoader from '../Loaders/Spinner';
 import formatBytes from '../../../common/utils/formatBytes';
 import timeAgo from '../../../common/utils/timeAgo';
+import { EnvironmentServerData } from '../../../common/interfaces/EnvironmentControllerInterface';
+import { getEnvironmentServerData } from '../../ipc/environmentsIpcHandler';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentServerInfo.scss';
+import TimeIndicator from '../TimeIndicator';
 
-interface Props {
-  endpoint: string;
-  statistics: StatisticsHistory[];
-}
-
-// TODO: Update to the self loading strategy
-export default function EnvironmentServerInfo({ endpoint, statistics }: Props) {
+export default function EnvironmentServerInfo() {
   const { t } = useTranslation();
-  const [serverLogo, setServerLogo] = useState(<></>);
+  const [serverData, setServerData] = useState<EnvironmentServerData | null>(
+    null
+  );
+
+  const [cardData, setCardData] = useState(<></>);
+
+  const location = useLocation();
+  const environmentId = location.pathname.split('/')[2];
 
   useEffect(() => {
-    setServerLogo(
-      <DynamicImageLoad
-        imgSrc={`${endpoint}/portal/api/servlet/image/1/custom/logo_image.png`}
-        altName="Logo"
-        fallback={defaultServerLogo}
-      />
-    );
-  }, [endpoint]);
+    async function loadServerData() {
+      setServerData(await getEnvironmentServerData(Number(environmentId)));
+    }
 
-  if (typeof statistics === 'undefined' || typeof endpoint === 'undefined') {
-    return <SpinnerLoader />;
-  }
-  const uptime =
-    statistics.length > 0 ? timeAgo(Number(statistics[0].systemUptime)) : null;
+    ipcRenderer.on(`environmentDataUpdated_${environmentId}`, () => {
+      loadServerData();
+    });
+
+    loadServerData();
+
+    return () => {
+      ipcRenderer.removeAllListeners(`environmentDataUpdated_${environmentId}`);
+      setServerData(null);
+    };
+  }, [environmentId]);
+
+  useEffect(() => {
+    const uptime = serverData
+      ? timeAgo(Number(serverData.statisticHistory[0].systemUptime))
+      : null;
+
+    setCardData(
+      serverData ? (
+        <>
+          <div className="image-container">
+            <DynamicImageLoad
+              imgSrc={`${serverData.baseUrl}/portal/api/servlet/image/1/custom/logo_image.png`}
+              altName="Logo"
+              fallback={defaultServerLogo}
+            />
+          </div>
+          <div id="server-specs">
+            <div className="specs-item">
+              <FiCpu />
+              <div className="spec-description">
+                <span>{t('components.EnvironmentServerInfo.processor')}</span>
+                <span>
+                  {serverData.statisticHistory[0].systemServerCoreCount} core
+                </span>
+              </div>
+            </div>
+            <div className="specs-item">
+              <FiServer />
+              <div className="spec-description">
+                <span>{t('components.EnvironmentServerInfo.memory')}</span>
+                <span>
+                  {formatBytes(
+                    Number(
+                      serverData.statisticHistory[0].systemServerMemorySize
+                    )
+                  )}
+                </span>
+              </div>
+            </div>
+            <div className="specs-item">
+              <FiDatabase />
+              <div className="spec-description">
+                <span>{t('components.EnvironmentServerInfo.disk')}</span>
+                <span>
+                  {formatBytes(
+                    Number(serverData.statisticHistory[0].systemServerHDSize)
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div id="uptime">
+            <div className="specs-item">
+              <FiClock />
+              <div className="spec-description">
+                <span>
+                  {t('components.EnvironmentServerInfo.activityTime')}
+                </span>
+                <span>
+                  {uptime !== null
+                    ? t(
+                        'components.EnvironmentServerInfo.activityTimeDescription'
+                      )
+                        .replace('%days%', String(uptime.days))
+                        .replace('%hours%', String(uptime.hours))
+                        .replace('%minutes%', String(uptime.minutes))
+                        .replace('%seconds%', String(uptime.seconds))
+                    : ''}
+                </span>
+              </div>
+            </div>
+          </div>
+          <TimeIndicator
+            date={serverData.statisticHistory[0].httpResponse.timestamp}
+          />
+        </>
+      ) : (
+        <span>{t('components.global.noData')}</span>
+      )
+    );
+  }, [serverData, t]);
 
   return (
     <div className="widget-container" id="environment-server-info">
       <h3 className="title">{t('components.EnvironmentServerInfo.title')}</h3>
-      <div className="widget-card">
-        {statistics.length > 0 ? (
-          <>
-            <div className="image-container">{serverLogo}</div>
-            <div id="server-specs">
-              <div className="specs-item">
-                <FiCpu />
-                <div className="spec-description">
-                  <span>{t('components.EnvironmentServerInfo.processor')}</span>
-                  <span>{statistics[0].systemServerCoreCount} core</span>
-                </div>
-              </div>
-              <div className="specs-item">
-                <FiServer />
-                <div className="spec-description">
-                  <span>{t('components.EnvironmentServerInfo.memory')}</span>
-                  <span>
-                    {formatBytes(Number(statistics[0].systemServerMemorySize))}
-                  </span>
-                </div>
-              </div>
-              <div className="specs-item">
-                <FiDatabase />
-                <div className="spec-description">
-                  <span>{t('components.EnvironmentServerInfo.disk')}</span>
-                  <span>
-                    {formatBytes(Number(statistics[0].systemServerHDSize))}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div id="uptime">
-              <div className="specs-item">
-                <FiClock />
-                <div className="spec-description">
-                  <span>
-                    {t('components.EnvironmentServerInfo.activityTime')}
-                  </span>
-                  <span>
-                    {uptime !== null
-                      ? t(
-                          'components.EnvironmentServerInfo.activityTimeDescription'
-                        )
-                          .replace('%days%', String(uptime.days))
-                          .replace('%hours%', String(uptime.hours))
-                          .replace('%minutes%', String(uptime.minutes))
-                          .replace('%seconds%', String(uptime.seconds))
-                      : ''}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : (
-          <span>{t('components.global.noData')}</span>
-        )}
-      </div>
+      <div className="widget-card">{cardData}</div>
     </div>
   );
 }

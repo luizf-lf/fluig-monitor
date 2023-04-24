@@ -61,7 +61,7 @@ export default function EnvironmentSummary() {
       </section>
 
       <section id="server-info">
-        {/* <EnvironmentServerInfo /> */}
+        <EnvironmentServerInfo />
         <EnvironmentLicensesPanel />
         {/* <EnvironmentServices /> */}
       </section>
