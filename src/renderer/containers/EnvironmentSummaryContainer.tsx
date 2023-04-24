@@ -57,7 +57,7 @@ export default function EnvironmentSummary() {
             </div>
           </div>
         </div>
-        {/* <EnvironmentPerformanceGraph /> */}
+        <EnvironmentPerformanceGraph />
       </section>
 
       <section id="server-info">
