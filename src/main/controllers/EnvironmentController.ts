@@ -2,6 +2,7 @@ import log from 'electron-log';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 import {
   EnvironmentCreateControllerInterface,
+  EnvironmentServerData,
   EnvironmentUpdateControllerInterface,
   EnvironmentWithHistory,
   EnvironmentWithRelatedData,
@@ -202,6 +203,31 @@ export default class EnvironmentController {
     });
 
     return this.httpResponses;
+  }
+
+  static async getEnvironmentServerData(
+    id: number
+  ): Promise<EnvironmentServerData | null> {
+    const serverData = await prismaClient.environment.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        statisticHistory: {
+          take: 1,
+          include: {
+            httpResponse: true,
+          },
+          orderBy: {
+            httpResponse: {
+              timestamp: 'desc',
+            },
+          },
+        },
+      },
+    });
+
+    return serverData;
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {

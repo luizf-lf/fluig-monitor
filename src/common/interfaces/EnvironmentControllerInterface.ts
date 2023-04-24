@@ -34,6 +34,10 @@ export interface EnvironmentWithHistory extends Environment {
   httpResponses: HTTPResponse[];
 }
 
+export interface EnvironmentServerData extends Environment {
+  statisticHistory: StatisticsHistoryWithHttpResponse[];
+}
+
 export interface LicenseHistoryWithHttpResponse extends LicenseHistory {
   httpResponse: HTTPResponse;
 }
