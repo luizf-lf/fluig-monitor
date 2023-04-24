@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentLicensesPanel from '../components/ResponsivePanels/EnvironmentLicensesPanel';
-import EnvironmentPerformanceGraph from '../components/EnvironmentDataView/EnvironmentPerformanceGraph';
-import EnvironmentServerInfo from '../components/EnvironmentDataView/EnvironmentServerInfo';
+import EnvironmentPerformanceGraph from '../components/ResponsivePanels/EnvironmentPerformanceGraph';
+import EnvironmentServerInfo from '../components/ResponsivePanels/EnvironmentServerInfo';
 import EnvironmentServices from '../components/EnvironmentDataView/EnvironmentServices';
 import EnvironmentAvailabilityPanel from '../components/ResponsivePanels/EnvironmentAvailabilityPanel';
 import DatabasePanel from '../components/ResponsivePanels/SystemResources/DatabasePanel';
