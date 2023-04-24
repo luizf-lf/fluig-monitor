@@ -105,6 +105,14 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
+    'getEnvironmentServices',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      const services = await EnvironmentController.getEnvironmentServices(id);
+      return services;
+    }
+  );
+
+  ipcMain.handle(
     'createEnvironment',
     async (
       _event: Electron.IpcMainInvokeEvent,

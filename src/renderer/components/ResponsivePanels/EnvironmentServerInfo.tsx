@@ -12,7 +12,6 @@ import { EnvironmentServerData } from '../../../common/interfaces/EnvironmentCon
 import { getEnvironmentServerData } from '../../ipc/environmentsIpcHandler';
 
 import '../../assets/styles/components/EnvironmentDataView/EnvironmentServerInfo.scss';
-import TimeIndicator from '../TimeIndicator';
 
 export default function EnvironmentServerInfo() {
   const { t } = useTranslation();
@@ -113,9 +112,6 @@ export default function EnvironmentServerInfo() {
               </div>
             </div>
           </div>
-          <TimeIndicator
-            date={serverData.statisticHistory[0].httpResponse.timestamp}
-          />
         </>
       ) : (
         <span>{t('components.global.noData')}</span>

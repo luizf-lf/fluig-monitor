@@ -6,6 +6,7 @@ import {
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentServerData,
+  EnvironmentServices,
   EnvironmentUpdateControllerInterface,
   EnvironmentWithHistory,
   EnvironmentWithRelatedData,
@@ -153,6 +154,17 @@ export async function getEnvironmentServerData(
   );
 
   return serverData;
+}
+
+export async function getEnvironmentServices(
+  environmentId: number
+): Promise<EnvironmentServices | null> {
+  const services = await ipcRenderer.invoke(
+    'getEnvironmentServices',
+    environmentId
+  );
+
+  return services;
 }
 
 export async function getDiskInfo(id: number): Promise<HDStats[]> {

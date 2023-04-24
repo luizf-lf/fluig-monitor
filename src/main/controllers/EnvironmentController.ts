@@ -3,6 +3,7 @@ import HttpResponseResourceType from '../../common/interfaces/HttpResponseResour
 import {
   EnvironmentCreateControllerInterface,
   EnvironmentServerData,
+  EnvironmentServices,
   EnvironmentUpdateControllerInterface,
   EnvironmentWithHistory,
   EnvironmentWithRelatedData,
@@ -228,6 +229,31 @@ export default class EnvironmentController {
     });
 
     return serverData;
+  }
+
+  static async getEnvironmentServices(
+    id: number
+  ): Promise<EnvironmentServices | null> {
+    const servicesData = await prismaClient.environment.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        monitorHistory: {
+          take: 1,
+          include: {
+            httpResponse: true,
+          },
+          orderBy: {
+            httpResponse: {
+              timestamp: 'desc',
+            },
+          },
+        },
+      },
+    });
+
+    return servicesData;
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {

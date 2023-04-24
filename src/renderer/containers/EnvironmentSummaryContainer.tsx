@@ -4,7 +4,7 @@ import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentLicensesPanel from '../components/ResponsivePanels/EnvironmentLicensesPanel';
 import EnvironmentPerformanceGraph from '../components/ResponsivePanels/EnvironmentPerformanceGraph';
 import EnvironmentServerInfo from '../components/ResponsivePanels/EnvironmentServerInfo';
-import EnvironmentServices from '../components/EnvironmentDataView/EnvironmentServices';
+import EnvironmentServicesPanel from '../components/ResponsivePanels/EnvironmentServicesPanel';
 import EnvironmentAvailabilityPanel from '../components/ResponsivePanels/EnvironmentAvailabilityPanel';
 import DatabasePanel from '../components/ResponsivePanels/SystemResources/DatabasePanel';
 import DiskPanel from '../components/ResponsivePanels/SystemResources/DiskPanel';
@@ -63,7 +63,7 @@ export default function EnvironmentSummary() {
       <section id="server-info">
         <EnvironmentServerInfo />
         <EnvironmentLicensesPanel />
-        {/* <EnvironmentServices /> */}
+        <EnvironmentServicesPanel />
       </section>
     </motion.div>
   );
