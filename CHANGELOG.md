@@ -4,6 +4,9 @@
 - Changed get system resources methods to recover only the last resource
 - Updated all data dependent components to a new responsive and self loading model (load data independently from layout)
 - Created the database properties dashboard (From the environment view menu)
+- Added a compatibility layer for Fluig 1.6.5 (Liquid) with version validation.
+- Updated project structure.
+- Updated language files to json format.
 
 # 0.4.0
 

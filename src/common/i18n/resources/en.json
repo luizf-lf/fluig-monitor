@@ -44,6 +44,7 @@
       "connectionUnavailable": "Connection Error. Check the domain Url and the server availability.",
       "authFieldsValidation": "Fill the url and authentication fields before continuing.",
       "back": "Back",
+      "unsupportedFluigRelease": "This Fluig release (%release%) is not compatible with Fluig Monitor",
       "unableToEncrypt": "Unable to encrypt the authentication keys.",
       "form": {
         "title": "Add a new environment",

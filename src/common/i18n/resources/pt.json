@@ -44,6 +44,7 @@
       "connectionUnavailable": "Erro de conexão. Verifique a URL de domínio e a disponibilidade do servidor.",
       "authFieldsValidation": "Preencha os campos de URL e autenticação para continuar.",
       "back": "Voltar",
+      "unsupportedFluigRelease": "Esta release do Fluig (%release%) não é compatível com o Fluig Monitor",
       "unableToEncrypt": "Não foi possível criptografar as chaves de autenticação",
       "form": {
         "title": "Incluir um novo ambiente",

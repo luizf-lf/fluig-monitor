@@ -27,6 +27,7 @@ import {
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
+import compareSemver from '../../common/utils/compareSemver';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -202,6 +203,27 @@ export default function CreateEnvironmentView(): JSX.Element {
         }
 
         log.info(`Current environment release is ${fluigRelease}`);
+
+        // checks if the current fluig version is incompatible (lower than release 1.6.5)
+        if (
+          fluigRelease === 'unknown' ||
+          compareSemver(fluigRelease.split('-')[0], '1.6.5') === -1
+        ) {
+          log.warn(`Incompatible Fluig version detected: ${fluigRelease}`);
+          createShortNotification(
+            {
+              id: Date.now(),
+              type: 'error',
+              message: t(
+                'views.CreateEnvironmentView.unsupportedFluigRelease'
+              ).replace('%release%', fluigRelease),
+            },
+            10000
+          );
+          setButtonIsLoading(false);
+          setActionButtonsDisabled(false);
+          return;
+        }
 
         let environmentAuthKeys = {
           payload: '',
