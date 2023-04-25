@@ -2,6 +2,7 @@ import parseBoolean from '../src/common/utils/parseBoolean';
 import timeAgo from '../src/common/utils/timeAgo';
 import formatBytes from '../src/common/utils/formatBytes';
 import byteSpeed from '../src/common/utils/byteSpeed';
+import compareSemver from '../src/common/utils/compareSemver';
 
 describe('Common util functions', () => {
   describe('Parse boolean util', () => {
@@ -53,6 +54,16 @@ describe('Common util functions', () => {
     it('Calculates data speed', () => {
       expect(byteSpeed(1024, 1000)).toBe('1 KB/s');
       expect(byteSpeed(1048576, 1000)).toBe('1 MB/s');
+    });
+  });
+
+  describe('Compare semantic version util', () => {
+    it('Compares versions correctly', () => {
+      expect(compareSemver('1.7.0', '1.6.5')).toBe(1);
+      expect(compareSemver('1.6.1', '1.6.5')).toBe(-1);
+      expect(compareSemver('1.8.0', '1.8.0')).toBe(0);
+      expect(compareSemver('1.8.0', '1.7.1')).toBe(1);
+      expect(compareSemver('1.5.7', '1.5.14')).toBe(-1);
     });
   });
 });
