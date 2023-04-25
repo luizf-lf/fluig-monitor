@@ -42,9 +42,12 @@ export default function EnvironmentServerInfo() {
   }, [environmentId]);
 
   useEffect(() => {
-    const uptime = serverData
-      ? timeAgo(Number(serverData.statisticHistory[0].systemUptime))
-      : null;
+    const uptime =
+      serverData &&
+      serverData.statisticHistory.length > 0 &&
+      serverData.statisticHistory[0].systemUptime
+        ? timeAgo(Number(serverData.statisticHistory[0].systemUptime))
+        : null;
 
     setCardData(
       serverData ? (
@@ -56,62 +59,77 @@ export default function EnvironmentServerInfo() {
               fallback={defaultServerLogo}
             />
           </div>
-          <div id="server-specs">
-            <div className="specs-item">
-              <FiCpu />
-              <div className="spec-description">
-                <span>{t('components.EnvironmentServerInfo.processor')}</span>
-                <span>
-                  {serverData.statisticHistory[0].systemServerCoreCount} core
-                </span>
+          {uptime != null ? (
+            <>
+              <div id="server-specs">
+                <div className="specs-item">
+                  <FiCpu />
+                  <div className="spec-description">
+                    <span>
+                      {t('components.EnvironmentServerInfo.processor')}
+                    </span>
+                    <span>
+                      {serverData.statisticHistory[0].systemServerCoreCount}{' '}
+                      core
+                    </span>
+                  </div>
+                </div>
+                <div className="specs-item">
+                  <FiServer />
+                  <div className="spec-description">
+                    <span>{t('components.EnvironmentServerInfo.memory')}</span>
+                    <span>
+                      {formatBytes(
+                        Number(
+                          serverData.statisticHistory[0].systemServerMemorySize
+                        )
+                      )}
+                    </span>
+                  </div>
+                </div>
+                <div className="specs-item">
+                  <FiDatabase />
+                  <div className="spec-description">
+                    <span>{t('components.EnvironmentServerInfo.disk')}</span>
+                    <span>
+                      {formatBytes(
+                        Number(
+                          serverData.statisticHistory[0].systemServerHDSize
+                        )
+                      )}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="specs-item">
-              <FiServer />
-              <div className="spec-description">
-                <span>{t('components.EnvironmentServerInfo.memory')}</span>
-                <span>
-                  {formatBytes(
-                    Number(
-                      serverData.statisticHistory[0].systemServerMemorySize
-                    )
-                  )}
-                </span>
+              <div id="uptime">
+                <div className="specs-item">
+                  <FiClock />
+                  <div className="spec-description">
+                    <span>
+                      {t('components.EnvironmentServerInfo.activityTime')}
+                    </span>
+                    <span>
+                      {uptime !== null
+                        ? t(
+                            'components.EnvironmentServerInfo.activityTimeDescription'
+                          )
+                            .replace('%days%', String(uptime.days))
+                            .replace('%hours%', String(uptime.hours))
+                            .replace('%minutes%', String(uptime.minutes))
+                            .replace('%seconds%', String(uptime.seconds))
+                        : ''}
+                    </span>
+                  </div>
+                </div>
               </div>
+            </>
+          ) : (
+            <div className="text-center">
+              <span className="text-soft">
+                {t('components.EnvironmentServerInfo.noDataDueToVersion')}
+              </span>
             </div>
-            <div className="specs-item">
-              <FiDatabase />
-              <div className="spec-description">
-                <span>{t('components.EnvironmentServerInfo.disk')}</span>
-                <span>
-                  {formatBytes(
-                    Number(serverData.statisticHistory[0].systemServerHDSize)
-                  )}
-                </span>
-              </div>
-            </div>
-          </div>
-          <div id="uptime">
-            <div className="specs-item">
-              <FiClock />
-              <div className="spec-description">
-                <span>
-                  {t('components.EnvironmentServerInfo.activityTime')}
-                </span>
-                <span>
-                  {uptime !== null
-                    ? t(
-                        'components.EnvironmentServerInfo.activityTimeDescription'
-                      )
-                        .replace('%days%', String(uptime.days))
-                        .replace('%hours%', String(uptime.hours))
-                        .replace('%minutes%', String(uptime.minutes))
-                        .replace('%seconds%', String(uptime.seconds))
-                    : ''}
-                </span>
-              </div>
-            </div>
-          </div>
+          )}
         </>
       ) : (
         <span>{t('components.global.noData')}</span>

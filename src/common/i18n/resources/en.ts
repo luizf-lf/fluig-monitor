@@ -274,6 +274,7 @@ const en = {
       disk: 'Disk',
       activityTime: 'System Uptime',
       activityTimeDescription: '%days% days, %hours% hours, %minutes% minutes',
+      noDataDueToVersion: 'Server data unavailable due to Fluig version.',
     },
     EnvironmentServices: {
       title: 'Services',

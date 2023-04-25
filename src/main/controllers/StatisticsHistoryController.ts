@@ -35,17 +35,17 @@ interface CreateStatisticHistoryProps {
   threadingDaemonCount: number;
   threadingTotalStarted: number;
   detailedMemory: string;
-  systemServerMemorySize: number;
-  systemServerMemoryFree: number;
-  systemServerHDSize: string;
-  systemServerHDFree: string;
-  systemServerCoreCount: number;
-  systemServerArch: string;
-  systemTmpFolderSize: number;
-  systemLogFolderSize: number;
-  systemHeapMaxSize: number;
-  systemHeapSize: number;
-  systemUptime: number;
+  systemServerMemorySize: number | null;
+  systemServerMemoryFree: number | null;
+  systemServerHDSize: string | null;
+  systemServerHDFree: string | null;
+  systemServerCoreCount: number | null;
+  systemServerArch: string | null;
+  systemTmpFolderSize: number | null;
+  systemLogFolderSize: number | null;
+  systemHeapMaxSize: number | null;
+  systemHeapSize: number | null;
+  systemUptime: number | null;
 }
 
 export interface HDStats {

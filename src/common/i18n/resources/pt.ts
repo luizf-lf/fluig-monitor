@@ -280,6 +280,8 @@ const pt = {
       disk: 'Disco',
       activityTime: 'Tempo De Atividade',
       activityTimeDescription: '%days% dias, %hours% horas, %minutes% minutos',
+      noDataDueToVersion:
+        'Dados do servidor indisponíveis para esta versão do Fluig.',
     },
     EnvironmentServices: {
       title: 'Serviços',
