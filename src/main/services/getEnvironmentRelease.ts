@@ -1,16 +1,12 @@
 import log from 'electron-log';
 import AuthObject from '../../common/interfaces/AuthObject';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
-
-export interface V2VersionApiResponse {
-  content: string;
-  message: string | null;
-}
+import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
 
 export default async function getEnvironmentRelease(
   auth: AuthObject,
   domainUrl: string
-): Promise<V2VersionApiResponse | null> {
+): Promise<FluigVersionApiInterface | null> {
   try {
     if (!auth || !domainUrl) {
       throw new Error('Required parameters were not provided');

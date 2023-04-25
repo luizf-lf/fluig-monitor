@@ -27,14 +27,13 @@ import { CreateEnvironmentProps } from '../../renderer/ipc/environmentsIpcHandle
 
 import { isDevelopment, logStringFormat } from './globalConstants';
 import validateOAuthPermission from '../services/validateOAuthPermission';
-import getEnvironmentRelease, {
-  V2VersionApiResponse,
-} from '../services/getEnvironmentRelease';
+import getEnvironmentRelease from '../services/getEnvironmentRelease';
 import AuthObject from '../../common/interfaces/AuthObject';
 import i18n from '../../common/i18n/i18n';
 import AppUpdater, {
   AppUpdaterConstructorOptions,
 } from '../classes/AppUpdater';
+import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -356,7 +355,7 @@ export default function addIpcHandlers(): void {
       _event: Electron.IpcMainInvokeEvent,
       auth: AuthObject,
       domainUrl: string
-    ): Promise<V2VersionApiResponse | null> => {
+    ): Promise<FluigVersionApiInterface | null> => {
       log.info('IPC Handler: Getting the environment release');
       const result = await getEnvironmentRelease(auth, domainUrl);
 

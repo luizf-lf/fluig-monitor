@@ -15,12 +15,14 @@ import log from 'electron-log';
 import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 import { useNotifications } from '../contexts/NotificationsContext';
 import {
   createEnvironment,
   forceEnvironmentPing,
   forceEnvironmentSync,
+  getEnvironmentReleaseIPC,
 } from '../ipc/environmentsIpcHandler';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
@@ -133,6 +135,8 @@ export default function CreateEnvironmentView(): JSX.Element {
     log.info('CreateEnvironmentView: handling form submit.');
     event.preventDefault();
 
+    const fluigVersionRegex = /\d+\.\d+\.\d+/g;
+
     const formData = {
       name,
       baseUrl: domainUrl,
@@ -174,8 +178,8 @@ export default function CreateEnvironmentView(): JSX.Element {
           (i: { httpStatus: number }) => i.httpStatus === 200
         )
       ) {
-        let release = await ipcRenderer.invoke(
-          'getEnvironmentRelease',
+        let fluigRelease = 'unknown';
+        const releaseResponse = await getEnvironmentReleaseIPC(
           {
             consumerKey,
             consumerSecret,
@@ -185,13 +189,19 @@ export default function CreateEnvironmentView(): JSX.Element {
           domainUrl
         );
 
-        if (release) {
-          release = release.content.split(' - ')[1];
-        } else {
-          release = 'unknown';
+        if (releaseResponse && releaseResponse.content) {
+          const regexSearchIndex =
+            releaseResponse.content.search(fluigVersionRegex);
+
+          if (regexSearchIndex > -1) {
+            fluigRelease = releaseResponse.content.slice(
+              regexSearchIndex,
+              releaseResponse.content.length
+            );
+          }
         }
 
-        log.info(`Current environment release is ${release}`);
+        log.info(`Current environment release is ${fluigRelease}`);
 
         let environmentAuthKeys = {
           payload: '',
@@ -229,7 +239,7 @@ export default function CreateEnvironmentView(): JSX.Element {
             baseUrl: formData.baseUrl,
             kind: formData.kind,
             name: formData.name,
-            release,
+            release: fluigRelease,
           },
           updateSchedule: formData.updateSchedule,
           environmentAuthKeys,

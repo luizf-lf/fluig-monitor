@@ -28,6 +28,8 @@ import {
   MemoryStats,
 } from '../../main/controllers/StatisticsHistoryController';
 import { EnvironmentLicenseData } from '../../main/controllers/LicenseHistoryController';
+import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
+import AuthObject from '../../common/interfaces/AuthObject';
 
 export enum SystemResourceTypes {
   DISK = 'DISK',
@@ -78,6 +80,22 @@ export async function getEnvironmentHistoryById(
   }
   const environment = ipcRenderer.invoke('getEnvironmentHistoryById', id);
   return environment;
+}
+
+/**
+ * (ipcRenderer) Gets the environment release from the api using the `/api/public/wcm/version/v2` endpoint
+ */
+export async function getEnvironmentReleaseIPC(
+  auth: AuthObject,
+  baseUrl: string
+): Promise<FluigVersionApiInterface | null> {
+  const release = await ipcRenderer.invoke(
+    'getEnvironmentRelease',
+    auth,
+    baseUrl
+  );
+
+  return release;
 }
 
 export async function createEnvironment({
