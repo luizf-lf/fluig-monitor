@@ -1,8 +1,8 @@
-import parseBoolean from '../src/common/utils/parseBoolean';
-import timeAgo from '../src/common/utils/timeAgo';
-import formatBytes from '../src/common/utils/formatBytes';
-import byteSpeed from '../src/common/utils/byteSpeed';
-import compareSemver from '../src/common/utils/compareSemver';
+import parseBoolean from '../../src/common/utils/parseBoolean';
+import timeAgo from '../../src/common/utils/timeAgo';
+import formatBytes from '../../src/common/utils/formatBytes';
+import byteSpeed from '../../src/common/utils/byteSpeed';
+import compareSemver from '../../src/common/utils/compareSemver';
 
 describe('Common util functions', () => {
   describe('Parse boolean util', () => {
