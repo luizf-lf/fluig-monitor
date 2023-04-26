@@ -266,9 +266,27 @@ export default class StatisticsHistoryController {
    * Similar to getDatabaseStatisticsHistory, but returns only the latest statistic
    * @since 0.5
    */
-  static async getLastDatabaseStatistic(): Promise<DbStatistic | null> {
-    // TODO: Finish implementation
+  static async getLastDatabaseStatistic(
+    id: number
+  ): Promise<DbStatistic | null> {
+    const statistic = await prismaClient.statisticsHistory.findFirst({
+      select: {
+        dbTraficRecieved: true,
+        dbTraficSent: true,
+        dbSize: true,
+        httpResponse: true,
+      },
+      take: 100,
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
 
-    return null;
+    return statistic;
   }
 }

@@ -313,6 +313,20 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
+    'getLastDatabaseStatistic',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(
+        `IPC Handler: Recovering latest database statistics for environment ${id}`
+      );
+
+      const dbStats =
+        await StatisticsHistoryController.getLastDatabaseStatistic(id);
+
+      return dbStats;
+    }
+  );
+
+  ipcMain.handle(
     'getLastEnvironmentLicenseData',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
       log.info(

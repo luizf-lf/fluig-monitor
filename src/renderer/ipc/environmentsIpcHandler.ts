@@ -203,6 +203,18 @@ export async function getDatabaseInfo(id: number): Promise<DbStatistic[]> {
   return databaseInfo;
 }
 
+/**
+ * (ipcRenderer) Returns the latest database usage statistic from the Statistics API.
+ * @since 0.5.0
+ */
+export async function getLastDatabaseStatistic(
+  id: number
+): Promise<DbStatistic | null> {
+  const dbStats = await ipcRenderer.invoke('getLastDatabaseStatistic', id);
+
+  return dbStats;
+}
+
 export async function getDatabaseProperties(
   id: number
 ): Promise<DatabaseProperties> {
