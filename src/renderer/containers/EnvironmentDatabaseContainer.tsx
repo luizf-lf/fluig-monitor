@@ -24,6 +24,7 @@ export default function EnvironmentDatabaseContainer() {
       }}
     >
       <DatabaseStorageGraph />
+      {/* // TODO: Implement database inbound and outbound traffic graphs (Statistics - dbTrafficReceived, dbTrafficSent) */}
       <DatabasePropsPanel />
     </motion.div>
   );
