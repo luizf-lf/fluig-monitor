@@ -276,7 +276,6 @@ export default class StatisticsHistoryController {
         dbSize: true,
         httpResponse: true,
       },
-      take: 100,
       orderBy: {
         httpResponse: {
           timestamp: 'desc',
