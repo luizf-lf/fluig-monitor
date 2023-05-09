@@ -93,6 +93,7 @@ export default function AppSettingsView() {
     },
   ] as SettingsMenuBuilder[];
 
+  // TODO: Update settings view to a single page.
   return (
     <motion.div
       variants={globalContainerVariants}

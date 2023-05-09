@@ -23,6 +23,18 @@ export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();
   const [menuIsClosed, setMenuIsClosed] = useState(true);
 
+  /**
+   * // TODO: Update submenu items:
+   * - Database
+   *  - inboundTraffic, outboundTraffic
+   * - Detailed Memory
+   *  - memoryHeap, nonMemoryHeap, detailedMemory, systemHeapMaxSize, systemHeapSize
+   * - Runtime Stats
+   *  - runtimeUptime, threadingCount, threadingPeakCount, threadingDaemonCount, threadingTotalStarted
+   * - Artifacts
+   *  - artifactsApps, artifactsCore, artifactsSystem
+   * - remove "users"
+   */
   const submenuItems = [
     {
       target: `summary`,

@@ -32,7 +32,7 @@ export default function EnvironmentSummary() {
           }}
         >
           <h2 className="title">
-            {/* Environment name + version + last update */}
+            {/* TODO: Add an environment name (+ version) component  */}
           </h2>
           <div
             style={{
