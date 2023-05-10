@@ -9,6 +9,7 @@ import EnvironmentAvailabilityPanel from '../components/ResponsivePanels/Environ
 import DatabasePanel from '../components/ResponsivePanels/SystemResources/DatabasePanel';
 import DiskPanel from '../components/ResponsivePanels/SystemResources/DiskPanel';
 import MemoryPanel from '../components/ResponsivePanels/SystemResources/MemoryPanel';
+import EnvironmentName from '../components/ResponsivePanels/EnvironmentName';
 
 /**
  * The environment summary view container component. Acts as a container layout for the main components.
@@ -31,9 +32,7 @@ export default function EnvironmentSummary() {
             marginBottom: '2rem',
           }}
         >
-          <h2 className="title">
-            {/* TODO: Add an environment name (+ version) component  */}
-          </h2>
+          <EnvironmentName />
           <div
             style={{
               display: 'flex',

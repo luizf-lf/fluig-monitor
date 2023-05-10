@@ -189,6 +189,10 @@
   margin-bottom: 2rem;
 }
 
+.ml-1 {
+  margin-left: 1rem;
+}
+
 .info-blip {
   border: 2px solid var(--purple);
   color: var(--purple);
@@ -250,12 +254,13 @@
   animation: rotating 1s linear infinite;
 }
 
+.title {
+  margin-bottom: 0.5rem;
+}
+
 .widget-container {
   margin-bottom: 1.5rem;
 
-  .title {
-    margin-bottom: 0.5rem;
-  }
   .widget-card {
     background-color: var(--card);
     padding: 1rem;
@@ -347,4 +352,13 @@
   border-radius: 1rem;
   box-shadow: var(--card-shadow);
   background-color: var(--card);
+}
+
+.pill {
+  font-size: 0.75rem;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
+  background-color: var(--green);
+
+  color: #fff;
 }
