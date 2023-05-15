@@ -34,6 +34,10 @@ export default function EnvironmentView(): JSX.Element {
    * - Artifacts
    *  - artifactsApps, artifactsCore, artifactsSystem
    * - remove "users"
+   * - Insights
+   *  - Add various environment availability insights, such as uptime, days with downtime, response avegare, etc...
+   * - Services
+   *  - Show services availability as a timeline.
    */
   const submenuItems = [
     {
