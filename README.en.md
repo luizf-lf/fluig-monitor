@@ -1,3 +1,5 @@
+#
+
 ![Banner](./docs/img/banner.png)
 
 <div align="center">
@@ -11,8 +13,6 @@
 [![wakatime](https://wakatime.com/badge/github/luizf-lf/fluig-monitor.svg)](https://wakatime.com/badge/github/luizf-lf/fluig-monitor)
 
 </div>
-
-#
 
 ## Table Of Contents
 
@@ -43,7 +43,7 @@ Migrations between database versions are performed automatically, thanks to the 
 
 ## Features
 
-Algumas das principais funcionalidades já implementadas:
+Some of the main features already implemented:
 
 - Fully customized interface with light and dark theme.
 - Internationalization (i18n) in Portuguese and English.

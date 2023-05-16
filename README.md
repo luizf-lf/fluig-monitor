@@ -1,3 +1,5 @@
+#
+
 ![Banner](./docs/img/banner.png)
 
 <div align="center">
@@ -11,8 +13,6 @@
 [![wakatime](https://wakatime.com/badge/github/luizf-lf/fluig-monitor.svg)](https://wakatime.com/badge/github/luizf-lf/fluig-monitor)
 
 </div>
-
-#
 
 ## Índice
 
