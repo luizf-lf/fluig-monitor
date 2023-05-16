@@ -2,11 +2,11 @@ import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 
 // views / components
-import EnvironmentView from './views/EnvironmentView';
-import CreateEnvironmentView from './views/CreateEnvironmentView';
-import Navbar from './components/Navbar/Navbar';
-import HomeEnvironmentListView from './views/HomeEnvironmentListView';
-import AppSettingsView from './views/AppSettingsView';
+import EnvironmentView from './pages/EnvironmentView';
+import CreateEnvironmentView from './pages/CreateEnvironmentView';
+import Navbar from './components/container/Navbar/Navbar';
+import HomeEnvironmentListView from './pages/HomeEnvironmentListView';
+import AppSettingsView from './pages/AppSettingsView';
 
 // assets
 import './assets/styles/global.scss';
