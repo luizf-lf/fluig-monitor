@@ -1,10 +1,33 @@
-# Fluig Monitor
+![Banner](./docs/img/banner.png)
 
+<div align="center">
+
+![GitHub package.json version](https://img.shields.io/github/package-json/v/luizf-lf/fluig-monitor?color=green)
+![GitHub all releases](https://img.shields.io/github/downloads/luizf-lf/fluig-monitor/total?color=blue)
+![GitHub issues](https://img.shields.io/github/issues/luizf-lf/fluig-monitor)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/luizf-lf/fluig-monitor?color=green)
+[![PT-BR](https://img.shields.io/badge/Language-PT--BR-green)](./README.md)
+[![ENG](https://img.shields.io/badge/Language-ENG-blue)](./README.en.md)
 [![wakatime](https://wakatime.com/badge/github/luizf-lf/fluig-monitor.svg)](https://wakatime.com/badge/github/luizf-lf/fluig-monitor)
 
-> Check out the **english** documentation [here](./docs/README.md).
+</div>
 
-![Banner](./docs/img/banner.png)
+#
+
+## Índice
+
+- [Sobre](#sobre)
+- [Funcionalidades](#funcionalidades)
+- [Imagens](#imagens)
+- [Executando o projeto em modo de desenvolvimento](#executando-o-projeto-em-modo-de-desenvolvimento)
+- [Estrutura Do Projeto](#estrutura-do-projeto)
+  - [Visão Geral](#visão-geral)
+  - [Estrutura do processo main](#estrutura-do-processo-main)
+  - [Estrutura do processo renderer](#estrutura-do-processo-renderer)
+- [Instruções De Uso](#instruções-de-uso)
+  - [Cadastrando um ambiente](#cadastrando-um-ambiente)
+- [Informações adicionais](#informações-adicionais)
+- [Contribuindo](#contribuindo)
 
 ## Sobre
 
@@ -14,7 +37,7 @@ O monitoramento é realizado através da **API Rest** da plataforma, também uti
 
 Esta aplicação veio sendo desenvolvida inicialmente para fins **didáticos**, com a intenção de aprender sobre UI/UX, desenvolvimento de aplicações desktop com `React`, `Electron`, `Typescript`, e o uso das `APIs` do Fluig, mas aos poucos vem se tornando uma aplicação que possibilite gerir uma melhor observabilidade sobre a plataforma Fluig em si.
 
-A aplicação possui um banco de dados SQLite que é criado automaticamente na primeira execução do aplicativo. Na build de produção, o mesmo ficará disponível na pasta `%appdata%/fluig-monitor/app.db`, no caso da versão de desenvolvimento, o mesmo será criado dentro da pasta `.prisma`, na raiz do projeto. Mais informações estão disponíveis nas instruções de execução do projeto abaixo.
+A aplicação possui um banco de dados SQLite que é criado automaticamente na primeira execução do aplicativo. Na build de produção, o mesmo ficará disponível na pasta `%appdata%/fluig-monitor/fluig-monitor.db`, no caso da versão de desenvolvimento, o mesmo será criado dentro da pasta `.prisma`, na raiz do projeto. Mais informações estão disponíveis nas instruções de execução do projeto abaixo.
 
 As migrações entre as versões do banco de dados são executadas automaticamente, graças ao cliente do Prisma ORM embutido juntamente na aplicação.
 
@@ -100,6 +123,87 @@ Novas funcionalidades vem sendo estudadas constantemente. Verifique na aba [Issu
    ```shell
    $ npm run package
    ```
+
+## Estrutura Do Projeto
+
+### Visão Geral
+
+O Projeto é desenvolvido utilizando Electron, e por isso, utiliza de dois processos principais, o `main` e o `renderer`, onde o processo `main` é o processo principal do Electron, que funciona como o back-end da aplicação, e é responsável por lidar com operações HTTP, sistema de arquivos e schedule de tarefas, por exemplo. O processo `renderer` é o processo responsável pelo front-end da aplicação, que neste caso, é utilizado o React.
+
+O projeto também possui uma pasta `common` contendo recursos compartilhados entre os dois processos, como interfaces, funções utilitárias e classes de validação.
+
+Demonstração:
+
+```text
+src/
+  ├── common/
+  ├── main/
+  └── renderer/
+```
+
+A estrutura de pastas poderá ser alterada conforme necessidade.
+
+### Estrutura do processo main
+
+A pasta referente ao processo `main` (src/main) foi estruturada da seguinte forma:
+
+```text
+src/
+  ├── ...
+  └── main/
+        ├── classes/
+        ├── controllers/
+        ├── database/
+        ├── generated/
+        ├── interfaces/
+        ├── services/
+        ├── utils/
+        └── ...
+```
+
+Onde:
+
+- **classes:** Contém classes utilitárias utilizadas apenas pelo processo main.
+- **controllers:** Contém os controllers principais da aplicação, responsáveis principalmente por operações com o banco de dados.
+- **database:** Contém os utilitários de configuração do banco de dados com o prisma.
+- **generated:** Contém arquivos gerados pelo prisma. São ignorados pelo git.
+- **interfaces:** Contém interfaces utilizados pelo processo main.
+- **services:** Contém funções / serviços que lidam com requisições HTTP ao Fluig.
+- **utils:** Utilitários utilizados pelo processo main.
+
+### Estrutura do processo renderer
+
+A pasta referente ao processo `renderer` (src/renderer) foi estruturada da seguinte forma:
+
+```text
+src/
+  ├── ...
+  └── renderer/
+        ├── assets/
+        ├── classes/
+        ├── components/
+              ├── base/
+              ├── container/
+              └── layout/
+        ├── contexts/
+        ├── ipc/
+        ├── pages/
+        ├── utils/
+        └── ...
+```
+
+Onde:
+
+- **assets:** Contém arquivos de imagem, css e svg utilizados pelo renderer.
+- **classes:** Contém classes utilizadas apenas pelo renderer, principalmente para validação de formulários.
+- **components:** Contém os componentes React utilizados pelo renderer, estruturados da seguinte forma:
+  - **base:** Contém componentes base, como botões customizados, por exemplo.
+  - **container:** Contém componentes de negócio, como painéis de exibição de dados, por exemplo.
+  - **layout:** Contém componentes que agrupam outros componentes, como uma dashboard por exemplo.
+- **contexts:** Contém componentes de contexto que utilizam a Context API do React.
+- **ipc:** Contém funções utilitárias que fazem a ponte com o processo main utilizando Inter Process Communication.
+- **pages:** Contém componentes que funcionam como páginas, são vinculadas às rotas do React Router.
+- **utils:** Contém funções utilitárias utilizadas pelo renderer.
 
 ## Instruções De Uso
 
