@@ -8,8 +8,8 @@ import { getEnvironmentById } from '../../ipc/environmentsIpcHandler';
  * @since 0.5
  */
 export default function EnvironmentName() {
-  const [environmentName, setEnvironmentName] = useState('Servidor Local');
-  const [release, setEnvironmentRelease] = useState('1.7.1');
+  const [environmentName, setEnvironmentName] = useState('');
+  const [release, setEnvironmentRelease] = useState('');
 
   const location = useLocation();
   const environmentId = location.pathname.split('/')[2];
