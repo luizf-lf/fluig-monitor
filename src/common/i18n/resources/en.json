@@ -327,6 +327,14 @@
       "title": "Database Storage",
       "graphTitle": "Storage Over Time"
     },
+    "DatabaseNetWorkGraph": {
+      "insufficientOrNoData": "Insufficient or no data available.",
+      "title": "Database Traffic",
+      "graphTitleInbound": "Inbound",
+      "graphTitleOutbound": "Outbound",
+      "graphTitleMixed": "Inbound and outbound",
+      "dataNotAllowed": "Database traffic visualization not allowed."
+    },
     "ThemeSettings": {
       "title": "Theme",
       "helperText": "Select the theme to be used by the application bellow: ",

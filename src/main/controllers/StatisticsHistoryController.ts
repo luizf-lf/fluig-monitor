@@ -75,6 +75,12 @@ export interface DatabaseProperties {
   httpResponse: HTTPResponse;
 }
 
+export interface DatabaseTraffic {
+  dbTraficRecieved: bigint | null;
+  dbTraficSent: bigint | null;
+  httpResponse: HTTPResponse;
+}
+
 export default class StatisticsHistoryController {
   created: StatisticsHistory | null;
 
@@ -287,5 +293,32 @@ export default class StatisticsHistoryController {
     });
 
     return statistic;
+  }
+
+  /**
+   * Recovers the last 100 database traffic (inbound and outbound) data from the environment
+   * @since 0.5
+   */
+  static async getDatabaseTrafficHistory(
+    id: number
+  ): Promise<DatabaseTraffic[]> {
+    const inbound = await prismaClient.statisticsHistory.findMany({
+      select: {
+        dbTraficRecieved: true,
+        dbTraficSent: true,
+        httpResponse: true,
+      },
+      take: 100,
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return inbound;
   }
 }

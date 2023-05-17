@@ -313,6 +313,20 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
+    'getDatabaseTraffic',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(
+        `IPC Handler: Recovering database traffic for environment ${id}`
+      );
+
+      const inbound =
+        await StatisticsHistoryController.getDatabaseTrafficHistory(id);
+
+      return inbound;
+    }
+  );
+
+  ipcMain.handle(
     'getLastDatabaseStatistic',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
       log.info(

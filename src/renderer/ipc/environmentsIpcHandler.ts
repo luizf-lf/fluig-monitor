@@ -26,6 +26,7 @@ import {
   DatabaseProperties,
   HDStats,
   MemoryStats,
+  DatabaseTraffic,
 } from '../../main/controllers/StatisticsHistoryController';
 import { EnvironmentLicenseData } from '../../main/controllers/LicenseHistoryController';
 import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
@@ -235,6 +236,14 @@ export async function getDatabaseStatisticsHistory(
   );
 
   return dbStatistics;
+}
+
+export async function getDatabaseTraffic(
+  id: number
+): Promise<DatabaseTraffic[]> {
+  const traffic = await ipcRenderer.invoke('getDatabaseTraffic', id);
+
+  return traffic;
 }
 
 export async function getLastEnvironmentLicenseData(

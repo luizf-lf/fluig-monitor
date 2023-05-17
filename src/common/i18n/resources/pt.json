@@ -327,6 +327,14 @@
       "title": "Armazenamento Do Banco De Dados",
       "graphTitle": "Armazenamento ao longo do tempo"
     },
+    "DatabaseNetWorkGraph": {
+      "insufficientOrNoData": "Sem dados ou dados insuficientes.",
+      "title": "Trafego Do Banco de Dados",
+      "graphTitleInbound": "Fluxo de entrada",
+      "graphTitleOutbound": "Fluxo de saída",
+      "graphTitleMixed": "Fluxo de entrada e saída",
+      "dataNotAllowed": "Visualização de trafego não permitido"
+    },
     "ThemeSettings": {
       "title": "Tema",
       "helperText": "Selecione abaixo o tema a ser utilizado pela aplicação:",

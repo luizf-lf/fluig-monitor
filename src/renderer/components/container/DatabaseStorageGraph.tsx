@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import { ipcRenderer } from 'electron';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -44,7 +45,16 @@ export default function DatabaseStorageGraph() {
       );
     }
 
+    ipcRenderer.on(`environmentDataUpdated_${environmentId}`, () => {
+      loadGraphData();
+    });
+
     loadGraphData();
+
+    return () => {
+      ipcRenderer.removeAllListeners(`environmentDataUpdated_${environmentId}`);
+      setDbStatistics([]);
+    };
   }, [environmentId]);
 
   useEffect(() => {
