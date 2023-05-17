@@ -4,10 +4,10 @@
 
 <div align="center">
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/luizf-lf/fluig-monitor?color=green)
-![GitHub all releases](https://img.shields.io/github/downloads/luizf-lf/fluig-monitor/total?color=blue)
-![GitHub issues](https://img.shields.io/github/issues/luizf-lf/fluig-monitor)
-![GitHub closed issues](https://img.shields.io/github/issues-closed/luizf-lf/fluig-monitor?color=green)
+[![GitHub package.json version](https://img.shields.io/github/package-json/v/luizf-lf/fluig-monitor?color=green)](https://github.com/luizf-lf/fluig-monitor/releases)
+[![GitHub all releases](https://img.shields.io/github/downloads/luizf-lf/fluig-monitor/total?color=blue)](https://github.com/luizf-lf/fluig-monitor/releases)
+[![GitHub issues](https://img.shields.io/github/issues/luizf-lf/fluig-monitor)](https://github.com/luizf-lf/fluig-monitor/issues?q=is%3Aopen+is%3Aissue)
+[![GitHub closed issues](https://img.shields.io/github/issues-closed/luizf-lf/fluig-monitor?color=green)](https://github.com/luizf-lf/fluig-monitor/issues?q=is%3Aissue+is%3Aclosed)
 [![PT-BR](https://img.shields.io/badge/Language-PT--BR-green)](./README.md)
 [![ENG](https://img.shields.io/badge/Language-ENG-blue)](./README.en.md)
 [![wakatime](https://wakatime.com/badge/github/luizf-lf/fluig-monitor.svg)](https://wakatime.com/badge/github/luizf-lf/fluig-monitor)
