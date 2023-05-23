@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 
 import { DatabaseTraffic } from '../../../main/controllers/StatisticsHistoryController';
-import { getDatabaseTraffic } from '../../ipc/environmentsIpcHandler';
+import { getDatabaseStatisticsHistory } from '../../ipc/environmentsIpcHandler';
 import GraphTooltip from '../base/GraphTooltip';
 import formatBytes from '../../../common/utils/formatBytes';
 
@@ -39,8 +39,7 @@ export default function DatabaseNetworkGraph({ mode }: Props) {
 
   useEffect(() => {
     async function loadGraphData() {
-      // TODO: Update to getDatabaseStatisticsHistory, since it already recovers the db traffic
-      setDbTraffic(await getDatabaseTraffic(Number(environmentId)));
+      setDbTraffic(await getDatabaseStatisticsHistory(Number(environmentId)));
     }
 
     ipcRenderer.on(`environmentDataUpdated_${environmentId}`, () => {

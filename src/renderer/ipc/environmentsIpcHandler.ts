@@ -238,14 +238,6 @@ export async function getDatabaseStatisticsHistory(
   return dbStatistics;
 }
 
-export async function getDatabaseTraffic(
-  id: number
-): Promise<DatabaseTraffic[]> {
-  const traffic = await ipcRenderer.invoke('getDatabaseTraffic', id);
-
-  return traffic;
-}
-
 export async function getLastEnvironmentLicenseData(
   id: number
 ): Promise<EnvironmentLicenseData | null> {
