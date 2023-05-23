@@ -26,7 +26,6 @@ import {
   DatabaseProperties,
   HDStats,
   MemoryStats,
-  DatabaseTraffic,
 } from '../../main/controllers/StatisticsHistoryController';
 import { EnvironmentLicenseData } from '../../main/controllers/LicenseHistoryController';
 import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';

@@ -7,6 +7,7 @@
 - Added a compatibility layer for Fluig 1.6.5 (Liquid) with version validation.
 - Updated project structure.
 - Updated language files to json format.
+- Updated app settings view to a single page.
 
 # 0.4.0
 

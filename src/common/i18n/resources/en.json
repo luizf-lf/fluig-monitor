@@ -210,26 +210,7 @@
       }
     },
     "AppSettingsView": {
-      "title": "Configurações",
-      "settingsMenu": {
-        "categories": {
-          "general": "General",
-          "behavior": "Behavior",
-          "about": "About"
-        },
-        "pages": {
-          "theme": "Theme",
-          "language": "Language",
-          "update": "Updates",
-          "about": "About This Software",
-          "reportABug": "Report A Bug",
-          "systemTray": "System Tray"
-        }
-      },
-      "emptyRoute": {
-        "title": "Settings",
-        "helper": "Select an item on the side to access it's settings."
-      }
+      "title": "Settings"
     }
   },
   "global": {
@@ -369,9 +350,10 @@
       "disableNotificationHelper": "Use this option to disable the notification telling that Fluig Monitor is still running."
     },
     "AboutSection": {
+      "headingTitle": "About",
       "title": "An open-source tool for monitoring Fluig servers.",
       "developedBy": "Developed by ",
-      "disclosure": "This tool has been developed for self-teaching purposes, and has no connection with TOTVS.",
+      "disclosure": "This tool has been developed for didactic purposes, and has no connection with TOTVS.",
       "usageDisclosure": "The use of this tool is optional, and therefore, its total or partial functioning is not guaranteed for all types of Fluig environments.",
       "learnMoreAt": "Learn more about the project in the official repository at "
     },

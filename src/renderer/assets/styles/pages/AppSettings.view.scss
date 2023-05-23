@@ -1,70 +1,13 @@
 #appSettingsContainer {
-  width: 100%;
+  max-width: 1100px;
 
-  .settings-block-container {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    gap: 2rem;
+  .app-settings-block-container {
+    width: 100%;
 
-    .settings-menu {
+    .settings-card {
       display: flex;
+      gap: 3rem;
       flex-direction: column;
-
-      .menu-category {
-        margin-bottom: 1rem;
-        width: 100%;
-        background-color: var(--card);
-        border-radius: 1rem;
-        padding: 1rem;
-
-        .category-title {
-          font-weight: bold;
-          padding-bottom: 0.5rem;
-          margin-bottom: 0.5rem;
-          border-bottom: 2px solid var(--border-light);
-
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          gap: 0.5rem;
-          font-size: 1.15rem;
-        }
-        .category-items {
-          display: flex;
-          flex-direction: column;
-
-          .item {
-            color: var(--text-primary);
-            padding: 0.25rem 0.25rem;
-            transition: all var(--transition);
-            display: flex;
-            align-items: center;
-
-            svg {
-              opacity: 0%;
-            }
-
-            &:hover,
-            &.active {
-              color: var(--purple);
-
-              padding: 0.25rem 0.5rem;
-
-              svg {
-                opacity: 100%;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .settings-item-container {
-      width: 100%;
-      background-color: var(--card);
-      border-radius: 1rem;
-      padding: 1rem;
-      box-shadow: var(--card-shadow);
     }
   }
 }

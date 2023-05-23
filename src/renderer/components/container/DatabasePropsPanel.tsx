@@ -60,7 +60,12 @@ export default function DatabasePropsPanel() {
   }, [dbProps]);
 
   return (
-    <div className="widget-container">
+    <div
+      className="widget-container"
+      style={{
+        maxWidth: '22rem',
+      }}
+    >
       <h3 className="title">
         {t('components.SystemResources.DatabasePropsPanel.title')}
       </h3>
@@ -98,7 +103,7 @@ export default function DatabasePropsPanel() {
                   'components.SystemResources.DatabasePropsPanel.dbDriverVersion'
                 )}
               </p>
-              <h4>{dbProps.dbDriverVersion}</h4>
+              <h4 style={{ overflow: 'auto' }}>{dbProps.dbDriverVersion}</h4>
             </div>
             <div className="footer">
               <TimeIndicator date={dbProps.httpResponse.timestamp} />

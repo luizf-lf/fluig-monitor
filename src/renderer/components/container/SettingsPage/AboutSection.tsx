@@ -1,6 +1,6 @@
 import { shell } from 'electron';
 import { motion } from 'framer-motion';
-import { FiExternalLink } from 'react-icons/fi';
+import { FiExternalLink, FiSettings } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 
 import globalContainerVariants from '../../../utils/globalContainerVariants';
@@ -17,6 +17,12 @@ export default function AboutSection() {
       animate="visible"
       exit="exit"
     >
+      <h3 className="icon-title">
+        <span className="icon-dot">
+          <FiSettings />
+        </span>
+        {t('components.AboutSection.headingTitle')}
+      </h3>
       <center>
         <div className="mb-2">
           <img

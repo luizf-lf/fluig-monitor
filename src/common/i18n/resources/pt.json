@@ -210,26 +210,7 @@
       }
     },
     "AppSettingsView": {
-      "title": "Configurações",
-      "settingsMenu": {
-        "categories": {
-          "general": "Gerais",
-          "behavior": "Comportamento",
-          "about": "Sobre"
-        },
-        "pages": {
-          "theme": "Tema",
-          "language": "Idioma",
-          "update": "Atualizações",
-          "about": "Sobre A Ferramenta",
-          "reportABug": "Reporte Um Bug",
-          "systemTray": "Bandeja Do Sistema"
-        }
-      },
-      "emptyRoute": {
-        "title": "Configurações",
-        "helper": "Selecione um item ao lado para acessar as respectivas configurações."
-      }
+      "title": "Configurações"
     }
   },
   "global": {
@@ -369,6 +350,7 @@
       "disableNotificationHelper": "Utilize esta opção para desabilitar a notificação de que o Fluig Monitor ainda está em execução."
     },
     "AboutSection": {
+      "headingTitle": "Sobre",
       "title": "Uma ferramenta open-source para monitoramento de ambientes Fluig.",
       "developedBy": "Desenvolvido por ",
       "disclosure": "Esta ferramenta vem sendo desenvolvida para fins de auto didática, e não possui nenhum vínculo com a TOTVS.",
