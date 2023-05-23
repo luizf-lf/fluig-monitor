@@ -8,12 +8,14 @@ interface TimeBlocksObject {
 }
 
 /**
- * transforms a given amount of seconds into a time block, in order to be used as a "time ago" string format
+ * transforms a given amount of seconds into a time block, in order to be used as a relative time string format
  * @example
- *  timeAgo(90) => { days: 0, hours: 0, minutes: 1, seconds: 30 }
+ *  relativeTime(90) => { days: 0, hours: 0, minutes: 1, seconds: 30 }
  * @since 0.1.2
  */
-export default function timeAgo(totalSeconds: number): TimeBlocksObject | null {
+export default function relativeTime(
+  totalSeconds: number
+): TimeBlocksObject | null {
   try {
     /**
      * minutes to seconds = 60
@@ -45,7 +47,7 @@ export default function timeAgo(totalSeconds: number): TimeBlocksObject | null {
 
     return { days, hours, minutes, seconds };
   } catch (error) {
-    log.error(`timeAgo -> Could not determine past period: ${error}`);
+    log.error(`relativeTime -> Could not determine past period: ${error}`);
     return null;
   }
 }

@@ -1,5 +1,5 @@
 import parseBoolean from '../../src/common/utils/parseBoolean';
-import timeAgo from '../../src/common/utils/timeAgo';
+import relativeTime from '../../src/common/utils/relativeTime';
 import formatBytes from '../../src/common/utils/formatBytes';
 import byteSpeed from '../../src/common/utils/byteSpeed';
 import compareSemver from '../../src/common/utils/compareSemver';
@@ -26,16 +26,16 @@ describe('Common util functions', () => {
 
   describe('Relative time util', () => {
     it('Calculates seconds', () => {
-      expect(timeAgo(35)).toHaveProperty('seconds', 35);
+      expect(relativeTime(35)).toHaveProperty('seconds', 35);
     });
     it('Calculates minutes', () => {
-      expect(timeAgo(130)).toHaveProperty('minutes', 2);
+      expect(relativeTime(130)).toHaveProperty('minutes', 2);
     });
     it('Calculates hours', () => {
-      expect(timeAgo(11000)).toHaveProperty('hours', 3);
+      expect(relativeTime(11000)).toHaveProperty('hours', 3);
     });
     it('Calculates days', () => {
-      expect(timeAgo(300000)).toHaveProperty('days', 3);
+      expect(relativeTime(300000)).toHaveProperty('days', 3);
     });
   });
 

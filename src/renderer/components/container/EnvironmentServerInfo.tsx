@@ -7,7 +7,7 @@ import { FiClock, FiCpu, FiDatabase, FiServer } from 'react-icons/fi';
 import DynamicImageLoad from '../base/DynamicImageLoad';
 import defaultServerLogo from '../../assets/img/defaultServerLogo.png';
 import formatBytes from '../../../common/utils/formatBytes';
-import timeAgo from '../../../common/utils/timeAgo';
+import relativeTime from '../../../common/utils/relativeTime';
 import { EnvironmentServerData } from '../../../common/interfaces/EnvironmentControllerInterface';
 import { getEnvironmentServerData } from '../../ipc/environmentsIpcHandler';
 
@@ -46,7 +46,7 @@ export default function EnvironmentServerInfo() {
       serverData &&
       serverData.statisticHistory.length > 0 &&
       serverData.statisticHistory[0].systemUptime
-        ? timeAgo(Number(serverData.statisticHistory[0].systemUptime))
+        ? relativeTime(Number(serverData.statisticHistory[0].systemUptime))
         : null;
 
     setCardData(
