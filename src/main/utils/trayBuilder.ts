@@ -1,4 +1,4 @@
-import { app, Menu, Tray } from 'electron';
+import { app, Menu, shell, Tray } from 'electron';
 import log from 'electron-log';
 import path from 'path';
 import i18n from '../../common/i18n/i18n';
@@ -26,6 +26,19 @@ export default function trayBuilder(
         type: 'normal',
         label: i18n.t('menu.systemTray.open'),
         click: reopenFunction,
+      },
+      {
+        type: 'normal',
+        label: i18n.t('menu.systemTray.reportABug'),
+        click: () =>
+          shell.openExternal(
+            'https://github.com/luizf-lf/fluig-monitor/issues/new/choose'
+          ),
+      },
+      {
+        type: 'normal',
+        label: i18n.t('menu.systemTray.dropBombs'),
+        enabled: false,
       },
       {
         type: 'normal',

@@ -22,6 +22,8 @@
     "systemTray": {
       "running": "Fluig Monitor is running",
       "open": "Open",
+      "reportABug": "Report an error",
+      "dropBombs": "Drop bombs",
       "quit": "Quit"
     }
   },
