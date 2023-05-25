@@ -3,14 +3,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import {
-  FiAirplay,
-  FiDatabase,
-  FiLayers,
-  FiPackage,
-  FiUsers,
-  FiSettings,
-} from 'react-icons/fi';
+import { FiAirplay, FiDatabase, FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentSummary from '../components/layout/EnvironmentSummaryContainer';
@@ -33,7 +26,6 @@ export default function EnvironmentView(): JSX.Element {
    *  - runtimeUptime, threadingCount, threadingPeakCount, threadingDaemonCount, threadingTotalStarted
    * - Artifacts
    *  - artifactsApps, artifactsCore, artifactsSystem
-   * - remove "users"
    * - Insights
    *  - Add various environment availability insights, such as uptime, days with downtime, response average, etc...
    * - Services
@@ -50,21 +42,31 @@ export default function EnvironmentView(): JSX.Element {
       text: t('views.EnvironmentDataContainer.sideMenu.database'),
       icon: <FiDatabase />,
     },
-    {
-      target: `detailedMemory`,
-      text: t('views.EnvironmentDataContainer.sideMenu.detailedMemory'),
-      icon: <FiLayers />,
-    },
-    {
-      target: `artifacts`,
-      text: t('views.EnvironmentDataContainer.sideMenu.artifacts'),
-      icon: <FiPackage />,
-    },
-    {
-      target: `users`,
-      text: t('views.EnvironmentDataContainer.sideMenu.users'),
-      icon: <FiUsers />,
-    },
+    // {
+    //   target: `detailedMemory`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.detailedMemory'),
+    //   icon: <FiLayers />,
+    // },
+    // {
+    //   target: `runtimeStats`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.runtimeStats'),
+    //   icon: <FiPackage />,
+    // },
+    // {
+    //   target: `artifacts`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.artifacts'),
+    //   icon: <FiPackage />,
+    // },
+    // {
+    //   target: `insights`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.insights'),
+    //   icon: <FiPackage />,
+    // },
+    // {
+    //   target: `services`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.services'),
+    //   icon: <FiPackage />,
+    // },
   ];
 
   const [selectedButton, setSelectedButton] = useState(submenuItems[0].target);

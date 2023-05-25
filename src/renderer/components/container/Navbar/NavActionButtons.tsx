@@ -84,7 +84,7 @@ export default function NavActionButtons() {
   return (
     <section id="rightButtons">
       {updateActionButton}
-      <button
+      {/* <button
         type="button"
         className="optionButton"
         title={`${t('navbar.actionButtons.kioskMode')} [${t(
@@ -103,7 +103,7 @@ export default function NavActionButtons() {
         disabled
       >
         <FiBell />
-      </button>
+      </button> */}
       <button
         type="button"
         className="optionButton"
