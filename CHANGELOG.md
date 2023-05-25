@@ -1,4 +1,4 @@
-# 0.5.0-rc
+# 0.5.0
 
 - Fixed system resources components not being updated
 - Changed get system resources methods to recover only the last resource
