@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { DatabaseProperties } from '../../../main/controllers/StatisticsHistoryController';
 import { getDatabaseProperties } from '../../ipc/environmentsIpcHandler';
 
-import sqlServerLogo from '../../assets/img/database-logos/sqlServer.png';
-import mySqlLogo from '../../assets/img/database-logos/mySql.png';
+import sqlServerLogo from '../../assets/img/database-logos/sql-server.png';
+import mySqlLogo from '../../assets/img/database-logos/mysql.png';
 import oracleLogo from '../../assets/img/database-logos/oracle.png';
 import defaultDatabaseLogo from '../../assets/img/database-logos/database.png';
 import TimeIndicator from '../base/TimeIndicator';
