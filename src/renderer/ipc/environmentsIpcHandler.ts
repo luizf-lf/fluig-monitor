@@ -5,6 +5,8 @@ import {
 } from '../../common/interfaces/UpdateScheduleControllerInterface';
 import {
   EnvironmentCreateControllerInterface,
+  EnvironmentServerData,
+  EnvironmentServices,
   EnvironmentUpdateControllerInterface,
   EnvironmentWithHistory,
   EnvironmentWithRelatedData,
@@ -20,10 +22,20 @@ import {
   UpdateSchedule,
 } from '../../main/generated/client';
 import {
-  DBStats,
+  DbStatistic,
+  DatabaseProperties,
   HDStats,
   MemoryStats,
 } from '../../main/controllers/StatisticsHistoryController';
+import { EnvironmentLicenseData } from '../../main/controllers/LicenseHistoryController';
+import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
+import AuthObject from '../../common/interfaces/AuthObject';
+
+export enum SystemResourceTypes {
+  DISK = 'DISK',
+  MEMORY = 'MEMORY',
+  DATABASE = 'DATABASE',
+}
 
 export interface CreateEnvironmentProps {
   environment: EnvironmentCreateControllerInterface;
@@ -68,6 +80,22 @@ export async function getEnvironmentHistoryById(
   }
   const environment = ipcRenderer.invoke('getEnvironmentHistoryById', id);
   return environment;
+}
+
+/**
+ * (ipcRenderer) Gets the environment release from the api using the `/api/public/wcm/version/v2` endpoint
+ */
+export async function getEnvironmentReleaseIPC(
+  auth: AuthObject,
+  baseUrl: string
+): Promise<FluigVersionApiInterface | null> {
+  const release = await ipcRenderer.invoke(
+    'getEnvironmentRelease',
+    auth,
+    baseUrl
+  );
+
+  return release;
 }
 
 export async function createEnvironment({
@@ -124,29 +152,100 @@ export async function getLastHttpResponseById(
   return lastResponse;
 }
 
-export async function getHistoricalDiskInfo(id: number): Promise<HDStats[]> {
-  const diskInfo = await ipcRenderer.invoke('getHistoricalDiskInfo', id);
+export async function getHttpResponsesById(
+  environmentId: number
+): Promise<HTTPResponse[]> {
+  const responses = await ipcRenderer.invoke(
+    'getHttpResponsesById',
+    environmentId
+  );
+
+  return responses;
+}
+
+export async function getEnvironmentServerData(
+  environmentId: number
+): Promise<EnvironmentServerData | null> {
+  const serverData = await ipcRenderer.invoke(
+    'getEnvironmentServerData',
+    environmentId
+  );
+
+  return serverData;
+}
+
+export async function getEnvironmentServices(
+  environmentId: number
+): Promise<EnvironmentServices | null> {
+  const services = await ipcRenderer.invoke(
+    'getEnvironmentServices',
+    environmentId
+  );
+
+  return services;
+}
+
+export async function getDiskInfo(id: number): Promise<HDStats[]> {
+  const diskInfo = await ipcRenderer.invoke('getDiskInfo', id);
 
   return diskInfo;
 }
 
-export async function getHistoricalMemoryInfo(
-  id: number
-): Promise<MemoryStats[]> {
-  const memoryInfo = await ipcRenderer.invoke('getHistoricalMemoryInfo', id);
+export async function getMemoryInfo(id: number): Promise<MemoryStats[]> {
+  const memoryInfo = await ipcRenderer.invoke('getMemoryInfo', id);
 
   return memoryInfo;
 }
 
-export async function getHistoricalDatabaseInfo(
+export async function getDatabaseInfo(id: number): Promise<DbStatistic[]> {
+  const databaseInfo = await ipcRenderer.invoke('getDatabaseInfo', id);
+
+  return databaseInfo;
+}
+
+/**
+ * (ipcRenderer) Returns the latest database usage statistic from the Statistics API.
+ * @since 0.5.0
+ */
+export async function getLastDatabaseStatistic(
   id: number
-): Promise<DBStats[]> {
-  const databaseInfo = await ipcRenderer.invoke(
-    'getHistoricalDatabaseInfo',
+): Promise<DbStatistic | null> {
+  const dbStats = await ipcRenderer.invoke('getLastDatabaseStatistic', id);
+
+  return dbStats;
+}
+
+export async function getDatabaseProperties(
+  id: number
+): Promise<DatabaseProperties> {
+  const databaseProperties = await ipcRenderer.invoke(
+    'getDatabaseProperties',
     id
   );
 
-  return databaseInfo;
+  return databaseProperties;
+}
+
+export async function getDatabaseStatisticsHistory(
+  id: number
+): Promise<DbStatistic[]> {
+  const dbStatistics = await ipcRenderer.invoke(
+    'getDatabaseStatisticsHistory',
+    id
+  );
+
+  return dbStatistics;
+}
+
+export async function getLastEnvironmentLicenseData(
+  id: number
+): Promise<EnvironmentLicenseData | null> {
+  const lastLicenseData = await ipcRenderer.invoke(
+    'getLastEnvironmentLicenseData',
+    id
+  );
+
+  return lastLicenseData;
 }
 
 export async function forceEnvironmentSync(): Promise<void> {

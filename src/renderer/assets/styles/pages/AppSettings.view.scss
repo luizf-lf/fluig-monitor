@@ -1,0 +1,13 @@
+#appSettingsContainer {
+  max-width: 1100px;
+
+  .app-settings-block-container {
+    width: 100%;
+
+    .settings-card {
+      display: flex;
+      gap: 3rem;
+      flex-direction: column;
+    }
+  }
+}

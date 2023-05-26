@@ -1,3 +1,4 @@
+import log from 'electron-log';
 import formatBytes from './formatBytes';
 
 /**
@@ -8,5 +9,10 @@ import formatBytes from './formatBytes';
  * @since 0.4.0
  */
 export default function byteSpeed(size: number, timer: number): string {
-  return `${formatBytes(size / (timer / 1000))}/s`;
+  try {
+    return `${formatBytes(size / (timer / 1000))}/s`;
+  } catch (error) {
+    log.error(`byteSpeed -> Could not determine the byte speed: ${error}`);
+    return '0 Bytes/s';
+  }
 }

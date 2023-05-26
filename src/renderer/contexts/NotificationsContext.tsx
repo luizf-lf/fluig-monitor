@@ -1,6 +1,6 @@
 import { AnimatePresence } from 'framer-motion';
 import { createContext, ReactNode, useContext, useState } from 'react';
-import FloatingNotification from '../components/FloatingNotification';
+import FloatingNotification from '../components/base/FloatingNotification';
 
 interface NotificationInterface {
   id: number;

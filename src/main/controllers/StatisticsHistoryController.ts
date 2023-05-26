@@ -35,17 +35,17 @@ interface CreateStatisticHistoryProps {
   threadingDaemonCount: number;
   threadingTotalStarted: number;
   detailedMemory: string;
-  systemServerMemorySize: number;
-  systemServerMemoryFree: number;
-  systemServerHDSize: string;
-  systemServerHDFree: string;
-  systemServerCoreCount: number;
-  systemServerArch: string;
-  systemTmpFolderSize: number;
-  systemLogFolderSize: number;
-  systemHeapMaxSize: number;
-  systemHeapSize: number;
-  systemUptime: number;
+  systemServerMemorySize: number | null;
+  systemServerMemoryFree: number | null;
+  systemServerHDSize: string | null;
+  systemServerHDFree: string | null;
+  systemServerCoreCount: number | null;
+  systemServerArch: string | null;
+  systemTmpFolderSize: number | null;
+  systemLogFolderSize: number | null;
+  systemHeapMaxSize: number | null;
+  systemHeapSize: number | null;
+  systemUptime: number | null;
 }
 
 export interface HDStats {
@@ -60,10 +60,24 @@ export interface MemoryStats {
   httpResponse: HTTPResponse;
 }
 
-export interface DBStats {
+export interface DbStatistic {
   dbTraficRecieved: bigint | null;
   dbTraficSent: bigint | null;
   dbSize: bigint | null;
+  httpResponse: HTTPResponse;
+}
+
+export interface DatabaseProperties {
+  dbName: string | null;
+  dbVersion: string | null;
+  dbDriverName: string | null;
+  dbDriverVersion: string | null;
+  httpResponse: HTTPResponse;
+}
+
+export interface DatabaseTraffic {
+  dbTraficRecieved: bigint | null;
+  dbTraficSent: bigint | null;
   httpResponse: HTTPResponse;
 }
 
@@ -130,14 +144,14 @@ export default class StatisticsHistoryController {
     return this.created;
   }
 
-  static async getHistoricalDiskInfo(id: number): Promise<HDStats[] | []> {
+  static async getDiskInfo(id: number): Promise<HDStats[]> {
     const stats = await prismaClient.statisticsHistory.findMany({
       select: {
         systemServerHDFree: true,
         systemServerHDSize: true,
         httpResponse: true,
       },
-      take: 100,
+      take: 1,
       orderBy: {
         httpResponse: {
           timestamp: 'desc',
@@ -151,14 +165,14 @@ export default class StatisticsHistoryController {
     return stats;
   }
 
-  static async getHistoricalMemoryInfo(id: number): Promise<MemoryStats[]> {
+  static async getMemoryInfo(id: number): Promise<MemoryStats[]> {
     const stats = await prismaClient.statisticsHistory.findMany({
       select: {
         systemServerMemorySize: true,
         systemServerMemoryFree: true,
         httpResponse: true,
       },
-      take: 100,
+      take: 1,
       orderBy: {
         httpResponse: {
           timestamp: 'desc',
@@ -172,8 +186,68 @@ export default class StatisticsHistoryController {
     return stats;
   }
 
-  static async getHistoricalDatabaseInfo(id: number): Promise<DBStats[]> {
+  /**
+   * Recovers the database info as an array.
+   * @deprecated in favor of new methods (getDatabaseStatisticsHistory and getLastDatabaseStatistic)
+   */
+  static async getDatabaseInfo(id: number): Promise<DbStatistic[]> {
     const stats = await prismaClient.statisticsHistory.findMany({
+      select: {
+        dbTraficRecieved: true,
+        dbTraficSent: true,
+        dbSize: true,
+        httpResponse: true,
+      },
+      take: 1,
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return stats;
+  }
+
+  /**
+   * Gets the latest database properties from the statistics history.
+   * @since 0.5
+   */
+  static async getDatabaseProperties(
+    id: number
+  ): Promise<DatabaseProperties | null> {
+    const props = await prismaClient.statisticsHistory.findFirst({
+      select: {
+        dbName: true,
+        dbVersion: true,
+        dbDriverName: true,
+        dbDriverVersion: true,
+        httpResponse: true,
+      },
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return props;
+  }
+
+  /**
+   * Recovers the last 100 database statistics ordered by the http response timestamp, given the environment id.
+   * @since 0.5
+   */
+  static async getDatabaseStatisticsHistory(
+    id: number
+  ): Promise<DbStatistic[]> {
+    const statistics = await prismaClient.statisticsHistory.findMany({
       select: {
         dbTraficRecieved: true,
         dbTraficSent: true,
@@ -191,6 +265,60 @@ export default class StatisticsHistoryController {
       },
     });
 
-    return stats;
+    return statistics;
+  }
+
+  /**
+   * Similar to getDatabaseStatisticsHistory, but returns only the latest statistic
+   * @since 0.5
+   */
+  static async getLastDatabaseStatistic(
+    id: number
+  ): Promise<DbStatistic | null> {
+    const statistic = await prismaClient.statisticsHistory.findFirst({
+      select: {
+        dbTraficRecieved: true,
+        dbTraficSent: true,
+        dbSize: true,
+        httpResponse: true,
+      },
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return statistic;
+  }
+
+  /**
+   * Recovers the last 100 database traffic (inbound and outbound) data from the environment
+   * @since 0.5
+   */
+  static async getDatabaseTrafficHistory(
+    id: number
+  ): Promise<DatabaseTraffic[]> {
+    const inbound = await prismaClient.statisticsHistory.findMany({
+      select: {
+        dbTraficRecieved: true,
+        dbTraficSent: true,
+        httpResponse: true,
+      },
+      take: 100,
+      orderBy: {
+        httpResponse: {
+          timestamp: 'desc',
+        },
+      },
+      where: {
+        environmentId: id,
+      },
+    });
+
+    return inbound;
   }
 }

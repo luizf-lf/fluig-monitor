@@ -18,6 +18,7 @@ import SettingsController, {
 } from '../controllers/SettingsController';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import UpdateScheduleController from '../controllers/UpdateScheduleController';
+import LicenseHistoryController from '../controllers/LicenseHistoryController';
 
 import pingEnvironmentsJob from '../services/pingEnvironmentsJob';
 import syncEnvironmentsJob from '../services/syncEnvironmentsJob';
@@ -26,14 +27,13 @@ import { CreateEnvironmentProps } from '../../renderer/ipc/environmentsIpcHandle
 
 import { isDevelopment, logStringFormat } from './globalConstants';
 import validateOAuthPermission from '../services/validateOAuthPermission';
-import getEnvironmentRelease, {
-  V2VersionApiResponse,
-} from '../services/getEnvironmentRelease';
+import getEnvironmentRelease from '../services/getEnvironmentRelease';
 import AuthObject from '../../common/interfaces/AuthObject';
 import i18n from '../../common/i18n/i18n';
 import AppUpdater, {
   AppUpdaterConstructorOptions,
 } from '../classes/AppUpdater';
+import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -75,10 +75,39 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
+    'getHttpResponsesById',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      const responses = await new EnvironmentController().getHttpResponsesById(
+        id
+      );
+
+      return responses;
+    }
+  );
+
+  ipcMain.handle(
     'getEnvironmentHistoryById',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
       const environment = await new EnvironmentController().getHistoryById(id);
       return environment;
+    }
+  );
+
+  ipcMain.handle(
+    'getEnvironmentServerData',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      const serverData = await EnvironmentController.getEnvironmentServerData(
+        id
+      );
+      return serverData;
+    }
+  );
+
+  ipcMain.handle(
+    'getEnvironmentServices',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      const services = await EnvironmentController.getEnvironmentServices(id);
+      return services;
     }
   );
 
@@ -214,10 +243,6 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getLastHttpResponseFromEnvironment',
     async (_event: Electron.IpcMainInvokeEvent, environmentId: number) => {
-      log.info(
-        `IPC Handler: Recovering last HTTP Response from environment ${environmentId}`
-      );
-
       const lastResponse =
         await new EnvironmentController().getLastHttpResponseById(
           environmentId
@@ -228,39 +253,89 @@ export default function addIpcHandlers(): void {
   );
 
   ipcMain.handle(
-    'getHistoricalDiskInfo',
+    'getDiskInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting historical disk info');
+      log.info(`IPC Handler: Recovering disk info for environment ${id}`);
 
-      const diskInfo = await StatisticsHistoryController.getHistoricalDiskInfo(
-        id
-      );
+      const diskInfo = await StatisticsHistoryController.getDiskInfo(id);
 
       return diskInfo;
     }
   );
 
   ipcMain.handle(
-    'getHistoricalMemoryInfo',
+    'getMemoryInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting historical memory info');
+      log.info(`IPC Handler: Recovering memory info for environment ${id}`);
 
-      const memoryInfo =
-        await StatisticsHistoryController.getHistoricalMemoryInfo(id);
+      const memoryInfo = await StatisticsHistoryController.getMemoryInfo(id);
 
       return memoryInfo;
     }
   );
 
   ipcMain.handle(
-    'getHistoricalDatabaseInfo',
+    'getDatabaseInfo',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      log.info('IPC Handler: Getting historical database info');
+      log.info(`IPC Handler: Recovering database info for environment ${id}`);
 
-      const dbInfo =
-        await StatisticsHistoryController.getHistoricalDatabaseInfo(id);
+      const dbInfo = await StatisticsHistoryController.getDatabaseInfo(id);
 
       return dbInfo;
+    }
+  );
+
+  ipcMain.handle(
+    'getDatabaseProperties',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(`IPC Handler: Recovering database props for environment ${id}`);
+
+      const dbProps = await StatisticsHistoryController.getDatabaseProperties(
+        id
+      );
+
+      return dbProps;
+    }
+  );
+
+  ipcMain.handle(
+    'getDatabaseStatisticsHistory',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(
+        `IPC Handler: Recovering database statistics history for environment ${id}`
+      );
+
+      const dbProps =
+        await StatisticsHistoryController.getDatabaseStatisticsHistory(id);
+
+      return dbProps;
+    }
+  );
+
+  ipcMain.handle(
+    'getLastDatabaseStatistic',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(
+        `IPC Handler: Recovering latest database statistics for environment ${id}`
+      );
+
+      const dbStats =
+        await StatisticsHistoryController.getLastDatabaseStatistic(id);
+
+      return dbStats;
+    }
+  );
+
+  ipcMain.handle(
+    'getLastEnvironmentLicenseData',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      log.info(
+        `IPC Handler: Recovering last license data for environment ${id}`
+      );
+
+      const licenseData = await LicenseHistoryController.getLastLicenseData(id);
+
+      return licenseData;
     }
   );
 
@@ -294,7 +369,7 @@ export default function addIpcHandlers(): void {
       _event: Electron.IpcMainInvokeEvent,
       auth: AuthObject,
       domainUrl: string
-    ): Promise<V2VersionApiResponse | null> => {
+    ): Promise<FluigVersionApiInterface | null> => {
       log.info('IPC Handler: Getting the environment release');
       const result = await getEnvironmentRelease(auth, domainUrl);
 
