@@ -205,10 +205,11 @@
         "summary": "Summary",
         "database": "Database",
         "detailedMemory": "Detailed Memory",
+        "runtimeStats": "Runtime Statistics",
         "artifacts": "Artifacts",
-        "users": "Users",
-        "settings": "Settings",
-        "minimize": "Minimize"
+        "insights": "Insights",
+        "services": "Services",
+        "settings": "Settings"
       }
     },
     "AppSettingsView": {

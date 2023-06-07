@@ -3,7 +3,16 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { FiAirplay, FiDatabase, FiSettings } from 'react-icons/fi';
+import {
+  FiAirplay,
+  FiCpu,
+  FiDatabase,
+  FiGrid,
+  FiLayers,
+  FiList,
+  FiSettings,
+  FiTrendingUp,
+} from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentSummary from '../components/layout/EnvironmentSummaryContainer';
@@ -18,8 +27,6 @@ export default function EnvironmentView(): JSX.Element {
 
   /**
    * // TODO: Update submenu items:
-   * - Database
-   *  - inboundTraffic, outboundTraffic
    * - Detailed Memory
    *  - memoryHeap, nonMemoryHeap, detailedMemory, systemHeapMaxSize, systemHeapSize
    * - Runtime Stats
@@ -42,34 +49,41 @@ export default function EnvironmentView(): JSX.Element {
       text: t('views.EnvironmentDataContainer.sideMenu.database'),
       icon: <FiDatabase />,
     },
-    // {
-    //   target: `detailedMemory`,
-    //   text: t('views.EnvironmentDataContainer.sideMenu.detailedMemory'),
-    //   icon: <FiLayers />,
-    // },
-    // {
-    //   target: `runtimeStats`,
-    //   text: t('views.EnvironmentDataContainer.sideMenu.runtimeStats'),
-    //   icon: <FiPackage />,
-    // },
-    // {
-    //   target: `artifacts`,
-    //   text: t('views.EnvironmentDataContainer.sideMenu.artifacts'),
-    //   icon: <FiPackage />,
-    // },
-    // {
-    //   target: `insights`,
-    //   text: t('views.EnvironmentDataContainer.sideMenu.insights'),
-    //   icon: <FiPackage />,
-    // },
-    // {
-    //   target: `services`,
-    //   text: t('views.EnvironmentDataContainer.sideMenu.services'),
-    //   icon: <FiPackage />,
-    // },
+    {
+      target: `detailedMemory`,
+      text: t('views.EnvironmentDataContainer.sideMenu.detailedMemory'),
+      icon: <FiLayers />,
+    },
+    {
+      target: `runtimeStats`,
+      text: t('views.EnvironmentDataContainer.sideMenu.runtimeStats'),
+      icon: <FiCpu />,
+    },
+    {
+      target: `artifacts`,
+      text: t('views.EnvironmentDataContainer.sideMenu.artifacts'),
+      icon: <FiGrid />,
+    },
+    {
+      target: `insights`,
+      text: t('views.EnvironmentDataContainer.sideMenu.insights'),
+      icon: <FiTrendingUp />,
+    },
+    {
+      target: `services`,
+      text: t('views.EnvironmentDataContainer.sideMenu.services'),
+      icon: <FiList />,
+    },
   ];
 
   const [selectedButton, setSelectedButton] = useState(submenuItems[0].target);
+
+  const underDevelopmentNotice = (
+    <>
+      <h2>{t('views.EnvironmentDataContainer.sideMenu.users')}</h2>
+      <p>{t('components.global.underDevelopment')}</p>
+    </>
+  );
 
   return (
     <motion.div
@@ -125,39 +139,12 @@ export default function EnvironmentView(): JSX.Element {
           <Routes>
             <Route path="summary" element={<EnvironmentSummary />} />
             <Route path="database" element={<EnvironmentDatabaseContainer />} />
-            <Route
-              path="detailedMemory"
-              element={
-                <>
-                  <h2>
-                    {t(
-                      'views.EnvironmentDataContainer.sideMenu.detailedMemory'
-                    )}
-                    <p>{t('components.global.underDevelopment')}</p>
-                  </h2>
-                </>
-              }
-            />
-            <Route
-              path="artifacts"
-              element={
-                <>
-                  <h2>
-                    {t('views.EnvironmentDataContainer.sideMenu.artifacts')}
-                    <p>{t('components.global.underDevelopment')}</p>
-                  </h2>
-                </>
-              }
-            />
-            <Route
-              path="users"
-              element={
-                <>
-                  <h2>{t('views.EnvironmentDataContainer.sideMenu.users')}</h2>
-                  <p>{t('components.global.underDevelopment')}</p>
-                </>
-              }
-            />
+
+            <Route path="detailedMemory" element={underDevelopmentNotice} />
+            <Route path="runtimeStats" element={underDevelopmentNotice} />
+            <Route path="artifacts" element={underDevelopmentNotice} />
+            <Route path="insights" element={underDevelopmentNotice} />
+            <Route path="services" element={underDevelopmentNotice} />
 
             <Route path="edit" element={<EditEnvironmentSettingsView />} />
           </Routes>
