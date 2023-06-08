@@ -17,6 +17,11 @@ import { Link } from 'react-router-dom';
 import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentSummary from '../components/layout/EnvironmentSummaryContainer';
 import EnvironmentDatabaseContainer from '../components/layout/EnvironmentDatabaseContainer';
+import EnvironmentDetailedMemoryContainer from '../components/layout/EnvironmentDetailedMemoryContainer';
+import EnvironmentRuntimeStatsContainer from '../components/layout/EnvironmentRuntimeStatsContainer';
+import EnvironmentArtifactsContainer from '../components/layout/EnvironmentArtifactsContainer';
+import EnvironmentInsightsContainer from '../components/layout/EnvironmentInsightsContainer';
+import EnvironmentServicesContainer from '../components/layout/EnvironmentServicesContainer';
 import EditEnvironmentSettingsView from './EditEnvironmentSettingsView';
 
 import '../assets/styles/pages/EnvironmentView.scss';
@@ -140,11 +145,20 @@ export default function EnvironmentView(): JSX.Element {
             <Route path="summary" element={<EnvironmentSummary />} />
             <Route path="database" element={<EnvironmentDatabaseContainer />} />
 
-            <Route path="detailedMemory" element={underDevelopmentNotice} />
-            <Route path="runtimeStats" element={underDevelopmentNotice} />
-            <Route path="artifacts" element={underDevelopmentNotice} />
-            <Route path="insights" element={underDevelopmentNotice} />
-            <Route path="services" element={underDevelopmentNotice} />
+            <Route
+              path="detailedMemory"
+              element={<EnvironmentDetailedMemoryContainer />}
+            />
+            <Route
+              path="runtimeStats"
+              element={<EnvironmentRuntimeStatsContainer />}
+            />
+            <Route
+              path="artifacts"
+              element={<EnvironmentArtifactsContainer />}
+            />
+            <Route path="insights" element={<EnvironmentInsightsContainer />} />
+            <Route path="services" element={<EnvironmentServicesContainer />} />
 
             <Route path="edit" element={<EditEnvironmentSettingsView />} />
           </Routes>
