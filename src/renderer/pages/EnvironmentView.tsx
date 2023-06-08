@@ -83,13 +83,6 @@ export default function EnvironmentView(): JSX.Element {
 
   const [selectedButton, setSelectedButton] = useState(submenuItems[0].target);
 
-  const underDevelopmentNotice = (
-    <>
-      <h2>{t('views.EnvironmentDataContainer.sideMenu.users')}</h2>
-      <p>{t('components.global.underDevelopment')}</p>
-    </>
-  );
-
   return (
     <motion.div
       variants={globalContainerVariants}
