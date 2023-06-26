@@ -32,16 +32,11 @@ export default function EnvironmentView(): JSX.Element {
 
   /**
    * // TODO: Update submenu items:
-   * - Detailed Memory
-   *  - memoryHeap, nonMemoryHeap, detailedMemory, systemHeapMaxSize, systemHeapSize
-   * - Runtime Stats
-   *  - runtimeUptime, threadingCount, threadingPeakCount, threadingDaemonCount, threadingTotalStarted
-   * - Artifacts
-   *  - artifactsApps, artifactsCore, artifactsSystem
-   * - Insights
-   *  - Add various environment availability insights, such as uptime, days with downtime, response average, etc...
-   * - Services
-   *  - Show services availability as a timeline.
+   * - Detailed Memory (#33)
+   * - Runtime Stats (#34)
+   * - Artifacts (#35)
+   * - Insights (#36)
+   * - Services (#37)
    */
   const submenuItems = [
     {
