@@ -1,7 +1,7 @@
 /* eslint-disable no-await-in-loop */
 import log from 'electron-log';
 import { ipcMain } from 'electron';
-import Store from 'electron-store';
+import ElectronStore from 'electron-store';
 
 import { AppSetting } from '../generated/client';
 import { AuthKeysControllerInterface } from '../../common/interfaces/AuthKeysControllerInterface';
@@ -40,14 +40,22 @@ import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionAp
  * @since 0.2.1
  */
 export default function addIpcHandlers(): void {
+  const environmentController = new EnvironmentController();
+  const languageController = new LanguageController();
+  const updateScheduleController = new UpdateScheduleController();
+  const authKeysController = new AuthKeysController();
+  const logController = new LogController();
+  const settingsController = new SettingsController();
+  const electronStore = new ElectronStore();
+
   ipcMain.on('getAllEnvironments', async (event) => {
     log.info('IPC Listener: Recovering all environments');
-    event.returnValue = await new EnvironmentController().getAll();
+    event.returnValue = await environmentController.getAll();
   });
 
   ipcMain.on('getLanguage', async (event) => {
     log.info('IPC Listener: Recovering user language');
-    event.returnValue = await new LanguageController().get();
+    event.returnValue = await languageController.get();
   });
 
   ipcMain.on('getIsDevelopment', (event) => {
@@ -65,7 +73,7 @@ export default function addIpcHandlers(): void {
       includeRelatedData: boolean
     ) => {
       log.info('IPC Handler: Recovering environment by id');
-      const environment = await new EnvironmentController().getById(
+      const environment = await environmentController.getById(
         id,
         includeRelatedData
       );
@@ -77,9 +85,7 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getHttpResponsesById',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      const responses = await new EnvironmentController().getHttpResponsesById(
-        id
-      );
+      const responses = await environmentController.getHttpResponsesById(id);
 
       return responses;
     }
@@ -88,7 +94,7 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getEnvironmentHistoryById',
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
-      const environment = await new EnvironmentController().getHistoryById(id);
+      const environment = await environmentController.getHistoryById(id);
       return environment;
     }
   );
@@ -123,21 +129,19 @@ export default function addIpcHandlers(): void {
     ) => {
       log.info('IPC Handler: Creating a new environment');
 
-      const createdEnvironment = await new EnvironmentController().new(
-        environment
-      );
-      const createdUpdateSchedule = await new UpdateScheduleController().new({
+      const createdEnvironment = await environmentController.new(environment);
+      const createdUpdateSchedule = await updateScheduleController.new({
         environmentId: createdEnvironment.id,
         pingFrequency: updateSchedule.pingFrequency,
         scrapeFrequency: updateSchedule.scrapeFrequency,
       });
-      const createdAuthKeys = await new AuthKeysController().new({
+      const createdAuthKeys = await authKeysController.new({
         environmentId: createdEnvironment.id,
         payload: environmentAuthKeys.payload,
         hash: environmentAuthKeys.hash,
       });
 
-      await new LogController().writeLog({
+      await logController.writeLog({
         type: 'info',
         message: `Environment ${createdEnvironment.id} created with related data via ipcMain handler`,
       });
@@ -156,15 +160,15 @@ export default function addIpcHandlers(): void {
     ) => {
       log.info('IPC Handler: Updating an environment');
 
-      const updatedEnvironment = await new EnvironmentController().update(
+      const updatedEnvironment = await environmentController.update(
         environment
       );
-      const updatedUpdateSchedule = await new UpdateScheduleController().update(
+      const updatedUpdateSchedule = await updateScheduleController.update(
         updateSchedule
       );
-      const updatedAuthKeys = await new AuthKeysController().update(authKeys);
+      const updatedAuthKeys = await authKeysController.update(authKeys);
 
-      await new LogController().writeLog({
+      await logController.writeLog({
         type: 'info',
         message: `Environment ${updatedEnvironment.id} updated with related data via ipcMain handler`,
       });
@@ -178,9 +182,9 @@ export default function addIpcHandlers(): void {
     async (_event: Electron.IpcMainInvokeEvent, id: number) => {
       log.info('IPC Handler: Deleting environment');
 
-      const deleted = await new EnvironmentController().delete(id);
+      const deleted = await environmentController.delete(id);
 
-      await new LogController().writeLog({
+      await logController.writeLog({
         type: 'info',
         message: `Environment ${deleted.id} deleted logically via ipcMain handler`,
       });
@@ -208,7 +212,6 @@ export default function addIpcHandlers(): void {
       _event: Electron.IpcMainInvokeEvent,
       settings: AppSettingUpdatePropsInterface[]
     ): Promise<AppSetting[]> => {
-      const settingsController = new SettingsController();
       const updated = [];
 
       for (let i = 0; i < settings.length; i += 1) {
@@ -225,7 +228,7 @@ export default function addIpcHandlers(): void {
       _event: Electron.IpcMainInvokeEvent,
       settingId: string
     ): Promise<AppSetting | null> => {
-      const found = await new SettingsController().find(settingId);
+      const found = await settingsController.find(settingId);
 
       return found;
     }
@@ -234,7 +237,7 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getSettingsAsObject',
     async (/** _event: Electron.IpcMainInvokeEvent */): Promise<SettingsObject> => {
-      const found = await new SettingsController().getAllAsObject();
+      const found = await settingsController.getAllAsObject();
 
       return found;
     }
@@ -243,10 +246,9 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'getLastHttpResponseFromEnvironment',
     async (_event: Electron.IpcMainInvokeEvent, environmentId: number) => {
-      const lastResponse =
-        await new EnvironmentController().getLastHttpResponseById(
-          environmentId
-        );
+      const lastResponse = await environmentController.getLastHttpResponseById(
+        environmentId
+      );
 
       return lastResponse;
     }
@@ -380,7 +382,7 @@ export default function addIpcHandlers(): void {
   ipcMain.handle(
     'setStoreValue',
     (_event: Electron.IpcMainInvokeEvent, key: string, value: string) => {
-      new Store().set(key, value);
+      electronStore.set(key, value);
     }
   );
 
