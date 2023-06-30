@@ -1,17 +1,10 @@
-import { motion } from 'framer-motion';
-import globalContainerVariants from '../../utils/globalContainerVariants';
+import DefaultMotionDiv from '../base/DefaultMotionDiv';
 
 function EnvironmentRuntimeStatsContainer() {
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="runtime-stats-container"
-    >
+    <DefaultMotionDiv id="runtime-stats-container">
       <h3>Estatísticas De Runtime</h3>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }
 

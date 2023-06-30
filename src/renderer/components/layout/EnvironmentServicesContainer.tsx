@@ -1,17 +1,10 @@
-import { motion } from 'framer-motion';
-import globalContainerVariants from '../../utils/globalContainerVariants';
+import DefaultMotionDiv from '../base/DefaultMotionDiv';
 
 function EnvironmentServicesContainer() {
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="environment-services-container"
-    >
+    <DefaultMotionDiv id="environment-services-container">
       <h3>Histórico De Serviços</h3>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }
 

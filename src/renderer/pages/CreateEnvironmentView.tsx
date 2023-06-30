@@ -1,6 +1,5 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { motion } from 'framer-motion';
 import { ipcRenderer } from 'electron';
 import { FormEvent, useState } from 'react';
 import {
@@ -24,10 +23,10 @@ import {
   forceEnvironmentSync,
   getEnvironmentReleaseIPC,
 } from '../ipc/environmentsIpcHandler';
-import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 import compareSemver from '../../common/utils/compareSemver';
+import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -328,14 +327,7 @@ export default function CreateEnvironmentView(): JSX.Element {
   }
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="createEnvironmentContainer"
-      className="environment-form-container"
-    >
+    <DefaultMotionDiv id="environment-form-container">
       <Link to="/" className="top-return-button">
         <FiArrowLeft />
         {t('views.CreateEnvironmentView.back')}
@@ -628,6 +620,6 @@ export default function CreateEnvironmentView(): JSX.Element {
           {validationMessage}
         </div>
       </form>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

@@ -1,17 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { FiChevronLeft } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 
 import CreateEnvironmentButton from '../components/base/CreateEnvironmentButton';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
 
-import globalContainerVariants from '../utils/globalContainerVariants';
 import colorServer from '../assets/svg/color-server.svg';
 import HomeEnvironmentCard from '../components/container/HomeEnvironmentCard';
 
 import '../assets/styles/pages/HomeEnvironmentListView.scss';
+import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
 
 export default function HomeEnvironmentListView() {
   const { environmentList, updateEnvironmentList } = useEnvironmentList();
@@ -40,13 +39,7 @@ export default function HomeEnvironmentListView() {
   );
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="homeEnvironmentListContainer"
-    >
+    <DefaultMotionDiv id="homeEnvironmentListContainer">
       <h2>{t('views.HomeEnvironmentListView.header')}</h2>
       <div id="EnvironmentListContent">
         <CreateEnvironmentButton isExpanded />
@@ -56,6 +49,6 @@ export default function HomeEnvironmentListView() {
               <HomeEnvironmentCard environment={environment} />
             ))}
       </div>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

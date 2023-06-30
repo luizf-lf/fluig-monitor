@@ -1,10 +1,7 @@
-import { motion } from 'framer-motion';
-
-import globalContainerVariants from '../../utils/globalContainerVariants';
-
 import DatabasePropsPanel from '../container/DatabasePropsPanel';
 import DatabaseStorageGraph from '../container/DatabaseStorageGraph';
 import DatabaseNetworkGraph from '../container/DatabaseNetworkGraph';
+import DefaultMotionDiv from '../base/DefaultMotionDiv';
 
 /**
  * Environment database info container. Has a 5 x 1 grid template.
@@ -12,13 +9,7 @@ import DatabaseNetworkGraph from '../container/DatabaseNetworkGraph';
  */
 export default function EnvironmentDatabaseContainer() {
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="environment-database-container"
-    >
+    <DefaultMotionDiv id="environment-database-container">
       <div
         style={{
           display: 'grid',
@@ -42,6 +33,6 @@ export default function EnvironmentDatabaseContainer() {
         </div>
         <DatabasePropsPanel />
       </div>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

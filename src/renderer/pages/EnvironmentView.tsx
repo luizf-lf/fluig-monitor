@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import { Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
@@ -14,7 +13,6 @@ import {
   FiTrendingUp,
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import globalContainerVariants from '../utils/globalContainerVariants';
 import EnvironmentSummary from '../components/layout/EnvironmentSummaryContainer';
 import EnvironmentDatabaseContainer from '../components/layout/EnvironmentDatabaseContainer';
 import EnvironmentDetailedMemoryContainer from '../components/layout/EnvironmentDetailedMemoryContainer';
@@ -23,6 +21,7 @@ import EnvironmentArtifactsContainer from '../components/layout/EnvironmentArtif
 import EnvironmentInsightsContainer from '../components/layout/EnvironmentInsightsContainer';
 import EnvironmentServicesContainer from '../components/layout/EnvironmentServicesContainer';
 import EditEnvironmentSettingsView from './EditEnvironmentSettingsView';
+import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
 
 import '../assets/styles/pages/EnvironmentView.scss';
 
@@ -79,14 +78,7 @@ export default function EnvironmentView(): JSX.Element {
   const [selectedButton, setSelectedButton] = useState(submenuItems[0].target);
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="centerViewContainer"
-      className="center-view-container"
-    >
+    <DefaultMotionDiv id="center-view-container">
       <div className="environment-data-container">
         <section>
           <h2>Menu</h2>
@@ -152,6 +144,6 @@ export default function EnvironmentView(): JSX.Element {
           </Routes>
         </section>
       </div>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

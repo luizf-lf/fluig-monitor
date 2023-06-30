@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FiInfo, FiPackage } from 'react-icons/fi';
-import globalContainerVariants from '../../../utils/globalContainerVariants';
 import {
   getAppSettingsAsObject,
   updateAppSettings,
 } from '../../../ipc/settingsIpcHandler';
 import parseBoolean from '../../../../common/utils/parseBoolean';
+import DefaultMotionDiv from '../../base/DefaultMotionDiv';
 
 export default function UpdatesSettings() {
   const { t } = useTranslation();
@@ -50,12 +49,7 @@ export default function UpdatesSettings() {
   }, []);
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
+    <DefaultMotionDiv id="app-updates-settings">
       <h3 className="icon-title">
         <span className="icon-dot yellow-variant">
           <FiPackage />
@@ -108,6 +102,6 @@ export default function UpdatesSettings() {
       <p className="mt-2 font-soft">
         <FiInfo /> {t('components.UpdatesSettings.updateFrequency.helper')}
       </p>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

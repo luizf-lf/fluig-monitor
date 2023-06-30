@@ -1,18 +1,10 @@
-import { motion } from 'framer-motion';
-
-import globalContainerVariants from '../../utils/globalContainerVariants';
+import DefaultMotionDiv from '../base/DefaultMotionDiv';
 
 function EnvironmentDetailedMemoryContainer() {
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="environment-detailed-memory"
-    >
+    <DefaultMotionDiv id="environment-detailed-memory">
       <h3>Memória Detalhada</h3>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }
 
