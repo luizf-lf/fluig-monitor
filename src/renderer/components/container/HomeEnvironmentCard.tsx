@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
+import { ipcRenderer } from 'electron';
 import { ResponsiveContainer, LineChart, Line } from 'recharts';
 
 import { EnvironmentWithRelatedData } from '../../../common/interfaces/EnvironmentControllerInterface';
@@ -7,11 +9,26 @@ import EnvironmentFavoriteButton from '../base/EnvironmentFavoriteButton';
 import SmallTag from '../base/SmallTag';
 
 interface Props {
-  environment: EnvironmentWithRelatedData;
+  injectedEnvironment: EnvironmentWithRelatedData;
 }
 
-function HomeEnvironmentCard({ environment }: Props) {
+function HomeEnvironmentCard({ injectedEnvironment }: Props) {
   // TODO: Listen for environment pings to update the httpResponses graph
+
+  const [environment, setEnvironment] =
+    useState<EnvironmentWithRelatedData>(injectedEnvironment);
+
+  useEffect(() => {
+    ipcRenderer.on(`serverPinged_${environment.id}`, async () => {
+      // TODO: Implement environment recover on server ping
+      // setEnvironment(await getEnvironmentById(environment.id));
+    });
+
+    return () => {
+      ipcRenderer.removeAllListeners(`serverPinged_${environment.id}`);
+    };
+  });
+
   return (
     <div className="EnvironmentCard" key={environment.id}>
       <div className="heading">

@@ -46,7 +46,10 @@ export default function HomeEnvironmentListView() {
         {environmentList.length === 0
           ? createEnvironmentHelper
           : environmentList.map((environment) => (
-              <HomeEnvironmentCard environment={environment} />
+              <HomeEnvironmentCard
+                injectedEnvironment={environment}
+                key={environment.id}
+              />
             ))}
       </div>
     </DefaultMotionDiv>
