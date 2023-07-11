@@ -1,9 +1,10 @@
+import Box from '../base/Box';
 import DefaultMotionDiv from '../base/DefaultMotionDiv';
 
 function EnvironmentDetailedMemoryContainer() {
   return (
     <DefaultMotionDiv id="environment-detailed-memory">
-      <h3>Memória Detalhada</h3>
+      <Box>Detailed Memory</Box>
     </DefaultMotionDiv>
   );
 }

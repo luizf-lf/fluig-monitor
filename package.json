@@ -233,7 +233,7 @@
     "electron-log": "^4.4.8",
     "electron-store": "^8.1.0",
     "electron-updater": "^4.3.9",
-    "framer-motion": "^5.3.3",
+    "framer-motion": "^10.12.18",
     "history": "4.x.x",
     "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "^6.1.4",
