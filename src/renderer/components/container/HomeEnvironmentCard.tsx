@@ -7,21 +7,19 @@ import { ResponsiveContainer, LineChart, Line } from 'recharts';
 import { EnvironmentWithRelatedData } from '../../../common/interfaces/EnvironmentControllerInterface';
 import EnvironmentFavoriteButton from '../base/EnvironmentFavoriteButton';
 import SmallTag from '../base/SmallTag';
+import { getEnvironmentById } from '../../ipc/environmentsIpcHandler';
 
 interface Props {
   injectedEnvironment: EnvironmentWithRelatedData;
 }
 
 function HomeEnvironmentCard({ injectedEnvironment }: Props) {
-  // TODO: Listen for environment pings to update the httpResponses graph
-
   const [environment, setEnvironment] =
     useState<EnvironmentWithRelatedData>(injectedEnvironment);
 
   useEffect(() => {
     ipcRenderer.on(`serverPinged_${environment.id}`, async () => {
-      // TODO: Implement environment recover on server ping
-      // setEnvironment(await getEnvironmentById(environment.id));
+      setEnvironment(await getEnvironmentById(environment.id, true));
     });
 
     return () => {
