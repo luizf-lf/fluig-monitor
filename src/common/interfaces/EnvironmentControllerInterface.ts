@@ -53,3 +53,16 @@ export interface StatisticsHistoryWithHttpResponse extends StatisticsHistory {
 export interface MonitorHistoryWithHttpResponse extends MonitorHistory {
   httpResponse: HTTPResponse;
 }
+
+export interface EnvironmentWithDetailedMemoryHistory extends Environment {
+  statisticHistory: {
+    systemServerMemorySize: bigint | null;
+    systemServerMemoryFree: bigint | null;
+    memoryHeap: bigint | null;
+    nonMemoryHeap: bigint | null;
+    detailedMemory: string | null;
+    systemHeapMaxSize: bigint | null;
+    systemHeapSize: bigint | null;
+    httpResponse: HTTPResponse;
+  }[];
+}

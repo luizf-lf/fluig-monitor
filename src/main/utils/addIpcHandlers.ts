@@ -402,4 +402,14 @@ export default function addIpcHandlers(): void {
       new AppUpdater(options).checkUpdates();
     }
   );
+
+  ipcMain.handle(
+    'getDetailedMemoryById',
+    async (_event: Electron.IpcMainInvokeEvent, id: number) => {
+      const environmentMemory =
+        await EnvironmentController.getDetailedMemoryById(id);
+
+      return environmentMemory;
+    }
+  );
 }

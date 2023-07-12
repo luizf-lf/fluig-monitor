@@ -5,6 +5,7 @@ import {
   EnvironmentServerData,
   EnvironmentServices,
   EnvironmentUpdateControllerInterface,
+  EnvironmentWithDetailedMemoryHistory,
   EnvironmentWithHistory,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
@@ -360,5 +361,42 @@ export default class EnvironmentController {
     });
 
     return { favorited: !environment.isFavorite, exception: null };
+  }
+
+  static async getDetailedMemoryById(
+    id: number
+  ): Promise<EnvironmentWithDetailedMemoryHistory | null> {
+    log.info(
+      'EnvironmentController: Recovering detailed environment memory stats by id ',
+      id
+    );
+
+    const environment = await prismaClient.environment.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        statisticHistory: {
+          select: {
+            systemServerMemorySize: true,
+            systemServerMemoryFree: true,
+            memoryHeap: true,
+            nonMemoryHeap: true,
+            detailedMemory: true,
+            systemHeapMaxSize: true,
+            systemHeapSize: true,
+            httpResponse: true,
+          },
+          orderBy: {
+            httpResponse: {
+              timestamp: 'desc',
+            },
+          },
+          take: 300,
+        },
+      },
+    });
+
+    return environment;
   }
 }
