@@ -15,6 +15,7 @@ import formatBytes from '../../common/utils/formatBytes';
 import byteSpeed from '../../common/utils/byteSpeed';
 import i18n from '../../common/i18n/i18n';
 import SettingsController from '../controllers/SettingsController';
+import { isDevelopment } from '../../main/utils/globalConstants';
 
 export interface AppUpdaterConstructorOptions {
   forceOptions: { forceDownload?: boolean; forceInstall?: boolean };
@@ -192,9 +193,14 @@ export default class AppUpdater {
    */
   async checkUpdates(): Promise<void> {
     try {
-      log.info('AppUpdater: Checking for app updates.');
-      // recovers the app settings related to updates
+      if (isDevelopment) {
+        log.info('AppUpdate: App is running in dev mode. Ignoring updates.');
+        return;
+      }
 
+      log.info('AppUpdater: Checking for app updates.');
+
+      // recovers the app settings related to updates
       const { ENABLE_AUTO_DOWNLOAD_UPDATE, ENABLE_AUTO_INSTALL_UPDATE } =
         await new SettingsController().getAllAsObject();
       if (ENABLE_AUTO_DOWNLOAD_UPDATE) {
