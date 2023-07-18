@@ -194,7 +194,7 @@ export default class AppUpdater {
   async checkUpdates(): Promise<void> {
     try {
       if (isDevelopment) {
-        log.info('AppUpdate: App is running in dev mode. Ignoring updates.');
+        log.info('AppUpdater: App is running in dev mode. Ignoring updates.');
         return;
       }
 

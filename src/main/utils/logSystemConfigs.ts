@@ -5,9 +5,7 @@ import formatBytes from '../../common/utils/formatBytes';
 export default function logSystemConfigs() {
   const cpus = os.cpus();
   log.info('============ System Configuration ============');
-  for (let i = 0; i < cpus.length; i += 1) {
-    log.info(`CPU${i}: ${cpus[i].model}`);
-  }
+  log.info(`CPU: ${cpus.length}x ${cpus[0].model}`);
   log.info(`Total RAM: ${os.totalmem()} bytes (${formatBytes(os.totalmem())})`);
   log.info(`Free RAM: ${os.freemem()} bytes (${formatBytes(os.freemem())})`);
   log.info(`System Uptime: ${os.uptime()}s`);
