@@ -1,6 +1,14 @@
 import log from 'electron-log';
 
 /* eslint-disable no-restricted-properties */
+/**
+ * Formats a giver number of bytes to a human readable format.
+ * @since 0.2
+ * @param bytes number of bytes to format
+ * @param decimals amount of decimals to use (defaults to 2)
+ * @returns a string containing the formatted bytes in human readable format
+ * @example formatBytes(1073741824) -> "1 GB"
+ */
 export default function formatBytes(
   bytes: number | null,
   decimals = 2
