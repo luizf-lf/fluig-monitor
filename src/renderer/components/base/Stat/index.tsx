@@ -3,7 +3,7 @@ import './index.scss';
 interface StatProps {
   heading: string;
   prefix: string;
-  suffix: string;
+  suffix?: string;
 }
 
 /**
@@ -15,7 +15,7 @@ const Stat: React.FC<StatProps> = ({ heading, prefix, suffix }) => {
     <div className="stat-container">
       <span className="font-soft">{prefix}</span>
       <h3>{heading}</h3>
-      <span className="font-soft">{suffix}</span>
+      {suffix && <span className="font-soft">{suffix}</span>}
     </div>
   );
 };
