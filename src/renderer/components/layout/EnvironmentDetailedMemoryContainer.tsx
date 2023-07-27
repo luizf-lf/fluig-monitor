@@ -10,6 +10,7 @@ import {
 } from '../../../common/interfaces/EnvironmentControllerInterface';
 import SpinnerLoader from '../base/Loaders/Spinner';
 import formatBytes from 'common/utils/formatBytes';
+import { useTranslation } from 'react-i18next';
 
 function EnvironmentDetailedMemoryContainer() {
   const environmentId = window.location.hash.split('/')[2];
@@ -17,6 +18,8 @@ function EnvironmentDetailedMemoryContainer() {
     useState<EnvironmentWithDetailedMemoryHistory | null>(null);
   const [lastMemoryData, setLastMemoryData] =
     useState<DetailedMemoryHistory | null>(null);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     async function getData() {
@@ -43,7 +46,11 @@ function EnvironmentDetailedMemoryContainer() {
   // TODO: Implement i18n
   return (
     <DefaultMotionDiv id="environment-detailed-memory">
-      <h3>Consumo de memória</h3>
+      <h3>
+        {t(
+          'components.EnvironmentDetailedMemoryContainer.memoryConsumptionTitle'
+        )}
+      </h3>
       <Box>
         <div
           style={{
@@ -64,7 +71,9 @@ function EnvironmentDetailedMemoryContainer() {
                 Number(lastMemoryData.systemServerMemorySize) -
                   Number(lastMemoryData.systemServerMemoryFree)
               )}
-              prefix="Usado"
+              prefix={t(
+                'components.EnvironmentDetailedMemoryContainer.memoryConsumptionUsed'
+              )}
               suffix={formatBytes(
                 Number(lastMemoryData.systemServerMemorySize)
               )}
@@ -73,7 +82,11 @@ function EnvironmentDetailedMemoryContainer() {
           <div>Gráfico vem agui</div>
         </div>
       </Box>
-      <h3 style={{ marginTop: '2rem' }}>Estatísticas por tipo de memória</h3>
+      <h3 style={{ marginTop: '2rem' }}>
+        {t(
+          'components.EnvironmentDetailedMemoryContainer.memoryStatisticsTitle'
+        )}
+      </h3>
       <div style={{ display: 'flex', gap: '1rem' }}>
         <Box>
           <Stat

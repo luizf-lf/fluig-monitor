@@ -371,6 +371,11 @@
         "ms": "Tempo",
         "bytes": "Tamanho"
       }
+    },
+    "EnvironmentDetailedMemoryContainer": {
+      "memoryConsumptionTitle": "Consumo De Memória",
+      "memoryConsumptionUsed": "Usado",
+      "memoryStatisticsTitle": "Estatísticas por tipo de memória"
     }
   },
   "classes": {
