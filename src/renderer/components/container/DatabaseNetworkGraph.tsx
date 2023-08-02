@@ -4,8 +4,8 @@ import { useLocation } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 import {
   CartesianGrid,
-  Line,
-  LineChart,
+  Area,
+  AreaChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -78,7 +78,7 @@ export default function DatabaseNetworkGraph({ mode }: Props) {
       setHasGraphData(true);
       setGraph(
         <ResponsiveContainer width="100%" height="92%">
-          <LineChart data={normalizedData.reverse()}>
+          <AreaChart data={normalizedData.reverse()}>
             <CartesianGrid strokeDasharray="3" vertical={false} />
             <XAxis
               dataKey="timestamp"
@@ -99,24 +99,26 @@ export default function DatabaseNetworkGraph({ mode }: Props) {
               }}
             />
             {(mode === 'OUTBOUND' || mode === 'MIXED') && (
-              <Line
+              <Area
                 type="monotone"
                 dataKey="dbTrafficSent"
                 dot={false}
                 stroke="var(--green)"
+                fill="var(--light-green)"
                 strokeWidth={2}
               />
             )}
             {(mode === 'INBOUND' || mode === 'MIXED') && (
-              <Line
+              <Area
                 type="monotone"
                 dataKey="dbTrafficReceived"
                 dot={false}
                 stroke="var(--yellow)"
+                fill="var(--light-yellow)"
                 strokeWidth={2}
               />
             )}
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       );
     }
