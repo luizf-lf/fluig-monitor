@@ -1,15 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-
-import Box from '../base/Box';
-import Stat from '../base/Stat';
-import DefaultMotionDiv from '../base/DefaultMotionDiv';
-import { getDetailedMemoryById } from '../../ipc/environmentsIpcHandler';
-import {
-  DetailedMemoryHistory,
-  EnvironmentWithDetailedMemoryHistory,
-} from '../../../common/interfaces/EnvironmentControllerInterface';
-import SpinnerLoader from '../base/Loaders/Spinner';
-import formatBytes from 'common/utils/formatBytes';
 import { useTranslation } from 'react-i18next';
 import {
   Area,
@@ -20,7 +10,25 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
+import Box from '../base/Box';
+import Stat from '../base/Stat';
+import DefaultMotionDiv from '../base/DefaultMotionDiv';
+import { getDetailedMemoryById } from '../../ipc/environmentsIpcHandler';
+import {
+  DetailedMemoryHistory,
+  EnvironmentWithDetailedMemoryHistory,
+} from '../../../common/interfaces/EnvironmentControllerInterface';
+import SpinnerLoader from '../base/Loaders/Spinner';
+import formatBytes from '../../../common/utils/formatBytes';
 import GraphTooltip from '../base/GraphTooltip';
+
+interface NormalizedMemoryData {
+  timestamp: Date;
+  systemServerMemorySize: number;
+  systemServerMemoryFree: number;
+  systemServerMemoryUsed: number;
+}
 
 function EnvironmentDetailedMemoryContainer() {
   const environmentId = window.location.hash.split('/')[2];
@@ -28,7 +36,9 @@ function EnvironmentDetailedMemoryContainer() {
     useState<EnvironmentWithDetailedMemoryHistory | null>(null);
   const [lastMemoryData, setLastMemoryData] =
     useState<DetailedMemoryHistory | null>(null);
-  const [normalizedMemoryData, setNormalizedMemoryData] = useState<any[]>([]);
+  const [normalizedMemoryData, setNormalizedMemoryData] = useState<
+    NormalizedMemoryData[]
+  >([]);
 
   const { t } = useTranslation();
 
@@ -47,7 +57,7 @@ function EnvironmentDetailedMemoryContainer() {
         for (
           let i = 0;
           i < environmentDataResult.statisticHistory.length;
-          i++
+          i += 1
         ) {
           const element = environmentDataResult.statisticHistory[i];
           dataNormalized.push({
@@ -61,7 +71,6 @@ function EnvironmentDetailedMemoryContainer() {
         }
 
         setNormalizedMemoryData(dataNormalized);
-        console.log(dataNormalized);
       }
     }
 
@@ -74,8 +83,6 @@ function EnvironmentDetailedMemoryContainer() {
     return <SpinnerLoader />;
   }
 
-  // TODO: Fix graph display
-  // TODO: Implement i18n
   return (
     <DefaultMotionDiv id="environment-detailed-memory">
       <h3>
