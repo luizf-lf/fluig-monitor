@@ -401,7 +401,7 @@ async function syncProductVersion(
 
       if (!decodedKeys) {
         log.error(
-          'syncStatisticsData: Could not decode the environment keys, ignoring sync.'
+          'syncProductVersion: Could not decode the environment keys, ignoring sync.'
         );
         return;
       }
@@ -412,13 +412,10 @@ async function syncProductVersion(
       );
 
       if (release) {
-        await new EnvironmentController().update({
-          baseUrl: environment.baseUrl,
-          id: environment.id,
-          kind: environment.kind,
-          name: environment.name,
-          release: release.content.split(' - ')[1],
-        });
+        await new EnvironmentController().updateRelease(
+          environment.id,
+          release.content.split(' - ')[1]
+        );
       }
     }
   } catch (error) {

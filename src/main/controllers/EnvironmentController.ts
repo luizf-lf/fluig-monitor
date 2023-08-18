@@ -307,6 +307,29 @@ export default class EnvironmentController {
     return this.updated;
   }
 
+  async updateRelease(
+    environmentId: number,
+    release: string
+  ): Promise<Environment | null> {
+    try {
+      log.info(`Updating environment ${environmentId} release`);
+
+      this.updated = await prismaClient.environment.update({
+        where: {
+          id: environmentId,
+        },
+        data: {
+          release,
+        },
+      });
+
+      return this.updated;
+    } catch (error) {
+      log.error(`UpdateRelease error: ${error}`);
+      return null;
+    }
+  }
+
   async delete(id: number): Promise<Environment> {
     if (this.writeLogs) {
       log.info('Deleting environment with id', id, 'and related fields');
@@ -397,6 +420,7 @@ export default class EnvironmentController {
       },
     });
 
+    // TODO: Fix data type
     return environment;
   }
 }
