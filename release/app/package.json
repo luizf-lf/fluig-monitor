@@ -1,7 +1,7 @@
 {
   "name": "fluig-monitor",
   "description": "Application for monitoring Fluig environments.",
-  "version": "1.0.0-rc",
+  "version": "1.0.0",
   "main": "./dist/main/main.js",
   "author": {
     "name": "Luiz Ferreira",
