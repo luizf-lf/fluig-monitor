@@ -392,7 +392,7 @@
   },
   "toasts": {
     "HighResponseTime": {
-      "title": "com ping algo.",
+      "title": "com ping alto.",
       "message": "O servidor está com um tempo de resposta muito alto."
     },
     "OperatingCorrectly": {
