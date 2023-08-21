@@ -53,26 +53,27 @@ export default function EnvironmentView(): JSX.Element {
       text: t('views.EnvironmentDataContainer.sideMenu.detailedMemory'),
       icon: <FiLayers />,
     },
-    {
-      target: `runtimeStats`,
-      text: t('views.EnvironmentDataContainer.sideMenu.runtimeStats'),
-      icon: <FiCpu />,
-    },
-    {
-      target: `artifacts`,
-      text: t('views.EnvironmentDataContainer.sideMenu.artifacts'),
-      icon: <FiGrid />,
-    },
-    {
-      target: `insights`,
-      text: t('views.EnvironmentDataContainer.sideMenu.insights'),
-      icon: <FiTrendingUp />,
-    },
-    {
-      target: `services`,
-      text: t('views.EnvironmentDataContainer.sideMenu.services'),
-      icon: <FiList />,
-    },
+    // TODO: Implement remaining screens
+    // {
+    //   target: `runtimeStats`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.runtimeStats'),
+    //   icon: <FiCpu />,
+    // },
+    // {
+    //   target: `artifacts`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.artifacts'),
+    //   icon: <FiGrid />,
+    // },
+    // {
+    //   target: `insights`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.insights'),
+    //   icon: <FiTrendingUp />,
+    // },
+    // {
+    //   target: `services`,
+    //   text: t('views.EnvironmentDataContainer.sideMenu.services'),
+    //   icon: <FiList />,
+    // },
   ];
 
   const [selectedButton, setSelectedButton] = useState(submenuItems[0].target);
