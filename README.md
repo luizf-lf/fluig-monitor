@@ -25,7 +25,7 @@
   - [Estrutura do processo main](#estrutura-do-processo-main)
   - [Estrutura do processo renderer](#estrutura-do-processo-renderer)
 - [Instruções De Uso](#instruções-de-uso)
-  - [Cadastrando um ambiente](#cadastrando-um-ambiente)
+  - [Monitorando um ambiente](#monitorando-um-ambiente)
 - [Informações adicionais](#informações-adicionais)
 - [Contribuindo](#contribuindo)
 
@@ -35,7 +35,7 @@ Uma aplicação desktop, desenvolvida em **Electron**, utilizada para monitorar 
 
 O monitoramento é realizado através da **API Rest** da plataforma, também utilizada para coleta de dados do **monitor**, **estatísticas** e **licenças** da plataforma , conforme a [documentação](https://tdn.engpro.totvs.com.br/pages/releaseview.action?pageId=284881802).
 
-Esta aplicação veio sendo desenvolvida inicialmente para fins **didáticos**, com a intenção de aprender sobre UI/UX, desenvolvimento de aplicações desktop com `React`, `Electron`, `Typescript`, e o uso das `APIs` do Fluig, mas aos poucos vem se tornando uma aplicação que possibilite gerir uma melhor observabilidade sobre a plataforma Fluig em si.
+Esta aplicação veio sendo desenvolvida inicialmente para fins **didáticos**, com a intenção de aprender sobre UI/UX, desenvolvimento de aplicações desktop com `React`, `Electron`, `Typescript`, e o uso das `APIs` do Fluig, mas aos poucos vem se tornando uma aplicação que possibilite gerir uma melhor observabilidade sobre a plataforma Fluig.
 
 A aplicação possui um banco de dados SQLite que é criado automaticamente na primeira execução do aplicativo. Na build de produção, o mesmo ficará disponível na pasta `%appdata%/fluig-monitor/fluig-monitor.db`, no caso da versão de desenvolvimento, o mesmo será criado dentro da pasta `.prisma`, na raiz do projeto. Mais informações estão disponíveis nas instruções de execução do projeto abaixo.
 
@@ -53,30 +53,39 @@ Algumas das principais funcionalidades já implementadas:
 - Banco de dados local em SQLite.
 - Migrações de banco de dados automáticas.
 - Dashboard com gráfico de exibição de tempo de resposta da plataforma.
+- Telas de visão geral, banco de dados e memória detalhada do servidor.
 
 Novas funcionalidades vem sendo estudadas constantemente. Verifique na aba [Issues](https://github.com/luizf-lf/fluig-monitor/issues) as melhorias que já foram mapeadas publicamente e/ou sugeridas por outras pessoas.
 
 ## Imagens
 
-![Visão Do Ambiente (Tema Claro)](./docs/img/EnvironmentView_01-White.png)
-
-> Visão Do Ambiente (Tema Claro)
-
-![Visão Do Ambiente (Tema Escuro)](./docs/img/EnvironmentView_02-Dark.png)
-
-> Visão Do Ambiente (Tema Escuro)
-
-![Visão Do Ambiente (I18N)](./docs/img/EnvironmentView_03-EN.png)
-
-> Visão Do Ambiente (I18N) em inglês.
-
-![Visão Do Ambiente (Indisponibilidade)](./docs/img/EnvironmentView04-Unavailable.png)
-
-> Visão Do Ambiente (Indisponibilidade)
-
 ![Lista De Ambientes](./docs/img/HomeView.png)
 
 > Lista De Ambientes, com mini gráfico de disponibilidade.
+
+![Resumo - Modo Claro](./docs/img/EnvironmentView_White.png)
+
+> Visão Do Ambiente (Tema Claro)
+
+![Resumo - Modo Escuro](./docs/img/EnvironmentView_Dark.png)
+
+> Visão Do Ambiente (Tema Escuro)
+
+![Resumo - Inglês](./docs/img/EnvironmentView_English.png)
+
+> Visão Do Ambiente (i18n em Inglês)
+
+![Resumo - Indisponibilidade](./docs/img/EnvironmentView_Unavailable.png)
+
+> Visão Do Ambiente (Indisponibilidade)
+
+![Visão Do Banco De Dados](./docs/img/DatabaseView.png)
+
+> Visão Do Banco de Dados
+
+![Visão De Detalhes do Uso da Memória](./docs/img/DetailedMemoryView.png)
+
+> Visão De Detalhes do Uso da Memória
 
 ## Executando o projeto em modo de desenvolvimento
 
@@ -207,11 +216,11 @@ Onde:
 
 ## Instruções De Uso
 
-### Cadastrando um ambiente
+### Monitorando um ambiente
 
 Para começar a monitorar um ambiente, siga os passos a seguir:
 
-1. Abra a aplicação. Ao abrir pela primeira vez, a aplicação irá criar o banco de dados (SQLite) e aplicar as atualizações automaticamente.
+1. Abra a aplicação. Ao abrir pela primeira vez, a aplicação irá criar o banco de dados (SQLite) e aplicar as migrações automaticamente.
 
 2. Clique no botão de "+" na tela inicial ou na barra de navegação para incluir um novo ambiente.
 
@@ -219,13 +228,13 @@ Para começar a monitorar um ambiente, siga os passos a seguir:
 
    **Nome do Ambiente:** O nome do ambiente a ser monitorado, esta informação é utilizada apenas para identificação pela aplicação.
 
-   **Url de Domínio:** A url de domínio do ambiente, seguindo o padrão `protocolo://endereço:porta`, sem a barra no final da url. Exemplo: `https://teste.fluig.com` ou `https://dev.fluig.com:8080`
+   **Url de Domínio:** A url de domínio do ambiente, seguindo o padrão `protocolo://endereço:porta`, sem a barra no final da url. Exemplo: `https://teste.fluig.com` ou `http://dev.fluig.com:8080`
 
-   **Autenticação:** Nos campos de autenticação, você deverá inserir os respectivos valores da Consumer Key, Consumer Secret, Access Token e Token Secret do usuário aplicativo criado na plataforma. É importante notar que este usuário aplicativo deve ser administrador ou possuir permissão sobre as APIs `/monitoring/api/v1/statistics/report`, `/monitoring/api/v1/monitors/report` e `/license/api/v1/licenses`. Para verificar se as configurações estão corretas, você pode utilizar o botão `Testar Conexão`.
+   **Autenticação:** Nos campos de autenticação, você deverá inserir os respectivos valores da Consumer Key, Consumer Secret, Access Token e Token Secret do usuário aplicativo criado na plataforma (Saiba mais em [Plataforma ❙ Oauth application](https://tdn.totvs.com/pages/releaseview.action?pageId=234455783)). É importante notar que este usuário aplicativo deve ser administrador ou possuir permissão sobre as APIs `/monitoring/api/v1/statistics/report`, `/monitoring/api/v1/monitors/report` e `/license/api/v1/licenses`. Para verificar se as configurações estão corretas, você pode utilizar o botão `Testar Conexão`.
 
    **Verificação do Servidor:** Neste campo, é possível definir a frequência de verificação da disponibilidade do servidor. Por exemplo, se escolher `15 segundos`, o servidor será verificado a cada 15 segundos.
 
-   **Coleta de Dados:** Neste campo, é possível definir a frequência da coleta dos dados do **Monitor**, **Estatísticas** e **Licenças**
+   **Coleta de Dados:** Neste campo, é possível definir a frequência da coleta dos dados do **Monitor**, **Estatísticas** e **Licenças**. O período mínimo é de 15 minutos, que é o período mínimo que a plataforma utiliza para atualizar as informações coletadas das estatísticas do servidor.
 
 4. Clique no botão confirmar. O ambiente será salvo, terá sua disponibilidade verificada e seus dados coletados pela primeira vez. Após clicar em salvar, você será direcionado para a tela inicial, contendo a lista dos ambientes sendo monitorados.
 
@@ -235,8 +244,8 @@ Para começar a monitorar um ambiente, siga os passos a seguir:
 
 ## Informações adicionais
 
-Apesar de a aplicação já ter suas principais funcionalidades desenvolvidas (monitoramento, coleta e exibição de estatísticas), ainda existem muitas funcionalidades que serão desenvolvidas ao longo do tempo até que a aplicação tenha uma release de versão inicial.
-Atualmente a aplicação está em versão `preview`, disponível através da aba [Releases](https://github.com/luizf-lf/fluig-monitor/releases) para aqueles que quiserem testar a aplicação.
+Apesar de a aplicação já ter suas principais funcionalidades desenvolvidas (monitoramento, coleta e exibição de estatísticas) e já possuir uma release 1.0, novas funcionalidades e correções serão implementadas continuamente.
+Verifique através da aba [Releases](https://github.com/luizf-lf/fluig-monitor/releases) a última versão disponível da aplicação.
 
 ## Contribuindo
 
