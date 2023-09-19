@@ -1,13 +1,13 @@
-import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FiInbox } from 'react-icons/fi';
+
 import {
   getAppSetting,
   updateAppSettings,
 } from '../../../ipc/settingsIpcHandler';
 import parseBoolean from '../../../../common/utils/parseBoolean';
-import globalContainerVariants from '../../../utils/globalContainerVariants';
+import DefaultMotionDiv from '../../base/DefaultMotionDiv';
 
 export default function SystemTraySettings() {
   const { t } = useTranslation();
@@ -60,12 +60,7 @@ export default function SystemTraySettings() {
   }, []);
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
+    <DefaultMotionDiv id="system-tray-settings">
       <h3 className="icon-title">
         <span className="icon-dot purple-variant">
           <FiInbox />
@@ -114,6 +109,6 @@ export default function SystemTraySettings() {
           {t('components.SystemTraySettings.disableNotificationHelper')}
         </small>
       </div>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

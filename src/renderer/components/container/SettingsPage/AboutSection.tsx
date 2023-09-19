@@ -1,22 +1,16 @@
 import { shell } from 'electron';
-import { motion } from 'framer-motion';
 import { FiExternalLink, FiSettings } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 
-import globalContainerVariants from '../../../utils/globalContainerVariants';
 import { version } from '../../../../../release/app/package.json';
 import bannerLogo from '../../../assets/img/banner_logo.png';
+import DefaultMotionDiv from '../../base/DefaultMotionDiv';
 
 export default function AboutSection() {
   const { t } = useTranslation();
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
+    <DefaultMotionDiv id="about-section">
       <h3 className="icon-title">
         <span className="icon-dot">
           <FiSettings />
@@ -65,6 +59,6 @@ export default function AboutSection() {
           </p>
         </div>
       </center>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

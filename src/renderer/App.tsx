@@ -28,7 +28,7 @@ export default function App() {
           <div id="appWrapper">
             <Navbar />
             <main id="mainWindow">
-              <AnimatePresence exitBeforeEnter>
+              <AnimatePresence mode="wait">
                 {/* <Switch location={location} key={location.pathname}> */}
                 <Routes>
                   <Route path="/" element={<HomeEnvironmentListView />} />

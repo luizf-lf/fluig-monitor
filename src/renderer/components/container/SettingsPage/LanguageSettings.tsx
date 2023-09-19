@@ -1,8 +1,8 @@
 import { ipcRenderer } from 'electron';
-import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FiCompass } from 'react-icons/fi';
-import globalContainerVariants from '../../../utils/globalContainerVariants';
+
+import DefaultMotionDiv from '../../base/DefaultMotionDiv';
 
 export default function LanguageSettings() {
   const { t, i18n } = useTranslation();
@@ -14,12 +14,7 @@ export default function LanguageSettings() {
   }
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
+    <DefaultMotionDiv id="language-settings">
       <h3 className="icon-title">
         <span className="icon-dot">
           <FiCompass />
@@ -50,6 +45,6 @@ export default function LanguageSettings() {
           {t('menu.languages.en')}
         </label>
       </div>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

@@ -1,3 +1,11 @@
+# 1.0.0 - Initial release version
+
+- Updated some default settings values
+- Refactored the IPC Handler
+- Updated base view components
+- Detailed memory view implemented
+- Updated visible submenu features
+
 # 0.5.0
 
 - Fixed system resources components not being updated

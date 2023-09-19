@@ -1,7 +1,3 @@
-import { motion } from 'framer-motion';
-
-import globalContainerVariants from '../../utils/globalContainerVariants';
-
 import DatabasePanel from '../container/DatabasePanel';
 import DiskPanel from '../container/DiskPanel';
 import EnvironmentAvailabilityPanel from '../container/EnvironmentAvailabilityPanel';
@@ -11,6 +7,7 @@ import EnvironmentPerformanceGraph from '../container/EnvironmentPerformanceGrap
 import EnvironmentServerInfo from '../container/EnvironmentServerInfo';
 import EnvironmentServicesPanel from '../container/EnvironmentServicesPanel';
 import MemoryPanel from '../container/MemoryPanel';
+import DefaultMotionDiv from '../base/DefaultMotionDiv';
 
 /**
  * The environment summary view container component. Acts as a container layout for the main components.
@@ -18,13 +15,7 @@ import MemoryPanel from '../container/MemoryPanel';
  */
 export default function EnvironmentSummary() {
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="environment-summary-container"
-    >
+    <DefaultMotionDiv id="environment-summary-container">
       <section id="server-data">
         <div
           style={{
@@ -65,6 +56,6 @@ export default function EnvironmentSummary() {
         <EnvironmentLicensesPanel />
         <EnvironmentServicesPanel />
       </section>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

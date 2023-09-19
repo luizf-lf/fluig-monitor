@@ -1,7 +1,6 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
 import { Navigate, useParams } from 'react-router';
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
@@ -14,7 +13,6 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
-import globalContainerVariants from '../utils/globalContainerVariants';
 import {
   deleteEnvironment,
   getEnvironmentById,
@@ -26,6 +24,7 @@ import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentC
 import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
+import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId } = useParams();
@@ -381,13 +380,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
   }
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      id="environment-edit-form-container"
-    >
+    <DefaultMotionDiv id="environment-edit-form-container">
       <h1>{t('views.EditEnvironmentView.form.title')}</h1>
 
       <form action="#" onSubmit={handleUpdateData}>
@@ -683,7 +676,7 @@ function EditEnvironmentSettingsView(): JSX.Element {
           {validationMessage}
         </div>
       </form>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }
 

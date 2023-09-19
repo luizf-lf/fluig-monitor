@@ -8,6 +8,7 @@ import {
   EnvironmentServerData,
   EnvironmentServices,
   EnvironmentUpdateControllerInterface,
+  EnvironmentWithDetailedMemoryHistory,
   EnvironmentWithHistory,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
@@ -254,4 +255,10 @@ export async function forceEnvironmentSync(): Promise<void> {
 
 export async function forceEnvironmentPing(): Promise<void> {
   await ipcRenderer.invoke('forceEnvironmentPing');
+}
+
+export async function getDetailedMemoryById(
+  id: number
+): Promise<EnvironmentWithDetailedMemoryHistory | null> {
+  return await ipcRenderer.invoke('getDetailedMemoryById', id);
 }

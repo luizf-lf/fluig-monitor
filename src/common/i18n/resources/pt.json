@@ -205,10 +205,11 @@
         "summary": "Resumo",
         "database": "Banco De Dados",
         "detailedMemory": "Memória Detalhada",
+        "runtimeStats": "Estatísticas De Runtime",
         "artifacts": "Artefatos",
-        "users": "Usuários",
-        "settings": "Configurações",
-        "minimize": "Minimizar"
+        "insights": "Insights",
+        "services": "Serviços",
+        "settings": "Configurações"
       }
     },
     "AppSettingsView": {
@@ -370,6 +371,11 @@
         "ms": "Tempo",
         "bytes": "Tamanho"
       }
+    },
+    "EnvironmentDetailedMemoryContainer": {
+      "memoryConsumptionTitle": "Consumo De Memória",
+      "memoryConsumptionUsed": "Usado",
+      "memoryStatisticsTitle": "Estatísticas por tipo de memória"
     }
   },
   "classes": {
@@ -386,7 +392,7 @@
   },
   "toasts": {
     "HighResponseTime": {
-      "title": "com ping algo.",
+      "title": "com ping alto.",
       "message": "O servidor está com um tempo de resposta muito alto."
     },
     "OperatingCorrectly": {

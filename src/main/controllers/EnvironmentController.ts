@@ -5,6 +5,7 @@ import {
   EnvironmentServerData,
   EnvironmentServices,
   EnvironmentUpdateControllerInterface,
+  EnvironmentWithDetailedMemoryHistory,
   EnvironmentWithHistory,
   EnvironmentWithRelatedData,
 } from '../../common/interfaces/EnvironmentControllerInterface';
@@ -63,7 +64,7 @@ export default class EnvironmentController {
         oAuthKeysId: true,
         updateScheduleId: true,
         httpResponses: {
-          take: 20,
+          take: 75,
           where: {
             resourceType: HttpResponseResourceType.PING,
           },
@@ -95,6 +96,17 @@ export default class EnvironmentController {
       include: {
         updateScheduleId: includeRelatedData,
         oAuthKeysId: includeRelatedData,
+        httpResponses: includeRelatedData
+          ? {
+              take: 75,
+              where: {
+                resourceType: HttpResponseResourceType.PING,
+              },
+              orderBy: {
+                timestamp: 'desc',
+              },
+            }
+          : undefined,
       },
     });
 
@@ -295,6 +307,29 @@ export default class EnvironmentController {
     return this.updated;
   }
 
+  async updateRelease(
+    environmentId: number,
+    release: string
+  ): Promise<Environment | null> {
+    try {
+      log.info(`Updating environment ${environmentId} release`);
+
+      this.updated = await prismaClient.environment.update({
+        where: {
+          id: environmentId,
+        },
+        data: {
+          release,
+        },
+      });
+
+      return this.updated;
+    } catch (error) {
+      log.error(`UpdateRelease error: ${error}`);
+      return null;
+    }
+  }
+
   async delete(id: number): Promise<Environment> {
     if (this.writeLogs) {
       log.info('Deleting environment with id', id, 'and related fields');
@@ -349,5 +384,43 @@ export default class EnvironmentController {
     });
 
     return { favorited: !environment.isFavorite, exception: null };
+  }
+
+  static async getDetailedMemoryById(
+    id: number
+  ): Promise<EnvironmentWithDetailedMemoryHistory | null> {
+    log.info(
+      'EnvironmentController: Recovering detailed environment memory stats by id ',
+      id
+    );
+
+    const environment = await prismaClient.environment.findFirst({
+      where: {
+        id,
+      },
+      include: {
+        statisticHistory: {
+          select: {
+            systemServerMemorySize: true,
+            systemServerMemoryFree: true,
+            memoryHeap: true,
+            nonMemoryHeap: true,
+            detailedMemory: true,
+            systemHeapMaxSize: true,
+            systemHeapSize: true,
+            httpResponse: true,
+          },
+          orderBy: {
+            httpResponse: {
+              timestamp: 'desc',
+            },
+          },
+          take: 300,
+        },
+      },
+    });
+
+    // TODO: Fix data type
+    return environment;
   }
 }

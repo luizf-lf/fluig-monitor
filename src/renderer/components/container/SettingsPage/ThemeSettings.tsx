@@ -1,24 +1,18 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 import { FiPenTool } from 'react-icons/fi';
-import globalContainerVariants from '../../../utils/globalContainerVariants';
 
 import whiteThemePreview from '../../../assets/img/theme-preview-white.png';
 import darkThemePreview from '../../../assets/img/theme-preview-dark.png';
 import { useTheme } from '../../../contexts/ThemeContext';
+import DefaultMotionDiv from '../../base/DefaultMotionDiv';
 
 export default function ThemeSettings() {
   const { t } = useTranslation();
   const { theme, setFrontEndTheme } = useTheme();
 
   return (
-    <motion.div
-      variants={globalContainerVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-    >
+    <DefaultMotionDiv id="theme-settings">
       <h3 className="icon-title">
         <span className="icon-dot purple-variant">
           <FiPenTool />
@@ -69,6 +63,6 @@ export default function ThemeSettings() {
           </label>
         </div>
       </div>
-    </motion.div>
+    </DefaultMotionDiv>
   );
 }

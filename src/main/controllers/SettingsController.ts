@@ -72,7 +72,7 @@ export default class SettingsController {
       },
       {
         settingId: 'ENABLE_AUTO_INSTALL_UPDATE',
-        value: 'true',
+        value: 'false',
         group: 'GENERAL',
       },
     ];

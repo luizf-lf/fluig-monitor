@@ -92,8 +92,9 @@ export default function DatabaseStorageGraph() {
               allowDecimals={false}
               dataKey="dbSize"
               type="number"
-              domain={[0, (dataMax: number) => Math.ceil(dataMax / 250) * 250]}
+              domain={[0, (dataMax: number) => Math.ceil(dataMax) * 1.2]}
               tickFormatter={(el) => formatBytes(el)}
+              width={80}
             />
             <Tooltip
               content={(content) => {

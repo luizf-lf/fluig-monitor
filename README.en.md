@@ -25,7 +25,7 @@
   - [Structure of the main process](#structure-of-the-main-process)
   - [Structure of the renderer process](#structure-of-the-renderer-process)
 - [Instructions for use](#instructions-for-use)
-  - [Registering an environment](#registering-an-environment)
+  - [Monitoring an environment](#monitoring-an-environment)
 - [Additional Information](#additional-information)
 - [Contributing](#contributing)
 
@@ -35,7 +35,7 @@ A desktop application, developed in **Electron**, used to monitor **Fluig** envi
 
 Monitoring is performed through the platform's **Rest API**, also used to collect **monitor** data, **statistics** and platform **license**, as per the [documentation](https://tdn.totvs.com/display/fluigeng/Platform+%7C+Platform+Services+Monitor).
 
-This application was initially developed for **educational** purposes, with the intention of learning about UI/UX, development of desktop applications with `React`, `Electron`, `Typescript`, and the use of Fluig `API's`, but little by little it has become an application that allows better management of observability on the Fluig platform itself.
+This application was initially developed for **educational** purposes, with the intention of learning about UI/UX, development of desktop applications with `React`, `Electron`, `Typescript`, and the use of Fluig `API's`, but little by little it has become an application that allows better management of observability on the Fluig platform.
 
 The application has an SQLite database that is automatically created on the first application run. In the production build, it will be available in the `%appdata%/fluig-monitor/fluig-monitor.db` folder, in the case of the development version, it will be created in the `.prisma` folder, in the root of the project. More information is available in the project execution instructions below.
 
@@ -53,32 +53,39 @@ Some of the main features already implemented:
 - Local database in SQLite.
 - Automatic database migrations.
 - Dashboard with platform response time display graph.
+- Overview, database and detailed server memory screens.
 
 New features are constantly being studied. Check the [Issues](https://github.com/luizf-lf/fluig-monitor/issues) tab for improvements that have already been publicly mapped and/or suggested by others.
 
 ## Images
 
-### White Theme
+![List Of Environments](./docs/img/HomeView.png)
 
-![Environment View (White Theme)](./docs/img/EnvironmentView_01-White.png)
+> List of Environments, with mini availability graph.
 
-> Environment View (White Theme)
+![Summary - Light Mode](./docs/img/EnvironmentView_White.png)
 
-![Environment View (Dark Theme)](./docs/img/EnvironmentView_02-Dark.png)
+> Environment View (Light Theme)
+
+![Summary - Dark Mode](./docs/img/EnvironmentView_Dark.png)
 
 > Environment View (Dark Theme)
 
-![Environment View (I18N)](./docs/img/EnvironmentView_03-EN.png)
+![Summary - English](./docs/img/EnvironmentView_English.png)
 
-> Environment View (I18N) in english.
+> Environment View (i18n in English)
 
-![Environment View (Unavailability)](./docs/img/EnvironmentView04-Unavailable.png)
+![Summary - Unavailability](./docs/img/EnvironmentView_Unavailable.png)
 
 > Environment View (Unavailability)
 
-![Environment List](./docs/img/HomeView.png)
+![Database View](./docs/img/DatabaseView.png)
 
-> Environment List, with a mini availability graph.
+> Database View
+
+![Memory Usage Detailed View](./docs/img/DetailedMemoryView.png)
+
+> Memory Usage Detailed View
 
 ## Running the project in development mode
 
@@ -209,11 +216,11 @@ Where:
 
 ## Instructions for use
 
-### Registering an environment
+### Monitoring an environment
 
 To start monitoring an environment, follow these steps:
 
-1. Open the app. When opened for the first time, the application will create the database (SQLite) and apply the updates automatically.
+1. Open the app. When opened for the first time, the application will create the database (SQLite) and apply the migrations automatically.
 
 2. Click the "+" button on the home screen or navigation bar to add a new environment.
 
@@ -221,13 +228,13 @@ To start monitoring an environment, follow these steps:
 
    **Environment Name:** The name of the environment to be monitored, this information is used only for identification by the application.
 
-   **Domain Url:** The environment's domain url, following the `protocol://address:port` pattern, without the slash at the end of the url. Example: `https://test.fluig.com` or `https://dev.fluig.com:8080`
+   **Domain Url:** The environment's domain url, following the `protocol://address:port` pattern, without the slash at the end of the url. Example: `https://test.fluig.com` or `http://dev.fluig.com:8080`
 
-   **Authentication:** In the authentication fields, you must enter the respective values of the Consumer Key, Consumer Secret, Access Token and Token Secret of the application user created on the platform. It is important to note that this application user must be an administrator or have permission on the APIs `/monitoring/api/v1/statistics/report`, `/monitoring/api/v1/monitors/report` and `/license/api/v1/licenses`. To check if the settings are correct, you can use the `Test Connection` button.
+   **Authentication:** In the authentication fields, you must enter the respective values of the Consumer Key, Consumer Secret, Access Token and Token Secret of the application user created on the platform (Learn more at [Platform ❙ Oauth app](https://tdn.totvs.com/pages/viewpage.action?pageId=236430030)). It is important to note that this application user must be an administrator or have permission on the APIs `/monitoring/api/v1/statistics/report`, `/monitoring/api/v1/monitors/report` and `/license/api/v1/licenses`. To check if the settings are correct, you can use the `Test Connection` button.
 
    **Server Verification:** In this field, you can define the frequency of checking the availability of the server. For example, if you choose `15 seconds`, the server will be checked every 15 seconds.
 
-   **Data Collection:** In this field, it is possible to define the frequency of data collection from **Monitor**, **Statistics** and **Licenses**.
+   **Data Collection:** In this field, it is possible to define the frequency of data collection from **Monitor**, **Statistics** and **Licenses**. The minimum period is 15 minutes, which is the minimum period that the platform uses to update the information collected from server statistics
 
 4. Click on the **confirm** button. The environment will be saved, its availability checked and its data collected for the first time. After clicking save, you will be directed to the home screen, containing the list of environments being monitored.
 
@@ -237,8 +244,8 @@ To start monitoring an environment, follow these steps:
 
 ## Additional Information
 
-Although the application already has its main functionalities developed (monitoring, collection and display of statistics), there are still many functionalities that will be developed over time until the application has an initial version release.
-Currently the application is in a `preview` release, available trough the [Releases](https://github.com/luizf-lf/fluig-monitor/releases) tab for those who want to test the application.
+Although the application already has its main functionalities developed (monitoring, collection and display of statistics) and already has a 1.0 release, new functionalities and corrections will be continuously implemented.
+Check the [Releases](https://github.com/luizf-lf/fluig-monitor/releases) tab for the latest available version of the application.
 
 ## Contributing
 

@@ -12,6 +12,7 @@ import frequencyToMs from '../utils/frequencyToMs';
 import StatisticsHistoryController from '../controllers/StatisticsHistoryController';
 import { scrapeSyncInterval } from '../utils/globalConstants';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
+import getEnvironmentRelease from './getEnvironmentRelease';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
@@ -387,6 +388,41 @@ async function syncStatisticsData(
   }
 }
 
+async function syncProductVersion(
+  environment: EnvironmentWithRelatedData
+): Promise<void> {
+  try {
+    log.info(
+      `syncEnvironmentsJob: Updating fluig version for environment ${environment.id}`
+    );
+
+    if (environment.oAuthKeysId) {
+      const decodedKeys = new AuthKeysDecoder(environment.oAuthKeysId).decode();
+
+      if (!decodedKeys) {
+        log.error(
+          'syncProductVersion: Could not decode the environment keys, ignoring sync.'
+        );
+        return;
+      }
+
+      const release = await getEnvironmentRelease(
+        decodedKeys,
+        environment.baseUrl
+      );
+
+      if (release) {
+        await new EnvironmentController().updateRelease(
+          environment.id,
+          release.content.split(' - ')[1]
+        );
+      }
+    }
+  } catch (error) {
+    log.error(`Error on syncProductVersion: ${error}`);
+  }
+}
+
 /**
  * Handle the environment sync job.
  * It will check if the environment needs a synchronization according to the update schedule and
@@ -443,6 +479,7 @@ export default async function syncEnvironmentsJob() {
           await syncLicenseData(environment);
           await syncMonitorData(environment);
           await syncStatisticsData(environment);
+          await syncProductVersion(environment);
 
           // sends a signal to the renderer with the server status as an argument
           BrowserWindow.getAllWindows().forEach((windowElement) => {
