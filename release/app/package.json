@@ -1,13 +1,19 @@
 {
   "name": "fluig-monitor",
   "description": "Application for monitoring Fluig environments.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/main/main.js",
   "author": {
     "name": "Luiz Ferreira",
     "email": "luizfernando_lf@hotmail.com.br",
     "url": "https://github.com/luizf-lf"
   },
+  "contributors": [
+    {
+      "name": "Pablo Valle",
+      "url": "https://github.com/pablooav"
+    }
+  ],
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",

@@ -1,3 +1,7 @@
+# 1.0.1 
+
+- Add shortcut keys for mac users (Undo, Redo, Cut, Copy, Paste, Paste and Match Style, Delete, Select All, Speech, AutoFiil, Start Dictation)
+
 # 1.0.0 - Initial release version
 
 - Updated some default settings values
