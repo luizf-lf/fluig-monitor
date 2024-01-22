@@ -75,6 +75,15 @@ export default class MenuBuilder {
             this.mainWindow.webContents.toggleDevTools();
           },
         },
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' },
       ],
     };
     const subMenuViewProd: MenuItemConstructorOptions = {
@@ -86,6 +95,35 @@ export default class MenuBuilder {
           click: () => {
             this.mainWindow.setFullScreen(!this.mainWindow.isFullScreen());
           },
+        },
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'services' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideOthers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' },
+      ],
+    };
+
+    const subMenuEdit: MenuItemConstructorOptions = {
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'pasteAndMatchStyle' },
+        { role: 'delete' },
+        { role: 'selectAll' },
+        { type: 'separator' },
+        {
+          label: 'Speech',
+          submenu: [{ role: 'startSpeaking' }, { role: 'stopSpeaking' }],
         },
       ],
     };
@@ -140,7 +178,7 @@ export default class MenuBuilder {
         ? subMenuViewDev
         : subMenuViewProd;
 
-    return [subMenuView, subMenuLanguages, subMenuHelp];
+    return [subMenuView, subMenuEdit, subMenuLanguages, subMenuHelp];
   }
 
   // here we can change the menu buttons

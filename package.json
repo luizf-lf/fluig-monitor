@@ -1,7 +1,7 @@
 {
   "name": "fluig-monitor",
   "description": "Application for monitoring Fluig environments.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts && ts-node ./scripts/copySchema.ts",
@@ -131,6 +131,10 @@
       "name": "Luiz Ferreira",
       "email": "luizfernando_lf@hotmail.com.br",
       "url": "https://github.com/luizf-lf"
+    },
+    {
+      "name": "Pablo Valle",
+      "url": "https://github.com/pablooav"
     }
   ],
   "license": "MIT",
