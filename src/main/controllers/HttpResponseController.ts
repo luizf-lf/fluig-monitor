@@ -10,6 +10,7 @@ interface CreateHttpResponseProps {
   resourceType?: string;
   timestamp: string;
   responseTimeMs: number;
+  hostConnected: boolean;
 }
 
 export default class HttpResponseController {
@@ -28,6 +29,7 @@ export default class HttpResponseController {
         'HttpResponseController: Creating a new http response on the database'
       );
     }
+    // TODO: fix "unknown arg `environmentId`" error
     this.created = await prismaClient.hTTPResponse.create({
       data,
     });

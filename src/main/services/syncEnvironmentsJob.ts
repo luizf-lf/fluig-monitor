@@ -13,13 +13,15 @@ import StatisticsHistoryController from '../controllers/StatisticsHistoryControl
 import { scrapeSyncInterval } from '../utils/globalConstants';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 import getEnvironmentRelease from './getEnvironmentRelease';
+import assertConnectivity from '../utils/assertConnectivity';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
  *  and saves the result to the database
  */
 async function syncLicenseData(
-  item: EnvironmentWithRelatedData
+  item: EnvironmentWithRelatedData,
+  hostConnected: boolean
 ): Promise<void> {
   log.info('syncEnvironmentsJob: Fetching license data');
   if (item.oAuthKeysId) {
@@ -94,6 +96,7 @@ async function syncLicenseData(
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
+        hostConnected,
       });
     } else {
       log.error(
@@ -112,6 +115,7 @@ async function syncLicenseData(
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
+        hostConnected,
       });
     }
   }
@@ -122,7 +126,8 @@ async function syncLicenseData(
  *  and saves the result to the database.
  */
 async function syncMonitorData(
-  item: EnvironmentWithRelatedData
+  item: EnvironmentWithRelatedData,
+  hostConnected: boolean
 ): Promise<void> {
   log.info('syncEnvironmentsJob: Fetching monitor data');
 
@@ -192,6 +197,7 @@ async function syncMonitorData(
         statusCode: fluigClient.httpStatus,
         statusMessage: fluigClient.httpStatusText,
         timestamp: new Date().toISOString(),
+        hostConnected,
       });
     } else {
       log.error(
@@ -210,6 +216,7 @@ async function syncMonitorData(
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
+        hostConnected,
       });
     }
   }
@@ -220,7 +227,8 @@ async function syncMonitorData(
  *  and saves the result to the database
  */
 async function syncStatisticsData(
-  item: EnvironmentWithRelatedData
+  item: EnvironmentWithRelatedData,
+  hostConnected: boolean
 ): Promise<void> {
   try {
     log.info('syncEnvironmentsJob: Fetching statistics data');
@@ -362,6 +370,7 @@ async function syncStatisticsData(
           statusCode: fluigClient.httpStatus,
           statusMessage: fluigClient.httpStatusText,
           timestamp: new Date().toISOString(),
+          hostConnected,
         });
       } else {
         log.error(
@@ -380,6 +389,7 @@ async function syncStatisticsData(
           statusCode: 0,
           statusMessage: fluigClient.errorStack.split('\n')[0],
           timestamp: new Date().toISOString(),
+          hostConnected,
         });
       }
     }
@@ -476,9 +486,10 @@ export default async function syncEnvironmentsJob() {
           log.info(
             `syncEnvironmentsJob: Environment ${environment.id} needs synchronization. Fetching api data.`
           );
-          await syncLicenseData(environment);
-          await syncMonitorData(environment);
-          await syncStatisticsData(environment);
+          const hostConnected = await assertConnectivity();
+          await syncLicenseData(environment, hostConnected);
+          await syncMonitorData(environment, hostConnected);
+          await syncStatisticsData(environment, hostConnected);
           await syncProductVersion(environment);
 
           // sends a signal to the renderer with the server status as an argument

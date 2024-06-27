@@ -2,6 +2,7 @@
 import path from 'path';
 import log from 'electron-log';
 import { BrowserWindow, Notification } from 'electron';
+
 import EnvironmentController from '../controllers/EnvironmentController';
 // import { environmentPingInterval } from '../utils/globalConstants';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
@@ -10,6 +11,7 @@ import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentC
 import HttpResponseController from '../controllers/HttpResponseController';
 import frequencyToMs from '../utils/frequencyToMs';
 import getAssetPath from '../utils/getAssetPath';
+import assertConnectivity from '../utils/assertConnectivity';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 
 import i18n from '../../common/i18n/i18n';
@@ -90,6 +92,7 @@ async function executePing(
 ): Promise<void> {
   if (environment.oAuthKeysId) {
     const decodedKeys = new AuthKeysDecoder(environment.oAuthKeysId).decode();
+    const hostConnected = await assertConnectivity();
 
     if (!decodedKeys) {
       log.error(
@@ -138,6 +141,7 @@ async function executePing(
           statusCode: fluigClient.httpStatus || 0,
           statusMessage: fluigClient.httpStatusText,
           timestamp: new Date().toISOString(),
+          hostConnected,
         },
         true
       );
@@ -156,6 +160,7 @@ async function executePing(
         statusCode: 0,
         statusMessage: fluigClient.errorStack.split('\n')[0],
         timestamp: new Date().toISOString(),
+        hostConnected,
       });
     }
 

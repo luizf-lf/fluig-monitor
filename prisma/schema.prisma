@@ -56,6 +56,7 @@ model HTTPResponse {
   environmentId    Int
   environment      Environment        @relation(fields: [environmentId], references: [id])
   timestamp        DateTime           @default(now())
+  hostConnected    Boolean
   endpoint         String?
   resourceType     String?
   statusCode       Int
