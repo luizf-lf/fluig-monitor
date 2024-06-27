@@ -1,8 +1,10 @@
-# 1.0.1 
+# Changelog
 
-- Add shortcut keys for mac users (Undo, Redo, Cut, Copy, Paste, Paste and Match Style, Delete, Select All, Speech, AutoFiil, Start Dictation)
+## 1.0.1
 
-# 1.0.0 - Initial release version
+- Add shortcut keys for mac users (Undo, Redo, Cut, Copy, Paste, Paste and Match Style, Delete, Select All, Speech, AutoFill, Start Dictation)
+
+## 1.0.0 - Initial release version
 
 - Updated some default settings values
 - Refactored the IPC Handler
@@ -10,7 +12,7 @@
 - Detailed memory view implemented
 - Updated visible submenu features
 
-# 0.5.0
+## 0.5.0
 
 - Fixed system resources components not being updated
 - Changed get system resources methods to recover only the last resource
@@ -21,7 +23,7 @@
 - Updated language files to json format.
 - Updated app settings view to a single page.
 
-# 0.4.0
+## 0.4.0
 
 - Added a configurable minimize to system tray feature
 - Deprecated the updateFrontEndTheme method in favor of the generic updateSettings method
@@ -38,7 +40,7 @@
 - App Settings controller updated with default values and new methods.
 - App updates are shown on the app navbar when available
 
-# 0.3.0
+## 0.3.0
 
 - The app now validates if the oAuth user has sufficient permissions for data collection.
   - The validation occurs on the test connection button.
@@ -63,7 +65,7 @@
 - Log file name has been changed to "fluig-monitor.log".
 - Added a "breathing" animation to the environment status indicator card.
 
-# 0.2.1
+## 0.2.1
 
 - Implemented a mini line graph on the server list view from the last 20 ping responses (when there are responses)
 - Fixed license component percentage precision
@@ -72,7 +74,7 @@
 - Moved the Inter Process Communication handlers to a separated function.
 - Fixed splash screen not being rendered on production build due to a file not being bundled.
 
-# 0.2.0
+## 0.2.0
 
 - Updated test connection endpoint to /api/servlet/ping
 - Changed environment availability check strategy
@@ -84,7 +86,7 @@
 - Menu environments indicator auto update implemented
 - Environment view auto refresh implemented
 
-# 0.1.4
+## 0.1.4
 
 - System resources components added:
   - Disk Info
@@ -96,14 +98,14 @@
 - Environment Sync after environment creation implemented
 - Environment api response performance graph added with Rechart.js
 
-# 0.1.3
+## 0.1.3
 
 - Production build error fixed due to global constants not being properly loaded
 - Licenses component added
 - Server info component added
 - Services status component added
 
-# 0.1.2
+## 0.1.2
 
 - Persistent dark mode switcher implemented
 - App settings controller implemented
@@ -116,12 +118,12 @@
 - Clear dev logs script updated
 - Environment sync job added
 
-# 0.1.1
+## 0.1.1
 
 - Translated environment edit view
 - Updated database fields to include monitoring history
 
-# 0.1.0
+## 0.1.0
 
 - Implemented database structure with Prisma ORM
 - Migrated data interfaces on the front end
@@ -131,25 +133,25 @@
   - Custom form validator
 - File logging with daily log rotation implemented
 
-# 0.0.12
+## 0.0.12
 
 - Updated navbar components
 - Removed profile picture
 - Updated home environment list view
 
-# 0.0.11
+## 0.0.11
 
 - Updated project folder structure strategy
 
-# 0.0.10
+## 0.0.10
 
 - Fixed a big typo
 
-# 0.0.9
+## 0.0.9
 
 - Updated database strategy - using separated files for environment data & user settings.
 
-# 0.0.8
+## 0.0.8
 
 - New layout implemented
   - New logo & banner
@@ -165,6 +167,6 @@
 - Environment add form added
 - Environment edit form added
 
-# 0.0.1
+## 0.0.1
 
 - Project started with [ERB](https://github.com/electron-react-boilerplate/electron-react-boilerplate).
