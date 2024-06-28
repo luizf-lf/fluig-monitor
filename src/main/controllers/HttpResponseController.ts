@@ -29,9 +29,21 @@ export default class HttpResponseController {
         'HttpResponseController: Creating a new http response on the database'
       );
     }
-    // TODO: fix "unknown arg `environmentId`" error
     this.created = await prismaClient.hTTPResponse.create({
-      data,
+      data: {
+        environment: {
+          connect: {
+            id: data.environmentId,
+          },
+        },
+        statusCode: data.statusCode,
+        statusMessage: data.statusMessage,
+        endpoint: data.endpoint,
+        resourceType: data.resourceType,
+        timestamp: data.timestamp,
+        responseTimeMs: data.responseTimeMs,
+        hostConnected: data.hostConnected,
+      },
     });
 
     return this.created;

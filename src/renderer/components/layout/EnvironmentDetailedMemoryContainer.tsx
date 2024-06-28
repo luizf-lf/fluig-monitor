@@ -60,14 +60,19 @@ function EnvironmentDetailedMemoryContainer() {
           i += 1
         ) {
           const element = environmentDataResult.statisticHistory[i];
-          dataNormalized.push({
-            timestamp: element.httpResponse.timestamp,
-            systemServerMemorySize: Number(element.systemServerMemorySize),
-            systemServerMemoryFree: Number(element.systemServerMemoryFree),
-            systemServerMemoryUsed: Number(
-              element.systemServerMemorySize - element.systemServerMemoryFree
-            ),
-          });
+          if (
+            element.systemServerMemorySize &&
+            element.systemServerMemoryFree
+          ) {
+            dataNormalized.push({
+              timestamp: element.httpResponse.timestamp,
+              systemServerMemorySize: Number(element.systemServerMemorySize),
+              systemServerMemoryFree: Number(element.systemServerMemoryFree),
+              systemServerMemoryUsed: Number(
+                element.systemServerMemorySize - element.systemServerMemoryFree
+              ),
+            });
+          }
         }
 
         setNormalizedMemoryData(dataNormalized);

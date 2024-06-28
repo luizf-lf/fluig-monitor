@@ -11,6 +11,7 @@ interface CreateStatisticHistoryProps {
   endpoint: string;
   timestamp: string;
   responseTimeMs: number;
+  hostConnected: boolean;
 
   dataSourceFluigDs: string;
   dataSourceFluigDsRo: string;
@@ -97,6 +98,7 @@ export default class StatisticsHistoryController {
       resourceType: HttpResponseResourceType.STATISTICS,
       timestamp: data.timestamp,
       responseTimeMs: data.responseTimeMs,
+      hostConnected: data.hostConnected,
     });
 
     this.created = await prismaClient.statisticsHistory.create({

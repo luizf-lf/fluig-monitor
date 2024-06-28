@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { FiActivity, FiWifi, FiWifiOff } from 'react-icons/fi';
+import { FiActivity, FiGlobe, FiWifi, FiWifiOff } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 import { ipcRenderer } from 'electron';
 
@@ -41,7 +41,27 @@ export default function EnvironmentAvailabilityPanel() {
   }, [environmentId]);
 
   useEffect(() => {
-    if (lastHttpResponse && lastHttpResponse.statusCode !== 0) {
+    if (!lastHttpResponse) {
+      return;
+    }
+
+    if (!lastHttpResponse.hostConnected) {
+      setStatusBody(
+        <>
+          <div className="status-message">
+            <h3 className="text-red">
+              {t('components.EnvironmentStatusCard.disconnected')}
+            </h3>
+            <span className="text-secondary">
+              {t('components.EnvironmentStatusCard.youAreDisconnected')}
+            </span>
+          </div>
+          <div className="status-icon has-danger">
+            <FiGlobe />
+          </div>
+        </>
+      );
+    } else if (lastHttpResponse.statusCode !== 0) {
       if (lastHttpResponse.responseTimeMs > 1000) {
         setStatusBody(
           <>

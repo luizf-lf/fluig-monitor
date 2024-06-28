@@ -40,41 +40,52 @@ async function notifyAbout(
     if (responses.length >= 2) {
       previousResponse = responses[1];
 
-      if (
-        lastResponse.responseTimeMs < 1000 &&
-        previousResponse.responseTimeMs >= 1000
-      ) {
+      if (previousResponse.hostConnected && !lastResponse.hostConnected) {
         notification = new Notification({
-          title: `${environment.name} ${i18n.t(
-            'toasts.OperatingCorrectly.title'
-          )}`,
-          body: i18n.t('toasts.OperatingCorrectly.message'),
-          icon: path.join(getAssetPath(), 'resources', 'success.png'),
+          title: `${i18n.t('toasts.NotConnected.title')}`,
+          body: i18n
+            .t('toasts.NotConnected.message')
+            .replace('%server%', environment.name),
+          icon: path.join(getAssetPath(), 'resources', 'offline.png'),
         });
-      }
+      } else {
+        if (
+          lastResponse.responseTimeMs < 1000 &&
+          previousResponse.responseTimeMs >= 1000
+        ) {
+          notification = new Notification({
+            title: `${environment.name} ${i18n.t(
+              'toasts.OperatingCorrectly.title'
+            )}`,
+            body: i18n.t('toasts.OperatingCorrectly.message'),
+            icon: path.join(getAssetPath(), 'resources', 'success.png'),
+          });
+        }
 
-      if (
-        previousResponse.responseTimeMs === 0 &&
-        lastResponse.responseTimeMs > 0
-      ) {
-        notification = new Notification({
-          title: `${environment.name} ${i18n.t(
-            'toasts.ServerAvailable.title'
-          )}`,
-          body: i18n.t('toasts.ServerAvailable.message'),
-          icon: path.join(getAssetPath(), 'resources', 'success.png'),
-        });
-      } else if (
-        previousResponse.responseTimeMs > 0 &&
-        lastResponse.responseTimeMs === 0
-      ) {
-        notification = new Notification({
-          title: `${environment.name} ${i18n.t(
-            'toasts.ServerUnavailable.title'
-          )}`,
-          body: i18n.t('toasts.ServerUnavailable.message'),
-          icon: path.join(getAssetPath(), 'resources', 'error.png'),
-        });
+        if (
+          previousResponse.responseTimeMs === 0 &&
+          lastResponse.responseTimeMs > 0
+        ) {
+          notification = new Notification({
+            title: `${environment.name} ${i18n.t(
+              'toasts.ServerAvailable.title'
+            )}`,
+            body: i18n.t('toasts.ServerAvailable.message'),
+            icon: path.join(getAssetPath(), 'resources', 'success.png'),
+          });
+        } else if (
+          previousResponse.responseTimeMs > 0 &&
+          lastResponse.responseTimeMs === 0 &&
+          lastResponse.hostConnected
+        ) {
+          notification = new Notification({
+            title: `${environment.name} ${i18n.t(
+              'toasts.ServerUnavailable.title'
+            )}`,
+            body: i18n.t('toasts.ServerUnavailable.message'),
+            icon: path.join(getAssetPath(), 'resources', 'error.png'),
+          });
+        }
       }
     }
 

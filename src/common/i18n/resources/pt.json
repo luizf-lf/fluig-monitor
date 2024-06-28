@@ -266,10 +266,12 @@
       "attention": "Atenção",
       "operational": "Operacional",
       "unavailable": "Indisponível",
+      "disconnected": "Desconectado",
       "operatingCorrectly": "O servidor está online e operando corretamente.",
       "highResponseTime": "O servidor está online, porém apresenta um tempo de resposta incomum.",
       "noSatisfactoryResponse": "O servidor está online, porém não apresenta uma resposta satisfatória (HTTP %http%).",
-      "mayBeOffline": "É possível que o servidor esteja offline, veja detalhes abaixo: "
+      "mayBeOffline": "É possível que o servidor esteja offline, veja detalhes abaixo: ",
+      "youAreDisconnected": "Você está desconectado. Não foi possível verificar a disponibilidade do servidor."
     },
     "EnvironmentStatusSummary": {
       "updatedAt": "Atualizado às",
@@ -410,6 +412,10 @@
     "StillAlive": {
       "title": "Ainda estou aqui.",
       "message": "O Fluig Monitor está sendo executado na bandeja do sistema, você pode alterar este comportamento no painel de controle."
+    },
+    "NotConnected": {
+      "title": "Você está desconectado.",
+      "message": "O Fluig Monitor não consegue verificar a disponibilidade do servidor %server%. Verifique sua conexão com a rede."
     }
   },
   "dialogs": {

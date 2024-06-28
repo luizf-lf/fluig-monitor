@@ -17,6 +17,7 @@ interface LogLicenseProps {
     tenantId: number;
     totalLicenses: number;
   };
+  hostConnected: boolean;
 }
 
 export interface EnvironmentLicenseData {
@@ -43,6 +44,7 @@ export default class LicenseHistoryController {
     endpoint,
     responseTimeMs,
     licenseData,
+    hostConnected,
   }: LogLicenseProps): Promise<LicenseHistory> {
     const { activeUsers, remainingLicenses, tenantId, totalLicenses } =
       licenseData;
@@ -54,6 +56,7 @@ export default class LicenseHistoryController {
       resourceType: HttpResponseResourceType.LICENSES,
       timestamp,
       responseTimeMs,
+      hostConnected,
     });
 
     log.info(

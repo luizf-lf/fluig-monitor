@@ -260,5 +260,6 @@ export async function forceEnvironmentPing(): Promise<void> {
 export async function getDetailedMemoryById(
   id: number
 ): Promise<EnvironmentWithDetailedMemoryHistory | null> {
-  return await ipcRenderer.invoke('getDetailedMemoryById', id);
+  const response = await ipcRenderer.invoke('getDetailedMemoryById', id);
+  return response;
 }

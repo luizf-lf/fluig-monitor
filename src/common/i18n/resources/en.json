@@ -266,10 +266,12 @@
       "attention": "Attention",
       "operational": "Operational",
       "unavailable": "Unavailable",
+      "disconnected": "Disconnected",
       "operatingCorrectly": "The server is online and operating correctly.",
       "highResponseTime": "The server is online, but has an uncommon response time.",
       "noSatisfactoryResponse": "The server is online, but returned a non satisfactory response (HTTP %http%).",
-      "mayBeOffline": "It is possible that the server is offline. See details bellow: "
+      "mayBeOffline": "It is possible that the server is offline. See details bellow: ",
+      "youAreDisconnected": "Your device is disconnected. The server availability could not be checked."
     },
     "EnvironmentStatusSummary": {
       "updatedAt": "Updated at",
@@ -410,6 +412,10 @@
     "StillAlive": {
       "title": "I'm still alive.",
       "message": "Fluig Monitor is still running on the system tray. You can change this behavior on the settings panel."
+    },
+    "NotConnected": {
+      "title": "You are offline.",
+      "message": "Fluig Monitor could not reach %server%. Please check your network connection."
     }
   },
   "dialogs": {

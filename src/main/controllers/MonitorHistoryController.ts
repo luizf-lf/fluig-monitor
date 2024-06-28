@@ -17,6 +17,7 @@ interface MonitorHistoryCreateProps {
   responseTimeMs: number;
   endpoint?: string;
   monitorData: MonitorItem[];
+  hostConnected: boolean;
 }
 
 export default class MonitorHistoryController {
@@ -60,6 +61,7 @@ export default class MonitorHistoryController {
       resourceType: HttpResponseResourceType.MONITOR,
       timestamp: data.timestamp,
       responseTimeMs: data.responseTimeMs,
+      hostConnected: data.hostConnected,
     });
 
     log.info(

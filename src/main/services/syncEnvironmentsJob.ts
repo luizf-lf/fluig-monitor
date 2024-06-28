@@ -68,6 +68,7 @@ async function syncLicenseData(
             tenantId,
             totalLicenses,
           },
+          hostConnected,
         });
 
         if (logged !== null) {
@@ -169,6 +170,7 @@ async function syncMonitorData(
           responseTimeMs,
           endpoint: requestData.url,
           monitorData,
+          hostConnected,
         });
 
         if (logged !== null) {
@@ -270,6 +272,7 @@ async function syncStatisticsData(
             timestamp: new Date().toISOString(),
             responseTimeMs,
             endpoint: requestData.url,
+            hostConnected,
 
             dataSourceFluigDs: JSON.stringify(
               statisticsData.DATA_SOURCE_FLUIGDS
