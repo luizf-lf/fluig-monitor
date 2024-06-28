@@ -55,13 +55,13 @@ export interface MonitorHistoryWithHttpResponse extends MonitorHistory {
 }
 
 export interface DetailedMemoryHistory {
-  systemServerMemorySize: bigint;
-  systemServerMemoryFree: bigint;
-  memoryHeap: bigint;
-  nonMemoryHeap: bigint;
-  detailedMemory: string;
-  systemHeapMaxSize: bigint;
-  systemHeapSize: bigint;
+  systemServerMemorySize: bigint | null;
+  systemServerMemoryFree: bigint | null;
+  memoryHeap: bigint | null;
+  nonMemoryHeap: bigint | null;
+  detailedMemory: string | null;
+  systemHeapMaxSize: bigint | null;
+  systemHeapSize: bigint | null;
   httpResponse: HTTPResponse;
 }
 

@@ -420,7 +420,6 @@ export default class EnvironmentController {
       },
     });
 
-    // TODO: Fix data type
     return environment;
   }
 }
