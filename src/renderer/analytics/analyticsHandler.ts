@@ -4,7 +4,27 @@
 /* eslint-disable func-names */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { env } from 'process';
+import log from 'electron-log';
+
+/**
+ * Injects the google analytics tag (Experimental usage)
+ * @see https://analytics.google.com/
+ */
+export function injectGA() {
+  const tag: string = ''; // your google analytics tag should go here
+
+  if (tag && tag.length > 0) {
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', tag);
+
+    log.info(`Google Analytics injected with tag ${tag}`);
+  }
+}
 
 function injectClarity(c: any, l: any, a: any, r: any, i: any, t: any, y: any) {
   c[a] =
@@ -17,13 +37,16 @@ function injectClarity(c: any, l: any, a: any, r: any, i: any, t: any, y: any) {
   t.src = `https://www.clarity.ms/tag/${i}`;
   y = l.getElementsByTagName(r)[0];
   y.parentNode.insertBefore(t, y);
+
+  log.info(`Clarity injected with tag ${i}`);
 }
 
 /**
  * Handles the clarity tag injection (Experimental usage)
+ * @see https://clarity.microsoft.com/
  */
-export default function handleClarity() {
-  const tag = env.CLARITY_TAG;
+export function handleClarity() {
+  const tag: string = ''; // your clarity tag should go here
 
   if (tag && tag.length > 0) {
     injectClarity(

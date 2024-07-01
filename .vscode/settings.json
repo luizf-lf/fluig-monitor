@@ -22,7 +22,7 @@
     "*.{css,sass,scss}.d.ts": true
   },
   "totvsLanguageServer.welcomePage": false,
-  "cSpell.words": ["electronmon", "esnext", "Wifi"],
+  "cSpell.words": ["electronmon", "esnext", "gtag", "Wifi"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.rulers": [120]
 }

@@ -35,4 +35,6 @@ npm-debug.log.*
 
 src/main/generated
 
+src/renderer/analytics/gtag.js
+
 prisma/ERD.svg

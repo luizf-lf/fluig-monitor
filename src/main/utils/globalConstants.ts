@@ -8,12 +8,10 @@ import path from 'path';
 import { app } from 'electron';
 import getAppDataFolder from './fsUtils';
 
+require('dotenv').config();
+
 export const isDevelopment =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
-
-if (isDevelopment) {
-  require('dotenv').config();
-}
 
 export const logStringFormat =
   '{y}-{m}-{d} {h}:{i}:{s}.{ms} [{level}] ({processType}) {text}';
