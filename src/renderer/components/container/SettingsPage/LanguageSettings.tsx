@@ -44,6 +44,16 @@ export default function LanguageSettings() {
           />{' '}
           {t('menu.languages.en')}
         </label>
+        <label htmlFor="radioLanguage_es">
+          <input
+            type="radio"
+            name="radioLanguage"
+            id="radioLanguage_es"
+            checked={i18n.language === 'es'}
+            onChange={() => dispatchLanguageChange('es')}
+          />{' '}
+          {t('menu.languages.es')}
+        </label>
       </div>
     </DefaultMotionDiv>
   );

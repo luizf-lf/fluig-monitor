@@ -21,8 +21,8 @@
     "package-lock.json": true,
     "*.{css,sass,scss}.d.ts": true
   },
-  "totvsLanguageServer.welcomePage": false,
-  "cSpell.words": ["electronmon", "esnext", "gtag", "Wifi"],
+  "cSpell.words": ["electronmon", "esnext", "gtag", "SGBD", "Wifi"],
+  "cSpell.language": "en,pt,pt_BR,es",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.rulers": [120]
 }

@@ -1,0 +1,430 @@
+{
+  "menu": {
+    "about": {
+      "label": "&Sobre",
+      "aboutApp": "Acerca del Monitor de Fluig",
+      "bugReport": "Reportar un problema"
+    },
+    "languages": {
+      "label": "&Idioma",
+      "pt": "🇧🇷 Portugués",
+      "en": "🇺🇸 Inglés",
+      "es": "🇲🇽 Español"
+    },
+    "view": {
+      "label": "&Visualizar",
+      "toggleFS": "Cambiar a pantalla completa"
+    },
+    "file": {
+      "label": "&Archivo",
+      "quit": "Salir"
+    },
+    "systemTray": {
+      "running": "Monitor de Fluig en ejecución",
+      "open": "Abrir",
+      "reportABug": "Reportar un problema",
+      "dropBombs": "Lanzar bombas",
+      "quit": "Salir"
+    }
+  },
+  "navbar": {
+    "actionButtons": {
+      "updateDownloaded": "Actualización descargada. Clic para instalar.",
+      "updateAvailable": "Actualización disponible. Clic para descargar.",
+      "kioskMode": "Habilitar Modo Quiosque",
+      "notifications": "Abrir Notificaciones",
+      "theme": "Cambiar Tema",
+      "settings": "Abrir Configuraciones"
+    }
+  },
+  "views": {
+    "CreateEnvironmentView": {
+      "createdSuccessfully": "Ambiente incluído con exito.",
+      "connecting": "Conectando ...",
+      "connectionError": "Error de conexión: ",
+      "connectionOk": "Conexión Ok",
+      "connectionUnavailable": "Error de conexión. Verifique la URL de dominio y la disponibilidad del servidor.",
+      "authFieldsValidation": "Rellene los campos de URL y autentificación para continuar.",
+      "back": "Volver",
+      "unsupportedFluigRelease": "Esta release del Fluig (%release%) no es compatible con el Monitor de Fluig",
+      "unableToEncrypt": "No se ha podido encriptar las claves de autentificación",
+      "form": {
+        "title": "Incluir un nuevo ambiente",
+        "environmentDataSection": "Datos del ambiente",
+        "environmentName": {
+          "label": "Nombre del ambiente:",
+          "placeholder": "Ej.: Ambiente Ejemplo 01"
+        },
+        "domainUrl": {
+          "label": "URL De Dominio:",
+          "placeholder": "Ej.: https://test.fluig.com"
+        },
+        "environmentKind": {
+          "label": "Tipo de ambiente:",
+          "options": {
+            "prod": "Producción",
+            "hml": "Homologación",
+            "dev": "Desarrollo"
+          }
+        },
+        "environmentAuthSection": "Autentificación",
+        "consumerKey": {
+          "label": "Consumer Key:",
+          "placeholder": "Ingrese la consumer key"
+        },
+        "consumerSecret": {
+          "label": "Consumer Secret:",
+          "placeholder": "Ingrese la consumer secret"
+        },
+        "accessToken": {
+          "label": "Access Token:",
+          "placeholder": "Ingrese el access token"
+        },
+        "tokenSecret": {
+          "label": "Token Secret:",
+          "placeholder": "Ingrese el token secret"
+        },
+        "useEncryption": "Encriptar claves?",
+        "testConnection": "Testear Conexión",
+        "serverVerification": {
+          "title": "Verificación De Servidor",
+          "label": "Frecuencia",
+          "helper": "Tiempo utilizado para la verificación de disponibilidad del servidor.",
+          "options": {
+            "15s": "15 segundos",
+            "30s": "30 segundos",
+            "1m": "1 minuto",
+            "2m": "2 minutos"
+          }
+        },
+        "dataCollection": {
+          "title": "Colección De Datos",
+          "label": "Frecuencia",
+          "helper": "Tiempo utilizado para la colección de datos.",
+          "options": {
+            "15m": "15 minutos",
+            "30m": "30 minutos",
+            "1h": "1 hora",
+            "2h": "2 horas",
+            "3h": "3 horas",
+            "6h": "6 horas",
+            "12h": "12 horas",
+            "24h": "24 horas"
+          }
+        },
+        "buttonSubmit": "Incluir"
+      }
+    },
+    "EditEnvironmentView": {
+      "connecting": "Conectando...",
+      "connectionError": "Error de conexión",
+      "connectionOk": "Conexión Ok",
+      "insufficientPermissions": "Usuario sin permisos suficientes.",
+      "connectionUnavailable": "Error de conexión. Verifique la URL de dominio y la disponibilidad del servidor.",
+      "authFieldsValidation": "Rellene los campos de URL y autentificación para continuar.",
+      "updateError": "No se ha podido actualizar las informaciones del ambiente.",
+      "updatedSuccessfully": "Ambiente actualizado correctamente.",
+      "clickAgain": "Clic para confirmar la eliminación.",
+      "deletedSuccessfully": "Ambiente eliminado correctamente.",
+      "back": "Volver",
+      "unableToEncrypt": "No se ha podido encriptar las claves de autentificación",
+      "form": {
+        "title": "Editar ambiente",
+        "environmentDataSection": "Datos del ambiente",
+        "environmentName": {
+          "label": "Nombre del ambiente:",
+          "placeholder": "Ej.: Ambiente de Homologación 01"
+        },
+        "domainUrl": {
+          "label": "URL De Dominio:",
+          "placeholder": "Ej.: https://test.fluig.com:8080"
+        },
+        "environmentKind": {
+          "label": "Tipo:",
+          "options": {
+            "prod": "Producción",
+            "hml": "Homologación",
+            "dev": "Desarrollo"
+          }
+        },
+        "environmentAuthSection": "Autentificación",
+        "consumerKey": {
+          "label": "Consumer Key:",
+          "placeholder": "Ingrese la consumer key"
+        },
+        "consumerSecret": {
+          "label": "Consumer Secret:",
+          "placeholder": "Ingrese la consumer secret"
+        },
+        "accessToken": {
+          "label": "Access Token:",
+          "placeholder": "Ingrese el access token"
+        },
+        "tokenSecret": {
+          "label": "Token Secret:",
+          "placeholder": "Ingrese el token secret"
+        },
+        "useEncryption": "Encriptar claves?",
+        "testConnection": "Testear Conexión",
+        "serverVerification": {
+          "title": "Verificación De Servidor",
+          "label": "Frecuencia",
+          "helper": "Tiempo utilizado para la verificación de disponibilidad del servidor.",
+          "options": {
+            "15s": "15 segundos",
+            "30s": "30 segundos",
+            "1m": "1 minuto",
+            "2m": "2 minutos"
+          }
+        },
+        "dataCollection": {
+          "title": "Colección De Datos",
+          "label": "Frecuencia",
+          "helper": "Tiempo utilizado para la colección de datos.",
+          "options": {
+            "15m": "15 minutos",
+            "30m": "30 minutos",
+            "1h": "1 hora",
+            "2h": "2 horas",
+            "3h": "3 horas",
+            "6h": "6 horas",
+            "12h": "12 horas",
+            "24h": "24 horas"
+          }
+        },
+        "buttonSave": "Guardar",
+        "buttonDelete": "Eliminar"
+      }
+    },
+    "HomeEnvironmentListView": {
+      "header": "Sus Ambientes",
+      "createEnvironmentHelper": "Incluya un nuevo ambiente utilizando el botón a continuación."
+    },
+    "EnvironmentDataContainer": {
+      "sideMenu": {
+        "summary": "Resumen",
+        "database": "Base de Datos",
+        "detailedMemory": "Memoria Detallada",
+        "runtimeStats": "Estadísticas de Ejecución",
+        "artifacts": "Artefactos",
+        "insights": "Insights",
+        "services": "Servicios",
+        "settings": "Configuraciones"
+      }
+    },
+    "AppSettingsView": {
+      "title": "Configuración"
+    }
+  },
+  "global": {
+    "environmentKinds": {
+      "HML": "Homologación",
+      "DEV": "Desarrollo",
+      "PROD": "Producción"
+    },
+    "environmentKindsShort": {
+      "HML": "HML",
+      "DEV": "DEV",
+      "PROD": "PRD"
+    }
+  },
+  "helpMessages": {
+    "environments": {
+      "maximumExceeded": "Solo puede favoritar hasta 3 ambientes.",
+      "added": "Ambiente añadido a los favoritos.",
+      "removed": "Ambiente eliminado de los favoritos."
+    }
+  },
+  "components": {
+    "global": {
+      "noData": "Sin datos disponibles",
+      "underDevelopment": "Funcionalidad en desarrollo"
+    },
+    "EnvironmentLicenses": {
+      "title": "Licencias",
+      "usedLicenses": "%active% de %total% licencias usadas",
+      "remainingLicenses": "%remaining% restantes"
+    },
+    "EnvironmentServerInfo": {
+      "title": "Servidor",
+      "processor": "Procesador",
+      "memory": "Memoria",
+      "disk": "Disco",
+      "activityTime": "Tiempo de actividad",
+      "activityTimeDescription": "%days% dias, %hours% horas, %minutes% minutos",
+      "noDataDueToVersion": "Sin datos disponibles debido a la versión del Fluig."
+    },
+    "EnvironmentServices": {
+      "title": "Servicios",
+      "operational": "Operacional",
+      "unused": "Sin uso",
+      "failed": "Fallo"
+    },
+    "EnvironmentStatusCard": {
+      "title": "Estatus",
+      "responseTime": "Tiempo de respuesta: %responseTime%ms",
+      "attention": "Atención",
+      "operational": "Operacional",
+      "unavailable": "No disponible",
+      "disconnected": "Desconectado",
+      "operatingCorrectly": "El servidor está online y operando correctamente.",
+      "highResponseTime": "El servidor está online, pero lo tiempo de respuesta es elevado.",
+      "noSatisfactoryResponse": "El servidor está online, pero la respuesta no es satisfactoria (HTTP %http%).",
+      "mayBeOffline": "Puede que el servidor este apagado. Ve los detalles:",
+      "youAreDisconnected": "Usted se encuentra desconectado. No fue posible verificar la disponibilidad del servidor."
+    },
+    "EnvironmentStatusSummary": {
+      "updatedAt": "Actualizado en",
+      "updatedAtAlt": "Actualizado en"
+    },
+    "SystemResources": {
+      "Disk": {
+        "title": "Disco",
+        "used": "Usado",
+        "outOf": "hasta"
+      },
+      "Memory": {
+        "title": "Memoria",
+        "used": "Usado",
+        "outOf": "hasta"
+      },
+      "Database": {
+        "title": "Base de datos",
+        "size": "Tamaño",
+        "traffic": "Trafico",
+        "trafficNotAllowed": "Trafico no permitido"
+      },
+      "DatabasePropsPanel": {
+        "title": "Base de datos",
+        "dbName": "SGBD:",
+        "dbVersion": "Version:",
+        "dbDriverName": "Driver:",
+        "dbDriverVersion": "Version Do Driver:"
+      }
+    },
+    "EnvironmentPerformanceGraph": {
+      "title": "Rendimiento",
+      "graphTitle": "Tiempo de respuesta del servidor",
+      "last24h": "Ultimas 24 horas",
+      "insufficientOrNoData": "Sin datos o datos insuficientes.",
+      "responseTime": "Tiempo de respuesta (ms)"
+    },
+    "DatabaseEvolutionGraph": {
+      "title": "Almacenamiento de la base de datos",
+      "graphTitle": "Almacenamiento alrededor del tiempo"
+    },
+    "DatabaseNetWorkGraph": {
+      "insufficientOrNoData": "Sin datos o datos insuficientes.",
+      "title": "Trafico de la base de datos",
+      "graphTitleInbound": "Fluxo de entrada",
+      "graphTitleOutbound": "Fluxo de salida",
+      "graphTitleMixed": "Fluxo de entrada y salida",
+      "dataNotAllowed": "La visualización del trafico de la base de datos no es permitida."
+    },
+    "ThemeSettings": {
+      "title": "Tema",
+      "helperText": "Seleciona lo siguiente para cambiar el tema:",
+      "whiteTheme": "Tema Blanco",
+      "darkTheme": "Tema Oscuro"
+    },
+    "UpdatesSettings": {
+      "title": "Actualizaciones",
+      "helperText": "Aqui puedes configurar como se comporta la aplicación con las actualizaciones.",
+      "enableAutoDownload": {
+        "label": "Descargar actualizaciones automaticamente.",
+        "helper": "Al habilitar esta opción, el fluig monitor descargará las actualizaciones disponibles automaticamente."
+      },
+      "enableAutoInstall": {
+        "label": "Instalar actualizaciones automaticamente.",
+        "helper": "Al habilitar esta opción, el fluig monitor instalará las actualizaciones disponibles automaticamente al descarga-las."
+      },
+      "updateFrequency": {
+        "helper": "Las actualizaciones siempre se verifican diariamente."
+      }
+    },
+    "LanguageSettings": {
+      "title": "Idioma",
+      "helperText": "Aqui puedes configurar el idioma de la aplicación: "
+    },
+    "SystemTraySettings": {
+      "title": "Bandeja del sistema",
+      "helperText": "Aqui puedes configurar el comportamiento de la bandeja del sistema.",
+      "minimizeToSystemTray": "Minimizar a la bandeja del sistema",
+      "minimizeToSystemTrayHelper": "Al habilitar esta opción, el fluig monitor se minimizará a la bandeja del sistema y no se cerrará.",
+      "disableNotification": "Deshabilitar notificación",
+      "disableNotificationHelper": "Utiliza esta opción para deshabilitar la notificación que indica que el fluig monitor sigue corriendo."
+    },
+    "AboutSection": {
+      "headingTitle": "Acerca de",
+      "title": "Una herramienta de código abierto para monitorear entornos Fluig.",
+      "developedBy": "Desarrollada por ",
+      "disclosure": "Esta herramienta ha sido desarrollada para fines didáticos, y no tiene ninguna relación con TOTVS.",
+      "usageDisclosure": "El uso de esta herramienta es opcional, por lo que no se garantiza su funcionamiento total o parcial para todo tipo de ambientes Fluig..",
+      "learnMoreAt": "Aprenda más sobre el proyecto en el repositorio oficial en "
+    },
+    "ReportABugSection": {
+      "title": "Reportar un bug",
+      "headline1": "¿Encontró algún error o tiene alguna sugerencia de desarrollo sobre esta herramienta?",
+      "headline2": "Puedes utilizar el botón de abajo para ser redirigido a la página de Issues del repositorio en GitHub:",
+      "callToAction": "Acceder"
+    },
+    "GraphTooltip": {
+      "unitTitles": {
+        "ms": "Tiempo",
+        "bytes": "Tamaño"
+      }
+    },
+    "EnvironmentDetailedMemoryContainer": {
+      "memoryConsumptionTitle": "Consumo de Memoria",
+      "memoryConsumptionUsed": "Usado",
+      "memoryStatisticsTitle": "Estadísticas por tipo de Memoria"
+    }
+  },
+  "classes": {
+    "EnvironmentFormValidator": {
+      "nameIsRequired": "El nombre del ambiente es obligatorio.",
+      "baseUrlIsRequired": "La dirección del ambiente es obligatoria.",
+      "consumerKeyIsRequired": "El Consumer Key es obligatorio.",
+      "consumerSecretIsRequired": "El Consumer Secret del ambiente es obligatorio.",
+      "accessTokenIsRequired": "El Access Token es obligatorio.",
+      "tokenSecretIsRequired": "El Token Secret es obligatorio.",
+      "scrapeFrequencyIsRequired": "La frecuencia de recolección es obligatoria.",
+      "pingFrequencyIsRequired": "La frecuencia de verificación es obligatoria."
+    }
+  },
+  "toasts": {
+    "HighResponseTime": {
+      "title": "Tiempo de respuesta alto.",
+      "message": "El servidor tiene un tiempo de respuesta muy alto."
+    },
+    "OperatingCorrectly": {
+      "title": "Operando correctamente.",
+      "message": "El servidor ha vuelto a operar dentro del tiempo de respuesta correcto."
+    },
+    "ServerAvailable": {
+      "title": "Disponible de nuevo.",
+      "message": "El servidor ha vuelto a estar disponible."
+    },
+    "ServerUnavailable": {
+      "title": "No disponible.",
+      "message": "El servidor parece estar fuera de línea. Verifique."
+    },
+    "StillAlive": {
+      "title": "Aún aquí.",
+      "message": "El Fluig Monitor sigue corriendo en la bandeja del sistema. Puede cambiar este comportamiento en el panel de control."
+    },
+    "NotConnected": {
+      "title": "No está conectado.",
+      "message": "El Fluig Monitor no puede verificar la disponibilidad del servidor %server%. Verifique su conexión a la red."
+    }
+  },
+  "dialogs": {
+    "updateDialog": {
+      "title": "Actualización disponible",
+      "message": "¿Desea actualizar el Fluig Monitor?",
+      "detail": "Se ha descargado una nueva actualización del Fluig Monitor. Está lista para ejecutarse.",
+      "btnYes": "Actualizar",
+      "btnNo": "Cancelar"
+    }
+  }
+}

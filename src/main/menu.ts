@@ -163,12 +163,12 @@ export default class MenuBuilder {
             i18n.changeLanguage('en');
           },
         },
-        // {
-        //   label: t('menu.languages.es'),
-        //   click: () => {
-        //     i18n.changeLanguage('es');
-        //   },
-        // },
+        {
+          label: t('menu.languages.es'),
+          click: () => {
+            i18n.changeLanguage('es');
+          },
+        },
       ],
     };
 
@@ -255,12 +255,13 @@ export default class MenuBuilder {
               i18n.changeLanguage('en');
             },
           },
-          // {
-          //   label: t('menu.languages.es'),
-          //   click: () => {
-          //     i18n.changeLanguage('es');
-          //   },
-          // },
+          {
+            label: t('menu.languages.es'),
+            accelerator: 'Ctrl+L+3',
+            click: () => {
+              i18n.changeLanguage('es');
+            },
+          },
         ],
       },
       {
