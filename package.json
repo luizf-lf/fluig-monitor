@@ -1,7 +1,7 @@
 {
   "name": "fluig-monitor",
   "description": "Application for monitoring Fluig environments.",
-  "version": "1.1.0",
+  "version": "1.1.0-rc",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts && ts-node ./scripts/copySchema.ts",
