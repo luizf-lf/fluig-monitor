@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useLocation, useParams } from 'react-router';
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import {
@@ -25,6 +25,7 @@ import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
+import { reportPageView } from '../ipc/analyticsIpcHandler';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId } = useParams();
@@ -54,6 +55,11 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const { updateEnvironmentList } = useEnvironmentList();
 
   const { t } = useTranslation();
+  const location = useLocation();
+
+  useEffect(() => {
+    reportPageView('edit_environment', 'Edit Environment', location.hash);
+  }, [location.hash]);
 
   useEffect(() => {
     async function getEnvironmentData() {

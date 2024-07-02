@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { ipcRenderer } from 'electron';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import {
   FiAlertCircle,
   FiAlertTriangle,
@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fi';
 import log from 'electron-log';
 import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
@@ -27,6 +27,7 @@ import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 import compareSemver from '../../common/utils/compareSemver';
 import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
+import { reportPageView } from '../ipc/analyticsIpcHandler';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -50,6 +51,11 @@ export default function CreateEnvironmentView(): JSX.Element {
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
+  const location = useLocation();
+
+  useEffect(() => {
+    reportPageView('create_environment', 'Create Environment', location.hash);
+  }, [location.hash]);
 
   /**
    * Parse the domain url value.

@@ -6,7 +6,9 @@ import {
   useEffect,
   useState,
 } from 'react';
+
 import { getAppSetting, updateAppSettings } from '../ipc/settingsIpcHandler';
+import { reportAnalyticsEvent } from '../ipc/analyticsIpcHandler';
 
 interface ThemeContextProviderProps {
   children: ReactNode;
@@ -47,6 +49,12 @@ export function ThemeContextProvider({ children }: ThemeContextProviderProps) {
         },
       ]);
     }
+
+    reportAnalyticsEvent('theme_changed', {
+      category: 'Application',
+      label: 'Theme changed',
+      theme: selectedTheme,
+    });
   }
 
   // loads the theme saved on the database

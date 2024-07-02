@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { FiChevronLeft } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
 
@@ -11,10 +12,16 @@ import HomeEnvironmentCard from '../components/container/HomeEnvironmentCard';
 
 import '../assets/styles/pages/HomeEnvironmentListView.scss';
 import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
+import { reportPageView } from '../ipc/analyticsIpcHandler';
 
 export default function HomeEnvironmentListView() {
   const { environmentList, updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
+  const location = useLocation();
+
+  useEffect(() => {
+    reportPageView('home', 'Home', location.hash);
+  }, [location.hash]);
 
   useEffect(() => {
     async function fetchData() {

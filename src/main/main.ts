@@ -6,6 +6,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, screen, Tray, Notification } from 'electron';
+import os from 'node:os';
 
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
@@ -32,6 +33,7 @@ import getAssetPath from './utils/getAssetPath';
 import SettingsController from './controllers/SettingsController';
 import AppUpdater from './classes/AppUpdater';
 import trayBuilder from './utils/trayBuilder';
+import analytics from './analytics/analytics';
 
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
@@ -117,6 +119,17 @@ const createWindow = async () => {
     }
 
     trayIcon = trayBuilder(trayIcon, reopenWindow);
+
+    if (mainWindow) {
+      analytics
+        .setParams({
+          engagement_time_msec: 1000,
+          category: 'Language',
+          label: 'Language changed',
+          value: lang,
+        })
+        .event('language_changed');
+    }
   });
 
   // change the language to the locally saved language
@@ -175,6 +188,8 @@ addIpcHandlers();
 app
   .whenReady()
   .then(async () => {
+    const timer = Date.now();
+
     const appUpdater = new AppUpdater();
     const splash = new BrowserWindow({
       width: 720,
@@ -244,6 +259,23 @@ app
     scheduleJob('10 0 0 * * *', () => {
       appUpdater.checkUpdates();
     });
+
+    // .setUserProperties({
+    //   app_version: version,
+    //   app_name: app.name,
+    //   os_platform: os.platform(),
+    //   os_release: os.release(),
+    //   os_arch: os.arch(),
+    //   mode: app.isPackaged ? 'production' : 'development',
+    // })
+    analytics
+      .setParams({
+        engagement_time_msec: Date.now() - timer,
+        category: 'Application',
+        label: 'Application started',
+        debug_mode: true,
+      })
+      .event('app_started');
   })
   .catch((e) => {
     log.error('An unknown error occurred:');

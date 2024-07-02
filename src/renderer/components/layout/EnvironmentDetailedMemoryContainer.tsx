@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   Area,
@@ -22,6 +23,7 @@ import {
 import SpinnerLoader from '../base/Loaders/Spinner';
 import formatBytes from '../../../common/utils/formatBytes';
 import GraphTooltip from '../base/GraphTooltip';
+import { reportPageView } from '../../ipc/analyticsIpcHandler';
 
 interface NormalizedMemoryData {
   timestamp: Date;
@@ -41,6 +43,15 @@ function EnvironmentDetailedMemoryContainer() {
   >([]);
 
   const { t } = useTranslation();
+  const location = useLocation();
+
+  useEffect(() => {
+    reportPageView(
+      'environment_detailed_memory',
+      'Environment Detailed Memory',
+      location.hash
+    );
+  }, [location.hash]);
 
   useEffect(() => {
     async function getData() {

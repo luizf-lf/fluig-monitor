@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-await-in-loop */
 import log from 'electron-log';
 import { ipcMain } from 'electron';
@@ -34,6 +35,7 @@ import AppUpdater, {
   AppUpdaterConstructorOptions,
 } from '../classes/AppUpdater';
 import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
+import analytics from '../analytics/analytics';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -72,7 +74,7 @@ export default function addIpcHandlers(): void {
       id: number,
       includeRelatedData: boolean
     ) => {
-      log.info('IPC Handler: Recovering environment by id');
+      log.info(`IPC Handler: Recovering environment by id ${id}`);
       const environment = await environmentController.getById(
         id,
         includeRelatedData
@@ -410,6 +412,17 @@ export default function addIpcHandlers(): void {
         await EnvironmentController.getDetailedMemoryById(id);
 
       return environmentMemory;
+    }
+  );
+
+  ipcMain.handle(
+    'analytics',
+    (
+      _event: Electron.IpcMainInvokeEvent,
+      event: string,
+      data: { [key: string]: any }
+    ) => {
+      analytics.setParams(data).event(event);
     }
   );
 }

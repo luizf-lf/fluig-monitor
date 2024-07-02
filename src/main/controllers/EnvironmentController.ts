@@ -11,6 +11,7 @@ import {
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
 import { Environment, HTTPResponse } from '../generated/client';
+import analytics from '../analytics/analytics';
 
 interface ConstructorOptions {
   writeLogs: boolean;
@@ -269,6 +270,7 @@ export default class EnvironmentController {
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {
+    const timer = Date.now();
     if (this.writeLogs) {
       log.info(
         'EnvironmentController: Saving a new environment on the database'
@@ -278,12 +280,23 @@ export default class EnvironmentController {
       data,
     });
 
+    analytics
+      .setParams({
+        engagement_time_msec: Date.now() - timer,
+        category: 'Environments',
+        label: 'Environment created',
+        release: data.release,
+        kind: data.kind,
+      })
+      .event('env_created');
+
     return this.created;
   }
 
   async update(
     data: EnvironmentUpdateControllerInterface
   ): Promise<Environment> {
+    const timer = Date.now();
     if (this.writeLogs) {
       log.info('EnvironmentController: Updating environment with id', data.id);
     }
@@ -303,6 +316,17 @@ export default class EnvironmentController {
       },
       data: updatedData,
     });
+
+    analytics
+      .setParams({
+        engagement_time_msec: Date.now() - timer,
+        category: 'Environments',
+        label: 'Environment updated',
+        release: data.release,
+        kind: data.kind,
+        deleted: data.logDeleted,
+      })
+      .event('env_created');
 
     return this.updated;
   }

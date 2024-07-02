@@ -15,7 +15,7 @@ import formatBytes from '../../common/utils/formatBytes';
 import byteSpeed from '../../common/utils/byteSpeed';
 import i18n from '../../common/i18n/i18n';
 import SettingsController from '../controllers/SettingsController';
-import { isDevelopment } from '../../main/utils/globalConstants';
+import { isDevelopment } from '../utils/globalConstants';
 
 export interface AppUpdaterConstructorOptions {
   forceOptions: { forceDownload?: boolean; forceInstall?: boolean };

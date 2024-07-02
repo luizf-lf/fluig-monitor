@@ -2,16 +2,7 @@
 import { useState } from 'react';
 import { Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import {
-  FiAirplay,
-  FiCpu,
-  FiDatabase,
-  FiGrid,
-  FiLayers,
-  FiList,
-  FiSettings,
-  FiTrendingUp,
-} from 'react-icons/fi';
+import { FiAirplay, FiDatabase, FiLayers, FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import EnvironmentSummary from '../components/layout/EnvironmentSummaryContainer';
 import EnvironmentDatabaseContainer from '../components/layout/EnvironmentDatabaseContainer';
@@ -29,14 +20,6 @@ export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();
   const [menuIsClosed, setMenuIsClosed] = useState(true);
 
-  /**
-   * // TODO: Update submenu items:
-   * - Detailed Memory (#33)
-   * - Runtime Stats (#34)
-   * - Artifacts (#35)
-   * - Insights (#36)
-   * - Services (#37)
-   */
   const submenuItems = [
     {
       target: `summary`,

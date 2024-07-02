@@ -16,11 +16,13 @@ import prismaClient from './prismaContext';
 import seedDb from './seedDb';
 import { Migration } from '../interfaces/MigrationInterface';
 import LogController from '../controllers/LogController';
+import analytics from '../analytics/analytics';
 
 export default async function runDbMigrations() {
   let needsMigration = false;
   let mustSeed = false;
   const fullDbPath = path.resolve(dbPath, dbName);
+  const timer = Date.now();
 
   log.info(`Checking database at ${fullDbPath}`);
 
@@ -104,6 +106,14 @@ export default async function runDbMigrations() {
         type: 'info',
         message: 'Database migration executed',
       });
+
+      analytics
+        .setParams({
+          engagement_time_msec: Date.now() - timer,
+          category: 'Database',
+          label: 'Database migrated',
+        })
+        .event('db_migrated');
     } catch (e) {
       log.error('Migration executed with error.');
       log.error(e);
