@@ -6,7 +6,6 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, screen, Tray, Notification } from 'electron';
-import os from 'node:os';
 
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
@@ -34,6 +33,8 @@ import SettingsController from './controllers/SettingsController';
 import AppUpdater from './classes/AppUpdater';
 import trayBuilder from './utils/trayBuilder';
 import analytics from './analytics/analytics';
+
+require('dotenv').config();
 
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
@@ -268,12 +269,15 @@ app
     //   os_arch: os.arch(),
     //   mode: app.isPackaged ? 'production' : 'development',
     // })
+
+    const { GA_TRACKING_ID, GA_SECRET_KEY } = process.env;
+
     analytics
+      .config(GA_TRACKING_ID, GA_SECRET_KEY)
       .setParams({
         engagement_time_msec: Date.now() - timer,
         category: 'Application',
         label: 'Application started',
-        debug_mode: true,
       })
       .event('app_started');
   })

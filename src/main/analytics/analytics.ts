@@ -13,9 +13,9 @@ interface CustomObject {
  * Based on github.com/hajeonghun/electron-google-analytics4
  */
 class GAnalytics {
-  trackingID: string;
+  trackingID: string | undefined;
 
-  secretKey: string;
+  secretKey: string | undefined;
 
   clientID: string;
 
@@ -36,21 +36,26 @@ class GAnalytics {
   eventQueue: CustomObject[] = [];
 
   constructor() {
-    const { GA_TRACKING_ID, GA_SECRET_KEY } = process.env;
-
     this.enabled = true;
     this.store = new Store();
-    this.trackingID = GA_TRACKING_ID || '';
-    this.secretKey = GA_SECRET_KEY || '';
     this.clientID = randomUUID();
     this.sessionID = randomUUID();
+  }
 
-    if (!GA_TRACKING_ID || !GA_SECRET_KEY) {
+  config(
+    trackingId: string | undefined,
+    secretKey: string | undefined
+  ): GAnalytics {
+    this.trackingID = trackingId || '';
+    this.secretKey = secretKey || '';
+    if (!trackingId || !secretKey) {
       log.info(
         'Tracking id and secret key not configured. Analytics will be disabled.'
       );
       this.enabled = false;
     }
+
+    return this;
   }
 
   set(key: string, value: string | number): GAnalytics {
