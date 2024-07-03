@@ -6,6 +6,7 @@ import axios from 'axios';
 import { exec } from 'child_process';
 import crypto from 'crypto';
 import { app, BrowserWindow, dialog } from 'electron';
+
 import GitHubReleaseInterface, {
   ReleaseAsset,
 } from '../interfaces/GitHubReleaseInterface';
@@ -16,6 +17,8 @@ import byteSpeed from '../../common/utils/byteSpeed';
 import i18n from '../../common/i18n/i18n';
 import SettingsController from '../controllers/SettingsController';
 import { isDevelopment } from '../utils/globalConstants';
+import appStateHelper from '../analytics/appStateHelper';
+import analytics from '../analytics/analytics';
 
 export interface AppUpdaterConstructorOptions {
   forceOptions: { forceDownload?: boolean; forceInstall?: boolean };
@@ -134,6 +137,16 @@ export default class AppUpdater {
     if (this.shouldAutoInstall) {
       exec(execPath).on('spawn', () => {
         log.info('AppUpdater: App will auto quit and update itself');
+
+        appStateHelper.setIsClosed();
+        analytics
+          .setParams({
+            engagement_time_msec: appStateHelper.getEngagementTime(),
+            category: 'Application',
+            label: 'Application closed',
+            ref: 'App Updater',
+          })
+          .event('app_closed', true);
         setTimeout(() => {
           app.quit();
         }, this.actionsTimeout);
@@ -169,6 +182,16 @@ export default class AppUpdater {
           if (clicked.response === 0) {
             exec(execPath).on('spawn', () => {
               log.info('AppUpdater: App will quit and update itself');
+
+              appStateHelper.setIsClosed();
+              analytics
+                .setParams({
+                  engagement_time_msec: appStateHelper.getEngagementTime(),
+                  category: 'Application',
+                  label: 'Application closed',
+                  ref: 'App Updater',
+                })
+                .event('app_closed', true);
               setTimeout(() => {
                 app.quit();
               }, this.actionsTimeout);

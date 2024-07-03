@@ -10,7 +10,8 @@ interface CustomObject {
 
 /**
  * Google Analytics handler class.
- * Based on github.com/hajeonghun/electron-google-analytics4
+ * Based on hajeonghun/electron-google-analytics4
+ * @see https://github.com/hajeonghun/electron-google-analytics4
  */
 class GAnalytics {
   trackingID: string | undefined;
@@ -25,21 +26,23 @@ class GAnalytics {
 
   userProperties: CustomObject | null = null;
 
-  baseURL = 'https://google-analytics.com/mp';
-
-  collectURL = '/collect';
+  baseURL = 'https://google-analytics.com/mp/collect';
 
   store: Store;
 
-  enabled: boolean;
+  analyticsEnabled: boolean;
+
+  debugEnabled: boolean;
 
   eventQueue: CustomObject[] = [];
 
   constructor() {
-    this.enabled = true;
+    this.analyticsEnabled = true;
     this.store = new Store();
-    this.clientID = randomUUID();
     this.sessionID = randomUUID();
+    this.clientID = '';
+
+    this.debugEnabled = true;
   }
 
   config(
@@ -48,14 +51,29 @@ class GAnalytics {
   ): GAnalytics {
     this.trackingID = trackingId || '';
     this.secretKey = secretKey || '';
+
+    this.clientID = this.getClientId();
+
     if (!trackingId || !secretKey) {
       log.info(
         'Tracking id and secret key not configured. Analytics will be disabled.'
       );
-      this.enabled = false;
+      this.analyticsEnabled = false;
     }
 
     return this;
+  }
+
+  getClientId() {
+    let clientId = this.store.get('clientId') as string;
+
+    if (!clientId) {
+      clientId = randomUUID();
+      this.store.set('clientId', clientId);
+    }
+
+    this.clientID = clientId;
+    return this.clientID;
   }
 
   set(key: string, value: string | number): GAnalytics {
@@ -85,8 +103,8 @@ class GAnalytics {
     return this;
   }
 
-  event(eventName: string) {
-    if (!this.enabled) {
+  event(eventName: string, forcePush = false) {
+    if (!this.analyticsEnabled) {
       return this;
     }
 
@@ -96,8 +114,13 @@ class GAnalytics {
     });
     this.setParams();
 
-    if (this.eventQueue.length >= 5) {
-      // log.info(`Tracking events: ${this.eventQueue.map((item) => item.name)}`);
+    if (this.eventQueue.length >= 5 || forcePush) {
+      if (this.debugEnabled) {
+        log.debug(
+          `Tracking events: ${this.eventQueue.map((item) => item.name)}`
+        );
+      }
+
       const payload = {
         client_id: this.clientID,
         events: this.eventQueue,
@@ -105,11 +128,15 @@ class GAnalytics {
       if (this.userProperties) {
         Object.assign(payload, { user_properties: this.userProperties });
       }
-      // log.info(JSON.stringify(payload));
+
+      if (this.debugEnabled) {
+        log.debug(`Events payload: ${JSON.stringify(payload)}`);
+      }
+
       this.eventQueue = [];
       axios
         .post(
-          `${this.baseURL}${this.collectURL}?measurement_id=${this.trackingID}&api_secret=${this.secretKey}`,
+          `${this.baseURL}?measurement_id=${this.trackingID}&api_secret=${this.secretKey}`,
           payload
         )
         .then((res) => {

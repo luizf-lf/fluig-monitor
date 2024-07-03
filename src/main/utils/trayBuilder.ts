@@ -1,9 +1,12 @@
 import { app, Menu, shell, Tray } from 'electron';
 import log from 'electron-log';
 import path from 'path';
+
 import i18n from '../../common/i18n/i18n';
 import getAssetPath from './getAssetPath';
 import { version } from '../../../package.json';
+import appStateHelper from '../analytics/appStateHelper';
+import analytics from '../analytics/analytics';
 
 export default function trayBuilder(
   instance: Tray | null,
@@ -44,10 +47,22 @@ export default function trayBuilder(
         type: 'normal',
         label: i18n.t('menu.systemTray.quit'),
         click: () => {
+          appStateHelper.setIsClosed();
+          analytics
+            .setParams({
+              engagement_time_msec: appStateHelper.getEngagementTime(),
+              category: 'Application',
+              label: 'Application closed',
+              ref: 'System Tray',
+            })
+            .event('app_closed', true);
+
           log.info(
             'App will be closed since the system tray option has been clicked.'
           );
-          app.quit();
+          setTimeout(() => {
+            app.quit();
+          }, 500);
         },
       },
     ])

@@ -33,6 +33,7 @@ import SettingsController from './controllers/SettingsController';
 import AppUpdater from './classes/AppUpdater';
 import trayBuilder from './utils/trayBuilder';
 import analytics from './analytics/analytics';
+import appStateHelper from './analytics/appStateHelper';
 
 require('dotenv').config();
 
@@ -172,6 +173,16 @@ const createWindow = async () => {
       }
 
       mainWindow?.hide();
+
+      appStateHelper.setIsMinimized();
+
+      analytics
+        .setParams({
+          engagement_time_msec: appStateHelper.getEngagementTime(),
+          category: 'Application',
+          label: 'Application minimized',
+        })
+        .event('app_minimized');
     }
   });
 };
@@ -181,6 +192,15 @@ const reopenWindow = () => {
     createWindow();
   } else {
     BrowserWindow.getAllWindows()[0].show();
+    appStateHelper.setIsRestored();
+
+    analytics
+      .setParams({
+        engagement_time_msec: appStateHelper.getEngagementTime(),
+        category: 'Application',
+        label: 'Application restored',
+      })
+      .event('app_restored');
   }
 };
 
@@ -190,7 +210,6 @@ app
   .whenReady()
   .then(async () => {
     const timer = Date.now();
-
     const appUpdater = new AppUpdater();
     const splash = new BrowserWindow({
       width: 720,
@@ -270,19 +289,33 @@ app
     //   mode: app.isPackaged ? 'production' : 'development',
     // })
 
+    appStateHelper.setIsStarted();
+
     const { GA_TRACKING_ID, GA_SECRET_KEY } = process.env;
 
     analytics
       .config(GA_TRACKING_ID, GA_SECRET_KEY)
       .setParams({
-        engagement_time_msec: Date.now() - timer,
+        engagement_time_msec: appStateHelper.startedAt - timer,
         category: 'Application',
         label: 'Application started',
       })
       .event('app_started');
   })
-  .catch((e) => {
+  .catch((error: Error) => {
+    analytics
+      .setParams({
+        engagement_time_msec: 100,
+        category: 'Error',
+        label: 'Application error',
+        error_name: error.name,
+        error_message: error.message,
+      })
+      .event('error');
+
     log.error('An unknown error occurred:');
-    log.error(e);
-    app.quit();
+    log.error(error);
+    setTimeout(() => {
+      app.quit();
+    }, 500);
   });

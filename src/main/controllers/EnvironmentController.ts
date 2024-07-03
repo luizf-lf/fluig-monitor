@@ -326,7 +326,7 @@ export default class EnvironmentController {
         kind: data.kind,
         deleted: data.logDeleted,
       })
-      .event('env_created');
+      .event('env_updated');
 
     return this.updated;
   }

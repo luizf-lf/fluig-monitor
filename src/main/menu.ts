@@ -7,6 +7,8 @@ import {
 } from 'electron';
 import { t } from 'i18next';
 import i18n from '../common/i18n/i18n';
+import appStateHelper from './analytics/appStateHelper';
+import analytics from './analytics/analytics';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -190,7 +192,20 @@ export default class MenuBuilder {
           {
             label: t('menu.file.quit'),
             accelerator: 'Ctrl+W',
-            click: () => app.quit(),
+            click: () => {
+              appStateHelper.setIsClosed();
+              analytics
+                .setParams({
+                  engagement_time_msec: appStateHelper.getEngagementTime(),
+                  category: 'Application',
+                  label: 'Application closed',
+                  ref: 'Menu',
+                })
+                .event('app_closed', true);
+              setTimeout(() => {
+                app.quit();
+              }, 500);
+            },
           },
         ],
       },
