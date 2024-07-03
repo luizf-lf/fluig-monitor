@@ -21,6 +21,8 @@ export default function App() {
   // the useLocation hook is used to render a specific component per route
   // const location = useLocation();
 
+  // TODO: Add analytics to route changes(?)
+
   return (
     <EnvironmentListContextProvider>
       <NotificationsContextProvider>
