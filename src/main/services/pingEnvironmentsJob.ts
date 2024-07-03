@@ -16,6 +16,8 @@ import HttpResponseResourceType from '../../common/interfaces/HttpResponseResour
 
 import i18n from '../../common/i18n/i18n';
 
+// TODO: Implement analytics os server status changes
+
 async function notifyAbout(
   environment: EnvironmentWithRelatedData
 ): Promise<void> {

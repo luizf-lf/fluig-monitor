@@ -15,6 +15,7 @@ import { scrapeSyncInterval } from '../utils/globalConstants';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 import getEnvironmentRelease from './getEnvironmentRelease';
 import assertConnectivity from '../utils/assertConnectivity';
+import analytics from '../analytics/analytics';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses
@@ -471,6 +472,7 @@ export default async function syncEnvironmentsJob() {
 
   if (environmentList.length > 0) {
     environmentList.forEach(async (environment) => {
+      const timer = Date.now();
       log.info(
         `syncEnvironmentsJob: Checking related data for environment ${environment.id}`
       );
@@ -505,9 +507,6 @@ export default async function syncEnvironmentsJob() {
             `syncEnvironmentsJob: Environment ${environment.id} needs synchronization. Fetching api data.`
           );
 
-          // TODO: Add analytics to sync events
-          // TODO: Create analytics helper (abstract events to functions)
-
           const hostConnected = await assertConnectivity();
           await syncLicenseData(
             licenseHistoryController,
@@ -540,6 +539,15 @@ export default async function syncEnvironmentsJob() {
           });
 
           log.info('syncEnvironmentsJob: Environment sync job finished.');
+
+          analytics
+            .setParams({
+              engagement_time_msec: Date.now() - timer,
+              category: 'Monitoring',
+              label: 'Synchronization Executed',
+              host_connected: hostConnected,
+            })
+            .event('sync_executed');
         } else {
           log.info(
             `syncEnvironmentsJob: Environment ${environment.id} does not need synchronization.`

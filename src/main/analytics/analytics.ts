@@ -8,6 +8,8 @@ interface CustomObject {
   [key: string]: any;
 }
 
+// TODO: Create analytics helper (abstract events to functions)
+
 /**
  * Google Analytics handler class.
  * Based on hajeonghun/electron-google-analytics4
@@ -44,7 +46,7 @@ class GAnalytics {
     this.sessionID = randomUUID();
     this.clientID = '';
 
-    this.debugEnabled = false;
+    this.debugEnabled = true;
   }
 
   config(
@@ -125,7 +127,9 @@ class GAnalytics {
     if (this.eventQueue.length >= 5 || forcePush) {
       if (this.debugEnabled) {
         log.debug(
-          `Tracking events: ${this.eventQueue.map((item) => item.name)}`
+          `Tracking ${this.eventQueue.length} events: ${this.eventQueue.map(
+            (item) => item.name
+          )}`
         );
       }
 
@@ -141,7 +145,6 @@ class GAnalytics {
         log.debug(`Events payload: ${JSON.stringify(payload)}`);
       }
 
-      this.eventQueue = [];
       if (payload.events.length > 0) {
         axios
           .post(
@@ -150,6 +153,7 @@ class GAnalytics {
           )
           .then((res) => {
             log.info(`Events sent. HTTP ${res.status}`);
+            this.eventQueue = [];
             return res;
           })
           .catch((err: Error) => {
@@ -161,7 +165,7 @@ class GAnalytics {
             this.pushWithTimeout();
           });
       }
-    } else {
+    } else if (this.eventQueue.length > 0) {
       this.pushWithTimeout();
     }
   }

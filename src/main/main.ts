@@ -6,6 +6,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, screen, Tray, Notification } from 'electron';
+import os from 'node:os';
 
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
@@ -280,18 +281,10 @@ app
       appUpdater.checkUpdates();
     });
 
-    // .setUserProperties({
-    //   app_version: version,
-    //   app_name: app.name,
-    //   os_platform: os.platform(),
-    //   os_release: os.release(),
-    //   os_arch: os.arch(),
-    //   mode: app.isPackaged ? 'production' : 'development',
-    // })
-
     appStateHelper.setIsStarted();
 
     const { GA_TRACKING_ID, GA_SECRET_KEY } = process.env;
+    const { width, height } = screen.getPrimaryDisplay().size;
 
     analytics
       .config(GA_TRACKING_ID, GA_SECRET_KEY)
@@ -299,6 +292,14 @@ app
         engagement_time_msec: appStateHelper.startedAt - timer,
         category: 'Application',
         label: 'Application started',
+        app_version: version,
+        app_name: app.name,
+        app_mode: app.isPackaged ? 'production' : 'development',
+        screen_resolution: `${width}x${height}`,
+        os_platform: os.platform(),
+        os_type: os.type(),
+        os_release: os.release(),
+        os_arch: os.arch(),
       })
       .event('app_started');
   })
