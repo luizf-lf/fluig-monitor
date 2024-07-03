@@ -103,7 +103,6 @@ async function executePing(
 ): Promise<void> {
   if (environment.oAuthKeysId) {
     const decodedKeys = new AuthKeysDecoder(environment.oAuthKeysId).decode();
-    const hostConnected = await assertConnectivity();
 
     if (!decodedKeys) {
       log.error(
@@ -117,10 +116,13 @@ async function executePing(
       method: 'GET',
     };
 
+    const hostConnected = await assertConnectivity();
     const fluigClient = new FluigAPIClient({
       oAuthKeys: decodedKeys,
       requestData,
     });
+
+    const httpResponseController = new HttpResponseController();
 
     const initialTiming = Date.now();
     let timeout = null;
@@ -143,7 +145,7 @@ async function executePing(
         );
       }
 
-      await new HttpResponseController().new(
+      await httpResponseController.new(
         {
           environmentId: environment.id,
           responseTimeMs,
@@ -163,7 +165,7 @@ async function executePing(
         }`
       );
 
-      await new HttpResponseController().new({
+      await httpResponseController.new({
         environmentId: environment.id,
         responseTimeMs: 0,
         endpoint: requestData.url,

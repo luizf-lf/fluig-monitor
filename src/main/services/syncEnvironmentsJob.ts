@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import log from 'electron-log';
 import { BrowserWindow } from 'electron';
+
 import EnvironmentController from '../controllers/EnvironmentController';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
@@ -20,6 +21,8 @@ import assertConnectivity from '../utils/assertConnectivity';
  *  and saves the result to the database
  */
 async function syncLicenseData(
+  licenseHistoryController: LicenseHistoryController,
+  httpResponseController: HttpResponseController,
   item: EnvironmentWithRelatedData,
   hostConnected: boolean
 ): Promise<void> {
@@ -55,7 +58,7 @@ async function syncLicenseData(
         const { activeUsers, remainingLicenses, tenantId, totalLicenses } =
           fluigClient.httpResponse.items[0];
 
-        const logged = await new LicenseHistoryController().new({
+        const logged = await licenseHistoryController.new({
           environmentId: item.id,
           statusCode: fluigClient.httpStatus,
           timestamp: new Date().toISOString(),
@@ -89,7 +92,7 @@ async function syncLicenseData(
         fluigClient.httpStatus,
         '(licenses api)'
       );
-      await new HttpResponseController().new({
+      await httpResponseController.new({
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
@@ -108,7 +111,7 @@ async function syncLicenseData(
         '(licenses api)'
       );
 
-      await new HttpResponseController().new({
+      await httpResponseController.new({
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
@@ -127,6 +130,8 @@ async function syncLicenseData(
  *  and saves the result to the database.
  */
 async function syncMonitorData(
+  monitorHistoryController: MonitorHistoryController,
+  httpResponseController: HttpResponseController,
   item: EnvironmentWithRelatedData,
   hostConnected: boolean
 ): Promise<void> {
@@ -162,7 +167,7 @@ async function syncMonitorData(
       if (fluigClient.httpStatus === 200) {
         const monitorData = fluigClient.httpResponse.items;
 
-        const logged = await new MonitorHistoryController().new({
+        const logged = await monitorHistoryController.new({
           environmentId: item.id,
           statusCode: fluigClient.httpStatus,
           statusMessage: fluigClient.httpStatusText,
@@ -191,7 +196,7 @@ async function syncMonitorData(
         fluigClient.httpStatus,
         '(monitor api)'
       );
-      await new HttpResponseController().new({
+      await httpResponseController.new({
         environmentId: item.id,
         responseTimeMs,
         endpoint: requestData.url,
@@ -210,7 +215,7 @@ async function syncMonitorData(
         '(monitor api)'
       );
 
-      await new HttpResponseController().new({
+      await httpResponseController.new({
         environmentId: item.id,
         responseTimeMs: 0,
         endpoint: requestData.url,
@@ -229,6 +234,8 @@ async function syncMonitorData(
  *  and saves the result to the database
  */
 async function syncStatisticsData(
+  statisticsHistoryController: StatisticsHistoryController,
+  httpResponseController: HttpResponseController,
   item: EnvironmentWithRelatedData,
   hostConnected: boolean
 ): Promise<void> {
@@ -265,7 +272,7 @@ async function syncStatisticsData(
         if (fluigClient.httpStatus === 200) {
           const statisticsData = fluigClient.httpResponse;
 
-          const logged = await new StatisticsHistoryController().new({
+          const logged = await statisticsHistoryController.new({
             environmentId: item.id,
             statusCode: fluigClient.httpStatus,
             statusMessage: fluigClient.httpStatusText,
@@ -365,7 +372,7 @@ async function syncStatisticsData(
           fluigClient.httpStatus,
           '(statistics api)'
         );
-        await new HttpResponseController().new({
+        await httpResponseController.new({
           environmentId: item.id,
           responseTimeMs,
           endpoint: requestData.url,
@@ -384,7 +391,7 @@ async function syncStatisticsData(
           '(statistics api)'
         );
 
-        await new HttpResponseController().new({
+        await httpResponseController.new({
           environmentId: item.id,
           responseTimeMs: 0,
           endpoint: requestData.url,
@@ -402,6 +409,7 @@ async function syncStatisticsData(
 }
 
 async function syncProductVersion(
+  environmentController: EnvironmentController,
   environment: EnvironmentWithRelatedData
 ): Promise<void> {
   try {
@@ -425,10 +433,13 @@ async function syncProductVersion(
       );
 
       if (release) {
-        await new EnvironmentController().updateRelease(
-          environment.id,
-          release.content.split(' - ')[1]
-        );
+        const releaseName = release.content.split(' - ')[1];
+        if (releaseName.trim() !== environment.release.trim()) {
+          await environmentController.updateRelease(
+            environment.id,
+            releaseName
+          );
+        }
       }
     }
   } catch (error) {
@@ -450,7 +461,13 @@ export default async function syncEnvironmentsJob() {
     ).toLocaleString()}`
   );
 
-  const environmentList = await new EnvironmentController().getAll();
+  const environmentController = new EnvironmentController();
+  const statisticsHistoryController = new StatisticsHistoryController();
+  const monitorHistoryController = new MonitorHistoryController();
+  const licenseHistoryController = new LicenseHistoryController();
+  const httpResponseController = new HttpResponseController();
+
+  const environmentList = await environmentController.getAll();
 
   if (environmentList.length > 0) {
     environmentList.forEach(async (environment) => {
@@ -462,9 +479,7 @@ export default async function syncEnvironmentsJob() {
 
       if (environment.updateScheduleId) {
         const lastHttpResponse =
-          await new EnvironmentController().getLastScrapeResponseById(
-            environment.id
-          );
+          await environmentController.getLastScrapeResponseById(environment.id);
 
         if (
           lastHttpResponse === null ||
@@ -489,11 +504,30 @@ export default async function syncEnvironmentsJob() {
           log.info(
             `syncEnvironmentsJob: Environment ${environment.id} needs synchronization. Fetching api data.`
           );
+
+          // TODO: Add analytics to sync events
+          // TODO: Create analytics helper (abstract events to functions)
+
           const hostConnected = await assertConnectivity();
-          await syncLicenseData(environment, hostConnected);
-          await syncMonitorData(environment, hostConnected);
-          await syncStatisticsData(environment, hostConnected);
-          await syncProductVersion(environment);
+          await syncLicenseData(
+            licenseHistoryController,
+            httpResponseController,
+            environment,
+            hostConnected
+          );
+          await syncMonitorData(
+            monitorHistoryController,
+            httpResponseController,
+            environment,
+            hostConnected
+          );
+          await syncStatisticsData(
+            statisticsHistoryController,
+            httpResponseController,
+            environment,
+            hostConnected
+          );
+          await syncProductVersion(environmentController, environment);
 
           // sends a signal to the renderer with the server status as an argument
           BrowserWindow.getAllWindows().forEach((windowElement) => {

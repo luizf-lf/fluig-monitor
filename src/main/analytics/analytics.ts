@@ -36,13 +36,15 @@ class GAnalytics {
 
   eventQueue: CustomObject[] = [];
 
+  pushTimeout: NodeJS.Timeout | null = null;
+
   constructor() {
     this.analyticsEnabled = true;
     this.store = new Store();
     this.sessionID = randomUUID();
     this.clientID = '';
 
-    this.debugEnabled = true;
+    this.debugEnabled = false;
   }
 
   config(
@@ -103,7 +105,7 @@ class GAnalytics {
     return this;
   }
 
-  event(eventName: string, forcePush = false) {
+  event(eventName: string, forcePush = false): GAnalytics {
     if (!this.analyticsEnabled) {
       return this;
     }
@@ -114,6 +116,12 @@ class GAnalytics {
     });
     this.setParams();
 
+    this.handleQueue(forcePush);
+
+    return this;
+  }
+
+  handleQueue(forcePush = false) {
     if (this.eventQueue.length >= 5 || forcePush) {
       if (this.debugEnabled) {
         log.debug(
@@ -134,22 +142,37 @@ class GAnalytics {
       }
 
       this.eventQueue = [];
-      axios
-        .post(
-          `${this.baseURL}?measurement_id=${this.trackingID}&api_secret=${this.secretKey}`,
-          payload
-        )
-        .then((res) => {
-          log.info(`Events sent - ${res.status}`);
-          return res;
-        })
-        .catch((err) => {
-          log.error('Error sending analytics events');
-          log.error(err);
-        });
-    }
+      if (payload.events.length > 0) {
+        axios
+          .post(
+            `${this.baseURL}?measurement_id=${this.trackingID}&api_secret=${this.secretKey}`,
+            payload
+          )
+          .then((res) => {
+            log.info(`Events sent. HTTP ${res.status}`);
+            return res;
+          })
+          .catch((err: Error) => {
+            log.error(
+              'Error sending analytics events. Tying again in 30 seconds.'
+            );
+            log.error(err.message);
 
-    return this;
+            this.pushWithTimeout();
+          });
+      }
+    } else {
+      this.pushWithTimeout();
+    }
+  }
+
+  pushWithTimeout() {
+    if (this.pushTimeout) {
+      clearTimeout(this.pushTimeout);
+    }
+    this.pushTimeout = setTimeout(() => {
+      this.handleQueue(true);
+    }, 30000);
   }
 }
 
