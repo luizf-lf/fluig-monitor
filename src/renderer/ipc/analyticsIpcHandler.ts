@@ -24,4 +24,17 @@ export const GAEventsIPC = {
       engagement_time_msec: 100,
     });
   },
+
+  generateLead(source: string, target: string) {
+    reportAnalyticsEvent('lead_generated', {
+      lead_source: source,
+      target,
+    });
+  },
+
+  themeChanged(theme: string) {
+    reportAnalyticsEvent('theme_changed', {
+      theme,
+    });
+  },
 };

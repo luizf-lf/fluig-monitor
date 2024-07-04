@@ -30,8 +30,9 @@ import getAssetPath from './utils/getAssetPath';
 import SettingsController from './controllers/SettingsController';
 import AppUpdater from './classes/AppUpdater';
 import trayBuilder from './utils/trayBuilder';
-import analytics, { GAEvents } from './analytics/analytics';
+import analytics from './analytics/GAnalytics';
 import appStateHelper from './analytics/appStateHelper';
+import GAEvents from './analytics/GAEvents';
 
 require('dotenv').config();
 
@@ -44,6 +45,8 @@ log.transports.file.maxSize = 0; // disable the default electron-log file rotati
 
 let mainWindow: BrowserWindow | null = null;
 let trayIcon: Tray | null = null;
+
+let isFirstLanguageChange = true;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -121,9 +124,11 @@ const createWindow = async () => {
 
     trayIcon = trayBuilder(trayIcon, reopenWindow);
 
-    if (mainWindow) {
+    if (mainWindow && isFirstLanguageChange) {
       GAEvents.languageChanged(lang);
     }
+
+    isFirstLanguageChange = false;
   });
 
   // change the language to the locally saved language

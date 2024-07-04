@@ -35,7 +35,8 @@ import AppUpdater, {
   AppUpdaterConstructorOptions,
 } from '../classes/AppUpdater';
 import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
-import analytics, { GAEvents } from '../analytics/analytics';
+import analytics from '../analytics/GAnalytics';
+import GAEvents from '../analytics/GAEvents';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process

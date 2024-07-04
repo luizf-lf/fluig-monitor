@@ -13,7 +13,7 @@ import getAssetPath from '../utils/getAssetPath';
 import assertConnectivity from '../utils/assertConnectivity';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 import i18n from '../../common/i18n/i18n';
-import { GAEvents } from '../analytics/analytics';
+import GAEvents from '../analytics/GAEvents';
 
 async function notifyAbout(
   environment: EnvironmentWithRelatedData

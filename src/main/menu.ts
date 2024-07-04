@@ -7,7 +7,7 @@ import {
 } from 'electron';
 import { t } from 'i18next';
 import i18n from '../common/i18n/i18n';
-import { GAEvents } from './analytics/analytics';
+import GAEvents from './analytics/GAEvents';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;

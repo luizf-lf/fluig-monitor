@@ -17,7 +17,7 @@ import byteSpeed from '../../common/utils/byteSpeed';
 import i18n from '../../common/i18n/i18n';
 import SettingsController from '../controllers/SettingsController';
 import { isDevelopment } from '../utils/globalConstants';
-import { GAEvents } from '../analytics/analytics';
+import GAEvents from '../analytics/GAEvents';
 
 export interface AppUpdaterConstructorOptions {
   forceOptions: { forceDownload?: boolean; forceInstall?: boolean };

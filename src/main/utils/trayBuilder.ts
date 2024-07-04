@@ -5,7 +5,7 @@ import path from 'path';
 import i18n from '../../common/i18n/i18n';
 import getAssetPath from './getAssetPath';
 import { version } from '../../../package.json';
-import { GAEvents } from '../analytics/analytics';
+import GAEvents from '../analytics/GAEvents';
 
 export default function trayBuilder(
   instance: Tray | null,

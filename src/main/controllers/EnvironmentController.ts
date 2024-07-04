@@ -11,7 +11,7 @@ import {
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
 import { Environment, HTTPResponse } from '../generated/client';
-import { GAEvents } from '../analytics/analytics';
+import GAEvents from '../analytics/GAEvents';
 
 interface ConstructorOptions {
   writeLogs: boolean;

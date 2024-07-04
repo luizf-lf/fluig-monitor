@@ -15,7 +15,7 @@ import { scrapeSyncInterval } from '../utils/globalConstants';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
 import getEnvironmentRelease from './getEnvironmentRelease';
 import assertConnectivity from '../utils/assertConnectivity';
-import { GAEvents } from '../analytics/analytics';
+import GAEvents from '../analytics/GAEvents';
 
 /**
  * Fetch the license data from a Fluig server using the API /license/api/v1/licenses

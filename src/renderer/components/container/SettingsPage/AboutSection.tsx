@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { version } from '../../../../../release/app/package.json';
 import bannerLogo from '../../../assets/img/banner_logo.png';
 import DefaultMotionDiv from '../../base/DefaultMotionDiv';
-import { reportAnalyticsEvent } from '../../../ipc/analyticsIpcHandler';
+import { GAEventsIPC } from '../../../ipc/analyticsIpcHandler';
 
 export default function AboutSection() {
   const { t } = useTranslation();
@@ -51,10 +51,9 @@ export default function AboutSection() {
               type="button"
               className="btn-subtle"
               onClick={() => {
-                reportAnalyticsEvent('generate_lead', {
-                  lead_source: 'about_section',
-                });
-                shell.openExternal('https://github.com/luizf-lf/fluig-monitor');
+                const target = 'https://github.com/luizf-lf/fluig-monitor';
+                GAEventsIPC.generateLead('about_section', target);
+                shell.openExternal(target);
               }}
             >
               GitHub <FiExternalLink />

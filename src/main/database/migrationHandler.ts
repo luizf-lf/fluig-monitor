@@ -16,7 +16,7 @@ import prismaClient from './prismaContext';
 import seedDb from './seedDb';
 import { Migration } from '../interfaces/MigrationInterface';
 import LogController from '../controllers/LogController';
-import { GAEvents } from '../analytics/analytics';
+import GAEvents from '../analytics/GAEvents';
 
 export default async function runDbMigrations() {
   let needsMigration = false;

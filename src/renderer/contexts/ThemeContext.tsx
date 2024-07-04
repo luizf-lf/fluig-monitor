@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import log from 'electron-log';
 import {
   createContext,
@@ -8,7 +9,7 @@ import {
 } from 'react';
 
 import { getAppSetting, updateAppSettings } from '../ipc/settingsIpcHandler';
-import { reportAnalyticsEvent } from '../ipc/analyticsIpcHandler';
+import { GAEventsIPC } from '../ipc/analyticsIpcHandler';
 
 interface ThemeContextProviderProps {
   children: ReactNode;
@@ -25,9 +26,11 @@ export const ThemeContext = createContext({} as ThemeContextData);
 
 // exports the theme context provider, with the current theme value and switch function
 export function ThemeContextProvider({ children }: ThemeContextProviderProps) {
-  const [theme, setTheme] = useState(
-    document.body.classList.contains('dark-theme') ? 'DARK' : 'WHITE'
-  );
+  const initialTheme = document.body.classList.contains('dark-theme')
+    ? 'DARK'
+    : 'WHITE';
+  const [theme, setTheme] = useState(initialTheme);
+  const [firstThemeChange, setFirstThemeChange] = useState(true);
 
   // function that sets the theme to the body and the local database
   function setFrontEndTheme(selectedTheme: string, updateDbValue = true) {
@@ -50,11 +53,11 @@ export function ThemeContextProvider({ children }: ThemeContextProviderProps) {
       ]);
     }
 
-    reportAnalyticsEvent('theme_changed', {
-      category: 'Application',
-      label: 'Theme changed',
-      theme: selectedTheme,
-    });
+    if (!firstThemeChange) {
+      GAEventsIPC.themeChanged(selectedTheme);
+    }
+
+    setFirstThemeChange(false);
   }
 
   // loads the theme saved on the database
