@@ -4,7 +4,6 @@ import log from 'electron-log';
 import { BrowserWindow, Notification } from 'electron';
 
 import EnvironmentController from '../controllers/EnvironmentController';
-// import { environmentPingInterval } from '../utils/globalConstants';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import FluigAPIClient from '../../common/classes/FluigAPIClient';
 import { EnvironmentWithRelatedData } from '../../common/interfaces/EnvironmentControllerInterface';
@@ -13,10 +12,8 @@ import frequencyToMs from '../utils/frequencyToMs';
 import getAssetPath from '../utils/getAssetPath';
 import assertConnectivity from '../utils/assertConnectivity';
 import HttpResponseResourceType from '../../common/interfaces/HttpResponseResourceTypes';
-
 import i18n from '../../common/i18n/i18n';
-
-// TODO: Implement analytics os server status changes
+import { GAEvents } from '../analytics/analytics';
 
 async function notifyAbout(
   environment: EnvironmentWithRelatedData
@@ -37,6 +34,8 @@ async function notifyAbout(
         body: i18n.t('toasts.HighResponseTime.message'),
         icon: path.join(getAssetPath(), 'resources', 'warning.png'),
       });
+
+      GAEvents.environmentHighResponseTime(lastResponse.responseTimeMs);
     }
 
     if (responses.length >= 2) {
@@ -50,6 +49,8 @@ async function notifyAbout(
             .replace('%server%', environment.name),
           icon: path.join(getAssetPath(), 'resources', 'offline.png'),
         });
+
+        GAEvents.hostDisconnected();
       } else {
         if (
           lastResponse.responseTimeMs < 1000 &&
@@ -62,6 +63,8 @@ async function notifyAbout(
             body: i18n.t('toasts.OperatingCorrectly.message'),
             icon: path.join(getAssetPath(), 'resources', 'success.png'),
           });
+
+          GAEvents.environmentNormalResponseTime(lastResponse.responseTimeMs);
         }
 
         if (
@@ -75,6 +78,8 @@ async function notifyAbout(
             body: i18n.t('toasts.ServerAvailable.message'),
             icon: path.join(getAssetPath(), 'resources', 'success.png'),
           });
+
+          GAEvents.environmentBackOnline();
         } else if (
           previousResponse.responseTimeMs > 0 &&
           lastResponse.responseTimeMs === 0 &&
@@ -87,6 +92,8 @@ async function notifyAbout(
             body: i18n.t('toasts.ServerUnavailable.message'),
             icon: path.join(getAssetPath(), 'resources', 'error.png'),
           });
+
+          GAEvents.environmentOffline();
         }
       }
     }

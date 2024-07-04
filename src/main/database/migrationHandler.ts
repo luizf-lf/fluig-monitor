@@ -16,7 +16,7 @@ import prismaClient from './prismaContext';
 import seedDb from './seedDb';
 import { Migration } from '../interfaces/MigrationInterface';
 import LogController from '../controllers/LogController';
-import analytics from '../analytics/analytics';
+import { GAEvents } from '../analytics/analytics';
 
 export default async function runDbMigrations() {
   let needsMigration = false;
@@ -107,20 +107,15 @@ export default async function runDbMigrations() {
         message: 'Database migration executed',
       });
 
-      analytics
-        .setParams({
-          engagement_time_msec: Date.now() - timer,
-          category: 'Database',
-          label: 'Database migrated',
-        })
-        .event('db_migrated');
-    } catch (e) {
+      GAEvents.dbMigrated(timer);
+    } catch (error) {
+      GAEvents.appError(error as Error);
       log.error('Migration executed with error.');
-      log.error(e);
+      log.error(error);
 
       await new LogController().writeLog({
         type: 'error',
-        message: `Database migration executed with error: ${e}`,
+        message: `Database migration executed with error: ${error}`,
       });
       process.exit(1);
     }

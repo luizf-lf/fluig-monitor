@@ -11,7 +11,7 @@ import {
 } from '../../common/interfaces/EnvironmentControllerInterface';
 import prismaClient from '../database/prismaContext';
 import { Environment, HTTPResponse } from '../generated/client';
-import analytics from '../analytics/analytics';
+import { GAEvents } from '../analytics/analytics';
 
 interface ConstructorOptions {
   writeLogs: boolean;
@@ -280,15 +280,7 @@ export default class EnvironmentController {
       data,
     });
 
-    analytics
-      .setParams({
-        engagement_time_msec: Date.now() - timer,
-        category: 'Environments',
-        label: 'Environment created',
-        release: data.release,
-        kind: data.kind,
-      })
-      .event('env_created');
+    GAEvents.environmentCreated(timer, data.release, data.kind);
 
     return this.created;
   }
@@ -317,16 +309,7 @@ export default class EnvironmentController {
       data: updatedData,
     });
 
-    analytics
-      .setParams({
-        engagement_time_msec: Date.now() - timer,
-        category: 'Environments',
-        label: 'Environment updated',
-        release: data.release,
-        kind: data.kind,
-        deleted: data.logDeleted,
-      })
-      .event('env_updated');
+    GAEvents.environmentUpdated(timer, updatedData.release, updatedData.kind);
 
     return this.updated;
   }
@@ -355,6 +338,7 @@ export default class EnvironmentController {
   }
 
   async delete(id: number): Promise<Environment> {
+    const timer = Date.now();
     if (this.writeLogs) {
       log.info('Deleting environment with id', id, 'and related fields');
     }
@@ -367,6 +351,8 @@ export default class EnvironmentController {
         logDeletedAt: new Date().toISOString(),
       },
     });
+
+    GAEvents.environmentDeleted(timer, this.deleted.release, this.deleted.kind);
 
     return this.deleted;
   }

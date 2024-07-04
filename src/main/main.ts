@@ -6,8 +6,6 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import { app, BrowserWindow, screen, Tray, Notification } from 'electron';
-import os from 'node:os';
-
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
 
@@ -23,7 +21,6 @@ import {
 import logSystemConfigs from './utils/logSystemConfigs';
 import runDbMigrations from './database/migrationHandler';
 import LanguageController from './controllers/LanguageController';
-
 import { version } from '../../package.json';
 import rotateLogFile from './utils/logRotation';
 import syncEnvironmentsJob from './services/syncEnvironmentsJob';
@@ -33,7 +30,7 @@ import getAssetPath from './utils/getAssetPath';
 import SettingsController from './controllers/SettingsController';
 import AppUpdater from './classes/AppUpdater';
 import trayBuilder from './utils/trayBuilder';
-import analytics from './analytics/analytics';
+import analytics, { GAEvents } from './analytics/analytics';
 import appStateHelper from './analytics/appStateHelper';
 
 require('dotenv').config();
@@ -101,8 +98,9 @@ const createWindow = async () => {
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
   const menuBuilder = new MenuBuilder(mainWindow);
+  const languageController = new LanguageController();
 
-  const savedLanguage = await new LanguageController().get();
+  const savedLanguage = await languageController.get();
 
   i18n.on('languageChanged', async (lang: string) => {
     log.info(
@@ -118,20 +116,13 @@ const createWindow = async () => {
 
     // if the locally saved language is different from the changed language, saves the set language locally
     if (savedLanguage !== lang) {
-      await new LanguageController().update(lang);
+      await languageController.update(lang);
     }
 
     trayIcon = trayBuilder(trayIcon, reopenWindow);
 
     if (mainWindow) {
-      analytics
-        .setParams({
-          engagement_time_msec: 1000,
-          category: 'Language',
-          label: 'Language changed',
-          value: lang,
-        })
-        .event('language_changed');
+      GAEvents.languageChanged(lang);
     }
   });
 
@@ -175,17 +166,21 @@ const createWindow = async () => {
 
       mainWindow?.hide();
 
-      appStateHelper.setIsMinimized();
-
-      analytics
-        .setParams({
-          engagement_time_msec: appStateHelper.getEngagementTime(),
-          category: 'Application',
-          label: 'Application minimized',
-        })
-        .event('app_minimized');
+      GAEvents.appMinimized();
     }
   });
+
+  mainWindow.on('maximize', () => GAEvents.appMaximized());
+  mainWindow.on('resized', () => {
+    if (mainWindow) {
+      const size = mainWindow.getSize();
+      GAEvents.appResized(`${size.join('x')}`);
+    }
+  });
+  mainWindow.on('blur', () => GAEvents.appBlur());
+  mainWindow.on('focus', () => GAEvents.appFocus());
+  mainWindow.on('enter-full-screen', () => GAEvents.appFullScreen(true));
+  mainWindow.on('leave-full-screen', () => GAEvents.appFullScreen(false));
 };
 
 const reopenWindow = () => {
@@ -193,15 +188,7 @@ const reopenWindow = () => {
     createWindow();
   } else {
     BrowserWindow.getAllWindows()[0].show();
-    appStateHelper.setIsRestored();
-
-    analytics
-      .setParams({
-        engagement_time_msec: appStateHelper.getEngagementTime(),
-        category: 'Application',
-        label: 'Application restored',
-      })
-      .event('app_restored');
+    GAEvents.appRestored();
   }
 };
 
@@ -284,35 +271,13 @@ app
     appStateHelper.setIsStarted();
 
     const { GA_TRACKING_ID, GA_SECRET_KEY } = process.env;
-    const { width, height } = screen.getPrimaryDisplay().size;
 
-    analytics
-      .config(GA_TRACKING_ID, GA_SECRET_KEY)
-      .setParams({
-        engagement_time_msec: appStateHelper.startedAt - timer,
-        category: 'Application',
-        label: 'Application started',
-        app_version: version,
-        app_name: app.name,
-        app_mode: app.isPackaged ? 'production' : 'development',
-        screen_resolution: `${width}x${height}`,
-        os_platform: os.platform(),
-        os_type: os.type(),
-        os_release: os.release(),
-        os_arch: os.arch(),
-      })
-      .event('app_started');
+    analytics.config(GA_TRACKING_ID, GA_SECRET_KEY);
+
+    GAEvents.appStarted(timer);
   })
   .catch((error: Error) => {
-    analytics
-      .setParams({
-        engagement_time_msec: 100,
-        category: 'Error',
-        label: 'Application error',
-        error_name: error.name,
-        error_message: error.message,
-      })
-      .event('error');
+    GAEvents.appError(error);
 
     log.error('An unknown error occurred:');
     log.error(error);

@@ -17,8 +17,7 @@ import byteSpeed from '../../common/utils/byteSpeed';
 import i18n from '../../common/i18n/i18n';
 import SettingsController from '../controllers/SettingsController';
 import { isDevelopment } from '../utils/globalConstants';
-import appStateHelper from '../analytics/appStateHelper';
-import analytics from '../analytics/analytics';
+import { GAEvents } from '../analytics/analytics';
 
 export interface AppUpdaterConstructorOptions {
   forceOptions: { forceDownload?: boolean; forceInstall?: boolean };
@@ -138,15 +137,7 @@ export default class AppUpdater {
       exec(execPath).on('spawn', () => {
         log.info('AppUpdater: App will auto quit and update itself');
 
-        appStateHelper.setIsClosed();
-        analytics
-          .setParams({
-            engagement_time_msec: appStateHelper.getEngagementTime(),
-            category: 'Application',
-            label: 'Application closed',
-            ref: 'App Updater',
-          })
-          .event('app_closed', true);
+        GAEvents.appClosed('App Updater');
         setTimeout(() => {
           app.quit();
         }, this.actionsTimeout);
@@ -167,6 +158,7 @@ export default class AppUpdater {
     // adds a 5 seconds timeout to make sure the current language is loaded before the dialog is shown
     //  (in case the file has already been downloaded)
     setTimeout(() => {
+      const timer = Date.now();
       dialog
         .showMessageBox(BrowserWindow.getAllWindows()[0], {
           title: i18n.t('dialogs.updateDialog.title'),
@@ -183,15 +175,7 @@ export default class AppUpdater {
             exec(execPath).on('spawn', () => {
               log.info('AppUpdater: App will quit and update itself');
 
-              appStateHelper.setIsClosed();
-              analytics
-                .setParams({
-                  engagement_time_msec: appStateHelper.getEngagementTime(),
-                  category: 'Application',
-                  label: 'Application closed',
-                  ref: 'App Updater',
-                })
-                .event('app_closed', true);
+              GAEvents.appClosed('App Updater');
               setTimeout(() => {
                 app.quit();
               }, this.actionsTimeout);
@@ -201,6 +185,7 @@ export default class AppUpdater {
           }
 
           log.info("User don't like updates :{");
+          GAEvents.updateRefused(timer);
           return null;
         })
         .catch((error) => {

@@ -7,8 +7,7 @@ import {
 } from 'electron';
 import { t } from 'i18next';
 import i18n from '../common/i18n/i18n';
-import appStateHelper from './analytics/appStateHelper';
-import analytics from './analytics/analytics';
+import { GAEvents } from './analytics/analytics';
 
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
@@ -136,15 +135,18 @@ export default class MenuBuilder {
         {
           label: 'Github',
           click() {
-            shell.openExternal('https://github.com/luizf-lf/fluig-monitor');
+            const target = 'https://github.com/luizf-lf/fluig-monitor';
+            GAEvents.generateLead('darwin_help_menu', target);
+            shell.openExternal(target);
           },
         },
         {
           label: t('menu.about.bugReport'),
           click() {
-            shell.openExternal(
-              'https://github.com/luizf-lf/fluig-monitor/issues/new/choose'
-            );
+            const target =
+              'https://github.com/luizf-lf/fluig-monitor/issues/new/choose';
+            GAEvents.generateLead('darwin_help_menu', target);
+            shell.openExternal(target);
           },
         },
       ],
@@ -193,15 +195,7 @@ export default class MenuBuilder {
             label: t('menu.file.quit'),
             accelerator: 'Ctrl+W',
             click: () => {
-              appStateHelper.setIsClosed();
-              analytics
-                .setParams({
-                  engagement_time_msec: appStateHelper.getEngagementTime(),
-                  category: 'Application',
-                  label: 'Application closed',
-                  ref: 'Menu',
-                })
-                .event('app_closed', true);
+              GAEvents.appClosed('Menu');
               setTimeout(() => {
                 app.quit();
               }, 500);
@@ -285,15 +279,18 @@ export default class MenuBuilder {
           {
             label: 'Github',
             click() {
-              shell.openExternal('https://github.com/luizf-lf/fluig-monitor');
+              const target = 'https://github.com/luizf-lf/fluig-monitor';
+              GAEvents.generateLead('help_menu', target);
+              shell.openExternal(target);
             },
           },
           {
             label: t('menu.about.bugReport'),
             click() {
-              shell.openExternal(
-                'https://github.com/luizf-lf/fluig-monitor/issues/new/choose'
-              );
+              const target =
+                'https://github.com/luizf-lf/fluig-monitor/issues/new/choose';
+              GAEvents.generateLead('help_menu', target);
+              shell.openExternal(target);
             },
           },
         ],

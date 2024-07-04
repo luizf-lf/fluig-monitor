@@ -5,8 +5,7 @@ import path from 'path';
 import i18n from '../../common/i18n/i18n';
 import getAssetPath from './getAssetPath';
 import { version } from '../../../package.json';
-import appStateHelper from '../analytics/appStateHelper';
-import analytics from '../analytics/analytics';
+import { GAEvents } from '../analytics/analytics';
 
 export default function trayBuilder(
   instance: Tray | null,
@@ -47,15 +46,7 @@ export default function trayBuilder(
         type: 'normal',
         label: i18n.t('menu.systemTray.quit'),
         click: () => {
-          appStateHelper.setIsClosed();
-          analytics
-            .setParams({
-              engagement_time_msec: appStateHelper.getEngagementTime(),
-              category: 'Application',
-              label: 'Application closed',
-              ref: 'System Tray',
-            })
-            .event('app_closed', true);
+          GAEvents.appClosed('System Tray');
 
           log.info(
             'App will be closed since the system tray option has been clicked.'
