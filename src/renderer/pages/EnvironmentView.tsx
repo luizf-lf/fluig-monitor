@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { FiAirplay, FiDatabase, FiLayers, FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import EnvironmentSummary from '../components/layout/EnvironmentSummaryContainer';
+import EnvironmentDashboard from '../components/layout/EnvironmentSummaryContainer';
 import EnvironmentDatabaseContainer from '../components/layout/EnvironmentDatabaseContainer';
 import EnvironmentDetailedMemoryContainer from '../components/layout/EnvironmentDetailedMemoryContainer';
 import EnvironmentRuntimeStatsContainer from '../components/layout/EnvironmentRuntimeStatsContainer';
@@ -106,7 +106,7 @@ export default function EnvironmentView(): JSX.Element {
 
         <section id="menu-content">
           <Routes>
-            <Route path="summary" element={<EnvironmentSummary />} />
+            <Route path="summary" element={<EnvironmentDashboard />} />
             <Route path="database" element={<EnvironmentDatabaseContainer />} />
 
             <Route

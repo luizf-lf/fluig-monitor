@@ -8,15 +8,20 @@ export function reportAnalyticsEvent(
   ipcRenderer.invoke('analytics', event, params);
 }
 
-export function reportPageView(
-  page_id: string,
-  page_title: string,
-  page_location: string
-) {
-  reportAnalyticsEvent('page_view', {
-    page_id,
-    page_title,
-    page_location,
-    engagement_time_msec: 1000,
-  });
-}
+export const GAEventsIPC = {
+  pageView(page_id: string, page_title: string, timer: number) {
+    reportAnalyticsEvent('page_view', {
+      page_id,
+      page_title,
+      engagement_time_msec: Date.now() - timer,
+    });
+  },
+
+  buttonClick(button_id: string, button_label: string) {
+    reportAnalyticsEvent('button_click', {
+      button_id,
+      button_label,
+      engagement_time_msec: 100,
+    });
+  },
+};

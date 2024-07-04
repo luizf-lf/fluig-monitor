@@ -35,7 +35,7 @@ import AppUpdater, {
   AppUpdaterConstructorOptions,
 } from '../classes/AppUpdater';
 import { FluigVersionApiInterface } from '../../common/interfaces/FluigVersionApiInterface';
-import analytics from '../analytics/analytics';
+import analytics, { GAEvents } from '../analytics/analytics';
 
 /**
  * Adds all of the Inter Process Communication listeners and handlers needed by the main process
@@ -129,6 +129,7 @@ export default function addIpcHandlers(): void {
         environmentAuthKeys,
       }: CreateEnvironmentProps
     ) => {
+      const timer = Date.now();
       log.info('IPC Handler: Creating a new environment');
 
       const createdEnvironment = await environmentController.new(environment);
@@ -148,6 +149,14 @@ export default function addIpcHandlers(): void {
         message: `Environment ${createdEnvironment.id} created with related data via ipcMain handler`,
       });
 
+      GAEvents.environmentCreated(
+        timer,
+        environment.release,
+        environment.kind,
+        updateSchedule.pingFrequency,
+        updateSchedule.scrapeFrequency
+      );
+
       return { createdEnvironment, createdUpdateSchedule, createdAuthKeys };
     }
   );
@@ -162,6 +171,8 @@ export default function addIpcHandlers(): void {
     ) => {
       log.info('IPC Handler: Updating an environment');
 
+      const timer = Date.now();
+
       const updatedEnvironment = await environmentController.update(
         environment
       );
@@ -174,6 +185,14 @@ export default function addIpcHandlers(): void {
         type: 'info',
         message: `Environment ${updatedEnvironment.id} updated with related data via ipcMain handler`,
       });
+
+      GAEvents.environmentUpdated(
+        timer,
+        environment.release,
+        environment.kind,
+        updateSchedule.pingFrequency,
+        updateSchedule.scrapeFrequency
+      );
 
       return { updatedEnvironment, updatedUpdateSchedule, updatedAuthKeys };
     }

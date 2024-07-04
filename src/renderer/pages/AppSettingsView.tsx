@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import SystemTraySettings from '../components/container/SettingsPage/SystemTraySettings';
 import LanguageSettings from '../components/container/SettingsPage/LanguageSettings';
@@ -9,15 +8,17 @@ import ThemeSettings from '../components/container/SettingsPage/ThemeSettings';
 
 import '../assets/styles/pages/AppSettings.view.scss';
 import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
-import { reportPageView } from '../ipc/analyticsIpcHandler';
+import { GAEventsIPC } from '../ipc/analyticsIpcHandler';
 
 export default function AppSettingsView() {
   const { t } = useTranslation();
-  const location = useLocation();
 
   useEffect(() => {
-    reportPageView('app_settings', 'App Settings', location.hash);
-  }, [location.hash]);
+    const timer = Date.now();
+    return () => {
+      GAEventsIPC.pageView('app_settings', 'App Settings', timer);
+    };
+  }, []);
 
   return (
     <DefaultMotionDiv id="appSettingsContainer">

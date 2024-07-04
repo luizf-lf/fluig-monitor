@@ -4,6 +4,7 @@ import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { useEnvironmentList } from '../../contexts/EnvironmentListContext';
 import { useNotifications } from '../../contexts/NotificationsContext';
 import { toggleEnvironmentFavorite } from '../../ipc/environmentsIpcHandler';
+import { GAEventsIPC } from '../../ipc/analyticsIpcHandler';
 
 interface Props {
   environmentId: number;
@@ -57,7 +58,10 @@ export default function EnvironmentFavoriteButton({
   return (
     <button
       type="button"
-      onClick={() => toggleFavoriteEnvironment(environmentId)}
+      onClick={() => {
+        GAEventsIPC.buttonClick('favorite_environment', 'Favorite Environment');
+        toggleFavoriteEnvironment(environmentId);
+      }}
     >
       {favoriteStar}
     </button>

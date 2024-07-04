@@ -41,6 +41,8 @@ class GAnalytics {
 
   eventQueue: CustomObject[] = [];
 
+  queueThreshold = 15;
+
   pushTimeout: NodeJS.Timeout | null = null;
 
   constructor() {
@@ -127,7 +129,7 @@ class GAnalytics {
   }
 
   handleQueue(forcePush = false) {
-    if (this.eventQueue.length >= 5 || forcePush) {
+    if (this.eventQueue.length >= this.queueThreshold || forcePush) {
       if (this.debugEnabled) {
         log.debug(
           `Tracking ${this.eventQueue.length} events: ${this.eventQueue.map(
@@ -342,7 +344,13 @@ export const GAEvents = {
       .event('lead_generated');
   },
 
-  environmentCreated(timer: number, release: string, kind: string) {
+  environmentCreated(
+    timer: number,
+    release: string,
+    kind: string,
+    pingInterval: string,
+    scrapeInterval: string
+  ) {
     analytics
       .setParams({
         engagement_time_msec: Date.now() - timer,
@@ -350,6 +358,8 @@ export const GAEvents = {
         label: 'Environment created',
         release,
         kind,
+        ping_interval: pingInterval,
+        scrape_interval: scrapeInterval,
       })
       .event('env_created');
   },
@@ -366,7 +376,13 @@ export const GAEvents = {
       .event('env_deleted');
   },
 
-  environmentUpdated(timer: number, release: string, kind: string) {
+  environmentUpdated(
+    timer: number,
+    release: string,
+    kind: string,
+    pingInterval: string,
+    scrapeInterval: string
+  ) {
     analytics
       .setParams({
         engagement_time_msec: Date.now() - timer,
@@ -374,6 +390,8 @@ export const GAEvents = {
         label: 'Environment updated',
         release,
         kind,
+        ping_interval: pingInterval,
+        scrape_interval: scrapeInterval,
       })
       .event('env_updated');
   },

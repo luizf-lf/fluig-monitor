@@ -1,26 +1,27 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import DatabasePropsPanel from '../container/DatabasePropsPanel';
 import DatabaseStorageGraph from '../container/DatabaseStorageGraph';
 import DatabaseNetworkGraph from '../container/DatabaseNetworkGraph';
 import DefaultMotionDiv from '../base/DefaultMotionDiv';
-import { reportPageView } from '../../ipc/analyticsIpcHandler';
+import { GAEventsIPC } from '../../ipc/analyticsIpcHandler';
 
 /**
  * Environment database info container. Has a 5 x 1 grid template.
  * @since 0.5
  */
 export default function EnvironmentDatabaseContainer() {
-  const location = useLocation();
-
   useEffect(() => {
-    reportPageView(
-      'environment_database',
-      'Environment Database',
-      location.hash
-    );
-  }, [location.hash]);
+    const timer = Date.now();
+    return () => {
+      GAEventsIPC.pageView(
+        'environment_database',
+        'Environment Database',
+        timer
+      );
+    };
+  }, []);
+
   return (
     <DefaultMotionDiv id="environment-database-container">
       <div

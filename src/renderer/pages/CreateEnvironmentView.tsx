@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fi';
 import log from 'electron-log';
 import { Link } from 'react-router-dom';
-import { Navigate, useLocation } from 'react-router';
+import { Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
@@ -27,7 +27,7 @@ import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 import compareSemver from '../../common/utils/compareSemver';
 import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
-import { reportPageView } from '../ipc/analyticsIpcHandler';
+import { GAEventsIPC } from '../ipc/analyticsIpcHandler';
 
 export default function CreateEnvironmentView(): JSX.Element {
   const [name, setName] = useState('');
@@ -51,11 +51,13 @@ export default function CreateEnvironmentView(): JSX.Element {
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
-  const location = useLocation();
 
   useEffect(() => {
-    reportPageView('create_environment', 'Create Environment', location.hash);
-  }, [location.hash]);
+    const timer = Date.now();
+    return () => {
+      GAEventsIPC.pageView('create_environment', 'Create Environment', timer);
+    };
+  }, []);
 
   /**
    * Parse the domain url value.
@@ -510,7 +512,10 @@ export default function CreateEnvironmentView(): JSX.Element {
           <button
             type="button"
             className="button is-secondary"
-            onClick={validateOauthPermission}
+            onClick={() => {
+              GAEventsIPC.buttonClick('test_connection', 'Test Connection');
+              validateOauthPermission();
+            }}
           >
             <FiWifi /> {t('views.CreateEnvironmentView.form.testConnection')}
           </button>

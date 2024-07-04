@@ -270,7 +270,6 @@ export default class EnvironmentController {
   }
 
   async new(data: EnvironmentCreateControllerInterface): Promise<Environment> {
-    const timer = Date.now();
     if (this.writeLogs) {
       log.info(
         'EnvironmentController: Saving a new environment on the database'
@@ -280,15 +279,12 @@ export default class EnvironmentController {
       data,
     });
 
-    GAEvents.environmentCreated(timer, data.release, data.kind);
-
     return this.created;
   }
 
   async update(
     data: EnvironmentUpdateControllerInterface
   ): Promise<Environment> {
-    const timer = Date.now();
     if (this.writeLogs) {
       log.info('EnvironmentController: Updating environment with id', data.id);
     }
@@ -308,8 +304,6 @@ export default class EnvironmentController {
       },
       data: updatedData,
     });
-
-    GAEvents.environmentUpdated(timer, updatedData.release, updatedData.kind);
 
     return this.updated;
   }

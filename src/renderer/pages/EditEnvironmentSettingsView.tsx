@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useEffect, useState } from 'react';
-import { Navigate, useLocation, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import {
@@ -25,7 +25,7 @@ import EnvironmentFormValidator from '../classes/EnvironmentFormValidator';
 import AuthKeysDecoder from '../../common/classes/AuthKeysDecoder';
 import AuthKeysEncoder from '../../common/classes/AuthKeysEncoder';
 import DefaultMotionDiv from '../components/base/DefaultMotionDiv';
-import { reportPageView } from '../ipc/analyticsIpcHandler';
+import { GAEventsIPC } from '../ipc/analyticsIpcHandler';
 
 function EditEnvironmentSettingsView(): JSX.Element {
   const { environmentId } = useParams();
@@ -55,11 +55,13 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const { updateEnvironmentList } = useEnvironmentList();
 
   const { t } = useTranslation();
-  const location = useLocation();
 
   useEffect(() => {
-    reportPageView('edit_environment', 'Edit Environment', location.hash);
-  }, [location.hash]);
+    const timer = Date.now();
+    return () => {
+      GAEventsIPC.pageView('edit_environment', 'Edit Environment', timer);
+    };
+  }, []);
 
   useEffect(() => {
     async function getEnvironmentData() {
@@ -558,7 +560,13 @@ function EditEnvironmentSettingsView(): JSX.Element {
           <button
             type="button"
             className="button is-secondary"
-            onClick={validateOauthPermission}
+            onClick={() => {
+              GAEventsIPC.buttonClick(
+                'test_connection_edit',
+                'Test Connection (Edit environment)'
+              );
+              validateOauthPermission();
+            }}
           >
             <FiWifi /> {t('views.EditEnvironmentView.form.testConnection')}
           </button>

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import DatabasePanel from '../container/DatabasePanel';
 import DiskPanel from '../container/DiskPanel';
@@ -11,22 +10,23 @@ import EnvironmentServerInfo from '../container/EnvironmentServerInfo';
 import EnvironmentServicesPanel from '../container/EnvironmentServicesPanel';
 import MemoryPanel from '../container/MemoryPanel';
 import DefaultMotionDiv from '../base/DefaultMotionDiv';
-import { reportPageView } from '../../ipc/analyticsIpcHandler';
+import { GAEventsIPC } from '../../ipc/analyticsIpcHandler';
 
 /**
  * The environment summary view container component. Acts as a container layout for the main components.
  * @since 0.1.0
  */
-export default function EnvironmentSummary() {
-  const location = useLocation();
-
+export default function EnvironmentDashboard() {
   useEffect(() => {
-    reportPageView(
-      'environment_summary',
-      'Environment Dashboard',
-      location.hash
-    );
-  }, [location.hash]);
+    const timer = Date.now();
+    return () => {
+      GAEventsIPC.pageView(
+        'environment_summary',
+        'Environment Dashboard',
+        timer
+      );
+    };
+  }, []);
 
   return (
     <DefaultMotionDiv id="environment-summary-container">
