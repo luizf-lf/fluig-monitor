@@ -3,6 +3,7 @@ import log from 'electron-log';
 import Store from 'electron-store';
 import { randomUUID } from 'crypto';
 import axios from 'axios';
+import { app } from 'electron';
 
 interface CustomObject {
   [key: string]: any;
@@ -47,7 +48,7 @@ class GAnalytics {
     this.sessionID = randomUUID();
     this.clientID = '';
 
-    this.debugEnabled = true;
+    this.debugEnabled = !app.isPackaged;
   }
 
   config(
