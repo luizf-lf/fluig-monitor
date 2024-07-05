@@ -1,8 +1,8 @@
 import { app, screen } from 'electron';
 import os from 'node:os';
 
-import appStateHelper from './appStateHelper';
 import { version } from '../../../package.json';
+import appStateHelper from './appStateHelper';
 import analytics from './GAnalytics';
 
 /**
@@ -12,6 +12,7 @@ import analytics from './GAnalytics';
 const GAEvents = {
   appStarted(timer: number) {
     const { width, height } = screen.getPrimaryDisplay().size;
+    appStateHelper.setIsStarted();
 
     analytics
       .setParams({

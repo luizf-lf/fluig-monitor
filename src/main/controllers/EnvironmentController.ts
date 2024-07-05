@@ -65,7 +65,7 @@ export default class EnvironmentController {
         oAuthKeysId: true,
         updateScheduleId: true,
         httpResponses: {
-          take: 75,
+          take: 25,
           where: {
             resourceType: HttpResponseResourceType.PING,
           },
@@ -99,7 +99,7 @@ export default class EnvironmentController {
         oAuthKeysId: includeRelatedData,
         httpResponses: includeRelatedData
           ? {
-              take: 75,
+              take: 25,
               where: {
                 resourceType: HttpResponseResourceType.PING,
               },

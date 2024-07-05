@@ -17,4 +17,4 @@ console.log('📦 Copying prisma schema to build folder.');
 
 fs.copyFileSync(source, destination);
 
-console.log(`✅ ${source} has been copied to ${destination}`);
+console.log(`✅ Prisma Schema copied to ${destination}`);

@@ -3,38 +3,36 @@
 /* eslint global-require: off, no-console: off, promise/always-return: off */
 
 import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import path from 'path';
-import { app, BrowserWindow, screen, Tray, Notification } from 'electron';
+import { app, BrowserWindow, Notification, screen, Tray } from 'electron';
 import log from 'electron-log';
 import { scheduleJob } from 'node-schedule';
+import path from 'path';
+import 'regenerator-runtime/runtime';
 
-import MenuBuilder from './menu';
-import { resolveHtmlPath } from './utils/resolveHtmlPath';
+import { version } from '../../package.json';
 import i18n from '../common/i18n/i18n';
+import GAEvents from './analytics/GAEvents';
+import analytics from './analytics/GAnalytics';
+import AppUpdater from './classes/AppUpdater';
+import LanguageController from './controllers/LanguageController';
+import SettingsController from './controllers/SettingsController';
+import runDbMigrations from './database/migrationHandler';
+import envJson from './env.json';
+import MenuBuilder from './menu';
+import pingEnvironmentsJob from './services/pingEnvironmentsJob';
+import syncEnvironmentsJob from './services/syncEnvironmentsJob';
+import addIpcHandlers from './utils/addIpcHandlers';
+import getAssetPath from './utils/getAssetPath';
 import {
   isDevelopment,
   logStringFormat,
   pingInterval,
   scrapeSyncInterval,
 } from './utils/globalConstants';
-import logSystemConfigs from './utils/logSystemConfigs';
-import runDbMigrations from './database/migrationHandler';
-import LanguageController from './controllers/LanguageController';
-import { version } from '../../package.json';
 import rotateLogFile from './utils/logRotation';
-import syncEnvironmentsJob from './services/syncEnvironmentsJob';
-import pingEnvironmentsJob from './services/pingEnvironmentsJob';
-import addIpcHandlers from './utils/addIpcHandlers';
-import getAssetPath from './utils/getAssetPath';
-import SettingsController from './controllers/SettingsController';
-import AppUpdater from './classes/AppUpdater';
+import logSystemConfigs from './utils/logSystemConfigs';
+import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import trayBuilder from './utils/trayBuilder';
-import analytics from './analytics/GAnalytics';
-import appStateHelper from './analytics/appStateHelper';
-import GAEvents from './analytics/GAEvents';
-
-require('dotenv').config();
 
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
@@ -273,9 +271,7 @@ app
       appUpdater.checkUpdates();
     });
 
-    appStateHelper.setIsStarted();
-
-    const { GA_TRACKING_ID, GA_SECRET_KEY } = process.env;
+    const { GA_TRACKING_ID, GA_SECRET_KEY } = envJson;
 
     analytics.config(GA_TRACKING_ID, GA_SECRET_KEY);
 

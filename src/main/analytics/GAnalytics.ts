@@ -51,16 +51,18 @@ class GAnalytics {
     this.debugEnabled = !app.isPackaged;
   }
 
-  config(
-    trackingId: string | undefined,
-    secretKey: string | undefined
-  ): GAnalytics {
+  config(trackingId: string, secretKey: string): GAnalytics {
     this.trackingID = trackingId || '';
     this.secretKey = secretKey || '';
 
     this.clientID = this.getClientId();
 
-    if (!trackingId || !secretKey) {
+    if (
+      !trackingId ||
+      !secretKey ||
+      trackingId.length === 0 ||
+      secretKey.length === 0
+    ) {
       log.info(
         'Tracking id and secret key not configured. Analytics will be disabled.'
       );
