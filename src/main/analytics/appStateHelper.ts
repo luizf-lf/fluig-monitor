@@ -76,7 +76,9 @@ class AppStateHelper {
       case this.availableStates.CLOSED:
         return Date.now() - this.startedAt;
       case this.availableStates.FOCUSED:
-        return Date.now() - this.blurredAt;
+        return this.blurredAt === 0
+          ? Date.now() - this.startedAt
+          : Date.now() - this.blurredAt;
       case this.availableStates.BLURRED:
         return Date.now() - this.focusedAt;
       default:
