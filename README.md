@@ -28,6 +28,7 @@
   - [Monitorando um ambiente](#monitorando-um-ambiente)
 - [Informações adicionais](#informações-adicionais)
 - [Contribuindo](#contribuindo)
+- [Estatísticas de Uso](#estatísticas-de-uso)
 
 ## Sobre
 
@@ -46,7 +47,7 @@ As migrações entre as versões do banco de dados são executadas automaticamen
 Algumas das principais funcionalidades já implementadas:
 
 - Interface totalmente customizada, com tema claro e escuro.
-- Internacionalização (i18n) em Português e Inglês.
+- Internacionalização (i18n) em Português, Inglês e Espanhol.
 - Notificações no desktop.
 - Verificação de disponibilidade de servidor.
 - Coleta de informações do monitor, estatísticas e licenciamento da plataforma.
@@ -252,3 +253,60 @@ Verifique através da aba [Releases](https://github.com/luizf-lf/fluig-monitor/r
 Caso queira sugerir novas melhorias ou novas features para a aplicação, crie uma [issue](https://github.com/luizf-lf/fluig-monitor/issues) neste repositório, a viabilidade de sua sugestão será estudada e implementada de acordo.
 
 Caso queira contribuir diretamente com o código fonte da aplicação, é recomendável realizar um **fork** deste repositório, e fazer suas alterações localmente, e então realizar um **pull request** contendo um descritivo de suas alterações realizadas para que as mudanças realizadas sejam implementadas.
+
+## Estatísticas de Uso
+
+Afim de entender como o Fluig Monitor é utilizado, é realizada a coleta de algumas estatísticas de uso periodicamente utilizando a plataforma do Google Analytics, sem identificação de usuário. Desta forma é possível entender como o aplicativo é utilizado, e quais features são realmente importantes, e quais das possíveis melhorias devem ser priorizadas.
+
+> Dados sensíveis ou identificáveis, como por exemplo, nome ou url do ambiente Fluig monitorado **não** são coletados nas estatísticas.
+
+Para promover a rápida transparência, abaixo fica listado quais métricas o Fluig Monitor pode coletar:
+
+- Quando o aplicativo é iniciado. Sendo coletado:
+  - Versão do aplicativo.
+  - Nome do aplicativo.
+  - Modo do aplicativo (Produção ou Desenvolvimento).
+  - Resolução da tela.
+  - Plataforma do sistema operacional (Linux, Windows).
+  - Tipo do sistema operacional (Seguindo o formato [uname](https://linux.die.net/man/3/uname))
+  - Release do sistema operacional
+  - Arquitetura do sistema operacional (x32, x64, arm64).
+- Quando o aplicativo é minimizado.
+- Quando o aplicativo é maximizado.
+- Quando o tamanho da janela do aplicativo é alterada. Sendo coletado:
+  - Tamanho da janela.
+- Quando o aplicativo perde o foco.
+- Quando o aplicativo entra em foco.
+- Quando o aplicativo é restaurado (Após ser minimizado).
+- Quando o aplicativo é fechado. Sendo coletado:
+  - A forma como o aplicativo foi fechado (Bandeja do sistema ou menu de opções).
+- Quando o aplicativo entra ou sai do modo de tela cheia.
+- Quando o aplicativo emite um erro e é fechado inesperadamente.
+- Quando uma atualização do aplicativo é recusada.
+- Quando o idioma do aplicativo é alterado.
+- Quando você acessa um link externo do aplicativo (Para reportar um bug, por exemplo.)
+- Quando um ambiente é criado. Sendo coletado:
+  - Release do ambiente.
+  - Tipo do ambiente (Produção, Homologação ou Desenvolvimento).
+  - Intervalo de ping escolhido.
+  - Intervalo de coleta de estatísticas do ambiente escolhido.
+- Quando um ambiente é excluído.
+- Quando um ambiente é editado.
+- Quando a base de dados local do Fluig Monitor é migrada.
+- Quando uma sincronização é executada. Sendo coletado:
+  - Se o computador em que o Fluig Monitor está instalado está conectado à internet.
+- Quando o computador em que o Fluig Monitor está instalado é desconectado da internet.
+- Quando um ambiente possui um tempo de resposta alto.
+- Quando um ambiente volta a ter um tempo de resposta normal.
+- Quando um ambiente fica offline.
+- Quando um ambiente volta a ficar online.
+- Quando uma tela do Fluig Monitor é visualizada, sendo coletado:
+  - Código identificador (id) da tela.
+  - Título da tela.
+  - Tempo de visualização.
+- Quando um botão é clicado.
+- Quando o tema do Fluig Monitor é alterado.
+
+Ao utilizar as builds de produção do Fluig Monitor, você consente em participar da coleta de estatísticas.
+
+Caso não queira participar, você pode realizar um clone do repositório e realizar uma build própria do Fluig Monitor. A coleta será desativada automaticamente caso as variáveis de ambiente não sejam definidas no arquivo `.env` do projeto.
