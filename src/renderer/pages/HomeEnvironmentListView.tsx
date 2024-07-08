@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { FiChevronLeft } from 'react-icons/fi';
 import { useTranslation } from 'react-i18next';
+import { FiChevronLeft } from 'react-icons/fi';
+import { useLocation } from 'react-router';
 
 import CreateEnvironmentButton from '../components/base/CreateEnvironmentButton';
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
@@ -16,19 +17,29 @@ import { GAEventsIPC } from '../ipc/analyticsIpcHandler';
 export default function HomeEnvironmentListView() {
   const { environmentList, updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
+  const location = useLocation();
 
   useEffect(() => {
-    const timer = Date.now();
     async function fetchData() {
       updateEnvironmentList();
     }
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const timer = Date.now();
 
     return () => {
-      GAEventsIPC.pageView('home', 'Home', timer);
+      GAEventsIPC.pageView(
+        'home',
+        'Home',
+        timer,
+        location.pathname,
+        location.state?.from || ''
+      );
     };
-  }, []);
+  }, [location]);
 
   const createEnvironmentHelper = (
     <div className="createEnvironmentCard">

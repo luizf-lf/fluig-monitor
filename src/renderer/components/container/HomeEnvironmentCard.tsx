@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FiSettings } from 'react-icons/fi';
 import { ipcRenderer } from 'electron';
 import { ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -14,6 +14,7 @@ interface Props {
 }
 
 function HomeEnvironmentCard({ injectedEnvironment }: Props) {
+  const location = useLocation();
   const [environment, setEnvironment] =
     useState<EnvironmentWithRelatedData>(injectedEnvironment);
 
@@ -31,7 +32,10 @@ function HomeEnvironmentCard({ injectedEnvironment }: Props) {
     <div className="EnvironmentCard" key={environment.id}>
       <div className="heading">
         <div className="EnvironmentName">
-          <Link to={`/environment/${environment.id}/summary`}>
+          <Link
+            to={`/environment/${environment.id}/summary`}
+            state={{ from: location.pathname }}
+          >
             <h3>{environment.name}</h3>
             <small>{environment.baseUrl}</small>
           </Link>
@@ -41,7 +45,10 @@ function HomeEnvironmentCard({ injectedEnvironment }: Props) {
             environmentId={environment.id}
             isFavorite={environment.isFavorite}
           />
-          <Link to={`/environment/${environment.id}/edit`}>
+          <Link
+            to={`/environment/${environment.id}/edit`}
+            state={{ from: location.pathname }}
+          >
             <FiSettings />
           </Link>
         </div>

@@ -1,10 +1,11 @@
-import { useState } from 'react';
 import { ipcRenderer } from 'electron';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SmallTag from '../../base/SmallTag';
+import { Link, useLocation } from 'react-router-dom';
+
 import { Environment } from '../../../../main/generated/client';
 import '../../../assets/styles/components/EnvironmentListItem.scss';
+import SmallTag from '../../base/SmallTag';
 
 interface EnvironmentListItemInterface {
   data: Environment;
@@ -18,6 +19,7 @@ export default function EnvironmentListItem({
   let environmentKindTitle = '';
   const [isOnline, setIsOnline] = useState(true);
   const { t } = useTranslation();
+  const location = useLocation();
 
   ipcRenderer.on(`serverPinged_${data.id}`, (_event, { serverIsOnline }) => {
     setIsOnline(serverIsOnline);
@@ -55,6 +57,7 @@ export default function EnvironmentListItem({
         to={`/environment/${data.id}/summary`}
         className="environment-item-container is-expanded"
         title={environmentTitle}
+        state={{ from: location.pathname }}
       >
         <div className="initials">{environmentInitials}</div>
         <div className="data">

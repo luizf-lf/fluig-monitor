@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEnvironmentList } from '../../../contexts/EnvironmentListContext';
 import CreateEnvironmentButton from '../../base/CreateEnvironmentButton';
@@ -10,6 +10,7 @@ import NavActionButtons from './NavActionButtons';
 
 function Navbar() {
   const { environmentList } = useEnvironmentList();
+  const location = useLocation();
 
   return (
     <motion.nav
@@ -22,7 +23,7 @@ function Navbar() {
       id="mainNavbar"
     >
       <div>
-        <Link to="/" id="logo-container">
+        <Link to="/" id="logo-container" state={{ from: location.pathname }}>
           <Logo />
         </Link>
         <section id="environmentList">

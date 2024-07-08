@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
-import { Route, Routes } from 'react-router';
+import { Route, Routes, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { FiAirplay, FiDatabase, FiLayers, FiSettings } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ import '../assets/styles/pages/EnvironmentView.scss';
 
 export default function EnvironmentView(): JSX.Element {
   const { t } = useTranslation();
+  const location = useLocation();
   const [menuIsClosed, setMenuIsClosed] = useState(true);
 
   const submenuItems = [
@@ -82,6 +83,7 @@ export default function EnvironmentView(): JSX.Element {
                     onClick={() => setSelectedButton(item.target)}
                     className={selectedButton === item.target ? 'active' : ''}
                     title={menuIsClosed ? item.text : undefined}
+                    state={{ from: location.pathname }}
                   >
                     {item.icon}
                     <span className="item-text">{item.text}</span>
@@ -94,6 +96,7 @@ export default function EnvironmentView(): JSX.Element {
                 to="edit"
                 onClick={() => setSelectedButton(`edit`)}
                 className={selectedButton === `edit` ? 'active' : ''}
+                state={{ from: location.pathname }}
               >
                 <FiSettings />{' '}
                 <span className="item-text">

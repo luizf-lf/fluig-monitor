@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import axios from 'axios';
+import { randomUUID } from 'crypto';
+import { app } from 'electron';
 import log from 'electron-log';
 import Store from 'electron-store';
-import { randomUUID } from 'crypto';
-import axios from 'axios';
-import { app } from 'electron';
 
 interface CustomObject {
   [key: string]: any;

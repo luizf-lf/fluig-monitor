@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { FormEvent, useEffect, useState } from 'react';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useLocation, useParams } from 'react-router';
 import log from 'electron-log';
 import { ipcRenderer } from 'electron';
 import {
@@ -55,13 +55,20 @@ function EditEnvironmentSettingsView(): JSX.Element {
   const { updateEnvironmentList } = useEnvironmentList();
 
   const { t } = useTranslation();
+  const location = useLocation();
 
   useEffect(() => {
     const timer = Date.now();
     return () => {
-      GAEventsIPC.pageView('edit_environment', 'Edit Environment', timer);
+      GAEventsIPC.pageView(
+        'edit_environment',
+        'Edit Environment',
+        timer,
+        location.pathname,
+        location.state?.from || ''
+      );
     };
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     async function getEnvironmentData() {

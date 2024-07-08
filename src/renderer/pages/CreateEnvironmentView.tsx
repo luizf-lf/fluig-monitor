@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fi';
 import log from 'electron-log';
 import { Link } from 'react-router-dom';
-import { Navigate } from 'react-router';
+import { Navigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import { useEnvironmentList } from '../contexts/EnvironmentListContext';
@@ -51,13 +51,20 @@ export default function CreateEnvironmentView(): JSX.Element {
   const { createShortNotification } = useNotifications();
   const { updateEnvironmentList } = useEnvironmentList();
   const { t } = useTranslation();
+  const location = useLocation();
 
   useEffect(() => {
     const timer = Date.now();
     return () => {
-      GAEventsIPC.pageView('create_environment', 'Create Environment', timer);
+      GAEventsIPC.pageView(
+        'create_environment',
+        'Create Environment',
+        timer,
+        location.pathname,
+        location.state?.from || ''
+      );
     };
-  }, []);
+  }, [location]);
 
   /**
    * Parse the domain url value.
@@ -336,7 +343,11 @@ export default function CreateEnvironmentView(): JSX.Element {
 
   return (
     <DefaultMotionDiv id="environment-form-container">
-      <Link to="/" className="top-return-button">
+      <Link
+        to="/"
+        className="top-return-button"
+        state={{ from: location.pathname }}
+      >
         <FiArrowLeft />
         {t('views.CreateEnvironmentView.back')}
       </Link>

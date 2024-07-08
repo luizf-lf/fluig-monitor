@@ -9,10 +9,18 @@ export function reportAnalyticsEvent(
 }
 
 export const GAEventsIPC = {
-  pageView(page_id: string, page_title: string, timer: number) {
+  pageView(
+    page_id: string,
+    page_title: string,
+    timer: number,
+    page_location: string,
+    page_referrer: string
+  ) {
     reportAnalyticsEvent('page_view', {
       page_id,
       page_title,
+      page_location,
+      page_referrer,
       engagement_time_msec: Date.now() - timer,
     });
   },

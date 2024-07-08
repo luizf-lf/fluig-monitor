@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router';
 import {
   Area,
   AreaChart,
@@ -11,18 +12,18 @@ import {
   YAxis,
 } from 'recharts';
 
-import Box from '../base/Box';
-import Stat from '../base/Stat';
-import DefaultMotionDiv from '../base/DefaultMotionDiv';
-import { getDetailedMemoryById } from '../../ipc/environmentsIpcHandler';
 import {
   DetailedMemoryHistory,
   EnvironmentWithDetailedMemoryHistory,
 } from '../../../common/interfaces/EnvironmentControllerInterface';
-import SpinnerLoader from '../base/Loaders/Spinner';
 import formatBytes from '../../../common/utils/formatBytes';
-import GraphTooltip from '../base/GraphTooltip';
 import { GAEventsIPC } from '../../ipc/analyticsIpcHandler';
+import { getDetailedMemoryById } from '../../ipc/environmentsIpcHandler';
+import Box from '../base/Box';
+import DefaultMotionDiv from '../base/DefaultMotionDiv';
+import GraphTooltip from '../base/GraphTooltip';
+import SpinnerLoader from '../base/Loaders/Spinner';
+import Stat from '../base/Stat';
 
 interface NormalizedMemoryData {
   timestamp: Date;
@@ -42,6 +43,7 @@ function EnvironmentDetailedMemoryContainer() {
   >([]);
 
   const { t } = useTranslation();
+  const location = useLocation();
 
   useEffect(() => {
     async function getData() {
@@ -83,16 +85,20 @@ function EnvironmentDetailedMemoryContainer() {
     if (environmentId) {
       getData();
     }
+  }, []);
 
+  useEffect(() => {
     const timer = Date.now();
     return () => {
       GAEventsIPC.pageView(
         'environment_detailed_memory',
         'Environment Detailed Memory',
-        timer
+        timer,
+        location.pathname,
+        location.state?.from || ''
       );
     };
-  }, []);
+  }, [location]);
 
   if (!environmentData || !lastMemoryData) {
     return <SpinnerLoader />;

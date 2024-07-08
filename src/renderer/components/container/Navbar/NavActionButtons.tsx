@@ -1,18 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
 import { ipcRenderer } from 'electron';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  FiAirplay,
-  FiBell,
   FiDownload,
   FiDownloadCloud,
   FiMoon,
   FiSettings,
   FiSun,
 } from 'react-icons/fi';
+import { Link, useLocation } from 'react-router-dom';
+
 import '../../../assets/styles/components/RightButtons.scss';
-import { useTranslation } from 'react-i18next';
 import { useTheme } from '../../../contexts/ThemeContext';
 import SpinnerLoader from '../../base/Loaders/Spinner';
 
@@ -23,6 +22,7 @@ export default function NavActionButtons() {
     theme === 'DARK' ? <FiMoon /> : <FiSun />
   );
   const [updateActionButton, setUpdateActionButton] = useState(<></>);
+  const location = useLocation();
 
   function toggleAppTheme() {
     if (document.body.classList.contains('dark-theme')) {
@@ -116,6 +116,7 @@ export default function NavActionButtons() {
         to="/appSettings"
         className="optionButton"
         title={t('navbar.actionButtons.settings')}
+        state={{ from: location.pathname }}
       >
         <FiSettings />
       </Link>

@@ -1,12 +1,12 @@
-import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { Route, Routes } from 'react-router-dom';
 
 // views / components
-import EnvironmentView from './pages/EnvironmentView';
-import CreateEnvironmentView from './pages/CreateEnvironmentView';
 import Navbar from './components/container/Navbar/Navbar';
-import HomeEnvironmentListView from './pages/HomeEnvironmentListView';
 import AppSettingsView from './pages/AppSettingsView';
+import CreateEnvironmentView from './pages/CreateEnvironmentView';
+import EnvironmentView from './pages/EnvironmentView';
+import HomeEnvironmentListView from './pages/HomeEnvironmentListView';
 
 // assets
 import './assets/styles/global.scss';
@@ -18,9 +18,6 @@ import { NotificationsContextProvider } from './contexts/NotificationsContext';
 import { ThemeContextProvider } from './contexts/ThemeContext';
 
 export default function App() {
-  // the useLocation hook is used to render a specific component per route
-  // const location = useLocation();
-
   return (
     <EnvironmentListContextProvider>
       <NotificationsContextProvider>
@@ -29,7 +26,6 @@ export default function App() {
             <Navbar />
             <main id="mainWindow">
               <AnimatePresence mode="wait">
-                {/* <Switch location={location} key={location.pathname}> */}
                 <Routes>
                   <Route path="/" element={<HomeEnvironmentListView />} />
                   <Route
