@@ -75,6 +75,11 @@ export default class SettingsController {
         value: 'false',
         group: 'GENERAL',
       },
+      {
+        settingId: 'PERSISTENCE_THRESHOLD',
+        value: '0',
+        group: 'DATA',
+      },
     ];
   }
 

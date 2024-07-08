@@ -8,6 +8,7 @@ import LanguageSettings from '../components/container/SettingsPage/LanguageSetti
 import SystemTraySettings from '../components/container/SettingsPage/SystemTraySettings';
 import ThemeSettings from '../components/container/SettingsPage/ThemeSettings';
 import UpdatesSettings from '../components/container/SettingsPage/UpdatesSettings';
+import PersistenceThresholdSection from '../components/container/SettingsPage/PersistenceThresholdSection';
 import { GAEventsIPC } from '../ipc/analyticsIpcHandler';
 
 import '../assets/styles/pages/AppSettings.view.scss';
@@ -38,6 +39,7 @@ export default function AppSettingsView() {
           <LanguageSettings />
           <UpdatesSettings />
           <SystemTraySettings />
+          <PersistenceThresholdSection />
         </div>
         <div className="card mt-2">
           <AboutSection />
