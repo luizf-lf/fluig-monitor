@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0
+
+- Added a data persistence threshold feature.
+- Added optional analytics integration.
+- Added a feature to track when the system is offline, avoiding false downtimes.
+- Deprecated the "Log" and "Notification" tables.
+- Added Spanish translation.
+
 ## 1.0.1
 
 - Add shortcut keys for mac users (Undo, Redo, Cut, Copy, Paste, Paste and Match Style, Delete, Select All, Speech, AutoFill, Start Dictation)
