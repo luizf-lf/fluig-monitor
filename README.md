@@ -26,6 +26,7 @@
   - [Estrutura do processo renderer](#estrutura-do-processo-renderer)
 - [Instruções De Uso](#instruções-de-uso)
   - [Monitorando um ambiente](#monitorando-um-ambiente)
+  - [Gestão da Persistência de Dados](#gestão-da-persistência-de-dados)
 - [Informações adicionais](#informações-adicionais)
 - [Contribuindo](#contribuindo)
 - [Estatísticas de Uso](#estatísticas-de-uso)
@@ -55,6 +56,7 @@ Algumas das principais funcionalidades já implementadas:
 - Migrações de banco de dados automáticas.
 - Dashboard com gráfico de exibição de tempo de resposta da plataforma.
 - Telas de visão geral, banco de dados e memória detalhada do servidor.
+- Gestão da persistência de dados.
 
 Novas funcionalidades vem sendo estudadas constantemente. Verifique na aba [Issues](https://github.com/luizf-lf/fluig-monitor/issues) as melhorias que já foram mapeadas publicamente e/ou sugeridas por outras pessoas.
 
@@ -243,6 +245,14 @@ Para começar a monitorar um ambiente, siga os passos a seguir:
 
 6. As informações serão exibidas na dashboard na tela principal do ambiente. Caso um dos componentes nesta tela apresentar a informação "Sem dados disponíveis", pode ser que algum dado não tenha sido coletado corretamente devido à permissão do usuário aplicativo cadastrado. Neste caso, revise a permissão na plataforma Fluig e as configurações do ambiente cadastrado, e aguarde até que a próxima sincronização ocorra.
 
+### Gestão da Persistência de Dados
+
+O Fluig Monitor possui uma configuração na qual permite definir qual o período em dias que os dados monitorados devem ser guardados.
+
+Por padrão a configuração se inicia em 0, permitindo que os dados sejam armazenados indefinidamente, mas caso você opte por guardar os dados do monitoramento por um período definido em dias, é possível definir isso no painel do controle do aplicativo.
+
+Por exemplo, caso defina que os dados de monitoramento sejam mantidos por 120 dias, os dados serão guardados até este período, e os dados anteriores a 120 dias serão excluídos definitivamente do banco de dados local do Fluig Monitor.
+
 ## Informações adicionais
 
 Apesar de a aplicação já ter suas principais funcionalidades desenvolvidas (monitoramento, coleta e exibição de estatísticas) e já possuir uma release 1.0, novas funcionalidades e correções serão implementadas continuamente.
@@ -256,11 +266,11 @@ Caso queira contribuir diretamente com o código fonte da aplicação, é recome
 
 ## Estatísticas de Uso
 
-Afim de entender como o Fluig Monitor é utilizado, é realizada a coleta de algumas estatísticas de uso periodicamente utilizando a plataforma do Google Analytics, sem identificação de usuário. Desta forma é possível entender como o aplicativo é utilizado, e quais features são realmente importantes, e quais das possíveis melhorias devem ser priorizadas.
+Afim de entender como o Fluig Monitor é utilizado, é realizada a coleta de algumas estatísticas de uso periodicamente utilizando a plataforma do Google Analytics, sem identificação de usuário ou de ambientes monitorados. Desta forma é possível entender como o aplicativo é utilizado, e quais features são realmente importantes, podendo assim priorizar as possíveis melhorias que serão desenvolvidas no aplicativo.
 
 > Dados sensíveis ou identificáveis, como por exemplo, nome ou url do ambiente Fluig monitorado **não** são coletados nas estatísticas.
 
-Para promover a rápida transparência, abaixo fica listado quais métricas o Fluig Monitor pode coletar:
+Para promover a rápida transparência, abaixo ficam listadas quais métricas o Fluig Monitor pode coletar:
 
 - Quando o aplicativo é iniciado. Sendo coletado:
   - Versão do aplicativo.
