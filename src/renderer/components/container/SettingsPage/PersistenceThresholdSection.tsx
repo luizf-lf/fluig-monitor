@@ -9,21 +9,35 @@ import {
 } from '../../../ipc/settingsIpcHandler';
 
 export default function PersistenceThresholdSection() {
-  // TODO: Finish implementation
   const { t } = useTranslation();
   const [persistenceThreshold, setPersistenceThreshold] = useState(0);
+  const [changeTimeout, setChangeTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
   const handlePersistenceThresholdChange = (value: string) => {
-    updateAppSettings([
-      {
-        settingId: 'PERSISTENCE_THRESHOLD',
-        value,
-      },
-    ]);
+    if (changeTimeout) {
+      clearTimeout(changeTimeout);
+      setChangeTimeout(null);
+    }
+
+    setChangeTimeout(
+      setTimeout(() => {
+        updateAppSettings([
+          {
+            settingId: 'PERSISTENCE_THRESHOLD',
+            value,
+          },
+        ]);
+      }, 1000)
+    );
+
+    setPersistenceThreshold(Number(value));
   };
 
   const loadSettings = async () => {
     const { PERSISTENCE_THRESHOLD } = await getAppSettingsAsObject();
-    setPersistenceThreshold(Number(PERSISTENCE_THRESHOLD.value || 0));
+    setPersistenceThreshold(Number(PERSISTENCE_THRESHOLD.value));
   };
 
   useEffect(() => {
@@ -36,23 +50,22 @@ export default function PersistenceThresholdSection() {
         <span className="icon-dot green-variant">
           <FiDatabase />
         </span>
-        Persistência de dados
+        {t('components.PersistenceThresholdSection.title')}
       </h3>
       <p className="mb-2">
-        Utilize esta opção para definir o limite em dias, para a persistência
-        dos dados dos ambientes monitorados pelo Fluig Monitor.
+        {t('components.PersistenceThresholdSection.description')}
       </p>
 
       <div className="form-group mt-2">
         <label htmlFor="persistenceThreshold">
-          Limite de persistência de dados (dias):
+          {t('components.PersistenceThresholdSection.label')}
           <input
             id="persistenceThreshold"
             name="persistenceThreshold"
             className="form-input ml-1"
             type="number"
             min="0"
-            defaultValue={persistenceThreshold}
+            value={persistenceThreshold}
             onChange={(event) =>
               handlePersistenceThresholdChange(event.target.value)
             }
@@ -60,8 +73,7 @@ export default function PersistenceThresholdSection() {
         </label>
 
         <small className="font-soft">
-          Dados anteriores ao limite de persistência de dados serão excluídos.
-          Deixe em branco ou como &quot;0&quot; para desativar esta opção.
+          {t('components.PersistenceThresholdSection.helper')}
         </small>
       </div>
     </DefaultMotionDiv>

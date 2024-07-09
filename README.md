@@ -306,6 +306,9 @@ Para promover a rápida transparência, abaixo fica listado quais métricas o Fl
   - Tempo de visualização.
 - Quando um botão é clicado.
 - Quando o tema do Fluig Monitor é alterado.
+- Quando uma configuração do próprio Fluig Monitor é alterada, e seu respectivo valor.
+- Quando uma configuração padrão do Fluig Monitor é criada pela função semeadora.
+- Quando dados são excluídos pela função que lida com o limite de guarda de dados, e a quantidade de linhas excluídas.
 
 Ao utilizar as builds de produção do Fluig Monitor, você consente em participar da coleta de estatísticas.
 

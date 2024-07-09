@@ -289,6 +289,45 @@ const GAEvents = {
       })
       .event('env_offline');
   },
+
+  linesDeletedByPersistenceHandler(
+    threshold: number | string,
+    lines: number,
+    timer: number
+  ) {
+    analytics
+      .setParams({
+        engagement_time_msec: Date.now() - timer,
+        category: 'Database',
+        label: 'Lines deleted by persistence handler',
+        threshold_in_days: threshold,
+        lines_deleted: lines,
+      })
+      .event('persistence_handler_executed');
+  },
+
+  seedExecuted(settingId: string) {
+    analytics
+      .setParams({
+        engagement_time_msec: 100,
+        category: 'Database',
+        label: 'Seed executed',
+        setting_id: settingId,
+      })
+      .event('seed_executed');
+  },
+
+  appSettingChanged(settingId: string, value: string) {
+    analytics
+      .setParams({
+        engagement_time_msec: 100,
+        category: 'Settings',
+        label: 'App setting changed',
+        setting_id: settingId,
+        setting_value: value,
+      })
+      .event('app_setting_changed');
+  },
 };
 
 export default GAEvents;

@@ -32,7 +32,7 @@ export const dbUrl =
     : `file:${path.resolve(dbPath, dbName)}`) || '';
 
 // Must be updated every time a migration is created
-export const latestMigration = '20240701111425_create_host_online_field';
+export const latestMigration = '20240709145053_delete_deprecated_tables';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const platformToExecutables: any = {

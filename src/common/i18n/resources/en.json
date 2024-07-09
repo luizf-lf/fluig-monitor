@@ -354,6 +354,12 @@
       "disableNotification": "Disable notification",
       "disableNotificationHelper": "Use this option to disable the notification telling that Fluig Monitor is still running."
     },
+    "PersistenceThresholdSection": {
+      "title": "Data persistence",
+      "description": "Use this option to define the limit in days, for the data persistence of the monitored servers by the Fluig Monitor",
+      "label": "Data persistence limit (days)",
+      "helper": "Data older than the data persistence limit will be deleted. Leave it blank or set the value to 0 to disable this option."
+    },
     "AboutSection": {
       "headingTitle": "About",
       "title": "An open-source tool for monitoring Fluig servers.",

@@ -354,6 +354,12 @@
       "disableNotification": "Desabilitar notificação",
       "disableNotificationHelper": "Utilize esta opção para desabilitar a notificação de que o Fluig Monitor ainda está em execução."
     },
+    "PersistenceThresholdSection": {
+      "title": "Persistência de dados",
+      "description": "Utilize esta opção para definir o limite em dias, para a persistência dos dados monitorados pelo Fluig Monitor",
+      "label": "Limite de persistência de dados (Dias)",
+      "helper": "Dados anteriores ao limite de persistência de dados serão excluídos. Deixe em branco ou defina o valor em 0 para desativar esta opção."
+    },
     "AboutSection": {
       "headingTitle": "Sobre",
       "title": "Uma ferramenta open-source para monitoramento de ambientes Fluig.",

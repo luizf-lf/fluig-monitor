@@ -2,6 +2,7 @@
 import log from 'electron-log';
 import { AppSetting } from '../generated/client';
 import prismaClient from '../database/prismaContext';
+import GAEvents from '../analytics/GAEvents';
 
 export interface SettingsObject {
   [key: string]: AppSetting;
@@ -204,6 +205,8 @@ export default class SettingsController {
       create: data,
       update: data,
     });
+
+    GAEvents.appSettingChanged(data.settingId, data.value);
 
     return this.updated;
   }

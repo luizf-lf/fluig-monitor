@@ -33,6 +33,8 @@ import rotateLogFile from './utils/logRotation';
 import logSystemConfigs from './utils/logSystemConfigs';
 import { resolveHtmlPath } from './utils/resolveHtmlPath';
 import trayBuilder from './utils/trayBuilder';
+import seedDefaultValues from './database/seedDefaultValues';
+import dataPersistenceHandler from './utils/dataPersistenceHandler';
 
 log.transports.file.format = logStringFormat;
 log.transports.console.format = logStringFormat;
@@ -211,6 +213,21 @@ app
       icon: getAssetPath('icon.png'),
     });
 
+    const scheduledJobs = [
+      {
+        cron: '5 0 0 * * *',
+        job: rotateLogFile,
+      },
+      {
+        cron: '10 0 0 * * *',
+        job: appUpdater.checkUpdates,
+      },
+      {
+        cron: '10 0 0 * * *',
+        job: dataPersistenceHandler,
+      },
+    ];
+
     splash.loadFile(path.resolve(__dirname, '..', 'renderer', 'splash.html'));
     splash.show();
 
@@ -233,12 +250,15 @@ app
 
     await runDbMigrations();
 
+    await seedDefaultValues();
+
+    await dataPersistenceHandler();
+
     appUpdater.checkUpdates();
 
     // When using node schedule with a cron like scheduler, sometimes the
-    //  sync function are dispatched every second for a minute.
+    //  async function are dispatched every second for a minute.
     // That's why the setInterval is still being used.
-    // Maybe this function shall be transformed into a nodejs worker?
     log.info('Dispatching environment ping jobs');
     setInterval(async () => {
       await pingEnvironmentsJob();
@@ -261,14 +281,9 @@ app
       if (mainWindow === null) createWindow();
     });
 
-    // trigger the log file rotation every day at 00:00:05 (5 seconds past midnight)
-    scheduleJob('5 0 0 * * *', () => {
-      rotateLogFile();
-    });
-
-    // trigger the updater to check for updates every day at 00:00:10 (10s past midnight)
-    scheduleJob('10 0 0 * * *', () => {
-      appUpdater.checkUpdates();
+    // trigger the scheduled jobs calls
+    scheduledJobs.forEach(({ cron, job }) => {
+      scheduleJob(cron, () => job());
     });
 
     const { GA_TRACKING_ID, GA_SECRET_KEY } = envJson;

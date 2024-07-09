@@ -16,7 +16,9 @@
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.preload.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./.erb/configs/webpack.config.renderer.dev.ts",
     "test": "jest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "db:backup": "ts-node ./scripts/dbBackup.ts",
+    "db:restore": "ts-node ./scripts/dbRestore.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

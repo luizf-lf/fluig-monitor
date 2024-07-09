@@ -13,14 +13,11 @@ import {
   legacyDbName,
 } from '../utils/globalConstants';
 import prismaClient from './prismaContext';
-import seedDb from './seedDb';
 import { Migration } from '../interfaces/MigrationInterface';
-import LogController from '../controllers/LogController';
 import GAEvents from '../analytics/GAEvents';
 
 export default async function runDbMigrations() {
   let needsMigration = false;
-  let mustSeed = false;
   const fullDbPath = path.resolve(dbPath, dbName);
   const timer = Date.now();
 
@@ -42,7 +39,7 @@ export default async function runDbMigrations() {
   if (!dbExists) {
     log.info('Database does not exists. Migration and seeding is needed.');
     needsMigration = true;
-    mustSeed = true;
+
     // since prisma has trouble if the database file does not exist, touches an empty file
     log.info('Touching database file.');
     fs.closeSync(fs.openSync(fullDbPath, 'w'));
@@ -84,39 +81,12 @@ export default async function runDbMigrations() {
 
       log.info('Migration done.');
 
-      if (mustSeed) {
-        await seedDb(prismaClient);
-
-        await new LogController().writeLog({
-          type: 'info',
-          message: 'Initial database seed executed with default values',
-        });
-      }
-
-      log.info('Creating a database migration notification');
-      await prismaClient.notification.create({
-        data: {
-          type: 'info',
-          title: 'Base de dados migrada',
-          body: 'O banco de dados foi migrado devido à atualização de versão do aplicativo.',
-        },
-      });
-
-      await new LogController().writeLog({
-        type: 'info',
-        message: 'Database migration executed',
-      });
-
       GAEvents.dbMigrated(timer);
     } catch (error) {
       GAEvents.appError(error as Error);
       log.error('Migration executed with error.');
       log.error(error);
 
-      await new LogController().writeLog({
-        type: 'error',
-        message: `Database migration executed with error: ${error}`,
-      });
       process.exit(1);
     }
   } else {
