@@ -146,19 +146,3 @@ model AppSetting {
   value     String
   group     String?
 }
-
-model Notification {
-  id        Int      @id @default(autoincrement())
-  type      String
-  title     String?
-  body      String
-  createdAt DateTime @default(now())
-  readed    Boolean  @default(false)
-}
-
-model Log {
-  id        Int      @id @default(autoincrement())
-  timestamp DateTime @default(now())
-  type      String
-  message   String
-}

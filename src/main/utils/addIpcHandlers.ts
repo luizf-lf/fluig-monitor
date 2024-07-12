@@ -12,7 +12,6 @@ import { UpdateScheduleControllerInterface } from '../../common/interfaces/Updat
 import AuthKeysController from '../controllers/AuthKeysController';
 import EnvironmentController from '../controllers/EnvironmentController';
 import LanguageController from '../controllers/LanguageController';
-import LogController from '../controllers/LogController';
 import SettingsController, {
   AppSettingUpdatePropsInterface,
   SettingsObject,
@@ -47,7 +46,6 @@ export default function addIpcHandlers(): void {
   const languageController = new LanguageController();
   const updateScheduleController = new UpdateScheduleController();
   const authKeysController = new AuthKeysController();
-  const logController = new LogController();
   const settingsController = new SettingsController();
   const electronStore = new ElectronStore();
 
@@ -145,11 +143,6 @@ export default function addIpcHandlers(): void {
         hash: environmentAuthKeys.hash,
       });
 
-      await logController.writeLog({
-        type: 'info',
-        message: `Environment ${createdEnvironment.id} created with related data via ipcMain handler`,
-      });
-
       GAEvents.environmentCreated(
         timer,
         environment.release,
@@ -182,11 +175,6 @@ export default function addIpcHandlers(): void {
       );
       const updatedAuthKeys = await authKeysController.update(authKeys);
 
-      await logController.writeLog({
-        type: 'info',
-        message: `Environment ${updatedEnvironment.id} updated with related data via ipcMain handler`,
-      });
-
       GAEvents.environmentUpdated(
         timer,
         environment.release,
@@ -205,11 +193,6 @@ export default function addIpcHandlers(): void {
       log.info('IPC Handler: Deleting environment');
 
       const deleted = await environmentController.delete(id);
-
-      await logController.writeLog({
-        type: 'info',
-        message: `Environment ${deleted.id} deleted logically via ipcMain handler`,
-      });
 
       return deleted;
     }
