@@ -14,6 +14,10 @@
 
 </div>
 
+## Aviso
+
+> O **Fluig Monitor** não é mais ativamente mantido por mim. Isso significa que o este projeto não receberá novas atualizações, correções e nem receberá novas funcionalidades. Você ainda pode baixar o repositório do projeto, fazer alterações, instalar o app e utilizá-lo em sua última versão normalmente, porém, não terá garantias de estabilidade nem do funcionamento em novas versões do Fluig. Tomei esta decisão pois existem várias soluções de observabilidade mais robustas que cumprem a ideia inicial do Fluig Monitor (como a [stack do Grafana](https://grafana.com/about/grafana-stack/) para instalações on-premise e o próprio monitor da [TOTVS Cloud](https://www.totvs.com/cloud/) para instações em cloud). Este projeto foi um experimento de grande valia na minha carreira e no meu aprendizado como programador. Contudo, no momento optei por seguir em frente e priorizar novos projetos em minha vida.
+
 ## Índice
 
 - [Sobre](#sobre)
