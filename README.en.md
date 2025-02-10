@@ -14,6 +14,10 @@
 
 </div>
 
+## Notice
+
+**Fluig Monitor** is no longer actively maintained by me. This means that this project will not receive new updates, fixes or new features. You can still download the project repository, make changes, install the app and use it in its latest version normally, however, there is no guarantee of stability or operation in new versions of Fluig. I made this decision because there are several more robust observability solutions that fulfill the initial idea of ​​Fluig Monitor (such as the [Grafana stack](https://grafana.com/about/grafana-stack/) for on-premise installations and the [TOTVS Cloud](https://www.totvs.com/cloud/) monitor for cloud installations). This project was a very valuable experiment in my career and in my learning as a programmer. However, at the moment I have chosen to move on and prioritize new projects in my life.
+
 ## Table Of Contents
 
 - [About](#about)
